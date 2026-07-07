@@ -21,3 +21,8 @@ final Provider<DocklyClient> docklyClientProvider = Provider<DocklyClient>((ref)
 final Provider<AuthApi> authApiProvider = Provider<AuthApi>((ref) {
   return AuthApi(ref.watch(docklyClientProvider).dio);
 });
+
+/// Lokasyon (harita/nearby/detay) API istemcisi — anonim uçlar.
+final Provider<LocationsApi> locationsApiProvider = Provider<LocationsApi>((ref) {
+  return LocationsApi(ref.watch(docklyClientProvider).dio);
+});
