@@ -12,6 +12,17 @@ export const envSchema = z.object({
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
   /** Graceful shutdown süresi (ms) — ALB deregistration delay ile hizalı. */
   SHUTDOWN_TIMEOUT_MS: z.coerce.number().int().positive().default(10_000),
+  /** Firebase ID token doğrulaması (docs/23 §3.1): aud/iss pinning için proje kimliği. */
+  FIREBASE_PROJECT_ID: z.string().min(1),
+  /** RS256 imzalama anahtarları (PEM, PKCS8/SPKI). Kaynak: SSM (docs/28 §5). */
+  JWT_PRIVATE_KEY_PEM: z.string().includes('BEGIN'),
+  JWT_PUBLIC_KEY_PEM: z.string().includes('BEGIN'),
+  /** Anahtar rotasyonu için key id (docs/23 §3.2). */
+  JWT_KID: z.string().min(1).default('dockly-k1'),
+  ACCESS_TOKEN_TTL_SEC: z.coerce.number().int().min(60).max(3600).default(900),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(60),
+  /** /auth uçları IP başına dakikalık tavan (docs/30 §1). */
+  AUTH_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(10),
 });
 
 export type Env = z.infer<typeof envSchema>;

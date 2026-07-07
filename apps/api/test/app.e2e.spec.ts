@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module';
 import { GlobalProblemFilter } from '../src/common/problem/problem.filter';
 import { PrismaService } from '../src/infrastructure/prisma/prisma.service';
 import { RedisService } from '../src/infrastructure/redis/redis.service';
+import { generateTestKeys } from './helpers/auth-test-kit';
 
 /**
  * Uygulama seviyesi test: gerçek HTTP hattı, sahte altyapı (DB/Redis testte mock —
@@ -16,9 +17,13 @@ describe('API çekirdeği (e2e-lite)', () => {
   let redisHealthy = true;
 
   beforeAll(async () => {
+    const keys = generateTestKeys();
     process.env.NODE_ENV = 'test';
     process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
     process.env.REDIS_URL = 'redis://localhost:6379';
+    process.env.FIREBASE_PROJECT_ID = 'dockly-test';
+    process.env.JWT_PRIVATE_KEY_PEM = keys.privatePem;
+    process.env.JWT_PUBLIC_KEY_PEM = keys.publicPem;
 
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(PrismaService)

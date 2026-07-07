@@ -7,6 +7,7 @@ import { currentRequestId } from './common/context/request-context';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
 import { HealthModule } from './modules/health/health.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -30,13 +31,15 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport:
+            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),
     PrismaModule,
     RedisModule,
     HealthModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

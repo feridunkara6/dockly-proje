@@ -1,11 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { currentRequestId } from '../context/request-context';
@@ -28,6 +21,11 @@ export class GlobalProblemFilter implements ExceptionFilter {
     const requestId = currentRequestId();
     const instance = req.originalUrl?.split('?')[0];
 
+    if (exception instanceof AppProblem && exception.headers) {
+      for (const [name, value] of Object.entries(exception.headers)) {
+        res.setHeader(name, value);
+      }
+    }
     const body = this.toProblem(exception, instance, requestId);
     if (body.status >= 500) {
       const err = exception instanceof Error ? exception.stack : String(exception);

@@ -60,13 +60,21 @@ export class AppProblem extends Error {
   readonly problemType: ProblemType;
   readonly detail?: string;
   readonly errors?: FieldError[];
+  /** Yanıta eklenecek header'lar (ör. rate-limited → Retry-After, docs/23 §6). */
+  readonly headers?: Record<string, string>;
 
-  constructor(problemType: ProblemType, detail?: string, errors?: FieldError[]) {
+  constructor(
+    problemType: ProblemType,
+    detail?: string,
+    errors?: FieldError[],
+    headers?: Record<string, string>,
+  ) {
     super(detail ?? CATALOG[problemType].title);
     this.name = 'AppProblem';
     this.problemType = problemType;
     this.detail = detail;
     this.errors = errors;
+    this.headers = headers;
   }
 
   get status(): number {

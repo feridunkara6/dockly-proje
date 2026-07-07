@@ -18,10 +18,15 @@ export class RedisService implements OnModuleDestroy {
     });
   }
 
-  async ping(): Promise<boolean> {
+  /** lazyConnect: ilk kullanımda bağlantıyı açıkça kurar. */
+  async ensureConnected(): Promise<void> {
     if (this.client.status === 'wait' || this.client.status === 'end') {
       await this.client.connect();
     }
+  }
+
+  async ping(): Promise<boolean> {
+    await this.ensureConnected();
     return (await this.client.ping()) === 'PONG';
   }
 

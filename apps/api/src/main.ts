@@ -8,6 +8,8 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.useGlobalFilters(new GlobalProblemFilter());
+  // İş uçları /v1 altında (docs/23 §1); health uçları ALB için köke açık (docs/24 §13).
+  app.setGlobalPrefix('v1', { exclude: ['healthz', 'readyz'] });
   app.enableShutdownHooks();
 
   const env = app.get(EnvService);
