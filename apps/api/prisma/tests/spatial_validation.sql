@@ -146,11 +146,13 @@ END $$;
 DO $$
 DECLARE n int; total bigint;
 BEGIN
+  -- Not: geography'de envelope kenarları jeodezik kavis yapar; tam kenar üstündeki
+  -- noktalar dışarıda kalmasın diye pencere veri aralığından bilinçli olarak geniştir.
   SELECT count(*), sum(cnt) INTO n, total FROM (
     SELECT ST_SnapToGrid(position::geometry, 0.1, 0.1) AS cell, count(*) AS cnt
     FROM locations
     WHERE slug LIKE 'sp-test-%'
-      AND ST_Intersects(position, ST_MakeEnvelope(27.0, 36.5, 29.0, 37.1, 4326)::geography)
+      AND ST_Intersects(position, ST_MakeEnvelope(26.9, 36.4, 29.1, 37.2, 4326)::geography)
     GROUP BY 1
   ) g;
   IF n = 0 OR total <> 10000 THEN
