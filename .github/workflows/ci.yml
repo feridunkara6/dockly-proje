@@ -191,6 +191,12 @@ jobs:
           dart pub get
           dart analyze
           dart test
+      - name: dockly_ui (Flutter — analyze + test)
+        working-directory: packages/dockly_ui
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
       - name: dockly_mobile (Flutter — analyze + test)
         working-directory: apps/mobile
         run: |
