@@ -22,6 +22,11 @@ RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends openssl \
   && rm -rf /var/lib/apt/lists/*
+# Çalışma zamanında paket yöneticisine ihtiyaç yok: npm/npx/corepack/yarn imajdan
+# çıkarılır — tabanla gelen bağımlılık CVE'leri (sigstore/picomatch) ve saldırı
+# yüzeyi birlikte gider (docs/29 hardening ilkesi).
+RUN rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx \
+  /usr/local/bin/corepack /opt/yarn* /usr/local/bin/yarn /usr/local/bin/yarnpkg
 RUN groupadd -r dockly && useradd -r -g dockly dockly
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
