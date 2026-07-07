@@ -23,7 +23,8 @@ describe('API çekirdeği (e2e-lite)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(PrismaService)
       .useValue({
-        $queryRaw: () => (dbHealthy ? Promise.resolve([{ '?column?': 1 }]) : Promise.reject(new Error('db down'))),
+        $queryRaw: () =>
+          dbHealthy ? Promise.resolve([{ ok: 1 }]) : Promise.reject(new Error('db down')),
       })
       .overrideProvider(RedisService)
       .useValue({

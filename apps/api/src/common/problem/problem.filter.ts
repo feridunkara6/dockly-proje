@@ -23,10 +23,8 @@ export class GlobalProblemFilter implements ExceptionFilter {
 
     const body = this.toProblem(exception, instance, requestId);
     if (body.status >= 500) {
-      this.logger.error(
-        { requestId, instance, err: exception instanceof Error ? exception.stack : String(exception) },
-        'Beklenmeyen hata',
-      );
+      const err = exception instanceof Error ? exception.stack : String(exception);
+      this.logger.error({ requestId, instance, err }, 'Sunucu hatası');
     }
     res.status(body.status).type(PROBLEM_CONTENT_TYPE).json(body);
   }
@@ -47,18 +45,18 @@ export class GlobalProblemFilter implements ExceptionFilter {
       ).toBody(instance, requestId);
     }
     if (exception instanceof HttpException) {
+      // Framework istisnaları (404, 503-readiness vb.) kendi status'larıyla,
+      // kataloglu değilse jenerik "about:blank" type'ıyla Problem'a çevrilir (RFC 9457 §4).
       const status = exception.getStatus();
-      // Framework 404/405 gibi durumları da Problem biçimine çevrilir.
-      const type = status === HttpStatus.NOT_FOUND ? 'not-found' : 'internal';
-      if (status < 500) {
-        return {
-          type: `${PROBLEM_BASE}${type}`,
-          title: exception.message,
-          status,
-          ...(instance ? { instance } : {}),
-          ...(requestId ? { requestId } : {}),
-        };
-      }
+      const type =
+        status === HttpStatus.NOT_FOUND ? `${PROBLEM_BASE}not-found` : 'about:blank';
+      return {
+        type,
+        title: exception.message,
+        status,
+        ...(instance ? { instance } : {}),
+        ...(requestId ? { requestId } : {}),
+      };
     }
     return new AppProblem('internal').toBody(instance, requestId);
   }

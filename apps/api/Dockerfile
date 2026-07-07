@@ -1,9 +1,10 @@
 # Dockly API — multi-stage (docs/24 §17, docs/28 §4). Tek imaj: api + worker (CMD farkı).
 FROM node:20-slim AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+# Teknik borç (Faz 2'de kapanır): lockfile üretilince `npm ci`ya dönülecek.
+COPY package.json ./
 COPY prisma ./prisma
-RUN npm ci && npx prisma generate
+RUN npm install --no-audit --no-fund && npx prisma generate
 
 FROM node:20-slim AS build
 WORKDIR /app
