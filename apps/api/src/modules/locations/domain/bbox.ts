@@ -17,7 +17,9 @@ function roundTo(value: number, decimals = 6): number {
 }
 
 function fail(field: string, code: string, message: string): never {
-  throw new AppProblem('validation-error', 'Geçersiz bbox parametresi.', [{ field, code, message }]);
+  throw new AppProblem('validation-error', 'Geçersiz bbox parametresi.', [
+    { field, code, message },
+  ]);
 }
 
 /**
