@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'dto/geo.dart';
+import 'dto/location_detail.dart';
 import 'dto/location_summary.dart';
 import 'dto/map_result.dart';
 import 'problem_mapper.dart';
@@ -57,6 +58,16 @@ class LocationsApi {
           .whereType<Map<String, dynamic>>()
           .map(LocationSummary.fromJson)
           .toList(growable: false);
+    });
+  }
+
+  /// Liman detayı (docs/23 §10 #12, §11.3). id veya slug; bulunamazsa `NotFoundFailure`.
+  Future<LocationDetail> detail(String idOrSlug) async {
+    return _call(() async {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/locations/${Uri.encodeComponent(idOrSlug)}',
+      );
+      return LocationDetail.fromJson(res.data!);
     });
   }
 

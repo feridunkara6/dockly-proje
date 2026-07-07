@@ -8,4 +8,5 @@ export 'src/dto/session.dart';
 export 'src/dto/geo.dart';
 export 'src/dto/map_result.dart';
 export 'src/dto/location_summary.dart';
+export 'src/dto/location_detail.dart';
 export 'src/problem_mapper.dart';
