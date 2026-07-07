@@ -1,6 +1,5 @@
 # CI hattı (docs/28 §3). Biçimlendirme otomatik düzeltilir ve bot tarafından commit'lenir;
 # hata özetleri annotation olarak yayınlanır (giriş gerektirmeden okunabilir).
-# Teknik borç (Faz 2): lockfile commit'lenince `npm ci` + cache'e dönülecek.
 name: ci
 
 on:
@@ -36,12 +35,35 @@ jobs:
       CI: "true"
       DATABASE_URL: postgresql://dockly:dockly@localhost:5432/dockly_test
       REDIS_URL: redis://localhost:6379
+      FIREBASE_PROJECT_ID: dockly-ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install --no-audit --no-fund
+      - name: Lockfile yoksa üret ve commit'le (TD-1 — tek seferlik)
+        run: |
+          if [ ! -f package-lock.json ]; then
+            npm install --package-lock-only --no-audit --no-fund
+            if [ "${{ github.event_name }}" = "push" ]; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add package-lock.json
+              git commit -m "build: package-lock.json (deterministik kurulum, TD-1)"
+              git push origin HEAD:main
+            fi
+          fi
+      - name: Bağımlılık kurulumu (lockfile varsa npm ci)
+        run: |
+          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+      - name: Test JWT anahtarları üret (yalnız CI ortamı)
+        run: |
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /tmp/jwt.pem 2>/dev/null
+          openssl pkey -in /tmp/jwt.pem -pubout -out /tmp/jwt.pub
+          {
+            echo "JWT_PRIVATE_KEY_PEM<<PEMEOF"; cat /tmp/jwt.pem; echo "PEMEOF"
+            echo "JWT_PUBLIC_KEY_PEM<<PEMEOF"; cat /tmp/jwt.pub; echo "PEMEOF"
+          } >> "$GITHUB_ENV"
       - run: npx prisma validate
       - run: npx prisma generate
       - name: Migration'ları gerçek PostGIS'e uygula
@@ -89,6 +111,9 @@ jobs:
           docker run -d --name api-smoke --network host \
             -e NODE_ENV=staging -e PORT=3100 \
             -e DATABASE_URL="$DATABASE_URL" -e REDIS_URL="$REDIS_URL" \
+            -e FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            -e JWT_PRIVATE_KEY_PEM="$JWT_PRIVATE_KEY_PEM" \
+            -e JWT_PUBLIC_KEY_PEM="$JWT_PUBLIC_KEY_PEM" \
             dockly-api:ci
           for i in $(seq 1 30); do
             if curl -sf http://localhost:3100/readyz; then exit 0; fi
@@ -112,7 +137,8 @@ jobs:
           node-version: 20
       - name: Bağımlılık kurulumu
         working-directory: apps/api
-        run: npm install --no-audit --no-fund
+        run: |
+          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
       - name: Dependency vulnerability scan
         working-directory: apps/api
         run: |
