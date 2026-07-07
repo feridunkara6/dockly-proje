@@ -3,7 +3,13 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { LocationsRepository } from '../domain/locations.repository';
 import { NM_TO_M } from '../domain/nearby';
-import { Bbox, Cluster, LocationPin, LocationSummary, NearbyParams } from '../domain/location.types';
+import {
+  Bbox,
+  Cluster,
+  LocationPin,
+  LocationSummary,
+  NearbyParams,
+} from '../domain/location.types';
 
 /** Ham satır (PostGIS projeksiyonu). */
 interface PinRow {
@@ -43,9 +49,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0
-        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
-        : Prisma.empty;
+      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -149,9 +153,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0
-        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
-        : Prisma.empty;
+      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.

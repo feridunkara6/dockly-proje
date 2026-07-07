@@ -38,6 +38,8 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type])
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }
