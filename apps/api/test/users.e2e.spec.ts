@@ -10,10 +10,7 @@ import { FakeFirebaseVerifier, generateTestKeys } from './helpers/auth-test-kit'
 const runIf = process.env.CI === 'true' ? describe : describe.skip;
 
 function ftok(uid: string, provider = 'google.com'): string {
-  return (
-    'ftok:' +
-    JSON.stringify({ uid, emailVerified: true, provider, email: `${uid}@e2e.dev` })
-  );
+  return 'ftok:' + JSON.stringify({ uid, emailVerified: true, provider, email: `${uid}@e2e.dev` });
 }
 
 runIf('Users API (e2e — gerçek DB+Redis)', () => {
@@ -61,7 +58,11 @@ runIf('Users API (e2e — gerçek DB+Redis)', () => {
       .set('Authorization', `Bearer ${access}`)
       .expect(200);
     expect(res.body.profile.displayName).toBe('me-user-1');
-    expect(res.body.settings).toEqual({ theme: 'system', units: 'metric', marketingConsent: false });
+    expect(res.body.settings).toEqual({
+      theme: 'system',
+      units: 'metric',
+      marketingConsent: false,
+    });
     expect(res.body.role).toBe('user');
   });
 
