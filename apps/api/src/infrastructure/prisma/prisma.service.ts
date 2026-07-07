@@ -3,8 +3,8 @@ import { PrismaClient } from '@prisma/client';
 
 /**
  * Tek PrismaClient örneği (docs/24 §5).
- * KURAL: Bu servis yalnız infrastructure ve modules/*/persistence içinden import edilir
- * (eslint no-restricted-imports ile zorlanır).
+ * KURAL: Bu servis yalnız infrastructure ve modüllerin persistence katmanından
+ * import edilir (eslint no-restricted-imports ile zorlanır).
  */
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
