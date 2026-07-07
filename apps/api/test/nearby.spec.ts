@@ -47,13 +47,23 @@ describe('parseNearbyQuery (docs/23 §9.6)', () => {
   });
 
   it('radiusNm (0,50] dışında → radius-range', () => {
-    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', radiusNm: '0' }))).toBe('radius-range');
-    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', radiusNm: '51' }))).toBe('radius-range');
+    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', radiusNm: '0' }))).toBe(
+      'radius-range',
+    );
+    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', radiusNm: '51' }))).toBe(
+      'radius-range',
+    );
   });
 
   it('limit tam sayı [1,50] değilse → limit-range', () => {
-    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '0' }))).toBe('limit-range');
-    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '51' }))).toBe('limit-range');
-    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '2.5' }))).toBe('limit-range');
+    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '0' }))).toBe(
+      'limit-range',
+    );
+    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '51' }))).toBe(
+      'limit-range',
+    );
+    expect(fieldCode(() => parseNearbyQuery({ lat: '36', lon: '28', limit: '2.5' }))).toBe(
+      'limit-range',
+    );
   });
 });
