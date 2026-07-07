@@ -24,7 +24,9 @@ function num(raw: string | undefined): number | undefined {
 }
 
 function fail(field: string, code: string, message: string): never {
-  throw new AppProblem('validation-error', 'Geçersiz nearby parametresi.', [{ field, code, message }]);
+  throw new AppProblem('validation-error', 'Geçersiz nearby parametresi.', [
+    { field, code, message },
+  ]);
 }
 
 /**
