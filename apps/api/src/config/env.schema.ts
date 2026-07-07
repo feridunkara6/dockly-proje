@@ -19,9 +19,7 @@ export type Env = z.infer<typeof envSchema>;
 export function validateEnv(raw: NodeJS.ProcessEnv): Env {
   const parsed = envSchema.safeParse(raw);
   if (!parsed.success) {
-    const details = parsed.error.issues
-      .map((i) => `${i.path.join('.')}: ${i.message}`)
-      .join('; ');
+    const details = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ');
     throw new Error(`Ortam yapılandırması geçersiz — ${details}`);
   }
   return parsed.data;

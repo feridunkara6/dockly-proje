@@ -2,7 +2,11 @@ import { Request, Response } from 'express';
 import { RequestContextMiddleware } from '../src/common/context/request-context.middleware';
 import { currentRequestId } from '../src/common/context/request-context';
 
-function fakeReqRes(incomingId?: string): { req: Request; res: Response; headers: Record<string, string> } {
+function fakeReqRes(incomingId?: string): {
+  req: Request;
+  res: Response;
+  headers: Record<string, string>;
+} {
   const headers: Record<string, string> = {};
   const req = {
     header: (name: string) => (name.toLowerCase() === 'x-request-id' ? incomingId : undefined),
@@ -18,7 +22,7 @@ function fakeReqRes(incomingId?: string): { req: Request; res: Response; headers
 describe('RequestContextMiddleware (docs/24 §12)', () => {
   const middleware = new RequestContextMiddleware();
 
-  it('id üretir, yanıt header\'ına yazar ve ALS içinde erişilir kılar', () => {
+  it("id üretir, yanıt header'ına yazar ve ALS içinde erişilir kılar", () => {
     const { req, res, headers } = fakeReqRes();
     let seen: string | undefined;
     middleware.use(req, res, () => {
