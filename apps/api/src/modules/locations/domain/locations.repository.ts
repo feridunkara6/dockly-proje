@@ -7,7 +7,9 @@ import {
   LocationPin,
   LocationSummary,
   NearbyParams,
+  RatingDimensionAvg,
   SeasonDto,
+  TypeDetails,
 } from './location.types';
 
 export interface TranslationRow {
@@ -42,6 +44,8 @@ export interface DetailData {
   contacts: ContactDto[];
   hours: HourDto[];
   seasons: SeasonDto[];
+  typeDetails: TypeDetails | null;
+  ratingDimensions: RatingDimensionAvg[];
 }
 
 /** Lokasyon coğrafi sorguları (PostGIS; ham SQL — ADR-005). */

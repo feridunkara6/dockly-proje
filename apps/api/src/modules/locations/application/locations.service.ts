@@ -24,7 +24,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -72,9 +74,9 @@ export class LocationsService {
 
   /**
    * Liman detayı (docs/23 §11.3, S-09). id veya slug ile; bulunamazsa 404.
-   * name/description + olanak/hizmet etiketleri locale'e göre çözülür.
-   * `typeDetails` ve `rating.dimensions` 3.1b-iv-b'de; `media.cover`/`userContext`
-   * ilgili alt sistemlerle gelecek (şimdilik null).
+   * name/description + olanak/hizmet etiketleri locale'e göre çözülür; `typeDetails`
+   * (alt-tip birleşimi) ve `rating.dimensions` (yorum-türevli) dahil.
+   * `media.cover`/`userContext` ilgili alt sistemlerle gelecek (şimdilik null).
    */
   async detail(idOrSlug: string, locale: string): Promise<LocationDetail> {
     const d = await this.repo.findDetail(idOrSlug);
@@ -93,7 +95,7 @@ export class LocationsService {
       priceTier: d.priceTier,
       is24h: d.is24h,
       verifiedAt: d.verifiedAt,
-      rating: { avg: d.ratingAvg, count: d.ratingCount, dimensions: [] },
+      rating: { avg: d.ratingAvg, count: d.ratingCount, dimensions: d.ratingDimensions },
       amenities: d.amenities.map((a) => ({
         code: a.code,
         label: pickLabel(a.translations, locale, a.code),
@@ -106,7 +108,7 @@ export class LocationsService {
       contacts: d.contacts,
       hours: d.hours,
       seasons: d.seasons,
-      typeDetails: null,
+      typeDetails: d.typeDetails,
       media: { cover: null, count: d.photoCount },
       userContext: null,
       counts: { reviews: d.reviewCount, photos: d.photoCount },

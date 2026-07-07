@@ -9,6 +9,8 @@ import {
   LocationPin,
   LocationSummary,
   NearbyParams,
+  RatingDimensionAvg,
+  TypeDetails,
 } from '../domain/location.types';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -69,7 +71,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -173,7 +177,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
@@ -227,6 +233,10 @@ export class PrismaLocationsRepository implements LocationsRepository {
         contacts: true,
         operatingHours: true,
         openingSeasons: true,
+        marinaDetails: true,
+        fuelDockDetails: true,
+        restaurantDockDetails: true,
+        anchorageDetails: true,
       },
     });
     if (!loc) return null;
@@ -237,6 +247,68 @@ export class PrismaLocationsRepository implements LocationsRepository {
     `);
     const lat = Number(pos[0]?.lat);
     const lon = Number(pos[0]?.lon);
+
+    // Puan boyut ortalamaları — yalnız onaylanmış (silinmemiş) yorumlardan.
+    const dimRows = await this.prisma.$queryRaw<{ code: string; avg: number }[]>(Prisma.sql`
+      SELECT rd.code AS code, AVG(rr.score)::float8 AS avg
+      FROM review_ratings rr
+      JOIN reviews r ON r.id = rr.review_id
+      JOIN rating_dimensions rd ON rd.id = rr.dimension_id
+      WHERE r.location_id = ${loc.id}::uuid
+        AND r.status = 'approved'
+        AND r.deleted_at IS NULL
+      GROUP BY rd.code, rd.sort_order
+      ORDER BY rd.sort_order NULLS LAST
+    `);
+    const ratingDimensions: RatingDimensionAvg[] = dimRows.map((r) => ({
+      code: r.code,
+      avg: Math.round(Number(r.avg) * 100) / 100,
+    }));
+
+    let typeDetails: TypeDetails | null = null;
+    if (loc.marinaDetails) {
+      const m = loc.marinaDetails;
+      typeDetails = {
+        kind: 'marina',
+        berthCount: m.berthCount ?? null,
+        vhfChannel: m.vhfChannel ?? null,
+        hasBlueFlag: m.hasBlueFlag ?? null,
+        travelLiftCapacityTons: dec(m.travelLiftCapacityTons),
+        craneCapacityTons: dec(m.craneCapacityTons),
+        winterStorage: m.winterStorage ?? null,
+      };
+    } else if (loc.fuelDockDetails) {
+      const f = loc.fuelDockDetails;
+      typeDetails = {
+        kind: 'fuelDock',
+        hasDiesel: f.hasDiesel ?? null,
+        hasGasoline: f.hasGasoline ?? null,
+        hasAdblue: f.hasAdblue ?? null,
+        minDepthM: dec(f.minDepthM),
+        paymentNote: f.paymentNote ?? null,
+      };
+    } else if (loc.restaurantDockDetails) {
+      const rd = loc.restaurantDockDetails;
+      typeDetails = {
+        kind: 'restaurantDock',
+        cuisine: rd.cuisine ?? null,
+        berthCountFree: rd.berthCountFree ?? null,
+        minSpendPolicy: rd.minSpendPolicy ?? null,
+        reservationRecommended: rd.reservationRecommended ?? null,
+      };
+    } else if (loc.anchorageDetails) {
+      const a = loc.anchorageDetails;
+      typeDetails = {
+        kind: 'anchorage',
+        holdingType: a.holdingType ?? null,
+        protectionN: a.protectionN ?? null,
+        protectionS: a.protectionS ?? null,
+        protectionE: a.protectionE ?? null,
+        protectionW: a.protectionW ?? null,
+        swellExposure: a.swellExposure ?? null,
+        isFree: a.isFree,
+      };
+    }
 
     const bySort = <T extends { sortOrder: number | null }>(a: T, b: T): number =>
       (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999);
@@ -299,6 +371,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
         opensOn: fmtMonthDay(s.opensOnMonth, s.opensOnDay),
         closesOn: fmtMonthDay(s.closesOnMonth, s.closesOnDay),
       })),
+      typeDetails,
+      ratingDimensions,
     };
   }
 }

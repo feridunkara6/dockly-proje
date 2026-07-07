@@ -90,6 +90,55 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
       SELECT gen_random_uuid(), l.id, 5, 1, 10, 31 FROM locations l WHERE l.slug = 'e2e-detail-marina'
       ON CONFLICT DO NOTHING;
     `);
+    // typeDetails (marina alt-tipi)
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag, travel_lift_capacity_tons, winter_storage)
+      SELECT l.id, 380, '72', true, 100.0, true FROM locations l WHERE l.slug = 'e2e-detail-marina'
+      ON CONFLICT (location_id) DO NOTHING;
+    `);
+    // rating.dimensions için onaylı yorum + boyut puanları
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO users (id, firebase_uid)
+      VALUES ('11111111-1111-1111-1111-111111111111', 'e2e_detail_reviewer')
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO reviews (id, location_id, user_id, overall_rating, status)
+      SELECT '22222222-2222-2222-2222-222222222222', l.id, '11111111-1111-1111-1111-111111111111', 5, 'approved'
+      FROM locations l WHERE l.slug = 'e2e-detail-marina'
+      ON CONFLICT (id) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO review_ratings (review_id, dimension_id, score)
+      VALUES
+        ('22222222-2222-2222-2222-222222222222', 1, 5),
+        ('22222222-2222-2222-2222-222222222222', 2, 4)
+      ON CONFLICT (review_id, dimension_id) DO NOTHING;
+    `);
+    // Yakıt iskelesi alt-tipi
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
+      VALUES (gen_random_uuid(), 'e2e-detail-fuel', 6, 'published', 'TR', 'E2E Yakıt İskelesi',
+        ST_SetSRID(ST_MakePoint(28.96, 36.76), 4326)::geography)
+      ON CONFLICT (slug) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, min_depth_m)
+      SELECT l.id, true, true, 3.5 FROM locations l WHERE l.slug = 'e2e-detail-fuel'
+      ON CONFLICT (location_id) DO NOTHING;
+    `);
+    // Demirleme alt-tipi
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
+      VALUES (gen_random_uuid(), 'e2e-detail-anchorage', 8, 'published', 'TR', 'E2E Demirleme',
+        ST_SetSRID(ST_MakePoint(28.97, 36.77), 4326)::geography)
+      ON CONFLICT (slug) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO anchorage_details (location_id, holding_type, protection_n, protection_s, is_free)
+      SELECT l.id, 'sand', 4, 2, true FROM locations l WHERE l.slug = 'e2e-detail-anchorage'
+      ON CONFLICT (location_id) DO NOTHING;
+    `);
     // 404 için taslak
     await prisma.$executeRawUnsafe(`
       INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
@@ -133,7 +182,10 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     expect(b.is24h).toBe(true);
     expect(b.rating.avg).toBeCloseTo(4.6, 2);
     expect(b.rating.count).toBe(50);
-    expect(b.rating.dimensions).toEqual([]);
+    expect(b.rating.dimensions).toEqual([
+      { code: 'shelter', avg: 5 },
+      { code: 'staff', avg: 4 },
+    ]);
     expect(b.amenities).toHaveLength(2);
     expect(b.amenities[0].label).toBe('Elektrik');
     expect(b.services[0].code).toBe('mooring_assist');
@@ -143,7 +195,11 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     const day2 = b.hours.find((h: { dayOfWeek: number }) => h.dayOfWeek === 2);
     expect(day2).toEqual({ dayOfWeek: 2, opensAt: null, closesAt: null });
     expect(b.seasons[0]).toEqual({ opensOn: '05-01', closesOn: '10-31' });
-    expect(b.typeDetails).toBeNull();
+    expect(b.typeDetails.kind).toBe('marina');
+    expect(b.typeDetails.berthCount).toBe(380);
+    expect(b.typeDetails.vhfChannel).toBe('72');
+    expect(b.typeDetails.hasBlueFlag).toBe(true);
+    expect(b.typeDetails.travelLiftCapacityTons).toBeCloseTo(100, 1);
     expect(b.media).toEqual({ cover: null, count: 24 });
     expect(b.userContext).toBeNull();
     expect(b.counts).toEqual({ reviews: 50, photos: 24 });
@@ -169,6 +225,21 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     const res = await request(http).get('/v1/locations/e2e-detail-marina').expect(200);
     expect(res.headers['cache-control']).toContain('max-age=300');
     expect(res.headers['vary']).toMatch(/Accept-Language/i);
+  });
+
+  it('typeDetails ayrımı: yakıt iskelesi → kind fuelDock', async () => {
+    const res = await request(http).get('/v1/locations/e2e-detail-fuel').expect(200);
+    expect(res.body.typeDetails.kind).toBe('fuelDock');
+    expect(res.body.typeDetails.hasDiesel).toBe(true);
+    expect(res.body.typeDetails.minDepthM).toBeCloseTo(3.5, 1);
+  });
+
+  it('typeDetails ayrımı: demirleme → kind anchorage (rüzgar koruması)', async () => {
+    const res = await request(http).get('/v1/locations/e2e-detail-anchorage').expect(200);
+    expect(res.body.typeDetails.kind).toBe('anchorage');
+    expect(res.body.typeDetails.holdingType).toBe('sand');
+    expect(res.body.typeDetails.protectionN).toBe(4);
+    expect(res.body.typeDetails.isFree).toBe(true);
   });
 
   it('taslak lokasyon → 404', async () => {

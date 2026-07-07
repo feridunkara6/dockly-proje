@@ -40,7 +40,23 @@ const SAMPLE: DetailData = {
   contacts: [{ type: 'phone', value: '+90', isPrimary: true }],
   hours: [{ dayOfWeek: 1, opensAt: '08:00', closesAt: '22:00' }],
   seasons: [{ opensOn: '05-01', closesOn: '10-31' }],
+  typeDetails: {
+    kind: 'marina',
+    berthCount: 380,
+    vhfChannel: '72',
+    hasBlueFlag: true,
+    travelLiftCapacityTons: 100,
+    craneCapacityTons: null,
+    winterStorage: true,
+  },
+  ratingDimensions: [
+    { code: 'shelter', avg: 4.9 },
+    { code: 'staff', avg: 4.7 },
+  ],
 };
+
+/** Alt-tip detayı olmayan lokasyon (ör. şamandıra) — typeDetails null yolu. */
+const BARE: DetailData = { ...SAMPLE, slug: 'bare', typeDetails: null, ratingDimensions: [] };
 
 class FakeRepo implements LocationsRepository {
   findPinsInBbox(): Promise<never[]> {
@@ -53,7 +69,9 @@ class FakeRepo implements LocationsRepository {
     return Promise.resolve([]);
   }
   findDetail(idOrSlug: string): Promise<DetailData | null> {
-    return Promise.resolve(idOrSlug === 'd-marin' ? SAMPLE : null);
+    if (idOrSlug === 'd-marin') return Promise.resolve(SAMPLE);
+    if (idOrSlug === 'bare') return Promise.resolve(BARE);
+    return Promise.resolve(null);
   }
 }
 
@@ -78,13 +96,37 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     expect(d.amenities[0].label).toBe('Electricity');
   });
 
-  it('ertelenen alanlar null/boş (typeDetails, media.cover, userContext, rating.dimensions)', async () => {
+  it('typeDetails (marina) + rating.dimensions geçirilir', async () => {
     const d = await service.detail('d-marin', 'tr');
+    expect(d.typeDetails).toEqual({
+      kind: 'marina',
+      berthCount: 380,
+      vhfChannel: '72',
+      hasBlueFlag: true,
+      travelLiftCapacityTons: 100,
+      craneCapacityTons: null,
+      winterStorage: true,
+    });
+    expect(d.rating).toEqual({
+      avg: 4.6,
+      count: 50,
+      dimensions: [
+        { code: 'shelter', avg: 4.9 },
+        { code: 'staff', avg: 4.7 },
+      ],
+    });
+  });
+
+  it('alt-tip detayı yoksa typeDetails null, rating.dimensions boş', async () => {
+    const d = await service.detail('bare', 'tr');
     expect(d.typeDetails).toBeNull();
-    expect(d.media.cover).toBeNull();
-    expect(d.media.count).toBe(24);
+    expect(d.rating.dimensions).toEqual([]);
+  });
+
+  it('halen ertelenen alanlar null (media.cover, userContext)', async () => {
+    const d = await service.detail('d-marin', 'tr');
+    expect(d.media).toEqual({ cover: null, count: 24 });
     expect(d.userContext).toBeNull();
-    expect(d.rating).toEqual({ avg: 4.6, count: 50, dimensions: [] });
     expect(d.counts).toEqual({ reviews: 50, photos: 24 });
   });
 

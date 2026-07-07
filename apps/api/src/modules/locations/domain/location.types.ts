@@ -154,6 +154,52 @@ export interface MediaBlock {
   count: number;
 }
 
+// --- typeDetails ayrık birleşimi (docs/23 §11.3; donmuş alt-tip tabloları) ---
+
+export interface MarinaTypeDetails {
+  kind: 'marina';
+  berthCount: number | null;
+  vhfChannel: string | null;
+  hasBlueFlag: boolean | null;
+  travelLiftCapacityTons: number | null;
+  craneCapacityTons: number | null;
+  winterStorage: boolean | null;
+}
+
+export interface FuelDockTypeDetails {
+  kind: 'fuelDock';
+  hasDiesel: boolean | null;
+  hasGasoline: boolean | null;
+  hasAdblue: boolean | null;
+  minDepthM: number | null;
+  paymentNote: string | null;
+}
+
+export interface RestaurantDockTypeDetails {
+  kind: 'restaurantDock';
+  cuisine: string | null;
+  berthCountFree: number | null;
+  minSpendPolicy: string | null;
+  reservationRecommended: boolean | null;
+}
+
+export interface AnchorageTypeDetails {
+  kind: 'anchorage';
+  holdingType: string | null;
+  protectionN: number | null;
+  protectionS: number | null;
+  protectionE: number | null;
+  protectionW: number | null;
+  swellExposure: string | null;
+  isFree: boolean;
+}
+
+export type TypeDetails =
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
+
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve
  * `rating.dimensions` (yorum-türevli) 3.1b-iv-b'de; `media.cover` medya alt
@@ -178,7 +224,7 @@ export interface LocationDetail {
   contacts: ContactDto[];
   hours: HourDto[];
   seasons: SeasonDto[];
-  typeDetails: Record<string, unknown> | null;
+  typeDetails: TypeDetails | null;
   media: MediaBlock;
   userContext: null;
   counts: { reviews: number; photos: number };
