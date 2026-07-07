@@ -48,10 +48,14 @@ BEGIN
 END $$;
 
 -- ---------------------------------------------------------------------------
--- 2) GIST index varlığı + planlayıcının onu KULLANDIĞI (bbox sorgusu)
+-- 2) GIST index varlığı + index'in bbox sorgusunda KULLANILABİLİR olduğu.
+-- Not: 10K satırlık test setinde planlayıcı seq scan'i haklı olarak seçebilir;
+-- bu yüzden doğrulama enable_seqscan=off ile "index yolu çalışıyor mu"yu ölçer
+-- (planlayıcı tercihi değil, fonksiyonel yetenek testi).
 -- ---------------------------------------------------------------------------
+SET LOCAL enable_seqscan = off;
 DO $$
-DECLARE plan json; uses_gist boolean;
+DECLARE plan json; uses_index boolean;
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM pg_indexes
@@ -65,12 +69,13 @@ BEGIN
     WHERE deleted_at IS NULL AND status = ''published''
       AND ST_Intersects(position, ST_MakeEnvelope(27.10, 36.55, 27.60, 36.85, 4326)::geography)'
   INTO plan;
-  uses_gist := plan::text ILIKE '%Index%';
-  IF NOT uses_gist THEN
-    RAISE EXCEPTION 'bbox sorgusu GIST index kullanmıyor. Plan: %', plan::text;
+  uses_index := plan::text ILIKE '%Index%Scan%';
+  IF NOT uses_index THEN
+    RAISE EXCEPTION 'bbox sorgusu GIST index kullanamıyor. Plan: %', plan::text;
   END IF;
-  RAISE NOTICE 'OK 2: bbox sorgusu index scan kullanıyor';
+  RAISE NOTICE 'OK 2: bbox sorgusu index scan kullanabiliyor';
 END $$;
+SET LOCAL enable_seqscan = on;
 
 -- ---------------------------------------------------------------------------
 -- 3) ST_MakeEnvelope viewport sorgusu — sonuç doğruluğu (23 §9.5 sözleşmesi)
