@@ -1,4 +1,4 @@
-# CI hattı (docs/28 §3). Biçimlendirme otomatik düzeltilir ve bot tarafından commit'lenir;
+# CI hattı (docs/28 §3). Biçimlendirme ve lockfile bot tarafından senkronlanır;
 # hata özetleri annotation olarak yayınlanır (giriş gerektirmeden okunabilir).
 name: ci
 
@@ -41,23 +41,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Lockfile yoksa üret ve commit'le (TD-1 — tek seferlik)
+      - name: Lockfile senkronu (package.json değişince tazele ve commit'le)
         run: |
-          if [ ! -f package-lock.json ]; then
-            npm install --package-lock-only --no-audit --no-fund
+          npm install --package-lock-only --no-audit --no-fund
+          if [ -n "$(git status --porcelain package-lock.json)" ]; then
             if [ "${{ github.event_name }}" = "push" ]; then
               git config user.name "github-actions[bot]"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
               git add package-lock.json
-              git commit -m "build: package-lock.json (deterministik kurulum, TD-1)"
+              git commit -m "build: package-lock.json senkronu"
               git push origin HEAD:main \
                 || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
                 || echo "::notice::Lockfile push atlandı — başka koşu güncelledi."
             fi
           fi
-      - name: Bağımlılık kurulumu (lockfile varsa npm ci)
-        run: |
-          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+      - name: Bağımlılık kurulumu (deterministik)
+        run: npm ci --no-audit --no-fund
       - name: Test JWT anahtarları üret (yalnız CI ortamı)
         run: |
           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /tmp/jwt.pem 2>/dev/null
@@ -141,8 +140,7 @@ jobs:
           node-version: 20
       - name: Bağımlılık kurulumu
         working-directory: apps/api
-        run: |
-          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+        run: npm install --no-audit --no-fund
       - name: Dependency vulnerability scan
         working-directory: apps/api
         run: |
