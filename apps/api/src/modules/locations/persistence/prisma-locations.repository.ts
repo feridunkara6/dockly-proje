@@ -325,7 +325,11 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
+        ? {
+            id: loc.adminArea.id,
+            name: loc.adminArea.name,
+            province: loc.adminArea.parent?.name ?? null,
+          }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }

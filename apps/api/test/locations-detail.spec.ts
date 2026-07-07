@@ -1,6 +1,9 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
+import {
+  DetailData,
+  LocationsRepository,
+} from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
