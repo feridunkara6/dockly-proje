@@ -35,9 +35,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0
-        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
-        : Prisma.empty;
+      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
