@@ -1,0 +1,1215 @@
+// =====================================================================
+// Dockly — Prisma Schema
+// Kaynak: docs/22-veritabani-mimarisi.md (FROZEN v2.0, 6 Temmuz 2026)
+// + ADR-001 (user_sessions, idempotency_keys)
+// Fiziksel tek şema (public) — §1.9 izniyle; mantıksal modül ayrımı
+// yalnızca yorumlarla belirtilir. DDL kaynağı: migrations/0001_init/migration.sql
+// (partial unique index'ler, GIST/GIN index'ler, generated column,
+// partition'lama ve trigger'lar Prisma DSL'de ifade edilemez — bunlar
+// yalnızca migration.sql'de yaşar; şema burada en yakın karşılığı taşır).
+// =====================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------
+// ENUM'LAR (§3)
+// ---------------------------------------------------------------------
+
+enum UserStatus {
+  active
+  suspended
+  deleted
+
+  @@map("user_status")
+}
+
+enum LocationStatus {
+  draft
+  pending_review
+  published
+  archived
+
+  @@map("location_status")
+}
+
+enum ModerationStatus {
+  pending
+  approved
+  rejected
+
+  @@map("moderation_status")
+}
+
+enum ModerationEntity {
+  media
+  review
+  suggested_location
+  location_report
+
+  @@map("moderation_entity")
+}
+
+enum ReservationRequestStatus {
+  pending
+  contacted
+  confirmed
+  cancelled_by_user
+  cancelled_by_ops
+  expired
+
+  @@map("reservation_request_status")
+}
+
+enum ReportReason {
+  wrong_info
+  closed_permanently
+  wrong_photo
+  wrong_position
+  duplicate
+  other
+
+  @@map("report_reason")
+}
+
+enum ReportStatus {
+  open
+  in_review
+  resolved
+  rejected
+
+  @@map("report_status")
+}
+
+enum ContactType {
+  phone
+  whatsapp
+  email
+  website
+  vhf
+  instagram
+  facebook
+
+  @@map("contact_type")
+}
+
+enum MediaType {
+  photo
+  video
+  logo
+  document
+
+  @@map("media_type")
+}
+
+enum PriceTier {
+  free
+  paid
+  unknown
+
+  @@map("price_tier")
+}
+
+enum ActorType {
+  user
+  admin
+  system
+
+  @@map("actor_type")
+}
+
+enum NotificationType {
+  booking_status
+  new_photo
+  new_review
+  favorite_update
+  moderation_result
+  system
+
+  @@map("notification_type")
+}
+
+enum AdminAreaLevel {
+  region
+  province
+  district
+
+  @@map("admin_area_level")
+}
+
+enum WaterBodyType {
+  bay
+  cove
+  gulf
+  strait
+  channel
+
+  @@map("water_body_type")
+}
+
+enum ContributionType {
+  review_created
+  photo_approved
+  suggestion_approved
+  report_confirmed
+
+  @@map("contribution_type")
+}
+
+// ---------------------------------------------------------------------
+// LOOKUP TABLOLARI (§4) + i18n (§1.6)
+// ---------------------------------------------------------------------
+
+model Role {
+  id          Int      @id @default(autoincrement()) @db.SmallInt
+  code        String   @unique
+  permissions Json     @default("{}")
+  sortOrder   Int?     @map("sort_order") @db.SmallInt
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  users User[]
+
+  @@map("roles")
+}
+
+model Currency {
+  code          String   @id @db.Char(3)
+  symbol        String
+  decimalDigits Int      @default(2) @map("decimal_digits") @db.SmallInt
+  sortOrder     Int?     @map("sort_order") @db.SmallInt
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  countries Country[]
+
+  @@map("currencies")
+}
+
+model LocationType {
+  id                   Int      @id @default(autoincrement()) @db.SmallInt
+  code                 String   @unique
+  iconKey              String?  @map("icon_key")
+  colorHex             String?  @map("color_hex") @db.Char(7)
+  supportsReservation  Boolean  @default(false) @map("supports_reservation")
+  sortOrder            Int?     @map("sort_order") @db.SmallInt
+  isActive             Boolean  @default(true) @map("is_active")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  i18n                LocationTypeI18n[]
+  locations           Location[]
+  suggestedLocations  SuggestedLocation[]
+
+  @@map("location_types")
+}
+
+model LocationTypeI18n {
+  locationTypeId Int      @map("location_type_id") @db.SmallInt
+  locale         String
+  name           String
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  locationType LocationType @relation(fields: [locationTypeId], references: [id], onDelete: Cascade)
+
+  @@id([locationTypeId, locale])
+  @@map("location_type_i18n")
+}
+
+model BoatType {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  code       String   @unique
+  iconKey    String?  @map("icon_key")
+  sortOrder  Int?     @map("sort_order") @db.SmallInt
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  i18n  BoatTypeI18n[]
+  boats Boat[]
+
+  @@map("boat_types")
+}
+
+model BoatTypeI18n {
+  boatTypeId Int      @map("boat_type_id") @db.SmallInt
+  locale     String
+  name       String
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  boatType BoatType @relation(fields: [boatTypeId], references: [id], onDelete: Cascade)
+
+  @@id([boatTypeId, locale])
+  @@map("boat_type_i18n")
+}
+
+model EngineType {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  code       String   @unique
+  sortOrder  Int?     @map("sort_order") @db.SmallInt
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  boats Boat[]
+
+  @@map("engine_types")
+}
+
+model Amenity {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  code       String   @unique
+  iconKey    String?  @map("icon_key")
+  category   String?
+  sortOrder  Int?     @map("sort_order") @db.SmallInt
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  i18n              AmenityI18n[]
+  locationAmenities LocationAmenity[]
+
+  @@map("amenities")
+}
+
+model AmenityI18n {
+  amenityId Int      @map("amenity_id") @db.SmallInt
+  locale    String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  amenity Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([amenityId, locale])
+  @@map("amenity_i18n")
+}
+
+model Service {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  code       String   @unique
+  iconKey    String?  @map("icon_key")
+  sortOrder  Int?     @map("sort_order") @db.SmallInt
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  i18n             ServiceI18n[]
+  locationServices LocationService[]
+
+  @@map("services")
+}
+
+model ServiceI18n {
+  serviceId Int      @map("service_id") @db.SmallInt
+  locale    String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([serviceId, locale])
+  @@map("service_i18n")
+}
+
+model RatingDimension {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  code       String   @unique
+  sortOrder  Int?     @map("sort_order") @db.SmallInt
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  i18n          RatingDimensionI18n[]
+  reviewRatings ReviewRating[]
+
+  @@map("rating_dimensions")
+}
+
+model RatingDimensionI18n {
+  ratingDimensionId Int      @map("rating_dimension_id") @db.SmallInt
+  locale            String
+  name              String
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  ratingDimension RatingDimension @relation(fields: [ratingDimensionId], references: [id], onDelete: Cascade)
+
+  @@id([ratingDimensionId, locale])
+  @@map("rating_dimension_i18n")
+}
+
+// ---------------------------------------------------------------------
+// GEO (§5.5)
+// ---------------------------------------------------------------------
+
+model Country {
+  code                 String   @id @db.Char(2)
+  iso3                 String   @unique @db.Char(3)
+  name                 String
+  defaultCurrencyCode  String?  @map("default_currency_code") @db.Char(3)
+  defaultLocale        String   @default("tr") @map("default_locale")
+  phonePrefix          String?  @map("phone_prefix")
+  isActive             Boolean  @default(false) @map("is_active")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  defaultCurrency Currency?   @relation(fields: [defaultCurrencyCode], references: [code])
+  adminAreas      AdminArea[]
+  waterBodies     WaterBody[]
+  users           User[]
+  locations       Location[]
+  boatsFlagged    Boat[]
+
+  @@map("countries")
+}
+
+model AdminArea {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  countryCode  String         @map("country_code") @db.Char(2)
+  parentId     String?        @map("parent_id") @db.Uuid
+  level        AdminAreaLevel
+  name         String
+  slug         String?
+  // centroid geography(Point,4326) — Prisma DSL geography'yi yönetemez, gerçek tanım migration.sql'de.
+  centroid     Unsupported("geography(Point, 4326)")?
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  country   Country     @relation(fields: [countryCode], references: [code])
+  parent    AdminArea?  @relation("AdminAreaHierarchy", fields: [parentId], references: [id])
+  children  AdminArea[] @relation("AdminAreaHierarchy")
+  i18n      AdminAreaI18n[]
+  locations Location[]
+
+  @@unique([countryCode, level, slug], map: "ux_admin_areas_country_level_slug")
+  @@map("admin_areas")
+}
+
+model AdminAreaI18n {
+  adminAreaId String   @map("admin_area_id") @db.Uuid
+  locale      String
+  name        String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  adminArea AdminArea @relation(fields: [adminAreaId], references: [id], onDelete: Cascade)
+
+  @@id([adminAreaId, locale])
+  @@map("admin_area_i18n")
+}
+
+model WaterBody {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  countryCode String?        @map("country_code") @db.Char(2)
+  type        WaterBodyType
+  name        String
+  slug        String?        @unique
+  centroid    Unsupported("geography(Point, 4326)")?
+  boundary    Unsupported("geography(Polygon, 4326)")?
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime       @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  country   Country?   @relation(fields: [countryCode], references: [code])
+  locations Location[]
+
+  @@map("water_bodies")
+}
+
+// ---------------------------------------------------------------------
+// IDENTITY (§5.1–5.4) + ADR-001
+// ---------------------------------------------------------------------
+
+model User {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firebaseUid      String     @unique @map("firebase_uid")
+  email            String?    @db.Citext
+  emailVerifiedAt  DateTime?  @map("email_verified_at") @db.Timestamptz(6)
+  phone            String?
+  phoneVerifiedAt  DateTime?  @map("phone_verified_at") @db.Timestamptz(6)
+  roleId           Int        @default(1) @map("role_id") @db.SmallInt
+  status           UserStatus @default(active)
+  locale           String     @default("tr")
+  countryCode      String     @default("TR") @map("country_code") @db.Char(2)
+  isGuest          Boolean    @default(false) @map("is_guest")
+  lastSignInAt     DateTime?  @map("last_sign_in_at") @db.Timestamptz(6)
+  createdAt        DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime   @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  deletedBy        String?    @map("deleted_by") @db.Uuid
+
+  role    Role    @relation(fields: [roleId], references: [id])
+  country Country @relation(fields: [countryCode], references: [code])
+
+  deletedByUser User?  @relation("UserSelfDeletedBy", fields: [deletedBy], references: [id])
+  usersDeleted  User[] @relation("UserSelfDeletedBy")
+
+  profile                     UserProfile?
+  settings                    UserSetting?
+  devices                     UserDevice[]
+  sessions                    UserSession[]
+  idempotencyKeys             IdempotencyKey[]
+
+  boatsOwned                  Boat[]                    @relation("BoatOwner")
+  boatsDeleted                Boat[]                    @relation("BoatDeletedByUser")
+
+  mediaUploaded                Media[]                  @relation("MediaUploader")
+  mediaDeleted                 Media[]                  @relation("MediaDeletedByUser")
+
+  locationsCreated             Location[]               @relation("LocationCreatedBy")
+  locationsVerified            Location[]               @relation("LocationVerifiedBy")
+  locationsDeleted             Location[]               @relation("LocationDeletedByUser")
+
+  reviews                       Review[]                @relation("ReviewAuthor")
+  reviewsDeleted                Review[]                @relation("ReviewDeletedByUser")
+  reviewReactions                ReviewReaction[]
+
+  favorites                     Favorite[]
+  recentlyViewed                RecentlyViewed[]
+
+  suggestedLocations             SuggestedLocation[]     @relation("SuggestedLocationProposer")
+  suggestedLocationsReviewed      SuggestedLocation[]     @relation("SuggestedLocationReviewedBy")
+  suggestedLocationsDeleted       SuggestedLocation[]     @relation("SuggestedLocationDeletedByUser")
+
+  locationReports                 LocationReport[]        @relation("LocationReportReporter")
+  locationReportsResolved         LocationReport[]        @relation("LocationReportResolvedBy")
+
+  contributionEvents               ContributionEvent[]
+
+  moderationTasksAssigned          ModerationTask[]       @relation("ModerationAssignedTo")
+  moderationTasksDecided           ModerationTask[]       @relation("ModerationDecidedBy")
+
+  reservationRequests               ReservationRequest[]  @relation("ReservationRequester")
+  reservationRequestsHandled        ReservationRequest[]  @relation("ReservationHandledBy")
+  reservationRequestsDeleted        ReservationRequest[]  @relation("ReservationDeletedByUser")
+  reservationRequestEvents          ReservationRequestEvent[]
+
+  notifications                     Notification[]
+  notificationPreferences           NotificationPreference[]
+
+  auditLogs                         AuditLog[]
+  appSettingsUpdated                AppSetting[]
+
+  @@map("users")
+}
+
+model Media {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mediaType          MediaType         @default(photo) @map("media_type")
+  uploaderUserId     String?           @map("uploader_user_id") @db.Uuid
+  storageKey         String            @unique @map("storage_key")
+  mimeType           String            @map("mime_type")
+  width              Int?
+  height             Int?
+  sizeBytes          Int?              @map("size_bytes")
+  blurhash           String?
+  takenAt            DateTime?         @map("taken_at") @db.Timestamptz(6)
+  moderationStatus   ModerationStatus  @default(pending) @map("moderation_status")
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  deletedBy          String?           @map("deleted_by") @db.Uuid
+
+  uploader     User? @relation("MediaUploader", fields: [uploaderUserId], references: [id])
+  deletedByUser User? @relation("MediaDeletedByUser", fields: [deletedBy], references: [id])
+
+  userProfilesAvatarOf UserProfile[]
+  locationsCoverOf     Location[]
+  locationMedia        LocationMedia[]
+  reviewMedia          ReviewMedia[]
+  boatMedia            BoatMedia[]
+
+  @@map("media")
+}
+
+model UserProfile {
+  userId               String    @id @map("user_id") @db.Uuid
+  displayName          String    @map("display_name")
+  fullName             String?   @map("full_name")
+  avatarMediaId        String?   @map("avatar_media_id") @db.Uuid
+  bio                  String?
+  homePortLocationId   String?   @map("home_port_location_id") @db.Uuid
+  experienceYears      Int?      @map("experience_years") @db.SmallInt
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  avatarMedia    Media?    @relation(fields: [avatarMediaId], references: [id])
+  homePortLocation Location? @relation(fields: [homePortLocationId], references: [id])
+
+  @@map("user_profiles")
+}
+
+model UserSetting {
+  userId               String    @id @map("user_id") @db.Uuid
+  theme                String?
+  units                String    @default("metric")
+  marketingConsentAt   DateTime? @map("marketing_consent_at") @db.Timestamptz(6)
+  termsAcceptedAt      DateTime  @map("terms_accepted_at") @db.Timestamptz(6)
+  privacyAcceptedAt    DateTime  @map("privacy_accepted_at") @db.Timestamptz(6)
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_settings")
+}
+
+model UserDevice {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  fcmToken     String    @unique @map("fcm_token")
+  platform     String?
+  appVersion   String?   @map("app_version")
+  osVersion    String?   @map("os_version")
+  locale       String?
+  lastSeenAt   DateTime? @map("last_seen_at") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_devices")
+}
+
+// ADR-001: refresh-token rotasyonu / reuse-detection oturum tablosu.
+model UserSession {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  tokenHash         String    @unique @map("token_hash")
+  familyId          String    @map("family_id") @db.Uuid
+  rotatedFromId     String?   @map("rotated_from_id") @db.Uuid
+  issuedAt          DateTime  @default(now()) @map("issued_at") @db.Timestamptz(6)
+  expiresAt         DateTime  @map("expires_at") @db.Timestamptz(6)
+  revokedAt         DateTime? @map("revoked_at") @db.Timestamptz(6)
+  reuseDetectedAt   DateTime? @map("reuse_detected_at") @db.Timestamptz(6)
+  ip                String?   @db.Inet
+  userAgent         String?   @map("user_agent")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user         User          @relation(fields: [userId], references: [id])
+  rotatedFrom  UserSession?  @relation("UserSessionRotation", fields: [rotatedFromId], references: [id])
+  rotatedTo    UserSession[] @relation("UserSessionRotation")
+
+  @@map("user_sessions")
+}
+
+// ADR-001: idempotency anahtarları — immutable cache, updated_at yok.
+model IdempotencyKey {
+  userId          String    @map("user_id") @db.Uuid
+  idemKey         String    @map("idem_key")
+  requestHash     String    @map("request_hash")
+  responseStatus  Int?      @map("response_status") @db.SmallInt
+  responseBody    Json?     @map("response_body")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt       DateTime  @map("expires_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, idemKey])
+  @@map("idempotency_keys")
+}
+
+model Boat {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerUserId        String    @map("owner_user_id") @db.Uuid
+  name               String
+  boatTypeId         Int       @map("boat_type_id") @db.SmallInt
+  brand              String?
+  model              String?
+  buildYear          Int?      @map("build_year") @db.SmallInt
+  lengthM            Decimal   @map("length_m") @db.Decimal(5, 2)
+  beamM              Decimal?  @map("beam_m") @db.Decimal(4, 2)
+  draftM             Decimal?  @map("draft_m") @db.Decimal(4, 2)
+  engineTypeId       Int?      @map("engine_type_id") @db.SmallInt
+  flagCountryCode    String?   @map("flag_country_code") @db.Char(2)
+  registrationNo     String?   @map("registration_no")
+  isPrimary          Boolean   @default(false) @map("is_primary")
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(6)
+  deletedBy          String?   @map("deleted_by") @db.Uuid
+
+  owner        User        @relation("BoatOwner", fields: [ownerUserId], references: [id])
+  deletedByUser User?      @relation("BoatDeletedByUser", fields: [deletedBy], references: [id])
+  boatType     BoatType    @relation(fields: [boatTypeId], references: [id])
+  engineType   EngineType? @relation(fields: [engineTypeId], references: [id])
+  flagCountry  Country?    @relation(fields: [flagCountryCode], references: [code])
+
+  reviews             Review[]
+  reservationRequests ReservationRequest[]
+  boatMedia           BoatMedia[]
+
+  @@map("boats")
+}
+
+// ---------------------------------------------------------------------
+// CATALOG (§5.6–§5.8)
+// ---------------------------------------------------------------------
+
+model Location {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug              String          @unique
+  locationTypeId    Int             @map("location_type_id") @db.SmallInt
+  status            LocationStatus  @default(draft)
+  countryCode       String          @map("country_code") @db.Char(2)
+  adminAreaId       String?         @map("admin_area_id") @db.Uuid
+  waterBodyId       String?         @map("water_body_id") @db.Uuid
+  name              String
+  description       String?
+  // position geography(Point,4326) NOT NULL — gerçek tanım migration.sql'de.
+  position          Unsupported("geography(Point, 4326)")
+  maxBoatLengthM    Decimal?        @map("max_boat_length_m") @db.Decimal(5, 2)
+  maxDraftM         Decimal?        @map("max_draft_m") @db.Decimal(4, 2)
+  depthMinM         Decimal?        @map("depth_min_m") @db.Decimal(4, 2)
+  depthMaxM         Decimal?        @map("depth_max_m") @db.Decimal(4, 2)
+  capacity          Int?
+  priceTier         PriceTier       @default(unknown) @map("price_tier")
+  is24h             Boolean         @default(false) @map("is_24h")
+  coverMediaId      String?         @map("cover_media_id") @db.Uuid
+  ratingAvg         Decimal?        @map("rating_avg") @db.Decimal(3, 2)
+  ratingCount       Int             @default(0) @map("rating_count")
+  reviewCount       Int             @default(0) @map("review_count")
+  photoCount        Int             @default(0) @map("photo_count")
+  // search_text tsvector GENERATED ALWAYS AS (...) STORED — bkz. migration.sql
+  searchText        Unsupported("tsvector")? @map("search_text")
+  verifiedAt        DateTime?       @map("verified_at") @db.Timestamptz(6)
+  verifiedBy        String?         @map("verified_by") @db.Uuid
+  source            String?
+  createdBy         String?         @map("created_by") @db.Uuid
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime        @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime?       @map("deleted_at") @db.Timestamptz(6)
+  deletedBy         String?         @map("deleted_by") @db.Uuid
+
+  locationType LocationType @relation(fields: [locationTypeId], references: [id])
+  country      Country      @relation(fields: [countryCode], references: [code])
+  adminArea    AdminArea?   @relation(fields: [adminAreaId], references: [id])
+  waterBody    WaterBody?   @relation(fields: [waterBodyId], references: [id])
+  coverMedia   Media?       @relation(fields: [coverMediaId], references: [id])
+  verifiedByUser User?      @relation("LocationVerifiedBy", fields: [verifiedBy], references: [id])
+  createdByUser  User?      @relation("LocationCreatedBy", fields: [createdBy], references: [id])
+  deletedByUser  User?      @relation("LocationDeletedByUser", fields: [deletedBy], references: [id])
+
+  marinaDetails           MarinaDetail?
+  fuelDockDetails         FuelDockDetail?
+  restaurantDockDetails   RestaurantDockDetail?
+  anchorageDetails        AnchorageDetail?
+  contacts                LocationContact[]
+  operatingHours          OperatingHour[]
+  openingSeasons          OpeningSeason[]
+  i18n                    LocationI18n[]
+  amenities               LocationAmenity[]
+  services                LocationService[]
+  media                   LocationMedia[]
+  reviews                 Review[]
+  favorites               Favorite[]
+  recentlyViewed          RecentlyViewed[]
+  suggestedLocationsCreatedFrom SuggestedLocation[]
+  locationReports         LocationReport[]
+  reservationRequests     ReservationRequest[]
+  userProfilesHomePort    UserProfile[]
+
+  @@map("locations")
+}
+
+model MarinaDetail {
+  locationId               String    @id @map("location_id") @db.Uuid
+  berthCount               Int?      @map("berth_count")
+  vhfChannel               String?   @map("vhf_channel")
+  hasBlueFlag              Boolean?  @map("has_blue_flag")
+  travelLiftCapacityTons   Decimal?  @map("travel_lift_capacity_tons") @db.Decimal(6, 1)
+  craneCapacityTons        Decimal?  @map("crane_capacity_tons") @db.Decimal(6, 1)
+  winterStorage            Boolean?  @map("winter_storage")
+  createdAt                DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@map("marina_details")
+}
+
+model FuelDockDetail {
+  locationId    String    @id @map("location_id") @db.Uuid
+  hasDiesel     Boolean?  @map("has_diesel")
+  hasGasoline   Boolean?  @map("has_gasoline")
+  hasAdblue     Boolean?  @map("has_adblue")
+  minDepthM     Decimal?  @map("min_depth_m") @db.Decimal(4, 2)
+  paymentNote   String?   @map("payment_note")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@map("fuel_dock_details")
+}
+
+model RestaurantDockDetail {
+  locationId              String    @id @map("location_id") @db.Uuid
+  cuisine                 String?
+  berthCountFree          Int?      @map("berth_count_free")
+  minSpendPolicy          String?   @map("min_spend_policy")
+  reservationRecommended  Boolean?  @map("reservation_recommended")
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@map("restaurant_dock_details")
+}
+
+model AnchorageDetail {
+  locationId      String    @id @map("location_id") @db.Uuid
+  holdingType     String?   @map("holding_type")
+  protectionN     Int?      @map("protection_n") @db.SmallInt
+  protectionS     Int?      @map("protection_s") @db.SmallInt
+  protectionE     Int?      @map("protection_e") @db.SmallInt
+  protectionW     Int?      @map("protection_w") @db.SmallInt
+  swellExposure   String?   @map("swell_exposure")
+  isFree          Boolean   @default(true) @map("is_free")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@map("anchorage_details")
+}
+
+model LocationContact {
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  locationId   String      @map("location_id") @db.Uuid
+  contactType  ContactType @map("contact_type")
+  value        String
+  label        String?
+  isPrimary    Boolean     @default(false) @map("is_primary")
+  isVerified   Boolean     @default(false) @map("is_verified")
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime    @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@unique([locationId, contactType, value], map: "ux_location_contacts_type_value")
+  @@map("location_contacts")
+}
+
+model OperatingHour {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  locationId  String    @map("location_id") @db.Uuid
+  dayOfWeek   Int       @map("day_of_week") @db.SmallInt
+  opensAt     DateTime? @map("opens_at") @db.Time
+  closesAt    DateTime? @map("closes_at") @db.Time
+  isClosed    Boolean   @default(false) @map("is_closed")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@unique([locationId, dayOfWeek, opensAt], map: "ux_operating_hours_day_opens")
+  @@map("operating_hours")
+}
+
+model OpeningSeason {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  locationId     String    @map("location_id") @db.Uuid
+  opensOnMonth   Int?      @map("opens_on_month") @db.SmallInt
+  opensOnDay     Int?      @map("opens_on_day") @db.SmallInt
+  closesOnMonth  Int?      @map("closes_on_month") @db.SmallInt
+  closesOnDay    Int?      @map("closes_on_day") @db.SmallInt
+  note           String?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@map("opening_seasons")
+}
+
+model LocationI18n {
+  locationId   String    @map("location_id") @db.Uuid
+  locale       String
+  name         String?
+  description  String?
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@id([locationId, locale])
+  @@map("location_i18n")
+}
+
+model LocationAmenity {
+  locationId  String    @map("location_id") @db.Uuid
+  amenityId   Int       @map("amenity_id") @db.SmallInt
+  note        String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+  amenity  Amenity  @relation(fields: [amenityId], references: [id])
+
+  @@id([locationId, amenityId])
+  @@map("location_amenities")
+}
+
+model LocationService {
+  locationId  String    @map("location_id") @db.Uuid
+  serviceId   Int       @map("service_id") @db.SmallInt
+  priceNote   String?   @map("price_note")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+  service  Service  @relation(fields: [serviceId], references: [id])
+
+  @@id([locationId, serviceId])
+  @@map("location_services")
+}
+
+model LocationMedia {
+  locationId  String    @map("location_id") @db.Uuid
+  mediaId     String    @map("media_id") @db.Uuid
+  sortOrder   Int?      @map("sort_order") @db.SmallInt
+  isCover     Boolean   @default(false) @map("is_cover")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id])
+  media    Media    @relation(fields: [mediaId], references: [id])
+
+  @@id([locationId, mediaId])
+  @@map("location_media")
+}
+
+// ---------------------------------------------------------------------
+// COMMUNITY (§5.9)
+// ---------------------------------------------------------------------
+
+model Review {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  locationId     String            @map("location_id") @db.Uuid
+  userId         String            @map("user_id") @db.Uuid
+  boatId         String?           @map("boat_id") @db.Uuid
+  overallRating  Int               @map("overall_rating") @db.SmallInt
+  title          String?
+  body           String?
+  visitedOn      DateTime?         @map("visited_on") @db.Date
+  status         ModerationStatus  @default(pending)
+  helpfulCount   Int               @default(0) @map("helpful_count")
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?         @map("deleted_at") @db.Timestamptz(6)
+  deletedBy      String?           @map("deleted_by") @db.Uuid
+
+  location Location @relation(fields: [locationId], references: [id])
+  author   User     @relation("ReviewAuthor", fields: [userId], references: [id])
+  boat     Boat?    @relation(fields: [boatId], references: [id])
+  deletedByUser User? @relation("ReviewDeletedByUser", fields: [deletedBy], references: [id])
+
+  media   ReviewMedia[]
+  ratings ReviewRating[]
+  reactions ReviewReaction[]
+
+  // Gerçek kısıt: partial UNIQUE (location_id, user_id) WHERE deleted_at IS NULL — bkz. migration.sql
+  @@map("reviews")
+}
+
+model ReviewMedia {
+  reviewId   String    @map("review_id") @db.Uuid
+  mediaId    String    @map("media_id") @db.Uuid
+  sortOrder  Int?      @map("sort_order") @db.SmallInt
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  review Review @relation(fields: [reviewId], references: [id])
+  media  Media  @relation(fields: [mediaId], references: [id])
+
+  @@id([reviewId, mediaId])
+  @@map("review_media")
+}
+
+model ReviewRating {
+  reviewId     String    @map("review_id") @db.Uuid
+  dimensionId  Int       @map("dimension_id") @db.SmallInt
+  score        Int       @db.SmallInt
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  review    Review          @relation(fields: [reviewId], references: [id])
+  dimension RatingDimension @relation(fields: [dimensionId], references: [id])
+
+  @@id([reviewId, dimensionId])
+  @@map("review_ratings")
+}
+
+model ReviewReaction {
+  reviewId   String    @map("review_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  reaction   String
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  review Review @relation(fields: [reviewId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@id([reviewId, userId, reaction])
+  @@map("review_reactions")
+}
+
+model BoatMedia {
+  boatId     String    @map("boat_id") @db.Uuid
+  mediaId    String    @map("media_id") @db.Uuid
+  isCover    Boolean   @default(false) @map("is_cover")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  boat  Boat  @relation(fields: [boatId], references: [id])
+  media Media @relation(fields: [mediaId], references: [id])
+
+  @@id([boatId, mediaId])
+  @@map("boat_media")
+}
+
+model Favorite {
+  userId      String    @map("user_id") @db.Uuid
+  locationId  String    @map("location_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user     User     @relation(fields: [userId], references: [id])
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@id([userId, locationId])
+  @@map("favorites")
+}
+
+model RecentlyViewed {
+  userId        String    @map("user_id") @db.Uuid
+  locationId    String    @map("location_id") @db.Uuid
+  lastViewedAt  DateTime  @default(now()) @map("last_viewed_at") @db.Timestamptz(6)
+  viewCount     Int       @default(1) @map("view_count")
+
+  user     User     @relation(fields: [userId], references: [id])
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@id([userId, locationId])
+  @@map("recently_viewed")
+}
+
+model SuggestedLocation {
+  id                  String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String           @map("user_id") @db.Uuid
+  name                String
+  locationTypeId      Int?             @map("location_type_id") @db.SmallInt
+  // position geography(Point,4326) NOT NULL — gerçek tanım migration.sql'de.
+  position            Unsupported("geography(Point, 4326)")
+  note                String?
+  status              ModerationStatus @default(pending)
+  reviewedBy          String?          @map("reviewed_by") @db.Uuid
+  reviewedAt          DateTime?        @map("reviewed_at") @db.Timestamptz(6)
+  createdLocationId   String?          @map("created_location_id") @db.Uuid
+  createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime?        @map("deleted_at") @db.Timestamptz(6)
+  deletedBy           String?          @map("deleted_by") @db.Uuid
+
+  user             User          @relation("SuggestedLocationProposer", fields: [userId], references: [id])
+  locationType     LocationType? @relation(fields: [locationTypeId], references: [id])
+  reviewedByUser   User?         @relation("SuggestedLocationReviewedBy", fields: [reviewedBy], references: [id])
+  createdLocation  Location?     @relation(fields: [createdLocationId], references: [id])
+  deletedByUser    User?         @relation("SuggestedLocationDeletedByUser", fields: [deletedBy], references: [id])
+
+  @@map("suggested_locations")
+}
+
+model LocationReport {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String?      @map("user_id") @db.Uuid
+  locationId       String       @map("location_id") @db.Uuid
+  reason           ReportReason
+  message          String?
+  status           ReportStatus @default(open)
+  resolvedBy       String?      @map("resolved_by") @db.Uuid
+  resolvedAt       DateTime?    @map("resolved_at") @db.Timestamptz(6)
+  resolutionNote   String?      @map("resolution_note")
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user           User?     @relation("LocationReportReporter", fields: [userId], references: [id])
+  location       Location  @relation(fields: [locationId], references: [id])
+  resolvedByUser User?     @relation("LocationReportResolvedBy", fields: [resolvedBy], references: [id])
+
+  @@map("location_reports")
+}
+
+// append-only — güncelleme yok.
+model ContributionEvent {
+  id          BigInt            @id @default(autoincrement())
+  userId      String            @map("user_id") @db.Uuid
+  type        ContributionType
+  entityType  String?           @map("entity_type")
+  entityId    String?           @map("entity_id") @db.Uuid
+  points      Int               @default(0) @db.SmallInt
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("contribution_events")
+}
+
+model ModerationTask {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityType         ModerationEntity  @map("entity_type")
+  entityId           String            @map("entity_id") @db.Uuid
+  status             ModerationStatus  @default(pending)
+  assignedToUserId   String?           @map("assigned_to_user_id") @db.Uuid
+  decidedByUserId    String?           @map("decided_by_user_id") @db.Uuid
+  decidedAt          DateTime?         @map("decided_at") @db.Timestamptz(6)
+  decisionNote       String?           @map("decision_note")
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  assignedTo User? @relation("ModerationAssignedTo", fields: [assignedToUserId], references: [id])
+  decidedBy  User? @relation("ModerationDecidedBy", fields: [decidedByUserId], references: [id])
+
+  @@unique([entityType, entityId], map: "ux_moderation_tasks_entity")
+  @@map("moderation_tasks")
+}
+
+// ---------------------------------------------------------------------
+// BOOKING (§5.9)
+// ---------------------------------------------------------------------
+
+model ReservationRequest {
+  id                 String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String                     @map("user_id") @db.Uuid
+  locationId         String                     @map("location_id") @db.Uuid
+  boatId             String?                    @map("boat_id") @db.Uuid
+  boatName           String                     @map("boat_name")
+  boatLengthM        Decimal                    @map("boat_length_m") @db.Decimal(5, 2)
+  boatDraftM         Decimal                    @map("boat_draft_m") @db.Decimal(4, 2)
+  checkInOn          DateTime                   @map("check_in_on") @db.Date
+  checkOutOn         DateTime                   @map("check_out_on") @db.Date
+  contactPhone       String                     @map("contact_phone")
+  note               String?
+  status             ReservationRequestStatus   @default(pending)
+  handledByUserId    String?                    @map("handled_by_user_id") @db.Uuid
+  expiresAt          DateTime?                  @map("expires_at") @db.Timestamptz(6)
+  createdAt          DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime                   @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime?                  @map("deleted_at") @db.Timestamptz(6)
+  deletedBy          String?                    @map("deleted_by") @db.Uuid
+
+  user           User      @relation("ReservationRequester", fields: [userId], references: [id])
+  location       Location  @relation(fields: [locationId], references: [id])
+  boat           Boat?     @relation(fields: [boatId], references: [id])
+  handledByUser  User?     @relation("ReservationHandledBy", fields: [handledByUserId], references: [id])
+  deletedByUser  User?     @relation("ReservationDeletedByUser", fields: [deletedBy], references: [id])
+
+  events ReservationRequestEvent[]
+
+  @@map("reservation_requests")
+}
+
+// append-only durum geçmişi.
+model ReservationRequestEvent {
+  id            BigInt                     @id @default(autoincrement())
+  requestId     String                     @map("request_id") @db.Uuid
+  fromStatus    ReservationRequestStatus?  @map("from_status")
+  toStatus      ReservationRequestStatus   @map("to_status")
+  actorType     ActorType                  @map("actor_type")
+  actorUserId   String?                    @map("actor_user_id") @db.Uuid
+  note          String?
+  createdAt     DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  request   ReservationRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actorUser User?              @relation(fields: [actorUserId], references: [id])
+
+  @@map("reservation_request_events")
+}
+
+// ---------------------------------------------------------------------
+// MESSAGING (§5.9)
+// ---------------------------------------------------------------------
+
+model Notification {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String           @map("user_id") @db.Uuid
+  type       NotificationType
+  title      String?
+  body       String?
+  data       Json?
+  readAt     DateTime?        @map("read_at") @db.Timestamptz(6)
+  pushedAt   DateTime?        @map("pushed_at") @db.Timestamptz(6)
+  createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  userId        String           @map("user_id") @db.Uuid
+  type          NotificationType
+  pushEnabled   Boolean          @default(true) @map("push_enabled")
+  emailEnabled  Boolean          @default(true) @map("email_enabled")
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, type])
+  @@map("notification_preferences")
+}
+
+// ---------------------------------------------------------------------
+// OPS (§5.10)
+// ---------------------------------------------------------------------
+
+// append-only, aylık RANGE partition (occurred_at) — bkz. migration.sql.
+// Prisma DSL partition'lamayı ifade edemez; PK burada mantıksal (id, occurred_at)'tir.
+model AuditLog {
+  id           BigInt     @default(autoincrement())
+  occurredAt   DateTime   @map("occurred_at") @db.Timestamptz(6)
+  actorType    ActorType  @map("actor_type")
+  actorUserId  String?    @map("actor_user_id") @db.Uuid
+  action       String
+  entityType   String?    @map("entity_type")
+  entityId     String?    @map("entity_id") @db.Uuid
+  oldValues    Json?      @map("old_values")
+  newValues    Json?      @map("new_values")
+  ip           String?    @db.Inet
+  userAgent    String?    @map("user_agent")
+  requestId    String?    @map("request_id") @db.Uuid
+
+  actorUser User? @relation(fields: [actorUserId], references: [id])
+
+  @@id([id, occurredAt])
+  @@map("audit_logs")
+}
+
+model AppSetting {
+  key          String    @id
+  value        Json
+  description  String?
+  updatedBy    String?   @map("updated_by") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  updatedByUser User? @relation(fields: [updatedBy], references: [id])
+
+  @@map("app_settings")
+}

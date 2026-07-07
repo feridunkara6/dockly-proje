@@ -1,0 +1,103 @@
+# CI hattı (docs/28 §3). PR: lint+test+build. main: staging deploy adımı Faz 6'da eklenecek
+# (AWS hesapları açıldığında OIDC rolüyle — kalıcı key YASAK, docs/28 §5).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    services:
+      db:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_USER: dockly
+          POSTGRES_PASSWORD: dockly
+          POSTGRES_DB: dockly_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U dockly -d dockly_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://dockly:dockly@localhost:5432/dockly_test
+      REDIS_URL: redis://localhost:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/api/package-lock.json
+      - run: npm ci
+      - run: npx prisma validate
+      - name: Migration'ları gerçek PostGIS'e uygula (şema doğrulaması)
+        run: npx prisma migrate deploy
+      - name: Seed idempotency kontrolü (iki kez koşar)
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/seed.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/seed.sql
+      - name: Spatial doğrulama paketi (gerçek PostGIS — GIST/ST_* /performans)
+        run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/tests/spatial_validation.sql
+      - run: npm run lint
+      - run: npx prettier --check "src/**/*.ts" "test/**/*.ts"
+      - run: npm run test:cov
+      - run: npm run build
+      - name: Docker imajı build (push yok — PR doğrulaması)
+        run: docker build -t dockly-api:ci .
+      - name: Compose smoke — api ayağa kalkıp /readyz 200 dönüyor mu
+        working-directory: .
+        run: |
+          docker compose up -d --wait db redis
+          docker run -d --name api-smoke --network host \
+            -e NODE_ENV=staging -e PORT=3100 \
+            -e DATABASE_URL="$DATABASE_URL" -e REDIS_URL="$REDIS_URL" \
+            dockly-api:ci
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3100/readyz && exit 0; sleep 1;
+          done
+          docker logs api-smoke; exit 1
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/api/package-lock.json
+      - name: Dependency vulnerability scan
+        working-directory: apps/api
+        run: |
+          npm ci
+          npm audit --audit-level=high
+      - name: License compliance (yalnız izinli lisanslar)
+        working-directory: apps/api
+        run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;BlueOak-1.0.0;CC0-1.0;Unlicense"
+      - name: SAST (semgrep — OWASP kural setleri)
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/owasp-top-ten p/typescript
+      - name: Docker imaj build + Trivy taraması (HIGH/CRITICAL kırar)
+        working-directory: apps/api
+        run: docker build -t dockly-api:scan .
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: dockly-api:scan
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true

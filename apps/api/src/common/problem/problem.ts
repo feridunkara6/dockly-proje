@@ -1,0 +1,88 @@
+import { HttpStatus } from '@nestjs/common';
+
+/**
+ * RFC 9457 Problem Details sözleşmesi (docs/23 §5).
+ * `type` URI'si ve `errors[].code` makine sözleşmesidir; mesajlar sunum detayıdır.
+ */
+export const PROBLEM_BASE = 'https://api.dockly.app/problems/';
+
+export interface FieldError {
+  field: string;
+  code: string;
+  message: string;
+}
+
+export interface ProblemBody {
+  type: string;
+  title: string;
+  status: number;
+  detail?: string;
+  instance?: string;
+  requestId?: string;
+  errors?: FieldError[];
+}
+
+/** docs/23 §5 çekirdek problem type kataloğu. */
+export type ProblemType =
+  | 'invalid-token'
+  | 'token-expired'
+  | 'guest-not-allowed'
+  | 'forbidden'
+  | 'not-found'
+  | 'conflict-state'
+  | 'duplicate-review'
+  | 'duplicate-request'
+  | 'validation-error'
+  | 'rate-limited'
+  | 'payload-too-large'
+  | 'internal';
+
+const CATALOG: Record<ProblemType, { status: HttpStatus; title: string }> = {
+  'invalid-token': { status: HttpStatus.UNAUTHORIZED, title: 'Geçersiz kimlik' },
+  'token-expired': { status: HttpStatus.UNAUTHORIZED, title: 'Oturum süresi doldu' },
+  'guest-not-allowed': { status: HttpStatus.FORBIDDEN, title: 'Bu işlem için hesap gerekli' },
+  forbidden: { status: HttpStatus.FORBIDDEN, title: 'Yetkiniz yok' },
+  'not-found': { status: HttpStatus.NOT_FOUND, title: 'Bulunamadı' },
+  'conflict-state': { status: HttpStatus.CONFLICT, title: 'Geçersiz durum geçişi' },
+  'duplicate-review': { status: HttpStatus.CONFLICT, title: 'Bu noktaya zaten yorumunuz var' },
+  'duplicate-request': { status: HttpStatus.CONFLICT, title: 'Bu tarihlere aktif talebiniz var' },
+  'validation-error': { status: HttpStatus.UNPROCESSABLE_ENTITY, title: 'Doğrulama hatası' },
+  'rate-limited': { status: HttpStatus.TOO_MANY_REQUESTS, title: 'Çok fazla istek' },
+  'payload-too-large': { status: HttpStatus.PAYLOAD_TOO_LARGE, title: 'İçerik çok büyük' },
+  internal: { status: HttpStatus.INTERNAL_SERVER_ERROR, title: 'Beklenmeyen hata' },
+};
+
+/**
+ * Domain/uygulama katmanının fırlattığı tek istisna ailesi (docs/24 §6, §14).
+ * HTTP bilgisi taşımaz görünür ama katalog eşlemesi burada merkezidir.
+ */
+export class AppProblem extends Error {
+  readonly problemType: ProblemType;
+  readonly detail?: string;
+  readonly errors?: FieldError[];
+
+  constructor(problemType: ProblemType, detail?: string, errors?: FieldError[]) {
+    super(detail ?? CATALOG[problemType].title);
+    this.name = 'AppProblem';
+    this.problemType = problemType;
+    this.detail = detail;
+    this.errors = errors;
+  }
+
+  get status(): number {
+    return CATALOG[this.problemType].status;
+  }
+
+  toBody(instance?: string, requestId?: string): ProblemBody {
+    const { status, title } = CATALOG[this.problemType];
+    return {
+      type: `${PROBLEM_BASE}${this.problemType}`,
+      title,
+      status,
+      ...(this.detail ? { detail: this.detail } : {}),
+      ...(instance ? { instance } : {}),
+      ...(requestId ? { requestId } : {}),
+      ...(this.errors?.length ? { errors: this.errors } : {}),
+    };
+  }
+}

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dockly Design System</title>
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --brand-primary:#0C7BDC; --brand-deep:#0A2540; --accent:#2EC4B6;
+    --bg-base:#F7F9FC; --bg-surface:#FFFFFF; --bg-glass:rgba(255,255,255,.72);
+    --text-1:#0F1728; --text-2:#5B6B84;
+    --success:#30A46C; --warning:#FFB224; --error:#E5484D;
+    --hairline:rgba(15,23,40,.08);
+    --shadow:0 8px 24px rgba(10,37,64,.08);
+    --r-sm:12px; --r-md:16px; --r-lg:24px;
+    --sea1:#8EC9EE; --sea2:#2E86C8; --sea3:#0A2540;
+    /* map marker colors */
+    --pin-private:#0C7BDC; --pin-munmarina:#3B82F6; --pin-munpier:#6366F1;
+    --pin-guest:#2EC4B6; --pin-restaurant:#F97316; --pin-fuel:#EAB308;
+    --pin-club:#8B5CF6; --pin-mooring:#64748B; --pin-buoy:#EF4444;
+  }
+  body.dark{
+    --brand-primary:#3B9DF2;
+    --bg-base:#0B1220; --bg-surface:#141C2B; --bg-glass:rgba(20,28,43,.72);
+    --text-1:#F2F5F9; --text-2:#93A1B8;
+    --hairline:rgba(242,245,249,.08);
+    --shadow:0 8px 24px rgba(0,0,0,.4);
+    --sea1:#123252; --sea2:#0E2038; --sea3:#060D18;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
+    background:var(--bg-base); color:var(--text-1);
+    transition:background .25s ease,color .25s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px 120px}
+  /* ============ HEADER ============ */
+  header{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);
+    background:var(--bg-glass);border-bottom:1px solid var(--hairline);
+  }
+  .hrow{max-width:1180px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.02em}
+  .logo svg{display:block}
+  .hrow nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+  .hrow nav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 10px;border-radius:8px}
+  .hrow nav a:hover{background:var(--hairline);color:var(--text-1)}
+  .toggle{
+    margin-left:8px;border:1px solid var(--hairline);background:var(--bg-surface);
+    color:var(--text-1);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;
+    cursor:pointer;box-shadow:var(--shadow);
+  }
+  /* ============ SECTIONS ============ */
+  section{margin-top:72px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--brand-primary);text-transform:uppercase}
+  h2{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 6px}
+  .sub{color:var(--text-2);font-size:15px;max-width:640px;line-height:1.5;margin-bottom:28px}
+  .grid{display:grid;gap:16px}
+  .card{
+    background:var(--bg-surface);border:1px solid var(--hairline);
+    border-radius:var(--r-md);box-shadow:var(--shadow);padding:20px;
+  }
+  .lbl{font-size:11px;font-weight:600;color:var(--text-2);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+  code{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--text-2)}
+  /* ============ COLORS ============ */
+  .swatches{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .sw{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--hairline);background:var(--bg-surface);box-shadow:var(--shadow)}
+  .sw .chip{height:84px}
+  .sw .meta{padding:12px 14px}
+  .sw .meta b{font-size:13px;display:block}
+  /* ============ TYPOGRAPHY ============ */
+  .type-row{display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1px solid var(--hairline)}
+  .type-row:last-child{border-bottom:none}
+  .type-meta{width:210px;flex-shrink:0}
+  .type-meta b{font-size:13px}
+  .type-meta code{display:block;margin-top:2px}
+  /* ============ ICONS ============ */
+  .icon-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+  .icon-cell{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--r-sm)}
+  .icon-cell:hover{background:var(--hairline)}
+  .icon-cell span{font-size:11px;color:var(--text-2);text-align:center}
+  .icon-cell svg{color:var(--text-1)}
+  /* ============ BUTTONS ============ */
+  .btn{
+    -webkit-tap-highlight-color:transparent;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    height:52px;padding:0 24px;border-radius:var(--r-md);font-size:16px;font-weight:600;
+    border:none;cursor:pointer;font-family:inherit;
+    transition:transform .15s ease,opacity .15s ease,background .15s ease;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--brand-primary);color:#fff;box-shadow:0 8px 24px rgba(12,123,220,.32)}
+  .btn-secondary{background:transparent;color:var(--brand-primary);border:1.5px solid var(--brand-primary)}
+  .btn-tertiary{background:transparent;color:var(--brand-primary)}
+  .btn-dark{background:var(--brand-deep);color:#fff}
+  .btn-destructive{background:var(--error);color:#fff}
+  .btn-glass{background:var(--bg-glass);backdrop-filter:blur(20px);color:var(--text-1);border:1px solid var(--hairline)}
+  .btn[disabled]{opacity:.4;cursor:not-allowed;box-shadow:none}
+  .btn-sm{height:40px;padding:0 16px;font-size:14px;border-radius:var(--r-sm)}
+  .btn-pill{height:36px;padding:0 14px;font-size:13px;border-radius:999px}
+  .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  /* chips */
+  .chip-f{
+    display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;
+    font-size:13px;font-weight:500;border:1px solid var(--hairline);background:var(--bg-surface);
+    color:var(--text-1);cursor:pointer;transition:all .15s ease;
+  }
+  .chip-f.on{background:var(--brand-primary);border-color:var(--brand-primary);color:#fff}
+  /* search bar */
+  .searchbar{
+    display:flex;align-items:center;gap:10px;height:52px;padding:0 18px;border-radius:999px;
+    background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--hairline);
+    box-shadow:var(--shadow);color:var(--text-2);font-size:16px;
+  }
+  /* ============ LOCATION CARD ============ */
+  .loc-card{
+    width:280px;border-radius:var(--r-md);overflow:hidden;background:var(--bg-surface);
+    border:1px solid var(--hairline);box-shadow:var(--shadow);cursor:pointer;
+    transition:transform .15s ease;flex-shrink:0;
+  }
+  .loc-card:active{transform:scale(.97)}
+  .loc-img{height:150px;position:relative;background:linear-gradient(140deg,var(--sea1),var(--sea2) 60%,var(--sea3))}
+  .loc-img .heart{
+    position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;
+  }
+  .badge{
+    position:absolute;left:10px;top:10px;font-size:10px;font-weight:700;letter-spacing:.06em;
+    background:rgba(255,255,255,.9);color:var(--brand-deep);padding:5px 9px;border-radius:999px;text-transform:uppercase;
+  }
+  .loc-body{padding:14px}
+  .loc-body h4{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  .loc-sub{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);margin-top:4px}
+  .star{color:#F5A623;font-weight:700}
+  .amen-row{display:flex;gap:6px;margin-top:10px}
+  .amen{
+    width:26px;height:26px;border-radius:8px;background:var(--bg-base);
+    display:flex;align-items:center;justify-content:center;color:var(--text-2);
+  }
+  /* review card */
+  .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--brand-primary));display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+  /* ============ MAP MARKERS ============ */
+  .map-demo{
+    border-radius:var(--r-lg);min-height:280px;position:relative;overflow:hidden;
+    background:
+      radial-gradient(ellipse 500px 220px at 18% 12%, rgba(255,255,255,.16), transparent 60%),
+      linear-gradient(160deg,var(--sea1) 0%,var(--sea2) 55%,var(--sea3) 130%);
+    border:1px solid var(--hairline);box-shadow:var(--shadow);
+  }
+  .pin{
+    position:absolute;width:36px;height:36px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);
+    display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;
+    box-shadow:0 4px 12px rgba(10,37,64,.35);cursor:pointer;transition:transform .15s ease;
+  }
+  .pin svg{transform:rotate(45deg)}
+  .pin:hover{transform:rotate(-45deg) scale(1.25)}
+  .pin.sel{transform:rotate(-45deg) scale(1.3);z-index:2}
+  .cluster{
+    position:absolute;min-width:44px;height:44px;border-radius:50%;padding:0 6px;
+    background:var(--bg-glass);backdrop-filter:blur(12px);border:2px solid #fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--text-1);
+    box-shadow:0 4px 12px rgba(10,37,64,.3);cursor:pointer;
+  }
+  .pin-legend{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .pl{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r-sm);background:var(--bg-surface);border:1px solid var(--hairline)}
+  .pl .dot{width:26px;height:26px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);flex-shrink:0}
+  .pl b{font-size:13px;display:block}
+  .pl code{font-size:10px}
+  /* ============ PHONE MOCKUPS ============ */
+  .phones{display:flex;gap:40px;flex-wrap:wrap;justify-content:center}
+  .phone{
+    width:300px;height:620px;border-radius:44px;background:var(--bg-base);
+    border:10px solid #0d1420;box-shadow:0 24px 60px rgba(10,37,64,.35);
+    position:relative;overflow:hidden;flex-shrink:0;
+  }
+  .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:86px;height:24px;background:#0d1420;border-radius:999px;z-index:30}
+  .phone .screen{position:absolute;inset:0}
+  .phone-label{text-align:center;margin-top:14px;font-size:13px;color:var(--text-2);font-weight:600}
+  /* home mock */
+  .mock-map{position:absolute;inset:0;background:
+      radial-gradient(ellipse 260px 130px at 20% 16%, rgba(255,255,255,.18), transparent 60%),
+      linear-gradient(165deg,var(--sea1),var(--sea2) 62%,var(--sea3) 140%)}
+  .land{position:absolute;background:#DCE8D2;border-radius:40% 60% 55% 45%/50% 45% 55% 50%}
+  body.dark .land{background:#1C2B23}
+  .mock-search{
+    position:absolute;top:48px;left:14px;right:14px;height:44px;border-radius:999px;
+    background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--hairline);
+    display:flex;align-items:center;gap:8px;padding:0 14px;font-size:14px;color:var(--text-2);z-index:10;
+  }
+  .mock-chips{position:absolute;top:100px;left:14px;display:flex;gap:6px;z-index:10}
+  .mock-chip{height:30px;padding:0 12px;border-radius:999px;background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--hairline);font-size:11px;font-weight:600;display:flex;align-items:center;color:var(--text-1)}
+  .mock-chip.on{background:var(--brand-primary);color:#fff;border-color:var(--brand-primary)}
+  .fab{position:absolute;right:14px;width:42px;height:42px;border-radius:50%;background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;color:var(--brand-primary);z-index:10}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:64px;z-index:15;
+    background:var(--bg-glass);backdrop-filter:blur(20px);
+    border-radius:var(--r-lg) var(--r-lg) 0 0;border:1px solid var(--hairline);border-bottom:none;
+    padding:8px 0 12px;
+  }
+  .handle{width:36px;height:4px;border-radius:999px;background:var(--text-2);opacity:.35;margin:4px auto 10px}
+  .sheet h5{font-size:15px;font-weight:700;padding:0 16px;letter-spacing:-.01em}
+  .rail{display:flex;gap:10px;padding:10px 16px 4px;overflow:hidden}
+  .mini-card{width:132px;flex-shrink:0;border-radius:12px;overflow:hidden;background:var(--bg-surface);border:1px solid var(--hairline)}
+  .mini-img{height:64px;background:linear-gradient(140deg,var(--sea1),var(--sea2))}
+  .mini-img.alt{background:linear-gradient(140deg,#F0C27B,#4B79A1)}
+  .mini-img.alt2{background:linear-gradient(140deg,#89F7CE,#2E86C8)}
+  .mini-body{padding:8px 10px}
+  .mini-body b{font-size:11.5px;display:block;letter-spacing:-.01em}
+  .mini-body span{font-size:10px;color:var(--text-2)}
+  /* bottom nav */
+  .bnav{
+    position:absolute;left:0;right:0;bottom:0;height:64px;z-index:20;
+    background:var(--bg-glass);backdrop-filter:blur(20px);border-top:1px solid var(--hairline);
+    display:flex;align-items:stretch;
+  }
+  .bnav .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--text-2)}
+  .bnav .tab.on{color:var(--brand-primary)}
+  /* splash mock */
+  .splash{position:absolute;inset:0;background:linear-gradient(180deg,var(--brand-deep),#06121F);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .wave-logo path{stroke-dasharray:300;stroke-dashoffset:300;animation:draw 1.6s ease forwards infinite}
+  @keyframes draw{0%{stroke-dashoffset:300}55%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+  .splash b{color:#fff;font-size:26px;letter-spacing:-.02em}
+  .splash span{color:rgba(255,255,255,.55);font-size:13px}
+  .dots{display:flex;gap:6px;margin-top:18px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);animation:pulse 1.2s ease infinite}
+  .dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+  @keyframes pulse{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:1;transform:scale(1.25)}}
+  /* skeleton mock */
+  .skel-page{position:absolute;inset:0;background:var(--bg-base);padding:52px 16px 0}
+  .sk{position:relative;overflow:hidden;background:var(--hairline);border-radius:10px}
+  .sk::after{
+    content:"";position:absolute;inset:0;transform:translateX(-100%);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+    animation:shimmer 1.2s infinite;
+  }
+  body.dark .sk::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
+  @keyframes shimmer{to{transform:translateX(100%)}}
+  /* detail sticky cta mock */
+  .detail-hero{height:200px;background:linear-gradient(150deg,var(--sea1),var(--sea2) 70%,var(--sea3))}
+  .cta-bar{
+    position:absolute;left:12px;right:12px;bottom:14px;height:56px;border-radius:var(--r-md);
+    background:var(--brand-primary);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:15px;box-shadow:0 10px 28px rgba(12,123,220,.45);z-index:20;
+  }
+  .glass-top{position:absolute;top:44px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:10}
+  .gbtn{width:36px;height:36px;border-radius:50%;background:var(--bg-glass);backdrop-filter:blur(16px);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;color:var(--text-1)}
+  footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--hairline);color:var(--text-2);font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hrow">
+    <div class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2v14M12 16c-3.5 0-5-2.5-7-2.5M12 16c3.5 0 5-2.5 7-2.5M5 20c2.3 1.4 4.6 2 7 2s4.7-.6 7-2M12 5.5l3-1.5-3-1.5-3 1.5 3 1.5z" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Dockly <span style="font-weight:500;color:var(--text-2);font-size:14px">Design System v1.0</span>
+    </div>
+    <nav>
+      <a href="#renk">Renk</a><a href="#tipografi">Tipografi</a><a href="#ikon">İkonlar</a>
+      <a href="#buton">Butonlar</a><a href="#kart">Kartlar</a><a href="#marker">Map Markers</a>
+      <a href="#mock">Navigasyon & Sheets</a><a href="#loading">Loading</a>
+    </nav>
+    <button class="toggle" onclick="document.body.classList.toggle('dark');this.textContent=document.body.classList.contains('dark')?'☀︎ Light':'☾ Dark'">☾ Dark</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ================= COLORS ================= -->
+<section id="renk">
+  <div class="kicker">01 · Color Palette</div>
+  <h2>Renk Sistemi</h2>
+  <p class="sub">Derin okyanus lacivertinin üzerinde tek bir güçlü marka mavisi. Yüzeyler sessiz, renk yalnızca anlam taşıdığında konuşur. Sağ üstten dark mode'u deneyin — tüm sistem tek geçişte dönüşür.</p>
+  <div class="grid swatches">
+    <div class="sw"><div class="chip" style="background:#0C7BDC"></div><div class="meta"><b>brand.primary</b><code>#0C7BDC · dark #3B9DF2</code></div></div>
+    <div class="sw"><div class="chip" style="background:#0A2540"></div><div class="meta"><b>brand.deep</b><code>#0A2540</code></div></div>
+    <div class="sw"><div class="chip" style="background:#2EC4B6"></div><div class="meta"><b>accent.turquoise</b><code>#2EC4B6 · dark #35D4C5</code></div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg-base);border-bottom:1px solid var(--hairline)"></div><div class="meta"><b>bg.base</b><code>#F7F9FC · dark #0B1220</code></div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg-surface);border-bottom:1px solid var(--hairline)"></div><div class="meta"><b>bg.surface</b><code>#FFFFFF · dark #141C2B</code></div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg-glass);backdrop-filter:blur(20px)"></div><div class="meta"><b>bg.glass</b><code>72% + blur 20</code></div></div>
+    <div class="sw"><div class="chip" style="background:var(--text-1)"></div><div class="meta"><b>text.primary</b><code>#0F1728 · dark #F2F5F9</code></div></div>
+    <div class="sw"><div class="chip" style="background:var(--text-2)"></div><div class="meta"><b>text.secondary</b><code>#5B6B84 · dark #93A1B8</code></div></div>
+    <div class="sw"><div class="chip" style="background:#30A46C"></div><div class="meta"><b>semantic.success</b><code>#30A46C</code></div></div>
+    <div class="sw"><div class="chip" style="background:#FFB224"></div><div class="meta"><b>semantic.warning</b><code>#FFB224</code></div></div>
+    <div class="sw"><div class="chip" style="background:#E5484D"></div><div class="meta"><b>semantic.error</b><code>#E5484D</code></div></div>
+    <div class="sw"><div class="chip" style="background:linear-gradient(140deg,#8EC9EE,#2E86C8,#0A2540)"></div><div class="meta"><b>gradient.sea</b><code>hero placeholder</code></div></div>
+  </div>
+</section>
+
+<!-- ================= TYPOGRAPHY ================= -->
+<section id="tipografi">
+  <div class="kicker">02 · Typography</div>
+  <h2>Tipografi Ölçeği</h2>
+  <p class="sub">iOS'ta SF Pro, Android'de Inter. Sıkı letter-spacing ile büyük boyutlarda "Apple hissi"; gövde metni rahat nefes alır. Dynamic Type ×1.4'e kadar test edilir.</p>
+  <div class="card">
+    <div class="type-row"><div class="type-meta"><b>Display</b><code>32 / 700 / -0.02em · lh 38</code></div><div style="font-size:32px;font-weight:700;letter-spacing:-.02em">Denize açıl.</div></div>
+    <div class="type-row"><div class="type-meta"><b>Title 1</b><code>28 / 700 / -0.02em · lh 34</code></div><div style="font-size:28px;font-weight:700;letter-spacing:-.02em">D-Marin Göcek</div></div>
+    <div class="type-row"><div class="type-meta"><b>Title 2</b><code>22 / 600 / -0.01em · lh 28</code></div><div style="font-size:22px;font-weight:600;letter-spacing:-.01em">Yakındaki Marinalar</div></div>
+    <div class="type-row"><div class="type-meta"><b>Headline</b><code>17 / 600 · lh 22</code></div><div style="font-size:17px;font-weight:600">Rezervasyon Talebi Gönder</div></div>
+    <div class="type-row"><div class="type-meta"><b>Body</b><code>16 / 400 · lh 24</code></div><div style="font-size:16px;line-height:1.5;max-width:460px">Göcek koylarının kalbinde, 380 yat kapasiteli tam donanımlı marina. Elektrik, su ve teknik servis mevcut.</div></div>
+    <div class="type-row"><div class="type-meta"><b>Callout</b><code>15 / 400 · lh 20</code></div><div style="font-size:15px;color:var(--text-2)">★ 4.8 · 214 değerlendirme · Göcek, Muğla</div></div>
+    <div class="type-row"><div class="type-meta"><b>Caption</b><code>13 / 400 · lh 18</code></div><div style="font-size:13px;color:var(--text-2)">Maks. tekne boyu 40m · Draft 5m</div></div>
+    <div class="type-row"><div class="type-meta"><b>Micro</b><code>11 / 500 / +0.06em · uppercase</code></div><div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2)">ÖZEL MARİNA</div></div>
+  </div>
+</section>
+
+<!-- ================= ICONS ================= -->
+<section id="ikon">
+  <div class="kicker">03 · Icons</div>
+  <h2>İkonografi</h2>
+  <p class="sub">2px stroke, yuvarlak uçlu, 24×24 grid — SF Symbols ile yan yana yaşayabilen özel denizcilik seti. Aşağıda amenity (hizmet) ikonları; lokasyon tipi ikonları Map Markers bölümünde renkleriyle birlikte.</p>
+  <div class="card">
+    <div class="grid icon-grid">
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg><span>electricity</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg><span>water</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M4 21h10M14 10h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9l-3-3M6 9h6"/></svg><span>fuel</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v7a2 2 0 0 0 2 2v9M9 3v7M5 6h4M16 3c-1.5 2-2 4-2 6v3h3v9M17 3v18"/></svg><span>restaurant</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V8a4 4 0 0 1 8 0M9 21h8M11 11l1.5 1.5M13 8.5L14.5 10M15 6l1.5 1.5"/></svg><span>shower</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 4H5l1-4zM5 11v9h14v-9M9 15h6"/></svg><span>market</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><circle cx="8" cy="6.5" r=".5"/><circle cx="11" cy="6.5" r=".5"/></svg><span>laundry</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5C5.5 7 8.5 5.5 12 5.5S18.5 7 21 9.5M6 13c1.7-1.6 3.7-2.5 6-2.5s4.3.9 6 2.5M9 16.5c.9-.8 1.9-1.2 3-1.2s2.1.4 3 1.2"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg><span>wifi</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3.5V11c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6.5L12 3z"/><path d="M9 12l2 2 4-4"/></svg><span>security</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span>open_24h</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v14M12 17c-3.5 0-5-2.5-7-2.5M12 17c3.5 0 5-2.5 7-2.5M12 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg><span>mooring / çapa</span></div>
+      <div class="icon-cell"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5 1 3 1.5 4.5 1.5S10.5 18 12 17s3-1.5 4.5-1.5S19.5 16 21 17M4 13l2-7 5 2 6-4 3 9"/></svg><span>navigasyon</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BUTTONS ================= -->
+<section id="buton">
+  <div class="kicker">04 · Buttons & Inputs</div>
+  <h2>Butonlar</h2>
+  <p class="sub">Beş varyant, üç boyut, dört durum. Basılınca 0.97 scale (150ms) — sistemin dokunsal imzası. Loading durumunda buton genişliğini korur, metin spinner'a dönüşür.</p>
+  <div class="card" style="display:flex;flex-direction:column;gap:24px">
+    <div><div class="lbl">Varyantlar</div>
+      <div class="row">
+        <button class="btn btn-primary">Rezervasyon Talebi Gönder</button>
+        <button class="btn btn-secondary">Yol Tarifi</button>
+        <button class="btn btn-tertiary">Tümünü gör</button>
+        <button class="btn btn-glass">🧭 Konumum</button>
+        <button class="btn btn-destructive">Talebi İptal Et</button>
+      </div>
+    </div>
+    <div><div class="lbl">Durumlar</div>
+      <div class="row">
+        <button class="btn btn-primary">Default</button>
+        <button class="btn btn-primary" style="transform:scale(.97);filter:brightness(.92)">Pressed</button>
+        <button class="btn btn-primary" disabled>Disabled</button>
+        <button class="btn btn-primary"><span class="spinner"></span>Gönderiliyor</button>
+        <button class="btn btn-primary" style="background:var(--success)">✓ Gönderildi</button>
+      </div>
+    </div>
+    <div><div class="lbl">Boyutlar</div>
+      <div class="row">
+        <button class="btn btn-primary">Large · 52pt</button>
+        <button class="btn btn-primary btn-sm">Medium · 40pt</button>
+        <button class="btn btn-primary btn-pill">Pill · 36pt</button>
+      </div>
+    </div>
+    <div><div class="lbl">Filtre Chip'leri</div>
+      <div class="row">
+        <button class="chip-f on">⚡ Elektrik</button>
+        <button class="chip-f on">💧 Su</button>
+        <button class="chip-f">🍽 Restoran</button>
+        <button class="chip-f">🚿 Duş</button>
+        <button class="chip-f">📶 WiFi</button>
+        <button class="chip-f">🕐 24 Saat</button>
+        <button class="chip-f on" style="background:var(--brand-deep);border-color:var(--brand-deep)">Filtreler · 2 ✕</button>
+      </div>
+    </div>
+    <div><div class="lbl">Arama Çubuğu (glass)</div>
+      <div class="searchbar" style="max-width:420px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        Marina, koy, şehir ara…
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CARDS ================= -->
+<section id="kart">
+  <div class="kicker">05 · Cards</div>
+  <h2>Kartlar</h2>
+  <p class="sub">Ana sayfa kart raylarının yapı taşı DocklyLocationCard; yorumlar için DocklyReviewCard. Radius 16, gölge y8/blur24/%8 — kartlar zeminden "yüzerek" ayrılır.</p>
+  <div class="row" style="align-items:flex-start">
+    <div class="loc-card">
+      <div class="loc-img">
+        <span class="badge">Özel Marina</span>
+        <span class="heart"><svg width="17" height="17" viewBox="0 0 24 24" fill="#E5484D" stroke="#E5484D" stroke-width="2"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-2 4.2-8.5 9-8.5 9z"/></svg></span>
+      </div>
+      <div class="loc-body">
+        <h4>D-Marin Göcek</h4>
+        <div class="loc-sub"><span class="star">★ 4.8</span> (214) · 2.1 nm · Göcek</div>
+        <div class="amen-row">
+          <span class="amen">⚡</span><span class="amen">💧</span><span class="amen">⛽</span><span class="amen">🍽</span><span class="amen">🚿</span><span class="amen" style="font-size:10px;font-weight:700">+9</span>
+        </div>
+      </div>
+    </div>
+    <div class="loc-card">
+      <div class="loc-img" style="background:linear-gradient(140deg,#F0C27B,#4B79A1 70%,#0A2540)">
+        <span class="badge" style="color:#B45309">Restoran İskelesi</span>
+        <span class="heart"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0F1728" stroke-width="2"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-2 4.2-8.5 9-8.5 9z"/></svg></span>
+      </div>
+      <div class="loc-body">
+        <h4>Kandil Koyu Balıkçısı</h4>
+        <div class="loc-sub"><span class="star">★ 4.6</span> (89) · 5.4 nm · Selimiye</div>
+        <div class="amen-row"><span class="amen">🍽</span><span class="amen">💧</span><span class="amen">📶</span></div>
+      </div>
+    </div>
+    <div class="card" style="width:300px">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="avatar">AK</div>
+        <div style="flex:1"><b style="font-size:14px">Ahmet K.</b><div style="font-size:12px;color:var(--text-2)">Eylül 2026 · ⛵ Yelkenli</div></div>
+        <span class="star" style="font-size:13px">★★★★★</span>
+      </div>
+      <p style="font-size:14px;line-height:1.5;margin-top:12px">Rüzgârda bile çok korunaklı. Palamar ekibi telsizle karşıladı, elektrik-su bağlantısı 10 dakikada hazırdı.</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(140deg,var(--sea1),var(--sea2))"></div>
+        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(140deg,#89F7CE,#2E86C8)"></div>
+      </div>
+      <div style="margin-top:12px;font-size:12.5px;color:var(--text-2)">👍 Faydalı (12) · Yanıtla</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAP MARKERS ================= -->
+<section id="marker">
+  <div class="kicker">06 · Map Markers</div>
+  <h2>Harita İşaretçileri</h2>
+  <p class="sub">9 lokasyon tipi, 9 renk — damla formlu pin, beyaz konturla her harita stilinde okunur. Cluster'lar glass daire içinde sayı taşır; seçili pin %30 büyür ve öne gelir.</p>
+  <div class="map-demo">
+    <div class="land" style="width:220px;height:150px;top:-50px;left:-60px"></div>
+    <div class="land" style="width:170px;height:110px;bottom:-40px;right:-40px"></div>
+    <div class="pin sel" style="background:var(--pin-private);top:60px;left:110px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 4v13M12 17c-3 0-4.3-2.1-6-2.1M12 17c3 0 4.3-2.1 6-2.1M12 6.8a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8z"/></svg></div>
+    <div class="pin" style="background:var(--pin-guest);top:130px;left:56px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M12 11.5V20M8 17.5c1.2 1.4 2.5 2 4 2s2.8-.6 4-2"/></svg></div>
+    <div class="pin" style="background:var(--pin-restaurant);top:96px;right:140px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M7 4v6a2.2 2.2 0 0 0 2.2 2.2V20M11.5 4v6M7 7h4.5M16.5 4c-1.2 1.8-1.7 3.4-1.7 5v3h2.7v8M17.5 4v16"/></svg></div>
+    <div class="pin" style="background:var(--pin-fuel);top:170px;right:80px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V6a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v14M5 20h9M14 11h1.6a1.8 1.8 0 0 1 1.8 1.8v4a1.3 1.3 0 0 0 2.6 0V10l-2.5-2.5M7 9h5"/></svg></div>
+    <div class="pin" style="background:var(--pin-buoy);bottom:56px;left:150px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="10" r="4.5"/><path d="M12 14.5V19M9 19h6"/></svg></div>
+    <div class="cluster" style="top:52px;right:56px">12</div>
+    <div class="cluster" style="bottom:80px;right:190px;min-width:38px;height:38px;font-size:13px">5</div>
+    <!-- mini kart -->
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:16px;width:78%;max-width:420px;background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--hairline);border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)">
+      <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(140deg,var(--sea1),var(--sea2));flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <b style="font-size:14.5px;letter-spacing:-.01em">D-Marin Göcek</b>
+        <div style="font-size:12px;color:var(--text-2)">Özel Marina · <span class="star">★ 4.8</span> · 2.1 nm</div>
+      </div>
+      <button class="btn btn-primary btn-pill">Detay</button>
+    </div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="grid pin-legend">
+    <div class="pl"><span class="dot" style="background:var(--pin-private)"></span><div><b>Özel Marina</b><code>private_marina · #0C7BDC</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-munmarina)"></span><div><b>Belediye Marinası</b><code>municipal_marina · #3B82F6</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-munpier)"></span><div><b>Belediye İskelesi</b><code>municipal_pier · #6366F1</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-guest)"></span><div><b>Misafir Bağlama</b><code>guest_mooring · #2EC4B6</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-restaurant)"></span><div><b>Restoran İskelesi</b><code>restaurant_pier · #F97316</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-fuel)"></span><div><b>Yakıt İskelesi</b><code>fuel_pier · #EAB308</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-club)"></span><div><b>Tekne Kulübü</b><code>boat_club · #8B5CF6</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-mooring)"></span><div><b>Bağlama Noktası</b><code>mooring_point · #64748B</code></div></div>
+    <div class="pl"><span class="dot" style="background:var(--pin-buoy)"></span><div><b>Şamandıra</b><code>buoy · #EF4444</code></div></div>
+  </div>
+</section>
+
+<!-- ================= PHONE MOCKUPS: NAV + SHEET ================= -->
+<section id="mock">
+  <div class="kicker">07 · Navigation, Bottom Sheet & Detail</div>
+  <h2>Ekran Mockup'ları</h2>
+  <p class="sub">Glass bottom navigation (5 sekme), Apple Maps tarzı bottom sheet (peek durumu) ve detay sayfasının sticky CTA'sı — birebir ölçülü kompozisyon.</p>
+  <div class="phones">
+    <!-- HOME -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="mock-map">
+            <div class="land" style="width:200px;height:130px;top:-40px;left:-50px"></div>
+            <div class="land" style="width:150px;height:90px;top:150px;right:-60px"></div>
+          </div>
+          <div class="mock-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            Marina, koy, şehir ara…
+          </div>
+          <div class="mock-chips">
+            <span class="mock-chip on">Marina</span><span class="mock-chip">İskele</span><span class="mock-chip">Yakıt</span><span class="mock-chip">Şamandıra</span>
+          </div>
+          <div class="pin" style="background:var(--pin-private);top:170px;left:70px;width:30px;height:30px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 4v13M12 17c-3 0-4.3-2.1-6-2.1M12 17c3 0 4.3-2.1 6-2.1M12 6.8a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8z"/></svg></div>
+          <div class="pin" style="background:var(--pin-restaurant);top:230px;right:70px;width:30px;height:30px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 4v6a2.2 2.2 0 0 0 2.2 2.2V20M11.5 4v6M7 7h4.5M16.5 4c-1.2 1.8-1.7 3.4-1.7 5v3h2.7v8M17.5 4v16"/></svg></div>
+          <div class="cluster" style="top:150px;right:44px;min-width:36px;height:36px;font-size:12px">8</div>
+          <div class="pin" style="background:var(--pin-guest);top:280px;left:120px;width:30px;height:30px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M12 11.5V20M8 17.5c1.2 1.4 2.5 2 4 2s2.8-.6 4-2"/></svg></div>
+          <div class="fab" style="top:300px">◎</div>
+          <div class="fab" style="top:350px">≡</div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <h5>Yakındaki Marinalar</h5>
+            <div class="rail">
+              <div class="mini-card"><div class="mini-img"></div><div class="mini-body"><b>D-Marin Göcek</b><span>★ 4.8 · 2.1 nm</span></div></div>
+              <div class="mini-card"><div class="mini-img alt"></div><div class="mini-body"><b>Skopea Marina</b><span>★ 4.7 · 3.4 nm</span></div></div>
+              <div class="mini-card"><div class="mini-img alt2"></div><div class="mini-body"><b>Göcek Bel. İsk.</b><span>★ 4.3 · 3.9 nm</span></div></div>
+            </div>
+          </div>
+          <div class="bnav">
+            <div class="tab on"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>Keşfet</div>
+            <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Arama</div>
+            <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-2 4.2-8.5 9-8.5 9z"/></svg>Favoriler</div>
+            <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v14M12 17c-3.5 0-5-2.5-7-2.5M12 17c3.5 0 5-2.5 7-2.5M12 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>Taleplerim</div>
+            <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.5 4.5-5.5 8-5.5s6.5 2 8 5.5"/></svg>Profil</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">S-06 · Ana Harita — peek sheet + glass nav</div>
+    </div>
+    <!-- DETAIL -->
+    <div>
+      <div class="phone">
+        <div class="screen" style="background:var(--bg-base)">
+          <div class="detail-hero"></div>
+          <div class="glass-top">
+            <span class="gbtn">‹</span>
+            <span style="display:flex;gap:8px"><span class="gbtn">♡</span><span class="gbtn">⤴</span></span>
+          </div>
+          <div style="position:absolute;top:176px;left:0;right:0;bottom:0;background:var(--bg-base);border-radius:24px 24px 0 0;padding:18px 16px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--pin-private);text-transform:uppercase">Özel Marina</span>
+            <div style="font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:2px">D-Marin Göcek</div>
+            <div style="font-size:13px;color:var(--text-2);margin-top:3px"><span class="star">★ 4.8</span> (214) · Göcek, Muğla</div>
+            <div style="display:flex;gap:8px;margin-top:14px">
+              <span class="mock-chip" style="height:34px;font-size:12px">🧭 Yol Tarifi</span>
+              <span class="mock-chip" style="height:34px;font-size:12px">📞 Ara</span>
+              <span class="mock-chip" style="height:34px;font-size:12px">🌐 Web</span>
+            </div>
+            <div style="margin-top:16px;padding:12px;border-radius:14px;background:var(--bg-surface);border:1px solid var(--hairline)">
+              <b style="font-size:13px">⛵ Poyraz (12.4m / 1.9m)</b>
+              <div style="font-size:12.5px;color:var(--success);margin-top:6px">✓ Boy uygun (maks 40m)</div>
+              <div style="font-size:12.5px;color:var(--success);margin-top:2px">✓ Draft uygun (5m)</div>
+            </div>
+            <div style="margin-top:14px"><b style="font-size:13px">Hizmetler</b>
+              <div style="display:flex;gap:6px;margin-top:8px">
+                <span class="amen" style="width:34px;height:34px">⚡</span><span class="amen" style="width:34px;height:34px">💧</span><span class="amen" style="width:34px;height:34px">⛽</span><span class="amen" style="width:34px;height:34px">🍽</span><span class="amen" style="width:34px;height:34px">🚿</span><span class="amen" style="width:34px;height:34px">📶</span><span class="amen" style="width:34px;height:34px;font-size:11px;font-weight:700">+8</span>
+              </div>
+            </div>
+          </div>
+          <div class="cta-bar">Rezervasyon Talebi Gönder</div>
+        </div>
+      </div>
+      <div class="phone-label">S-09 · Lokasyon Detay — sticky CTA</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOADING ================= -->
+<section id="loading">
+  <div class="kicker">08 · Loading States</div>
+  <h2>Yükleme Ekranları</h2>
+  <p class="sub">Spinner yerine üç dil: splash'ta çizilen logo, listelerde gerçek yerleşimin iskeleti (shimmer 1.2s), görsellerde blur-hash'ten netleşme. Kullanıcı asla boş beyaz ekran görmez.</p>
+  <div class="phones">
+    <!-- SPLASH -->
+    <div>
+      <div class="phone" style="height:420px">
+        <div class="screen">
+          <div class="splash">
+            <svg class="wave-logo" width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M12 2v14M12 16c-3.5 0-5-2.5-7-2.5M12 16c3.5 0 5-2.5 7-2.5M5 20c2.3 1.4 4.6 2 7 2s4.7-.6 7-2M12 5.5l3-1.5-3-1.5-3 1.5 3 1.5z" stroke="#3B9DF2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <b>Dockly</b>
+            <span>Denizdeki her nokta</span>
+            <div class="dots"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">S-01 · Splash — logo path-draw animasyonu</div>
+    </div>
+    <!-- SKELETON -->
+    <div>
+      <div class="phone" style="height:420px">
+        <div class="screen">
+          <div class="skel-page">
+            <div class="sk" style="height:44px;border-radius:999px"></div>
+            <div style="display:flex;gap:10px;margin-top:16px">
+              <div class="sk" style="width:132px;height:120px;border-radius:12px"></div>
+              <div class="sk" style="width:132px;height:120px;border-radius:12px"></div>
+            </div>
+            <div class="sk" style="height:14px;width:60%;margin-top:16px"></div>
+            <div class="sk" style="height:14px;width:40%;margin-top:8px"></div>
+            <div style="display:flex;gap:10px;margin-top:16px">
+              <div class="sk" style="width:132px;height:120px;border-radius:12px"></div>
+              <div class="sk" style="width:132px;height:120px;border-radius:12px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Skeleton — gerçek yerleşimin iskeleti, shimmer 1.2s</div>
+    </div>
+    <!-- IMAGE LOADING -->
+    <div>
+      <div class="phone" style="height:420px">
+        <div class="screen" style="background:var(--bg-base);padding:52px 16px 0">
+          <div style="border-radius:16px;overflow:hidden;border:1px solid var(--hairline)">
+            <div style="height:120px;background:linear-gradient(140deg,var(--sea1),var(--sea2));filter:blur(14px) saturate(1.2);transform:scale(1.1)"></div>
+            <div style="padding:12px;background:var(--bg-surface)"><b style="font-size:13px">1 · blur-hash placeholder</b></div>
+          </div>
+          <div style="border-radius:16px;overflow:hidden;border:1px solid var(--hairline);margin-top:14px">
+            <div style="height:120px;background:linear-gradient(140deg,var(--sea1),var(--sea2));filter:blur(4px)"></div>
+            <div style="padding:12px;background:var(--bg-surface)"><b style="font-size:13px">2 · netleşme (200ms fade)</b></div>
+          </div>
+          <div style="border-radius:16px;overflow:hidden;border:1px solid var(--hairline);margin-top:14px">
+            <div style="height:120px;background:linear-gradient(140deg,var(--sea1),var(--sea2) 60%,var(--sea3))"></div>
+            <div style="padding:12px;background:var(--bg-surface)"><b style="font-size:13px">3 · tam görsel</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">Görsel pipeline — blur-hash → net</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Dockly Design System v1.0 · Kaynak token'lar: <b>00-foundation.md §7</b> · Uygulama detayı: <b>09-design-system.md</b>, component API'leri: <b>10-component-library.md</b>, etkileşim: <b>21-ekran-tasarimlari.md</b>
+</footer>
+
+</div>
+</body>
+</html>
