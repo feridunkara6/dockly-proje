@@ -33,7 +33,9 @@ class FakeBoatRepo implements BoatRepository {
   validCountries = new Set(['TR', 'GR']);
 
   async listByOwner(): Promise<Boat[]> {
-    return [...this.rows].filter((b) => b).sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary));
+    return [...this.rows]
+      .filter((b) => b)
+      .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary));
   }
   async findOwned(_o: string, id: string): Promise<Boat | null> {
     return this.rows.find((b) => b.id === id) ?? null;

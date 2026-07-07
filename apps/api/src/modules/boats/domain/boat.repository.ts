@@ -20,7 +20,12 @@ export interface BoatRepository {
   }): Promise<LookupResolution>;
   /** Yeni tekne — birincil devri (varsa) ile TEK transaction (docs/22 boats partial unique). */
   create(id: string, ownerUserId: string, input: CreateBoatInput, ids: LookupIds): Promise<Boat>;
-  update(ownerUserId: string, boatId: string, patch: UpdateBoatInput, ids: LookupIds): Promise<Boat>;
+  update(
+    ownerUserId: string,
+    boatId: string,
+    patch: UpdateBoatInput,
+    ids: LookupIds,
+  ): Promise<Boat>;
   softDelete(ownerUserId: string, boatId: string, actorUserId: string): Promise<void>;
   /** Silinen birincil teknenin yerine en yeni aktif tekneyi birincil yapar. */
   promoteNewPrimaryIfNeeded(ownerUserId: string): Promise<void>;

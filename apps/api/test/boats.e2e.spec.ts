@@ -10,7 +10,10 @@ import { FakeFirebaseVerifier, generateTestKeys } from './helpers/auth-test-kit'
 const runIf = process.env.CI === 'true' ? describe : describe.skip;
 
 function ftok(uid: string): string {
-  return 'ftok:' + JSON.stringify({ uid, emailVerified: true, provider: 'google.com', email: `${uid}@e2e.dev` });
+  return (
+    'ftok:' +
+    JSON.stringify({ uid, emailVerified: true, provider: 'google.com', email: `${uid}@e2e.dev` })
+  );
 }
 
 runIf('Boats API (e2e — gerçek DB+Redis)', () => {
@@ -56,13 +59,21 @@ runIf('Boats API (e2e — gerçek DB+Redis)', () => {
     const created = await request(http)
       .post('/v1/boats')
       .set('Authorization', `Bearer ${t}`)
-      .send({ name: 'Poyraz', boatTypeCode: 'sailboat', lengthM: 12.4, engineTypeCode: 'inboard_diesel' })
+      .send({
+        name: 'Poyraz',
+        boatTypeCode: 'sailboat',
+        lengthM: 12.4,
+        engineTypeCode: 'inboard_diesel',
+      })
       .expect(201);
     expect(created.body.isPrimary).toBe(true);
     expect(created.body.boatTypeCode).toBe('sailboat');
     expect(created.body.lengthM).toBe(12.4);
 
-    const list = await request(http).get('/v1/boats').set('Authorization', `Bearer ${t}`).expect(200);
+    const list = await request(http)
+      .get('/v1/boats')
+      .set('Authorization', `Bearer ${t}`)
+      .expect(200);
     expect(list.body.data).toHaveLength(1);
   });
 
@@ -110,7 +121,10 @@ runIf('Boats API (e2e — gerçek DB+Redis)', () => {
       .send({ isPrimary: true })
       .expect(200);
 
-    const list = await request(http).get('/v1/boats').set('Authorization', `Bearer ${t}`).expect(200);
+    const list = await request(http)
+      .get('/v1/boats')
+      .set('Authorization', `Bearer ${t}`)
+      .expect(200);
     const primaries = list.body.data.filter((x: { isPrimary: boolean }) => x.isPrimary);
     expect(primaries).toHaveLength(1);
     expect(primaries[0].id).toBe(b.body.id);
@@ -156,7 +170,10 @@ runIf('Boats API (e2e — gerçek DB+Redis)', () => {
       .delete(`/v1/boats/${a.body.id}`)
       .set('Authorization', `Bearer ${t}`)
       .expect(204);
-    const list = await request(http).get('/v1/boats').set('Authorization', `Bearer ${t}`).expect(200);
+    const list = await request(http)
+      .get('/v1/boats')
+      .set('Authorization', `Bearer ${t}`)
+      .expect(200);
     expect(list.body.data).toHaveLength(1);
     expect(list.body.data[0].id).toBe(b.body.id);
     expect(list.body.data[0].isPrimary).toBe(true);
