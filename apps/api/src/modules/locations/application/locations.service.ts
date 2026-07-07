@@ -24,9 +24,7 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(
-    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
-  ) {}
+  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
