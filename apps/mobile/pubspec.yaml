@@ -1,0 +1,25 @@
+name: dockly_mobile
+description: Dockly mobil uygulaması (docs/26). İskelet — auth ekranları 2.4b'de.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  dockly_api:
+    path: ../../packages/dockly_api
+  dockly_core:
+    path: ../../packages/dockly_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
