@@ -1,0 +1,67 @@
+import 'geo.dart';
+
+/// Kart kapak görseli (docs/23 §11.2). `url` her zaman varyant CDN URL'idir.
+class CoverMedia {
+  const CoverMedia({required this.url, required this.blurhash});
+
+  final String url;
+  final String? blurhash;
+
+  factory CoverMedia.fromJson(Map<String, dynamic> json) => CoverMedia(
+        url: json['url'] as String,
+        blurhash: json['blurhash'] as String?,
+      );
+}
+
+/// Kart/liste öğesi (docs/23 §11.2) — nearby & koleksiyon raylarında kullanılır.
+class LocationSummary {
+  const LocationSummary({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.position,
+    required this.slug,
+    required this.coverMedia,
+    required this.ratingAvg,
+    required this.ratingCount,
+    required this.priceTier,
+    required this.city,
+    required this.waterBodyName,
+    required this.distanceNm,
+    required this.amenityCodes,
+  });
+
+  final String id;
+  final String name;
+  final String type;
+  final GeoPoint position;
+  final String slug;
+  final CoverMedia? coverMedia;
+  final double? ratingAvg;
+  final int ratingCount;
+  final String priceTier;
+  final String? city;
+  final String? waterBodyName;
+  final double distanceNm;
+  final List<String> amenityCodes;
+
+  factory LocationSummary.fromJson(Map<String, dynamic> json) => LocationSummary(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        type: json['type'] as String,
+        position: GeoPoint.fromJson(json['position'] as Map<String, dynamic>),
+        slug: json['slug'] as String,
+        coverMedia: json['coverMedia'] == null
+            ? null
+            : CoverMedia.fromJson(json['coverMedia'] as Map<String, dynamic>),
+        ratingAvg: (json['ratingAvg'] as num?)?.toDouble(),
+        ratingCount: (json['ratingCount'] as num?)?.toInt() ?? 0,
+        priceTier: json['priceTier'] as String,
+        city: json['city'] as String?,
+        waterBodyName: json['waterBodyName'] as String?,
+        distanceNm: (json['distanceNm'] as num?)?.toDouble() ?? 0,
+        amenityCodes: (json['amenityCodes'] as List<dynamic>? ?? const <dynamic>[])
+            .map((dynamic e) => e as String)
+            .toList(growable: false),
+      );
+}

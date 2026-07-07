@@ -3,5 +3,9 @@ library;
 
 export 'src/dockly_client.dart';
 export 'src/auth_api.dart';
+export 'src/locations_api.dart';
 export 'src/dto/session.dart';
+export 'src/dto/geo.dart';
+export 'src/dto/map_result.dart';
+export 'src/dto/location_summary.dart';
 export 'src/problem_mapper.dart';
