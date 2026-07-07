@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { LocationsRepository } from '../domain/locations.repository';
 import { NM_TO_M } from '../domain/nearby';
-import { Bbox, LocationPin, LocationSummary, NearbyParams } from '../domain/location.types';
+import { Bbox, Cluster, LocationPin, LocationSummary, NearbyParams } from '../domain/location.types';
 
 /** Ham satır (PostGIS projeksiyonu). */
 interface PinRow {
@@ -25,6 +25,14 @@ interface NearbyRow extends PinRow {
   amenityCodes: string[] | null;
 }
 
+interface ClusterRow {
+  nodeLon: number;
+  nodeLat: number;
+  lon: number;
+  lat: number;
+  count: number | bigint;
+}
+
 @Injectable()
 export class PrismaLocationsRepository implements LocationsRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -35,7 +43,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -129,6 +139,55 @@ export class PrismaLocationsRepository implements LocationsRepository {
       waterBodyName: r.waterBodyName ?? null,
       distanceNm: Math.round(Number(r.distanceNm) * 100) / 100,
       amenityCodes: r.amenityCodes ?? [],
+    }));
+  }
+
+  async findClusters(
+    bbox: Bbox,
+    types: string[] | undefined,
+    cellDeg: number,
+    limit: number,
+  ): Promise<Cluster[]> {
+    const typeFilter =
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
+
+    // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
+    // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
+    const rows = await this.prisma.$queryRaw<ClusterRow[]>(Prisma.sql`
+      SELECT
+        ST_X(cell)                       AS "nodeLon",
+        ST_Y(cell)                       AS "nodeLat",
+        ST_X(ST_Centroid(ST_Collect(g))) AS "lon",
+        ST_Y(ST_Centroid(ST_Collect(g))) AS "lat",
+        COUNT(*)::int                    AS "count"
+      FROM (
+        SELECT
+          ST_SnapToGrid(l.position::geometry, 0, 0, ${cellDeg}, ${cellDeg}) AS cell,
+          l.position::geometry AS g
+        FROM locations l
+        JOIN location_types lt ON lt.id = l.location_type_id
+        WHERE l.status = 'published'
+          AND l.deleted_at IS NULL
+          AND l.position && ST_MakeEnvelope(${bbox.minLon}, ${bbox.minLat}, ${bbox.maxLon}, ${bbox.maxLat}, 4326)::geography
+          ${typeFilter}
+      ) s
+      GROUP BY cell
+      ORDER BY COUNT(*) DESC
+      LIMIT ${limit}
+    `);
+
+    const half = cellDeg / 2;
+    return rows.map((r) => ({
+      position: { lat: Number(r.lat), lon: Number(r.lon) },
+      count: Number(r.count),
+      bbox: [
+        Number(r.nodeLon) - half,
+        Number(r.nodeLat) - half,
+        Number(r.nodeLon) + half,
+        Number(r.nodeLat) + half,
+      ] as [number, number, number, number],
     }));
   }
 }

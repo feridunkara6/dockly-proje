@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
 import { LocationsService } from '../application/locations.service';
-import { LocationSummary, PinResult } from '../domain/location.types';
+import { LocationSummary, MapResult } from '../domain/location.types';
 
 /**
  * Lokasyon süper-tipi — harita/arama/nearby/detay (docs/23 §8, §10 #10).
@@ -15,9 +15,10 @@ export class LocationsController {
   @Header('Cache-Control', 'public, max-age=120, s-maxage=120, stale-while-revalidate=600')
   async list(
     @Query('bbox') bbox?: string,
+    @Query('zoom') zoom?: string,
     @Query('type') type?: string | string[],
-  ): Promise<PinResult> {
-    return this.locations.pinsInBbox(bbox, normalizeTypes(type));
+  ): Promise<MapResult> {
+    return this.locations.map(bbox, zoom, normalizeTypes(type));
   }
 
   /** Yakınımdaki limanlar (docs/23 §9.6) — mesafeye göre sıralı, S-06 rayı. */
@@ -37,8 +38,6 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type])
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }

@@ -149,6 +149,51 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     expect(res.body.errors[0].code).toBe('bbox-invalid');
   });
 
+  // --- 3.1b-iii: cluster modu (zoom < 12) ---
+
+  interface ClusterDto {
+    position: { lat: number; lon: number };
+    count: number;
+    bbox: [number, number, number, number];
+  }
+
+  it('cluster modu (zoom<12): Göcek 2 nokta → tek balon, locations boş', async () => {
+    const res = await request(http)
+      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=10')
+      .expect(200);
+    expect(res.body.locations).toEqual([]);
+    const clusters: ClusterDto[] = res.body.clusters;
+    expect(clusters).toHaveLength(1);
+    expect(clusters[0].count).toBe(2);
+    expect(clusters[0].bbox).toHaveLength(4);
+    expect(clusters[0].position.lat).toBeCloseTo(36.755, 1);
+  });
+
+  it('cluster modu: 501 nokta tek balonda toplanır (düşük zoom)', async () => {
+    const res = await request(http)
+      .get('/v1/locations?bbox=29.50,39.50,30.50,40.50&zoom=6')
+      .expect(200);
+    expect(res.body.locations).toEqual([]);
+    const clusters: ClusterDto[] = res.body.clusters;
+    expect(clusters).toHaveLength(1);
+    expect(clusters[0].count).toBe(501);
+  });
+
+  it('zoom ≥ 12 → pin modu (clusters boş)', async () => {
+    const res = await request(http)
+      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=13')
+      .expect(200);
+    expect(res.body.clusters).toEqual([]);
+    expect(res.body.locations).toHaveLength(2);
+  });
+
+  it('geçersiz zoom → 422 zoom-invalid', async () => {
+    const res = await request(http)
+      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=abc')
+      .expect(422);
+    expect(res.body.errors[0].code).toBe('zoom-invalid');
+  });
+
   // --- 3.1b-ii: /locations/nearby ---
 
   it('nearby: anonim; yarıçap içindeki 2 Göcek lokasyonu, mesafeye göre sıralı', async () => {

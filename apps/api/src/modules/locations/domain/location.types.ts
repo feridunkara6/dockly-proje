@@ -23,8 +23,22 @@ export interface Bbox {
   maxLat: number;
 }
 
-/** Pin modu yanıtı (docs/23 §9.5): tavanı aşarsa `truncated=true`. */
-export interface PinResult {
+/** Harita balonu (docs/23 §9.5, cluster modu). `bbox` = balonun hücre kapsamı;
+ * istemci dokununca bu bbox ile yeniden sorgular (S-06 kamera uçuşu). */
+export interface Cluster {
+  position: GeoPoint;
+  count: number;
+  /** [minLon, minLat, maxLon, maxLat] */
+  bbox: [number, number, number, number];
+}
+
+/**
+ * Harita yanıtı (docs/23 §9.5). zoom ≥ 12 → `locations` dolu, `clusters` boş;
+ * zoom < 12 → `clusters` dolu, `locations` boş. `truncated` yalnız pin modunda
+ * anlamlı (tavan aşımı).
+ */
+export interface MapResult {
+  clusters: Cluster[];
   locations: LocationPin[];
   truncated: boolean;
 }
