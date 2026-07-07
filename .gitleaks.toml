@@ -1,0 +1,12 @@
+# Gitleaks yapılandırması (docs/29 SEC hijyeni).
+# Varsayılan kural seti AYNEN geçerli; tek istisna: örnek/şablon env dosyası.
+# Gerekçe: .env.example tanımı gereği gerçek secret içermez; içine yazılan
+# PEM/placeholder kalıpları geçmiş commit'lerde kalıcı sahte alarm üretir.
+# Gerçek .env dosyaları .gitignore'dadır ve taramaya TABİDİR.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Şablon env dosyası — gerçek secret barındırmaz"
+paths = ['''apps/api/\.env\.example$''']
