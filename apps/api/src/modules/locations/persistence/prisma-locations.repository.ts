@@ -1,9 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
-import { LocationsRepository } from '../domain/locations.repository';
+import { DetailData, LocationsRepository } from '../domain/locations.repository';
 import { NM_TO_M } from '../domain/nearby';
 import { Bbox, Cluster, LocationPin, LocationSummary, NearbyParams } from '../domain/location.types';
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function pad2(n: number): string {
+  return n < 10 ? `0${n}` : `${n}`;
+}
+
+/** @db.Time → "HH:MM" (UTC saklanır); null ise null. */
+function fmtTime(t: Date | null): string | null {
+  return t ? `${pad2(t.getUTCHours())}:${pad2(t.getUTCMinutes())}` : null;
+}
+
+/** month/day → "MM-DD"; ikisinden biri yoksa null. */
+function fmtMonthDay(month: number | null, day: number | null): string | null {
+  return month != null && day != null ? `${pad2(month)}-${pad2(day)}` : null;
+}
+
+function dec(v: unknown): number | null {
+  return v === null || v === undefined ? null : Number(v);
+}
 
 /** Ham satır (PostGIS projeksiyonu). */
 interface PinRow {
@@ -189,5 +209,94 @@ export class PrismaLocationsRepository implements LocationsRepository {
         Number(r.nodeLat) + half,
       ] as [number, number, number, number],
     }));
+  }
+
+  async findDetail(idOrSlug: string): Promise<DetailData | null> {
+    const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
+    const loc = await this.prisma.location.findFirst({
+      where: { ...where, status: 'published', deletedAt: null },
+      include: {
+        locationType: true,
+        i18n: true,
+        adminArea: { include: { parent: true } },
+        waterBody: true,
+        amenities: { include: { amenity: { include: { i18n: true } } } },
+        services: { include: { service: { include: { i18n: true } } } },
+        contacts: true,
+        operatingHours: true,
+        openingSeasons: true,
+      },
+    });
+    if (!loc) return null;
+
+    const pos = await this.prisma.$queryRaw<{ lat: number; lon: number }[]>(Prisma.sql`
+      SELECT ST_Y(position::geometry) AS lat, ST_X(position::geometry) AS lon
+      FROM locations WHERE id = ${loc.id}::uuid
+    `);
+    const lat = Number(pos[0]?.lat);
+    const lon = Number(pos[0]?.lon);
+
+    const bySort = <T extends { sortOrder: number | null }>(a: T, b: T): number =>
+      (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999);
+
+    return {
+      id: loc.id,
+      slug: loc.slug,
+      type: loc.locationType.code,
+      status: loc.status,
+      baseName: loc.name,
+      baseDescription: loc.description,
+      i18n: loc.i18n.map((t) => ({ locale: t.locale, name: t.name, description: t.description })),
+      lat,
+      lon,
+      countryCode: loc.countryCode,
+      adminArea: loc.adminArea
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
+        : null,
+      waterBody: loc.waterBody
+        ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
+        : null,
+      dimensions: {
+        maxBoatLengthM: dec(loc.maxBoatLengthM),
+        maxDraftM: dec(loc.maxDraftM),
+        depthMinM: dec(loc.depthMinM),
+        depthMaxM: dec(loc.depthMaxM),
+        capacity: loc.capacity ?? null,
+      },
+      priceTier: loc.priceTier,
+      is24h: loc.is24h,
+      verifiedAt: loc.verifiedAt ? loc.verifiedAt.toISOString() : null,
+      ratingAvg: dec(loc.ratingAvg),
+      ratingCount: loc.ratingCount,
+      reviewCount: loc.reviewCount,
+      photoCount: loc.photoCount,
+      amenities: [...loc.amenities]
+        .sort((a, b) => bySort(a.amenity, b.amenity))
+        .map((la) => ({
+          code: la.amenity.code,
+          category: la.amenity.category,
+          translations: la.amenity.i18n.map((i) => ({ locale: i.locale, name: i.name })),
+        })),
+      services: [...loc.services]
+        .sort((a, b) => bySort(a.service, b.service))
+        .map((ls) => ({
+          code: ls.service.code,
+          translations: ls.service.i18n.map((i) => ({ locale: i.locale, name: i.name })),
+        })),
+      contacts: [...loc.contacts]
+        .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary })),
+      hours: [...loc.operatingHours]
+        .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
+        .map((h) => ({
+          dayOfWeek: h.dayOfWeek,
+          opensAt: h.isClosed ? null : fmtTime(h.opensAt),
+          closesAt: h.isClosed ? null : fmtTime(h.closesAt),
+        })),
+      seasons: loc.openingSeasons.map((s) => ({
+        opensOn: fmtMonthDay(s.opensOnMonth, s.opensOnDay),
+        closesOn: fmtMonthDay(s.closesOnMonth, s.closesOnDay),
+      })),
+    };
   }
 }

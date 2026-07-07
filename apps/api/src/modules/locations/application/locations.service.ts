@@ -3,7 +3,23 @@ import { LOCATIONS_REPOSITORY, LocationsRepository } from '../domain/locations.r
 import { PIN_CAP, parseBbox, quantizeBbox } from '../domain/bbox';
 import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../domain/cluster';
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
-import { LocationSummary, MapResult } from '../domain/location.types';
+import { LocationDetail, LocationSummary, MapResult } from '../domain/location.types';
+import { pickLabel } from '../../../common/i18n/locale';
+import { AppProblem } from '../../../common/problem/problem';
+
+/** i18n satırından name/description seçer: istenen → 'en' → temel (null atlanır). */
+function pickI18nField(
+  rows: { locale: string; name: string | null; description: string | null }[],
+  locale: string,
+  field: 'name' | 'description',
+  fallback: string | null,
+): string | null {
+  return (
+    rows.find((r) => r.locale === locale)?.[field] ??
+    rows.find((r) => r.locale === 'en')?.[field] ??
+    fallback
+  );
+}
 
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
@@ -54,5 +70,48 @@ export class LocationsService {
       limit: q.limit,
     });
     return { data };
+  }
+
+  /**
+   * Liman detayı (docs/23 §11.3, S-09). id veya slug ile; bulunamazsa 404.
+   * name/description + olanak/hizmet etiketleri locale'e göre çözülür.
+   * `typeDetails` ve `rating.dimensions` 3.1b-iv-b'de; `media.cover`/`userContext`
+   * ilgili alt sistemlerle gelecek (şimdilik null).
+   */
+  async detail(idOrSlug: string, locale: string): Promise<LocationDetail> {
+    const d = await this.repo.findDetail(idOrSlug);
+    if (!d) throw new AppProblem('not-found');
+
+    return {
+      id: d.id,
+      slug: d.slug,
+      type: d.type,
+      status: d.status,
+      name: pickI18nField(d.i18n, locale, 'name', d.baseName) ?? d.baseName,
+      description: pickI18nField(d.i18n, locale, 'description', d.baseDescription),
+      position: { lat: d.lat, lon: d.lon },
+      geo: { countryCode: d.countryCode, adminArea: d.adminArea, waterBody: d.waterBody },
+      dimensions: d.dimensions,
+      priceTier: d.priceTier,
+      is24h: d.is24h,
+      verifiedAt: d.verifiedAt,
+      rating: { avg: d.ratingAvg, count: d.ratingCount, dimensions: [] },
+      amenities: d.amenities.map((a) => ({
+        code: a.code,
+        label: pickLabel(a.translations, locale, a.code),
+        category: a.category,
+      })),
+      services: d.services.map((s) => ({
+        code: s.code,
+        label: pickLabel(s.translations, locale, s.code),
+      })),
+      contacts: d.contacts,
+      hours: d.hours,
+      seasons: d.seasons,
+      typeDetails: null,
+      media: { cover: null, count: d.photoCount },
+      userContext: null,
+      counts: { reviews: d.reviewCount, photos: d.photoCount },
+    };
   }
 }

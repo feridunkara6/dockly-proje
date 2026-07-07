@@ -1,4 +1,48 @@
-import { Bbox, Cluster, LocationPin, LocationSummary, NearbyParams } from './location.types';
+import {
+  Bbox,
+  Cluster,
+  ContactDto,
+  Dimensions,
+  HourDto,
+  LocationPin,
+  LocationSummary,
+  NearbyParams,
+  SeasonDto,
+} from './location.types';
+
+export interface TranslationRow {
+  locale: string;
+  name: string;
+}
+
+/** Detay için ham veri; i18n etiketleme uygulama katmanında yapılır. */
+export interface DetailData {
+  id: string;
+  slug: string;
+  type: string;
+  status: string;
+  baseName: string;
+  baseDescription: string | null;
+  i18n: { locale: string; name: string | null; description: string | null }[];
+  lat: number;
+  lon: number;
+  countryCode: string;
+  adminArea: { id: string; name: string; province: string | null } | null;
+  waterBody: { id: string; name: string; type: string } | null;
+  dimensions: Dimensions;
+  priceTier: string;
+  is24h: boolean;
+  verifiedAt: string | null;
+  ratingAvg: number | null;
+  ratingCount: number;
+  reviewCount: number;
+  photoCount: number;
+  amenities: { code: string; category: string | null; translations: TranslationRow[] }[];
+  services: { code: string; translations: TranslationRow[] }[];
+  contacts: ContactDto[];
+  hours: HourDto[];
+  seasons: SeasonDto[];
+}
 
 /** Lokasyon coğrafi sorguları (PostGIS; ham SQL — ADR-005). */
 export interface LocationsRepository {
@@ -25,6 +69,12 @@ export interface LocationsRepository {
     cellDeg: number,
     limit: number,
   ): Promise<Cluster[]>;
+
+  /**
+   * Yayınlanmış (silinmemiş) bir lokasyonun detay verisi (docs/23 §11.3); id veya
+   * slug ile. Bulunamazsa `null`. i18n etiketleri ham döner (locale servis'te seçilir).
+   */
+  findDetail(idOrSlug: string): Promise<DetailData | null>;
 }
 
 export const LOCATIONS_REPOSITORY = Symbol('LOCATIONS_REPOSITORY');

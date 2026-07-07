@@ -79,3 +79,107 @@ export interface NearbyParams {
   types?: string[];
   limit: number;
 }
+
+// --- LocationDetail (S-09, docs/23 §11.3) ---
+
+export interface AdminAreaRef {
+  id: string;
+  name: string;
+  province: string | null;
+}
+
+export interface WaterBodyRef {
+  id: string;
+  name: string;
+  type: string;
+}
+
+export interface GeoBlock {
+  countryCode: string;
+  adminArea: AdminAreaRef | null;
+  waterBody: WaterBodyRef | null;
+}
+
+export interface Dimensions {
+  maxBoatLengthM: number | null;
+  maxDraftM: number | null;
+  depthMinM: number | null;
+  depthMaxM: number | null;
+  capacity: number | null;
+}
+
+export interface RatingDimensionAvg {
+  code: string;
+  avg: number;
+}
+
+export interface RatingBlock {
+  avg: number | null;
+  count: number;
+  dimensions: RatingDimensionAvg[];
+}
+
+export interface AmenityLabeled {
+  code: string;
+  label: string;
+  category: string | null;
+}
+
+export interface ServiceLabeled {
+  code: string;
+  label: string;
+}
+
+export interface ContactDto {
+  type: string;
+  value: string;
+  isPrimary: boolean;
+}
+
+/** Gün içi çalışma saati; kapalı günlerde opensAt/closesAt null. */
+export interface HourDto {
+  dayOfWeek: number;
+  opensAt: string | null;
+  closesAt: string | null;
+}
+
+/** Sezon aralığı "MM-DD" (docs/23 §11.3). */
+export interface SeasonDto {
+  opensOn: string | null;
+  closesOn: string | null;
+}
+
+export interface MediaBlock {
+  cover: CoverMedia | null;
+  count: number;
+}
+
+/**
+ * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve
+ * `rating.dimensions` (yorum-türevli) 3.1b-iv-b'de; `media.cover` medya alt
+ * sistemiyle; `userContext` kimlikli bağlamda gelecek — bu anonim uçta `null`.
+ */
+export interface LocationDetail {
+  id: string;
+  slug: string;
+  type: string;
+  status: string;
+  name: string;
+  description: string | null;
+  position: GeoPoint;
+  geo: GeoBlock;
+  dimensions: Dimensions;
+  priceTier: string;
+  is24h: boolean;
+  verifiedAt: string | null;
+  rating: RatingBlock;
+  amenities: AmenityLabeled[];
+  services: ServiceLabeled[];
+  contacts: ContactDto[];
+  hours: HourDto[];
+  seasons: SeasonDto[];
+  typeDetails: Record<string, unknown> | null;
+  media: MediaBlock;
+  userContext: null;
+  counts: { reviews: number; photos: number };
+}

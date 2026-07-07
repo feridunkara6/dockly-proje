@@ -1,6 +1,7 @@
-import { Controller, Get, Header, Query } from '@nestjs/common';
+import { Controller, Get, Header, Headers, Param, Query } from '@nestjs/common';
 import { LocationsService } from '../application/locations.service';
-import { LocationSummary, MapResult } from '../domain/location.types';
+import { LocationDetail, LocationSummary, MapResult } from '../domain/location.types';
+import { resolveLocale } from '../../../common/i18n/locale';
 
 /**
  * Lokasyon süper-tipi — harita/arama/nearby/detay (docs/23 §8, §10 #10).
@@ -32,6 +33,20 @@ export class LocationsController {
     @Query('type') type?: string | string[],
   ): Promise<{ data: LocationSummary[] }> {
     return this.locations.nearby({ lat, lon, radiusNm, limit }, normalizeTypes(type));
+  }
+
+  /**
+   * Liman detayı (docs/23 §10 #12, §11.3). id veya slug ile; i18n Accept-Language.
+   * `nearby`'den SONRA tanımlı — statik segment param'dan önce eşleşsin diye.
+   */
+  @Get(':idOrSlug')
+  @Header('Cache-Control', 'public, max-age=300, s-maxage=300, stale-while-revalidate=600')
+  @Header('Vary', 'Accept-Language')
+  async detail(
+    @Param('idOrSlug') idOrSlug: string,
+    @Headers('accept-language') acceptLanguage?: string,
+  ): Promise<LocationDetail> {
+    return this.locations.detail(idOrSlug, resolveLocale(acceptLanguage));
   }
 }
 
