@@ -1,4 +1,4 @@
-# CI hattı (docs/28 §3). Biçimlendirme ve lockfile bot tarafından senkronlanır;
+# CI hattı (docs/28 §3). Biçimlendirme otomatik düzeltilir ve bot tarafından commit'lenir;
 # hata özetleri annotation olarak yayınlanır (giriş gerektirmeden okunabilir).
 name: ci
 
@@ -52,7 +52,7 @@ jobs:
               git commit -m "build: package-lock.json senkronu"
               git push origin HEAD:main \
                 || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
-                || echo "::notice::Lockfile push atlandı — başka koşu güncelledi."
+                || echo "::notice::Lockfile push atlandı."
             fi
           fi
       - name: Bağımlılık kurulumu (deterministik)
@@ -91,8 +91,8 @@ jobs:
               git commit -m "style: prettier otomatik biçimlendirme"
               git push origin HEAD:main \
                 || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
-                || echo "::notice::Stil push atlandı — başka koşu güncelledi."
-              echo "Biçimlendirme düzeltildi ve commit'lendi."
+                || echo "::notice::Stil push atlandı."
+              echo "Biçimlendirme düzeltildi."
             fi
           fi
       - name: Testler (coverage kapılı)
@@ -169,3 +169,31 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: "1"
           ignore-unfixed: true
+
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.0
+          cache: true
+      - name: dockly_core (saf Dart — analyze + test)
+        working-directory: packages/dockly_core
+        run: |
+          dart pub get
+          dart analyze
+          dart test
+      - name: dockly_api (saf Dart — analyze + test)
+        working-directory: packages/dockly_api
+        run: |
+          dart pub get
+          dart analyze
+          dart test
+      - name: dockly_mobile (Flutter — analyze + test)
+        working-directory: apps/mobile
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
