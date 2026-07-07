@@ -36,7 +36,9 @@ class FakeCatalogRepo implements CatalogRepository {
     ];
   }
   async listServices(): Promise<NamedIconRow[]> {
-    return [{ code: 'mooring_assist', iconKey: null, translations: [{ locale: 'tr', name: 'Palamar' }] }];
+    return [
+      { code: 'mooring_assist', iconKey: null, translations: [{ locale: 'tr', name: 'Palamar' }] },
+    ];
   }
   async listBoatTypes(): Promise<NamedIconRow[]> {
     return [{ code: 'sailboat', iconKey: 'sailboat', translations: [] }];
