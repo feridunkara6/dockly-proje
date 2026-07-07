@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
+  mapbox_maps_flutter: ^2.22.0
   dockly_api:
     path: ../../packages/dockly_api
   dockly_core:
