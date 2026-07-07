@@ -1,20 +1,27 @@
 # Dockly API — multi-stage (docs/24 §17, docs/28 §4). Tek imaj: api + worker (CMD farkı).
-FROM node:20-slim AS deps
-WORKDIR /app
+# Taban: node:22-slim (Node 20 LTS desteği Nisan 2026'da bitti — güvenlik yamaları için 22 LTS).
 # Teknik borç (Faz 2'de kapanır): lockfile üretilince `npm ci`ya dönülecek.
+FROM node:22-slim AS deps
+WORKDIR /app
 COPY package.json ./
 COPY prisma ./prisma
 RUN npm install --no-audit --no-fund && npx prisma generate
 
-FROM node:20-slim AS build
+FROM node:22-slim AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build && npm prune --omit=dev
 
-FROM node:20-slim AS runtime
+FROM node:22-slim AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
+# openssl: Prisma query engine'in çalışma zamanı bağımlılığı (slim imajda gelmez);
+# upgrade: taban katmandaki düzeltmesi yayınlanmış CVE'leri kapatır (Trivy kapısı).
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends openssl \
+  && rm -rf /var/lib/apt/lists/*
 RUN groupadd -r dockly && useradd -r -g dockly dockly
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
