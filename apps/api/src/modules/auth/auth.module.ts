@@ -11,6 +11,7 @@ import {
   GoogleJwksFirebaseVerifier,
 } from '../../infrastructure/firebase/firebase-token.verifier';
 import { RateLimiterService } from '../../infrastructure/redis/rate-limiter.service';
+import { JtiBlacklistService } from '../../infrastructure/redis/jti-blacklist.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 
@@ -20,12 +21,13 @@ import { RolesGuard } from '../../common/guards/roles.guard';
     SessionService,
     TokenSigner,
     RateLimiterService,
+    JtiBlacklistService,
     JwtAuthGuard,
     RolesGuard,
     { provide: FIREBASE_TOKEN_VERIFIER, useClass: GoogleJwksFirebaseVerifier },
     { provide: SESSION_REPOSITORY, useClass: PrismaSessionRepository },
     { provide: USER_ACCOUNT_REPOSITORY, useClass: PrismaUserAccountRepository },
   ],
-  exports: [TokenSigner, JwtAuthGuard, RolesGuard, RateLimiterService],
+  exports: [SessionService, TokenSigner, JwtAuthGuard, RolesGuard, RateLimiterService, JtiBlacklistService],
 })
 export class AuthModule {}

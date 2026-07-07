@@ -65,6 +65,45 @@ export class InMemorySessionRepository implements SessionRepository {
       if (row.userId === userId && row.revokedAt === null) row.revokedAt = new Date();
     }
   }
+
+  async countActiveFamilies(userId: string): Promise<number> {
+    const families = new Set<string>();
+    for (const row of this.rows.values()) {
+      if (row.userId === userId && row.revokedAt === null) families.add(row.familyId);
+    }
+    return families.size;
+  }
+
+  async findOldestActiveFamilyId(userId: string): Promise<string | null> {
+    let oldest: (SessionRecord & { tokenHash: string }) | null = null;
+    for (const row of this.rows.values()) {
+      if (row.userId === userId && row.revokedAt === null) {
+        if (!oldest || row.id < oldest.id) oldest = row; // id = uuidv7 → zaman sıralı
+      }
+    }
+    return oldest?.familyId ?? null;
+  }
+
+  async listActiveSessionIds(userId: string): Promise<string[]> {
+    const ids: string[] = [];
+    for (const row of this.rows.values()) {
+      if (row.userId === userId && row.revokedAt === null) ids.push(row.id);
+    }
+    return ids;
+  }
+}
+
+/** Bellek-içi jti karalistesi. */
+export class InMemoryJtiBlacklist {
+  readonly blocked = new Set<string>();
+
+  async block(jti: string): Promise<void> {
+    this.blocked.add(jti);
+  }
+
+  async isBlocked(jti: string): Promise<boolean> {
+    return this.blocked.has(jti);
+  }
 }
 
 /** Bellek-içi hesap deposu. */

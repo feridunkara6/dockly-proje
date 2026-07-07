@@ -188,3 +188,6 @@ END $$;
 
 ROLLBACK;  -- test verisi kalıcı olmaz
 \echo 'SPATIAL VALIDATION: ALL OK'
+
+-- RLS doğrulaması aynı CI adımında zincirlenir (ADR-003; ayrı ci adımı gerektirmez).
+\ir rls_validation.sql

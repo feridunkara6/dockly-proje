@@ -18,6 +18,12 @@ export interface SessionRepository {
   /** Reuse tespitinde tüm aile düşürülür ve olay işaretlenir (docs/23 §3.2). */
   revokeFamily(familyId: string, reuseDetected: boolean): Promise<void>;
   revokeAllForUser(userId: string): Promise<void>;
+  /** Aktif (iptal edilmemiş) oturum ailesi sayısı — 5 cihaz tavanı (docs/30 §11). */
+  countActiveFamilies(userId: string): Promise<number>;
+  /** En eski aktif ailenin kimliği — tavan aşımında düşürülecek aday. */
+  findOldestActiveFamilyId(userId: string): Promise<string | null>;
+  /** Aktif oturum id'leri (= access jti'leri) — acil iptalde karalisteye alınır. */
+  listActiveSessionIds(userId: string): Promise<string[]>;
 }
 
 export const SESSION_REPOSITORY = Symbol('SESSION_REPOSITORY');

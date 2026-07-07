@@ -3,9 +3,11 @@ import { EnvService } from '../src/config/env.service';
 import { TokenSigner } from '../src/infrastructure/jwt/token.signer';
 import { SessionService } from '../src/modules/auth/application/session.service';
 import { AppProblem } from '../src/common/problem/problem';
+import { JtiBlacklistService } from '../src/infrastructure/redis/jti-blacklist.service';
 import {
   FakeFirebaseVerifier,
   generateTestKeys,
+  InMemoryJtiBlacklist,
   InMemorySessionRepository,
   InMemoryUserAccountRepository,
 } from './helpers/auth-test-kit';
@@ -19,6 +21,7 @@ describe('SessionService (rotating refresh + reuse tespiti, docs/23 §3)', () =>
   let sessions: InMemorySessionRepository;
   let users: InMemoryUserAccountRepository;
   let signer: TokenSigner;
+  let blacklist: InMemoryJtiBlacklist;
 
   beforeAll(() => {
     const keys = generateTestKeys();
@@ -35,7 +38,15 @@ describe('SessionService (rotating refresh + reuse tespiti, docs/23 §3)', () =>
     sessions = new InMemorySessionRepository();
     users = new InMemoryUserAccountRepository();
     signer = new TokenSigner(env);
-    service = new SessionService(new FakeFirebaseVerifier(), sessions, users, signer, env);
+    blacklist = new InMemoryJtiBlacklist();
+    service = new SessionService(
+      new FakeFirebaseVerifier(),
+      sessions,
+      users,
+      signer,
+      blacklist as unknown as JtiBlacklistService,
+      env,
+    );
   });
 
   it('oturum açma: geçerli JWT + rt_ önekli refresh + kullanıcı özeti döner', async () => {
@@ -103,6 +114,29 @@ describe('SessionService (rotating refresh + reuse tespiti, docs/23 §3)', () =>
       problemType: 'invalid-token',
     });
     await expect(service.logout(bundle.refreshToken)).resolves.toBeUndefined();
+  });
+
+  it('5 cihaz tavanı: 6. oturum en eski aileyi düşürür (docs/30 §11)', async () => {
+    const bundles = [];
+    for (let i = 0; i < 6; i++) {
+      bundles.push(await service.createSession(firebaseToken('u-cap'), {}));
+    }
+    expect(await sessions.countActiveFamilies(bundles[0].user.id)).toBe(5);
+    // İlk (en eski) ailenin refresh'i artık geçersiz
+    await expect(service.refreshSession(bundles[0].refreshToken, {})).rejects.toBeInstanceOf(
+      AppProblem,
+    );
+    // En yenisi çalışmaya devam eder
+    await expect(service.refreshSession(bundles[5].refreshToken, {})).resolves.toBeDefined();
+  });
+
+  it('terminateUser: aileler düşer ve yaşayan jti karalisteye girer', async () => {
+    const a = await service.createSession(firebaseToken('u-term'), {});
+    const b = await service.createSession(firebaseToken('u-term'), {});
+    await service.terminateUser(a.user.id);
+    expect(blacklist.blocked.size).toBe(2);
+    await expect(service.refreshSession(a.refreshToken, {})).rejects.toBeInstanceOf(AppProblem);
+    await expect(service.refreshSession(b.refreshToken, {})).rejects.toBeInstanceOf(AppProblem);
   });
 
   it('logoutAll kullanıcının tüm ailelerini düşürür', async () => {

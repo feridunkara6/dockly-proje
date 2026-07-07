@@ -52,4 +52,29 @@ export class PrismaSessionRepository implements SessionRepository {
       data: { revokedAt: new Date() },
     });
   }
+
+  async countActiveFamilies(userId: string): Promise<number> {
+    const families = await this.prisma.userSession.groupBy({
+      by: ['familyId'],
+      where: { userId, revokedAt: null },
+    });
+    return families.length;
+  }
+
+  async findOldestActiveFamilyId(userId: string): Promise<string | null> {
+    const oldest = await this.prisma.userSession.findFirst({
+      where: { userId, revokedAt: null },
+      orderBy: { issuedAt: 'asc' },
+      select: { familyId: true },
+    });
+    return oldest?.familyId ?? null;
+  }
+
+  async listActiveSessionIds(userId: string): Promise<string[]> {
+    const rows = await this.prisma.userSession.findMany({
+      where: { userId, revokedAt: null },
+      select: { id: true },
+    });
+    return rows.map((r) => r.id);
+  }
 }
