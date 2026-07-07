@@ -28,3 +28,40 @@ export interface PinResult {
   locations: LocationPin[];
   truncated: boolean;
 }
+
+/** Kart kapak görseli (docs/23 §11.2). `url` her zaman varyant CDN URL'idir (§12). */
+export interface CoverMedia {
+  url: string;
+  blurhash: string | null;
+}
+
+/**
+ * Kart/liste öğesi (docs/23 §11.2) = Pin + zenginleştirme.
+ * `coverMedia` medya alt sistemi (§12) gelene dek `null` (v1'de lokasyon medyası
+ * henüz doldurulmadı). `isFavorite` yalnız kimlikli bağlamda eklenir — bu anonim
+ * uçta yer almaz.
+ */
+export interface LocationSummary {
+  id: string;
+  name: string;
+  type: string;
+  position: GeoPoint;
+  slug: string;
+  coverMedia: CoverMedia | null;
+  ratingAvg: number | null;
+  ratingCount: number;
+  priceTier: string;
+  city: string | null;
+  waterBodyName: string | null;
+  distanceNm: number;
+  amenityCodes: string[];
+}
+
+/** Doğrulanmış nearby sorgu parametreleri (metreye çevrilmiş yarıçapla). */
+export interface NearbyParams {
+  lat: number;
+  lon: number;
+  radiusMeters: number;
+  types?: string[];
+  limit: number;
+}

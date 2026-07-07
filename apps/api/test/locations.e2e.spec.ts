@@ -4,6 +4,7 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { GlobalProblemFilter } from '../src/common/problem/problem.filter';
 import { PrismaService } from '../src/infrastructure/prisma/prisma.service';
+import { LocationSummary } from '../src/modules/locations/domain/location.types';
 
 /** Harita bbox pin ucu uçtan uca — gerçek PostGIS (yalnız CI). */
 const runIf = process.env.CI === 'true' ? describe : describe.skip;
@@ -42,6 +43,13 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     `);
     await prisma.$executeRawUnsafe(`
       UPDATE locations SET deleted_at = now() WHERE slug = 'e2e-gocek-deleted';
+    `);
+    // Marina'ya olanaklar bağla (amenityCodes array_agg yolunu doğrular).
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO location_amenities (location_id, amenity_id)
+      SELECT l.id, a.id FROM locations l, amenities a
+      WHERE l.slug = 'e2e-gocek-marina' AND a.code IN ('electricity', 'water')
+      ON CONFLICT DO NOTHING;
     `);
     // Tavan testi (500 pin): (30.0,40.0) çevresinde 501 yayınlanmış nokta.
     await prisma.$executeRawUnsafe(`
@@ -139,5 +147,78 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
   it('geçersiz bbox (3 değer) → 422 bbox-invalid', async () => {
     const res = await request(http).get('/v1/locations?bbox=1,2,3&zoom=13').expect(422);
     expect(res.body.errors[0].code).toBe('bbox-invalid');
+  });
+
+  // --- 3.1b-ii: /locations/nearby ---
+
+  it('nearby: anonim; yarıçap içindeki 2 Göcek lokasyonu, mesafeye göre sıralı', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=10')
+      .expect(200);
+    const items: LocationSummary[] = res.body.data;
+    expect(items.length).toBe(2);
+    // Merkez marina noktası → mesafe ~0, ilk sırada
+    expect(items[0].name).toBe('E2E Göcek Marina');
+    expect(items[0].distanceNm).toBeLessThanOrEqual(items[1].distanceNm);
+    expect(items[0].distanceNm).toBeCloseTo(0, 2);
+  });
+
+  it('nearby: LocationSummary alanları (mesafe, amenityCodes, coverMedia=null)', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=10')
+      .expect(200);
+    const marina = res.body.data.find((s: LocationSummary) => s.name === 'E2E Göcek Marina');
+    expect(marina.type).toBe('private_marina');
+    expect(marina.priceTier).toBe('paid');
+    expect(marina.ratingAvg).toBeCloseTo(4.8, 2);
+    expect(marina.ratingCount).toBe(100);
+    expect(marina.slug).toBe('e2e-gocek-marina');
+    expect(marina.coverMedia).toBeNull();
+    expect(marina.city).toBeNull();
+    expect(marina.waterBodyName).toBeNull();
+    expect(marina.amenityCodes).toEqual(['electricity', 'water']);
+    expect(typeof marina.distanceNm).toBe('number');
+  });
+
+  it('nearby: dar yarıçap yalnız merkezdeki marinayı döndürür', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=0.1')
+      .expect(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].name).toBe('E2E Göcek Marina');
+  });
+
+  it('nearby: type filtresi (fuel_pier)', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=10&type=fuel_pier')
+      .expect(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].type).toBe('fuel_pier');
+  });
+
+  it('nearby: limit uygulanır', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=10&limit=1')
+      .expect(200);
+    expect(res.body.data).toHaveLength(1);
+  });
+
+  it('nearby: eksik lat → 422 lat-required', async () => {
+    const res = await request(http).get('/v1/locations/nearby?lon=28.93').expect(422);
+    expect(res.body.errors[0].code).toBe('lat-required');
+  });
+
+  it('nearby: radiusNm > 50 → 422 radius-range', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=100')
+      .expect(422);
+    expect(res.body.errors[0].code).toBe('radius-range');
+  });
+
+  it('nearby: cache başlığı', async () => {
+    const res = await request(http)
+      .get('/v1/locations/nearby?lat=36.75&lon=28.93&radiusNm=10')
+      .expect(200);
+    expect(res.headers['cache-control']).toContain('max-age=60');
   });
 });

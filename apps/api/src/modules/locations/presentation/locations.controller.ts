@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
 import { LocationsService } from '../application/locations.service';
-import { PinResult } from '../domain/location.types';
+import { LocationSummary, PinResult } from '../domain/location.types';
 
 /**
  * Lokasyon süper-tipi — harita/arama/nearby/detay (docs/23 §8, §10 #10).
@@ -18,6 +18,19 @@ export class LocationsController {
     @Query('type') type?: string | string[],
   ): Promise<PinResult> {
     return this.locations.pinsInBbox(bbox, normalizeTypes(type));
+  }
+
+  /** Yakınımdaki limanlar (docs/23 §9.6) — mesafeye göre sıralı, S-06 rayı. */
+  @Get('nearby')
+  @Header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+  async nearby(
+    @Query('lat') lat?: string,
+    @Query('lon') lon?: string,
+    @Query('radiusNm') radiusNm?: string,
+    @Query('limit') limit?: string,
+    @Query('type') type?: string | string[],
+  ): Promise<{ data: LocationSummary[] }> {
+    return this.locations.nearby({ lat, lon, radiusNm, limit }, normalizeTypes(type));
   }
 }
 
