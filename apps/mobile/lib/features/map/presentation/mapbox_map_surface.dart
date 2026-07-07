@@ -48,6 +48,7 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
 
   Future<void> _onMapCreated(MapboxMap map) async {
     _map = map;
+    await map.setCamera(_initialCamera);
     _circles = await map.annotations.createCircleAnnotationManager();
     _labels = await map.annotations.createPointAnnotationManager();
     _circles!.tapEvents(onTap: _onCircleTap);
@@ -162,7 +163,6 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   Widget build(BuildContext context) {
     return MapWidget(
       key: const ValueKey<String>('dockly-mapbox'),
-      cameraOptions: _initialCamera,
       onMapCreated: _onMapCreated,
       onCameraChangeListener: _onCameraChanged,
     );
@@ -170,7 +170,7 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
 }
 
 /// `mapSurfaceBuilderProvider` override'ında kullanılan gerçek yüzey fabrikası.
-final MapSurfaceBuilder mapboxMapSurfaceBuilder = (
+Widget mapboxMapSurfaceBuilder(
   BuildContext context,
   MapSurfaceData data,
   MapSurfaceCallbacks callbacks,
