@@ -1,7 +1,6 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/bootstrap.dart';
 import 'package:dockly_mobile/config/flavor.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

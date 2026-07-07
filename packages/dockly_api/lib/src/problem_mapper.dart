@@ -16,8 +16,9 @@ AppFailure mapDioError(DioException error) {
       return const NetworkFailure('İstek iptal edildi.');
     case DioExceptionType.badCertificate:
       return const NetworkFailure('Güvenli bağlantı kurulamadı.');
-    case DioExceptionType.badResponse:
-    case DioExceptionType.unknown:
+    default:
+      // badResponse, unknown ve dio'nun gelecekteki enum değerleri:
+      // yanıt varsa Problem'e, yoksa ağ hatasına düşülür (ileri uyumlu).
       final response = error.response;
       if (response == null) return const NetworkFailure();
       return mapProblemResponse(response.statusCode, response.data);

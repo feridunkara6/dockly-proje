@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:test/test.dart';
@@ -16,23 +15,17 @@ void main() {
     api = AuthApi(client.dio);
   });
 
-  SessionBundle _validBundle() {
+  void enqueueValidBundle() {
     adapter.enqueueJson(200, <String, dynamic>{
       'accessToken': 'acc.token.value',
       'expiresIn': 900,
       'refreshToken': 'rt_abc',
       'user': <String, dynamic>{'id': 'u1', 'role': 'user', 'isGuest': false, 'locale': 'tr'},
     });
-    return const SessionBundle(
-      accessToken: 'acc.token.value',
-      expiresIn: 900,
-      refreshToken: 'rt_abc',
-      user: SessionUser(id: 'u1', role: 'user', isGuest: false, locale: 'tr'),
-    );
   }
 
   test('createSession: 200 → SessionBundle parse edilir; body doğru gönderilir', () async {
-    _validBundle();
+    enqueueValidBundle();
     final bundle = await api.createSession('firebase-id-token');
     expect(bundle.accessToken, 'acc.token.value');
     expect(bundle.expiresIn, 900);
