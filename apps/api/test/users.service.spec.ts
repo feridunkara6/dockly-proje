@@ -2,7 +2,6 @@ import { UsersService } from '../src/modules/users/application/users.service';
 import { SessionService } from '../src/modules/auth/application/session.service';
 import { UserRepository, DeletionAudit } from '../src/modules/users/domain/user.repository';
 import { UpdateMeInput, UserMe } from '../src/modules/users/domain/user.types';
-import { AppProblem } from '../src/common/problem/problem';
 import { Principal } from '../src/core/auth/principal';
 
 const PRINCIPAL: Principal = {
