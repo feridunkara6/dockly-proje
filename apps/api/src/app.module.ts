@@ -30,8 +30,7 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport:
-            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),

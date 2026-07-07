@@ -1,4 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { currentRequestId } from '../context/request-context';
@@ -48,8 +55,7 @@ export class GlobalProblemFilter implements ExceptionFilter {
       // Framework istisnaları (404, 503-readiness vb.) kendi status'larıyla,
       // kataloglu değilse jenerik "about:blank" type'ıyla Problem'a çevrilir (RFC 9457 §4).
       const status = exception.getStatus();
-      const type =
-        status === HttpStatus.NOT_FOUND ? `${PROBLEM_BASE}not-found` : 'about:blank';
+      const type = status === HttpStatus.NOT_FOUND ? `${PROBLEM_BASE}not-found` : 'about:blank';
       return {
         type,
         title: exception.message,

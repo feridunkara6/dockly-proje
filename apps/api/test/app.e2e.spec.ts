@@ -28,7 +28,8 @@ describe('API çekirdeği (e2e-lite)', () => {
       })
       .overrideProvider(RedisService)
       .useValue({
-        ping: () => (redisHealthy ? Promise.resolve(true) : Promise.reject(new Error('redis down'))),
+        ping: () =>
+          redisHealthy ? Promise.resolve(true) : Promise.reject(new Error('redis down')),
       })
       .compile();
 
