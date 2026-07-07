@@ -28,6 +28,13 @@ import { RolesGuard } from '../../common/guards/roles.guard';
     { provide: SESSION_REPOSITORY, useClass: PrismaSessionRepository },
     { provide: USER_ACCOUNT_REPOSITORY, useClass: PrismaUserAccountRepository },
   ],
-  exports: [SessionService, TokenSigner, JwtAuthGuard, RolesGuard, RateLimiterService, JtiBlacklistService],
+  exports: [
+    SessionService,
+    TokenSigner,
+    JwtAuthGuard,
+    RolesGuard,
+    RateLimiterService,
+    JtiBlacklistService,
+  ],
 })
 export class AuthModule {}
