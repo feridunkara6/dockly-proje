@@ -10,6 +10,7 @@ import { HealthModule } from './modules/health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { BoatsModule } from './modules/boats/boats.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -33,7 +34,8 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport:
+            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),
@@ -43,6 +45,7 @@ const REDACT_PATHS = [
     AuthModule,
     UsersModule,
     BoatsModule,
+    CatalogModule,
   ],
 })
 export class AppModule implements NestModule {
