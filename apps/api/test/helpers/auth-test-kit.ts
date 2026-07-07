@@ -1,7 +1,10 @@
 import { generateKeyPairSync } from 'node:crypto';
 import { AppProblem } from '../../src/common/problem/problem';
 import { FirebaseIdentity } from '../../src/infrastructure/firebase/firebase-token.verifier';
-import { CreateSessionInput, SessionRepository } from '../../src/modules/auth/domain/session.repository';
+import {
+  CreateSessionInput,
+  SessionRepository,
+} from '../../src/modules/auth/domain/session.repository';
 import { UserAccountRepository } from '../../src/modules/auth/domain/user-account.repository';
 import { SessionRecord, UserAccount } from '../../src/modules/auth/domain/auth.types';
 

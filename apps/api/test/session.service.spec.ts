@@ -49,7 +49,10 @@ describe('SessionService (rotating refresh + reuse tespiti, docs/23 §3)', () =>
   });
 
   it('misafir girişi guest=true üretir; sosyal girişle yükseltilir', async () => {
-    const guest = await service.createSession('ftok:' + JSON.stringify({ uid: 'g1', emailVerified: false, provider: 'anonymous' }), {});
+    const guest = await service.createSession(
+      'ftok:' + JSON.stringify({ uid: 'g1', emailVerified: false, provider: 'anonymous' }),
+      {},
+    );
     expect(guest.user.isGuest).toBe(true);
     const upgraded = await service.createSession(firebaseToken('g1'), {});
     expect(upgraded.user.isGuest).toBe(false);

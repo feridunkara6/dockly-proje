@@ -11,10 +11,7 @@ import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { RequestMeta, SessionBundle, UserAccount } from '../domain/auth.types';
 import { SESSION_REPOSITORY, SessionRepository } from '../domain/session.repository';
-import {
-  USER_ACCOUNT_REPOSITORY,
-  UserAccountRepository,
-} from '../domain/user-account.repository';
+import { USER_ACCOUNT_REPOSITORY, UserAccountRepository } from '../domain/user-account.repository';
 
 const REFRESH_TOKEN_PREFIX = 'rt_';
 const REFRESH_TOKEN_BYTES = 32;
