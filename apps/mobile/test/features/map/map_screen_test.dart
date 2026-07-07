@@ -1,0 +1,79 @@
+import 'package:dockly_api/dockly_api.dart';
+import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
+import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/fake_map_surface.dart';
+import '../../support/map_fakes.dart';
+
+Widget _app(FakeMapGateway gateway) {
+  return ProviderScope(
+    overrides: <Override>[
+      mapLocationsGatewayProvider.overrideWithValue(gateway),
+      mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
+      mapDebounceProvider.overrideWithValue(Duration.zero),
+    ],
+    child: const MaterialApp(home: MapScreen()),
+  );
+}
+
+const ValueKey<String> _pinKey = ValueKey<String>('pin-loc-1');
+
+void main() {
+  testWidgets('açılışta görünüm bildirilir → marker çizilir', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult)));
+    await tester.pumpAndSettle();
+    expect(find.byKey(_pinKey), findsOneWidget);
+  });
+
+  testWidgets('pin dokunma → seçim gösterilir', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('selection')), findsOneWidget);
+    expect(find.text('secili:loc-1'), findsOneWidget);
+  });
+
+  testWidgets('boş bölge → boş görünüm', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(
+      result: const MapResult(
+        clusters: <Cluster>[],
+        locations: <LocationPin>[],
+        truncated: false,
+      ),
+    )));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('henüz liman yok'), findsOneWidget);
+  });
+
+  testWidgets('truncated → yakınlaştırma ipucu', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(
+      result: const MapResult(
+        clusters: <Cluster>[],
+        locations: <LocationPin>[testPin],
+        truncated: true,
+      ),
+    )));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('yakınlaştırın'), findsOneWidget);
+  });
+
+  testWidgets('hata → hata görünümü + retry başarıyla toparlar', (WidgetTester tester) async {
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    await tester.pumpWidget(_app(gateway));
+    await tester.pumpAndSettle();
+    expect(find.text('Tekrar dene'), findsOneWidget);
+    expect(find.byKey(_pinKey), findsNothing);
+
+    gateway.error = null;
+    gateway.result = pinResult;
+    await tester.tap(find.text('Tekrar dene'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(_pinKey), findsOneWidget);
+  });
+}
