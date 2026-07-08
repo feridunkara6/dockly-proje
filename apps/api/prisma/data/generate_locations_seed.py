@@ -1,0 +1,274 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Veri edinimi partilerinden (data/*.json) seed_locations.sql üretir.
+
+Kurallar (Faz 5 veri edinimi):
+- Enum/kod doğrulaması: amenity/service/contact tipleri şemadaki whitelist'e uymalı.
+- Koordinat akıl kontrolü: Türkiye sınırlayıcı kutusu içinde olmalı.
+- Slug benzersizliği + isim benzerliğiyle mükerrer kontrolü.
+- Üretilen SQL tamamen idempotent (ON CONFLICT DO NOTHING) — CI seed'i iki kez koşar.
+Kullanım: python3 generate_locations_seed.py  (bu klasörden)
+"""
+import json
+import re
+import sys
+import unicodedata
+from pathlib import Path
+
+AMENITIES = {"electricity", "water", "fuel", "restaurant", "shower", "market", "laundry",
+             "wifi", "security", "wc", "pump_out", "crane", "travel_lift", "technical_service"}
+SERVICES = {"mooring_assist", "technical_service", "crane", "winter_storage", "boat_wash", "diver"}
+CONTACT_TYPES = {"phone", "whatsapp", "email", "website", "vhf", "instagram", "facebook"}
+HOLDING_TYPES = {"sand", "mud", "weed", "rock", "mixed"}  # ck_anchorage_details_holding_type
+TYPE_IDS = {"private_marina": 1, "municipal_marina": 2, "municipal_pier": 3, "guest_mooring": 4,
+            "restaurant_pier": 5, "fuel_pier": 6, "boat_club": 7, "mooring_point": 8, "buoy": 9}
+# Türkiye kaba sınır kutusu (deniz alanları dahil)
+LAT_RANGE = (35.5, 42.5)
+LON_RANGE = (25.0, 45.0)
+
+PROVINCES = {
+    "istanbul": "İstanbul", "yalova": "Yalova", "balikesir": "Balıkesir", "izmir": "İzmir",
+    "aydin": "Aydın", "mugla": "Muğla", "antalya": "Antalya", "mersin": "Mersin",
+    "canakkale": "Çanakkale", "bursa": "Bursa", "tekirdag": "Tekirdağ",
+}
+DISTRICTS = {
+    "istanbul-kadikoy": ("istanbul", "Kadıköy"), "istanbul-bakirkoy": ("istanbul", "Bakırköy"),
+    "istanbul-tuzla": ("istanbul", "Tuzla"), "istanbul-beylikduzu": ("istanbul", "Beylikdüzü"),
+    "istanbul-pendik": ("istanbul", "Pendik"), "yalova-merkez": ("yalova", "Merkez"),
+    "balikesir-ayvalik": ("balikesir", "Ayvalık"), "izmir-cesme": ("izmir", "Çeşme"),
+    "izmir-seferihisar": ("izmir", "Seferihisar"), "aydin-kusadasi": ("aydin", "Kuşadası"),
+    "aydin-didim": ("aydin", "Didim"), "mugla-marmaris": ("mugla", "Marmaris"),
+    "mugla-fethiye": ("mugla", "Fethiye"), "mugla-bodrum": ("mugla", "Bodrum"),
+    "mugla-koycegiz": ("mugla", "Köyceğiz"), "mugla-milas": ("mugla", "Milas"),
+    "antalya-finike": ("antalya", "Finike"), "antalya-konyaalti": ("antalya", "Konyaaltı"),
+    "antalya-kas": ("antalya", "Kaş"), "antalya-kemer": ("antalya", "Kemer"),
+    "antalya-alanya": ("antalya", "Alanya"), "mersin-yenisehir": ("mersin", "Yenişehir"),
+    "izmir-balcova": ("izmir", "Balçova"), "izmir-foca": ("izmir", "Foça"),
+    "canakkale-merkez": ("canakkale", "Merkez"), "canakkale-gelibolu": ("canakkale", "Gelibolu"),
+    "balikesir-erdek": ("balikesir", "Erdek"), "bursa-mudanya": ("bursa", "Mudanya"),
+    "istanbul-sariyer": ("istanbul", "Sarıyer"), "antalya-muratpasa": ("antalya", "Muratpaşa"),
+    "antalya-demre": ("antalya", "Demre"), "mersin-silifke": ("mersin", "Silifke"),
+    "mugla-datca": ("mugla", "Datça"), "mugla-ula": ("mugla", "Ula"),
+    "istanbul-beykoz": ("istanbul", "Beykoz"), "istanbul-adalar": ("istanbul", "Adalar"),
+    "balikesir-marmara": ("balikesir", "Marmara"), "balikesir-bandirma": ("balikesir", "Bandırma"),
+    "balikesir-burhaniye": ("balikesir", "Burhaniye"), "canakkale-biga": ("canakkale", "Biga"),
+    "canakkale-bozcaada": ("canakkale", "Bozcaada"), "canakkale-gokceada": ("canakkale", "Gökçeada"),
+    "canakkale-ayvacik": ("canakkale", "Ayvacık"), "tekirdag-sarkoy": ("tekirdag", "Şarköy"),
+    "izmir-dikili": ("izmir", "Dikili"), "izmir-karaburun": ("izmir", "Karaburun"),
+    "izmir-urla": ("izmir", "Urla"), "izmir-menderes": ("izmir", "Menderes"),
+    "aydin-soke": ("aydin", "Söke"),
+}
+
+
+def q(value):
+    """SQL string literal (tek tırnak kaçışı); None → NULL."""
+    if value is None:
+        return "NULL"
+    return "'" + str(value).replace("'", "''") + "'"
+
+
+def num(value):
+    return "NULL" if value is None else str(value)
+
+
+def norm_name(name):
+    n = unicodedata.normalize("NFKD", name.lower())
+    return re.sub(r"[^a-z0-9]", "", n)
+
+
+def validate(records):
+    errors, warnings = [], []
+    slugs, names = set(), {}
+    for r in records:
+        s = r["slug"]
+        if s in slugs:
+            errors.append(f"Mükerrer slug: {s}")
+        slugs.add(s)
+        key = norm_name(r["name"])
+        if key in names:
+            warnings.append(f"İsim benzerliği (mükerrer olabilir): {r['name']} ~ {names[key]}")
+        names[key] = r["name"]
+        if r["typeCode"] not in TYPE_IDS:
+            errors.append(f"{s}: bilinmeyen typeCode {r['typeCode']}")
+        if not (LAT_RANGE[0] <= r["lat"] <= LAT_RANGE[1]) or not (LON_RANGE[0] <= r["lon"] <= LON_RANGE[1]):
+            errors.append(f"{s}: koordinat Türkiye kutusu dışında ({r['lat']}, {r['lon']})")
+        for a in r.get("amenities", []):
+            if a not in AMENITIES:
+                errors.append(f"{s}: geçersiz amenity kodu '{a}'")
+        for sv in r.get("services", []):
+            if sv not in SERVICES:
+                errors.append(f"{s}: geçersiz service kodu '{sv}'")
+        for c in r.get("contacts", []):
+            if c["type"] not in CONTACT_TYPES:
+                errors.append(f"{s}: geçersiz contact tipi '{c['type']}'")
+            if c["type"] in ("phone", "whatsapp") and not re.fullmatch(r"\+90\d{10}", c["value"]):
+                warnings.append(f"{s}: telefon biçimi normalize değil: {c['value']}")
+        if r.get("holdingType") is not None and r["holdingType"] not in HOLDING_TYPES:
+            errors.append(f"{s}: geçersiz holdingType '{r['holdingType']}' (izinli: {sorted(HOLDING_TYPES)})")
+        if r["status"] not in ("published", "draft"):
+            errors.append(f"{s}: geçersiz status {r['status']}")
+        if r.get("districtSlug") and r["districtSlug"] not in DISTRICTS:
+            errors.append(f"{s}: tanımsız districtSlug {r['districtSlug']}")
+        if r.get("provinceSlug") not in PROVINCES:
+            errors.append(f"{s}: tanımsız provinceSlug {r.get('provinceSlug')}")
+    return errors, warnings
+
+
+def emit(records, batch_meta):
+    out = []
+    out.append("-- =========================================================================")
+    out.append("-- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)")
+    out.append(f"-- Parti: {batch_meta['batch']} · Toplama: {batch_meta['collectedAt']}")
+    out.append("-- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)")
+    out.append("-- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.")
+    out.append("-- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).")
+    out.append("-- =========================================================================")
+    out.append("")
+    out.append("-- --- İdari alanlar (il/ilçe) ---")
+    for slug, name in PROVINCES.items():
+        out.append(
+            "INSERT INTO admin_areas (id, country_code, level, name, slug)\n"
+            f"VALUES (gen_random_uuid(), 'TR', 'province', {q(name)}, {q(slug)})\n"
+            "ON CONFLICT (country_code, level, slug) DO NOTHING;"
+        )
+    out.append("")
+    for slug, (prov, name) in DISTRICTS.items():
+        out.append(
+            "INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)\n"
+            f"SELECT gen_random_uuid(), 'TR', p.id, 'district', {q(name)}, {q(slug)}\n"
+            f"FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = {q(prov)}\n"
+            "ON CONFLICT (country_code, level, slug) DO NOTHING;"
+        )
+    out.append("")
+    for r in records:
+        s = r["slug"]
+        admin_slug = r.get("districtSlug") or r.get("provinceSlug")
+        admin_level = "district" if r.get("districtSlug") else "province"
+        src = ", ".join(u.split("/")[2] for u in r.get("sourceUrls", [])[:2])
+        out.append(f"-- --- {r['name']} · güven: {r['confidence']} · kaynak: {src} ---")
+        out.append(
+            "INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,\n"
+            "  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,\n"
+            "  capacity, price_tier, source)\n"
+            f"SELECT gen_random_uuid(), {q(s)}, {TYPE_IDS[r['typeCode']]}, {q(r['status'])}, 'TR',\n"
+            f"  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = {q(admin_level)} AND slug = {q(admin_slug)}),\n"
+            f"  {q(r['name'])}, {q(r.get('descriptionTr'))},\n"
+            f"  ST_SetSRID(ST_MakePoint({r['lon']}, {r['lat']}), 4326)::geography,\n"
+            f"  {num(r.get('maxLoaM'))}, {num(r.get('maxDraftM'))}, {num(r.get('depthMinM'))}, {num(r.get('depthMaxM'))},\n"
+            f"  {num(r.get('berthCount'))}, {q(r.get('priceTier', 'paid'))}, 'import'\n"
+            "ON CONFLICT (slug) DO NOTHING;"
+        )
+        out.append(
+            "INSERT INTO location_i18n (location_id, locale, name, description)\n"
+            f"SELECT id, 'tr', {q(r['name'])}, {q(r.get('descriptionTr'))} FROM locations WHERE slug = {q(s)}\n"
+            "ON CONFLICT (location_id, locale) DO NOTHING;"
+        )
+        is_marina = r["typeCode"] in ("private_marina", "municipal_marina")
+        blue = "NULL" if r.get("blueFlag") is None else ("true" if r["blueFlag"] else "false")
+        winter = "NULL" if r.get("winterStorage") is None else ("true" if r["winterStorage"] else "false")
+        if is_marina: out.append(
+            "INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,\n"
+            "  travel_lift_capacity_tons, winter_storage)\n"
+            f"SELECT id, {num(r.get('berthCount'))}, {q(r.get('vhfChannel'))}, {blue}, {num(r.get('travelLiftTons'))}, {winter}\n"
+            f"FROM locations WHERE slug = {q(s)}\n"
+            "ON CONFLICT (location_id) DO NOTHING;"
+        )
+        if r["typeCode"] in ("mooring_point", "guest_mooring", "buoy") and (
+            r.get("holdingType") is not None or r.get("swellExposure") is not None or r.get("isFree") is not None
+        ):
+            freev = "true" if r.get("isFree", True) else "false"
+            out.append(
+                "INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)\n"
+                f"SELECT id, {q(r.get('holdingType'))}, {q(r.get('swellExposure'))}, {freev}\n"
+                f"FROM locations WHERE slug = {q(s)}\n"
+                "ON CONFLICT (location_id) DO NOTHING;"
+            )
+        if r["typeCode"] == "restaurant_pier":
+            resv = "NULL" if r.get("reservationRecommended") is None else ("true" if r["reservationRecommended"] else "false")
+            out.append(
+                "INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)\n"
+                f"SELECT id, {q(r.get('cuisine'))}, {num(r.get('berthCount'))}, {q(r.get('minSpendPolicy'))}, {resv}\n"
+                f"FROM locations WHERE slug = {q(s)}\n"
+                "ON CONFLICT (location_id) DO NOTHING;"
+            )
+        if r["typeCode"] == "fuel_pier":
+            def b3(v):
+                return "NULL" if v is None else ("true" if v else "false")
+            out.append(
+                "INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)\n"
+                f"SELECT id, {b3(r.get('hasDiesel'))}, {b3(r.get('hasGasoline'))}, {b3(r.get('hasAdblue'))}, {num(r.get('fuelMinDepthM'))}, {q(r.get('paymentNote'))}\n"
+                f"FROM locations WHERE slug = {q(s)}\n"
+                "ON CONFLICT (location_id) DO NOTHING;"
+            )
+        if r.get("amenities"):
+            codes = ", ".join(q(a) for a in r["amenities"])
+            out.append(
+                "INSERT INTO location_amenities (location_id, amenity_id)\n"
+                f"SELECT l.id, a.id FROM locations l, amenities a\n"
+                f"WHERE l.slug = {q(s)} AND a.code IN ({codes})\n"
+                "ON CONFLICT DO NOTHING;"
+            )
+        if r.get("services"):
+            codes = ", ".join(q(sv) for sv in r["services"])
+            out.append(
+                "INSERT INTO location_services (location_id, service_id)\n"
+                f"SELECT l.id, sv.id FROM locations l, services sv\n"
+                f"WHERE l.slug = {q(s)} AND sv.code IN ({codes})\n"
+                "ON CONFLICT DO NOTHING;"
+            )
+        for c in r.get("contacts", []):
+            primary = "true" if c.get("primary") else "false"
+            out.append(
+                "INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)\n"
+                f"SELECT gen_random_uuid(), l.id, {q(c['type'])}, {q(c['value'])}, {q(c.get('label'))}, {primary}\n"
+                f"FROM locations l WHERE l.slug = {q(s)}\n"
+                "ON CONFLICT (location_id, contact_type, value) DO NOTHING;"
+            )
+        season = r.get("season")
+        if season:
+            om, od = season["opensOn"]
+            cm, cd = season["closesOn"]
+            out.append(
+                "INSERT INTO opening_seasons (id, location_id, opens_on_month, opens_on_day, closes_on_month, closes_on_day)\n"
+                f"SELECT gen_random_uuid(), l.id, {om}, {od}, {cm}, {cd} FROM locations l\n"
+                f"WHERE l.slug = {q(s)}\n"
+                "  AND NOT EXISTS (SELECT 1 FROM opening_seasons os WHERE os.location_id = l.id)\n"
+                ";"
+            )
+        out.append("")
+    return "\n".join(out) + "\n"
+
+
+def main():
+    here = Path(__file__).resolve().parent
+    batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
+               "batch5_expansion.json"]
+    records, batch_names = [], []
+    for b in batches:
+        p = here / b
+        if not p.exists():
+            continue
+        data = json.loads(p.read_text(encoding="utf-8"))
+        records.extend(data["records"])
+        batch_names.append(data["batch"])
+    data = {"batch": " + ".join(batch_names), "collectedAt": "2026-07-07/08"}
+    errors, warnings = validate(records)
+    for w in warnings:
+        print(f"UYARI: {w}")
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    sql = emit(records, data)
+    (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
+    published = sum(1 for r in records if r["status"] == "published")
+    draft = len(records) - published
+    def missing(field):
+        return sum(1 for r in records if r.get(field) is None)
+    print(f"OK: {len(records)} kayıt → seed_locations.sql (published={published}, draft={draft})")
+    print(f"Eksikler: berthCount={missing('berthCount')}, maxLoaM={missing('maxLoaM')}, "
+          f"maxDraftM={missing('maxDraftM')}, vhf={missing('vhfChannel')}, operator={missing('operator')}")
+
+
+if __name__ == "__main__":
+    main()
