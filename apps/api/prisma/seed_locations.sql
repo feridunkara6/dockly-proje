@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas · Toplama: 2026-07-07
+-- Parti: 5.1-marinas + 5.2-municipal · Toplama: 2026-07-07/08
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -30,6 +30,12 @@ VALUES (gen_random_uuid(), 'TR', 'province', 'Antalya', 'antalya')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'TR', 'province', 'Mersin', 'mersin')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Çanakkale', 'canakkale')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Bursa', 'bursa')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -118,6 +124,46 @@ FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.sl
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Yenişehir', 'mersin-yenisehir'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Balçova', 'izmir-balcova'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'izmir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Foça', 'izmir-foca'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'izmir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Merkez', 'canakkale-merkez'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'canakkale'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gelibolu', 'canakkale-gelibolu'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'canakkale'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Erdek', 'balikesir-erdek'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'balikesir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Mudanya', 'bursa-mudanya'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'bursa'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Sarıyer', 'istanbul-sariyer'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Muratpaşa', 'antalya-muratpasa'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'antalya'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Demre', 'antalya-demre'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'antalya'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Silifke', 'mersin-silifke'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
@@ -1509,4 +1555,657 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'facebook', 'https://www.facebook.com/ALANYA-MARINA-180783565338565', NULL, false
 FROM locations l WHERE l.slug = 'alanya-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İzmir Marina · güven: high · kaynak: www.izmirmarina.com, www.izmirmarina.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'izmir-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-balcova'),
+  'İzmir Marina', 'Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova''daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.',
+  ST_SetSRID(ST_MakePoint(27.066, 38.4056), 4326)::geography,
+  NULL, NULL, NULL, 5,
+  71, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İzmir Marina', 'Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova''daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.' FROM locations WHERE slug = 'izmir-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 71, NULL, NULL, NULL, true
+FROM locations WHERE slug = 'izmir-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'izmir-marina' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant', 'shower', 'laundry', 'wifi', 'security', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'izmir-marina' AND sv.code IN ('mooring_assist', 'diver', 'boat_wash', 'winter_storage')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902322598920', NULL, true
+FROM locations l WHERE l.slug = 'izmir-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905520358830', NULL, false
+FROM locations l WHERE l.slug = 'izmir-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'izmirmarina@izdeniz.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'izmir-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.izmirmarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'izmir-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'instagram', 'https://www.instagram.com/marineizmir/', NULL, false
+FROM locations l WHERE l.slug = 'izmir-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Foça Büyükdeniz Rıhtımı · güven: medium · kaynak: www.foca.bel.tr, www.feribotseferleri.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'foca-buyukdeniz-rihtimi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-foca'),
+  'Foça Büyükdeniz Rıhtımı', 'Foça Belediyesi tarafından 1994''ten bu yana işletilen Büyükdeniz Rıhtımı''nda özel ve ticari yatlar sözleşmeyle bağlanmakta, misafir teknelere günlük konaklama ile elektrik ve su bağlantısı sağlanmaktadır.',
+  ST_SetSRID(ST_MakePoint(26.7539, 38.6697), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Foça Büyükdeniz Rıhtımı', 'Foça Belediyesi tarafından 1994''ten bu yana işletilen Büyükdeniz Rıhtımı''nda özel ve ticari yatlar sözleşmeyle bağlanmakta, misafir teknelere günlük konaklama ile elektrik ve su bağlantısı sağlanmaktadır.' FROM locations WHERE slug = 'foca-buyukdeniz-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'foca-buyukdeniz-rihtimi' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://foca.bel.tr/hizmetler/tekne-baglama-hizmetleri-ve-ucretleri', NULL, false
+FROM locations l WHERE l.slug = 'foca-buyukdeniz-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Bozburun Yat Yanaşma Yeri · güven: high · kaynak: www.marmaris.bel.tr, www.navily.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bozburun-yat-yanasma-yeri', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Bozburun Yat Yanaşma Yeri', 'Marmaris Belediyesi''nin ücret tarifesinde yer alan Bozburun Yat Yanaşma Yeri''nde sezonluk ve günlük bağlama hizmeti verilmektedir. 80 tekne kapasiteli tesiste elektrik ve su, ön ödemeli kartlı sistemle sağlanmakta, servis botu bulunmaktadır.',
+  ST_SetSRID(ST_MakePoint(28.0425, 36.692), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  80, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bozburun Yat Yanaşma Yeri', 'Marmaris Belediyesi''nin ücret tarifesinde yer alan Bozburun Yat Yanaşma Yeri''nde sezonluk ve günlük bağlama hizmeti verilmektedir. 80 tekne kapasiteli tesiste elektrik ve su, ön ödemeli kartlı sistemle sağlanmakta, servis botu bulunmaktadır.' FROM locations WHERE slug = 'bozburun-yat-yanasma-yeri'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bozburun-yat-yanasma-yeri' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.marmaris.bel.tr/?Page=Ucret_Tarifeleri', NULL, false
+FROM locations l WHERE l.slug = 'bozburun-yat-yanasma-yeri'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Marmaris Limanı · güven: high · kaynak: muttas.com.tr, muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'marmaris-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Marmaris Limanı', 'Muğla Büyükşehir Belediyesi iştiraki MUTTAŞ''ın işlettiği Marmaris Limanı''nda yaklaşık 1.700 metrelik rıhtımda 200 tekneye yanaşma hizmeti verilmektedir. Yatlara su, elektrik, atık alımı, güvenlik ve palamar hizmetleri sunulur; kruvaziyer trafiğiyle karma kullanımlıdır.',
+  ST_SetSRID(ST_MakePoint(28.273902, 36.849968), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Marmaris Limanı', 'Muğla Büyükşehir Belediyesi iştiraki MUTTAŞ''ın işlettiği Marmaris Limanı''nda yaklaşık 1.700 metrelik rıhtımda 200 tekneye yanaşma hizmeti verilmektedir. Yatlara su, elektrik, atık alımı, güvenlik ve palamar hizmetleri sunulur; kruvaziyer trafiğiyle karma kullanımlıdır.' FROM locations WHERE slug = 'marmaris-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'marmaris-limani' AND a.code IN ('electricity', 'water', 'security', 'pump_out')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'marmaris-limani' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524120265', NULL, true
+FROM locations l WHERE l.slug = 'marmaris-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'marmaris-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'marmaris-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İçmeler İskelesi · güven: medium · kaynak: muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'icmeler-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'İçmeler İskelesi', 'Marmaris İçmeler''de MUTTAŞ tarafından işletilen iskelede 220 metrelik rıhtım ve 142 metrelik iskelede yaklaşık 40 tekneye yanaşma hizmeti verilmektedir. Atık su alım hizmeti bulunmaktadır.',
+  ST_SetSRID(ST_MakePoint(28.238995, 36.800371), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İçmeler İskelesi', 'Marmaris İçmeler''de MUTTAŞ tarafından işletilen iskelede 220 metrelik rıhtım ve 142 metrelik iskelede yaklaşık 40 tekneye yanaşma hizmeti verilmektedir. Atık su alım hizmeti bulunmaktadır.' FROM locations WHERE slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'icmeler-iskelesi' AND a.code IN ('pump_out')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524120265', NULL, true
+FROM locations l WHERE l.slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905382330352', NULL, false
+FROM locations l WHERE l.slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Turunç İskelesi · güven: medium · kaynak: muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'turunc-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Turunç İskelesi', 'Marmaris Turunç Cumhuriyet Meydanı''ndaki 183 metrelik iskelede MUTTAŞ tarafından yaklaşık 30 tekneye yanaşma hizmeti verilmektedir. Su, atık alımı, güvenlik ve palamar hizmeti sunulmaktadır.',
+  ST_SetSRID(ST_MakePoint(28.249443, 36.772146), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  30, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Turunç İskelesi', 'Marmaris Turunç Cumhuriyet Meydanı''ndaki 183 metrelik iskelede MUTTAŞ tarafından yaklaşık 30 tekneye yanaşma hizmeti verilmektedir. Su, atık alımı, güvenlik ve palamar hizmeti sunulmaktadır.' FROM locations WHERE slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'turunc-iskelesi' AND a.code IN ('water', 'security', 'pump_out')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'turunc-iskelesi' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524120265', NULL, true
+FROM locations l WHERE l.slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905332502289', NULL, false
+FROM locations l WHERE l.slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Bodrum Limanı · güven: high · kaynak: muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bodrum-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Bodrum Limanı', 'Bodrum Barış Meydanı''ndaki liman MUTTAŞ tarafından işletilmekte olup 960 metrelik rıhtım ve 140 metrelik yüzer iskelede yaklaşık 230 tekneye yanaşma hizmeti verilmektedir. Kos''a uluslararası feribot kapısıdır.',
+  ST_SetSRID(ST_MakePoint(27.426232, 37.031991), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  230, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bodrum Limanı', 'Bodrum Barış Meydanı''ndaki liman MUTTAŞ tarafından işletilmekte olup 960 metrelik rıhtım ve 140 metrelik yüzer iskelede yaklaşık 230 tekneye yanaşma hizmeti verilmektedir. Kos''a uluslararası feribot kapısıdır.' FROM locations WHERE slug = 'bodrum-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bodrum-limani' AND a.code IN ('water', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'bodrum-limani' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902523169772', NULL, true
+FROM locations l WHERE l.slug = 'bodrum-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905332510157', NULL, false
+FROM locations l WHERE l.slug = 'bodrum-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'bodrum-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'bodrum-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gümbet İskelesi · güven: medium · kaynak: muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gumbet-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Gümbet İskelesi', 'Bodrum Gümbet''te MUTTAŞ tarafından işletilen, toplam 595 metre uzunluğunda üç iskeleden oluşan tesiste yaklaşık 200 tekneye bağlama hizmeti verilmektedir. Su, güvenlik ve palamar hizmeti sunulmaktadır.',
+  ST_SetSRID(ST_MakePoint(27.401812, 37.023076), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gümbet İskelesi', 'Bodrum Gümbet''te MUTTAŞ tarafından işletilen, toplam 595 metre uzunluğunda üç iskeleden oluşan tesiste yaklaşık 200 tekneye bağlama hizmeti verilmektedir. Su, güvenlik ve palamar hizmeti sunulmaktadır.' FROM locations WHERE slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gumbet-iskelesi' AND a.code IN ('water', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'gumbet-iskelesi' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902523169772', NULL, true
+FROM locations l WHERE l.slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905332510157', NULL, false
+FROM locations l WHERE l.slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Fethiye Limanı · güven: high · kaynak: muttas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'fethiye-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Fethiye Limanı', 'Fethiye Karagözler''de MUTTAŞ tarafından işletilen limanda yaklaşık 50 tekneye yanaşma hizmeti verilmekte; su, atık alımı, güvenlik ve palamar hizmetleri sunulmaktadır. Rodos''a uluslararası feribot kapısıdır.',
+  ST_SetSRID(ST_MakePoint(29.106163, 36.622984), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Fethiye Limanı', 'Fethiye Karagözler''de MUTTAŞ tarafından işletilen limanda yaklaşık 50 tekneye yanaşma hizmeti verilmekte; su, atık alımı, güvenlik ve palamar hizmetleri sunulmaktadır. Rodos''a uluslararası feribot kapısıdır.' FROM locations WHERE slug = 'fethiye-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'fethiye-limani' AND a.code IN ('water', 'security', 'pump_out')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'fethiye-limani' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902526127557', NULL, true
+FROM locations l WHERE l.slug = 'fethiye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905332505739', NULL, false
+FROM locations l WHERE l.slug = 'fethiye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@muttas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'fethiye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NULL, false
+FROM locations l WHERE l.slug = 'fethiye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Göcek Belediye İskelesi · güven: medium · kaynak: www.yatvitrini.com, panel.mugla.bel.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-belediye-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Belediye İskelesi', 'Göcek köyiçindeki belediye iskelesi 1989''da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.',
+  ST_SetSRID(ST_MakePoint(28.946667, 36.754444), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Belediye İskelesi', 'Göcek köyiçindeki belediye iskelesi 1989''da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.fethiye.bel.tr/', NULL, false
+FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Çanakkale Yat Limanı · güven: high · kaynak: tkygm.uab.gov.tr, marinalar.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'canakkale-yat-limani', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-merkez'),
+  'Çanakkale Yat Limanı', 'Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.',
+  ST_SetSRID(ST_MakePoint(26.406, 40.1534), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  120, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çanakkale Yat Limanı', 'Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.' FROM locations WHERE slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 120, '73/16', NULL, NULL, NULL
+FROM locations WHERE slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'canakkale-yat-limani' AND a.code IN ('electricity', 'water', 'fuel', 'shower', 'wc', 'laundry', 'wifi', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'canakkale-yat-limani' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902862128453', NULL, true
+FROM locations l WHERE l.slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'bilgi@canakkalebelediyesimarina.com', NULL, false
+FROM locations l WHERE l.slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gelibolu Yat Limanı · güven: low · kaynak: www.sualtigazetesi.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gelibolu-yat-limani', 3, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-gelibolu'),
+  'Gelibolu Yat Limanı', 'Gelibolu''da kuzey rüzgarlarına kapalı doğal limanın iç kısmı yatların bağlanmasına uygundur; barınakta akaryakıt pompası bulunmaktadır.',
+  ST_SetSRID(ST_MakePoint(26.6694, 40.405), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gelibolu Yat Limanı', 'Gelibolu''da kuzey rüzgarlarına kapalı doğal limanın iç kısmı yatların bağlanmasına uygundur; barınakta akaryakıt pompası bulunmaktadır.' FROM locations WHERE slug = 'gelibolu-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gelibolu-yat-limani' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Erdek Yat Limanı · güven: low · kaynak: www.denizhaber.net ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'erdek-yat-limani', 3, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Erdek Yat Limanı', 'Erdek merkezdeki iskele ve liman yerel tekneler ile kotra ve yatların bağlanmasında kullanılmaktadır; Balıkesir Büyükşehir Belediyesi iskelenin yat limanına dönüştürülmesini planladığını açıklamıştır.',
+  ST_SetSRID(ST_MakePoint(27.7892, 40.3933), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Erdek Yat Limanı', 'Erdek merkezdeki iskele ve liman yerel tekneler ile kotra ve yatların bağlanmasında kullanılmaktadır; Balıkesir Büyükşehir Belediyesi iskelenin yat limanına dönüştürülmesini planladığını açıklamıştır.' FROM locations WHERE slug = 'erdek-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+
+-- --- Güzelyalı Yat Limanı · güven: high · kaynak: www.burulas.com.tr, www.burulas.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'guzelyali-yat-limani', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-mudanya'),
+  'Güzelyalı Yat Limanı', 'Mudanya Güzelyalı''daki liman 2020''den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.',
+  ST_SetSRID(ST_MakePoint(28.932167, 40.356167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  58, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güzelyalı Yat Limanı', 'Mudanya Güzelyalı''daki liman 2020''den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.' FROM locations WHERE slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 58, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'guzelyali-yat-limani' AND a.code IN ('security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902244525244', NULL, true
+FROM locations l WHERE l.slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'burulas@burulas.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.burulas.com.tr/hizmetler/yat-limani', NULL, false
+FROM locations l WHERE l.slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İSPARK İstinye Tekne Park · güven: high · kaynak: ispark.istanbul, www.wikiderya.org ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ispark-istinye-tekne-park', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'İSPARK İstinye Tekne Park', 'İstinye Koyu''nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.',
+  ST_SetSRID(ST_MakePoint(29.057167, 41.113667), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  180, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İSPARK İstinye Tekne Park', 'İstinye Koyu''nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.' FROM locations WHERE slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 180, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ispark-istinye-tekne-park' AND a.code IN ('electricity', 'water', 'wc', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902166350045', NULL, true
+FROM locations l WHERE l.slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'istinye.marina@ispark.istanbul', NULL, false
+FROM locations l WHERE l.slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://istmarin.ispark.istanbul', NULL, false
+FROM locations l WHERE l.slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İSPARK Tarabya Tekne Park · güven: high · kaynak: ispark.istanbul, www.wikiderya.org ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ispark-tarabya-tekne-park', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'İSPARK Tarabya Tekne Park', 'Tarabya Koyu''nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.',
+  ST_SetSRID(ST_MakePoint(29.057901, 41.138466), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  265, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İSPARK Tarabya Tekne Park', 'Tarabya Koyu''nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.' FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 265, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ispark-tarabya-tekne-park' AND a.code IN ('electricity', 'water', 'wc', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902166350045', NULL, true
+FROM locations l WHERE l.slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'tarabya.marina@ispark.istanbul', NULL, false
+FROM locations l WHERE l.slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://istmarin.ispark.istanbul', NULL, false
+FROM locations l WHERE l.slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Antalya Kaleiçi Yat Limanı · güven: high · kaynak: tkygm.uab.gov.tr, www.antalya.bel.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'antalya-kaleici-yat-limani', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-muratpasa'),
+  'Antalya Kaleiçi Yat Limanı', 'Antalya''nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.',
+  ST_SetSRID(ST_MakePoint(30.703, 36.883833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  65, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Antalya Kaleiçi Yat Limanı', 'Antalya''nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.' FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 65, '16/73', NULL, NULL, NULL
+FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'antalya-kaleici-yat-limani' AND a.code IN ('electricity', 'water', 'restaurant', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'antalya-kaleici-yat-limani' AND sv.code IN ('mooring_assist', 'diver')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902422484530', NULL, true
+FROM locations l WHERE l.slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'iletisim@antalyaulasim.com.tr', NULL, false
+FROM locations l WHERE l.slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kaş Belediye Limanı · güven: medium · kaynak: tkygm.uab.gov.tr, www.wikiderya.org ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kas-belediye-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Kaş Belediye Limanı', 'Kaş ilçe merkezinin yanındaki eski liman yaklaşık 100 tekne kapasitelidir; yerel gezi-dalış tekneleri ile uğrak yatlar kullanmaktadır. Bağlama tonoz zinciriyle yapılmakta, çevrede ücretli duş-WC ve çamaşırhane bulunmaktadır.',
+  ST_SetSRID(ST_MakePoint(29.6404, 36.1993), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaş Belediye Limanı', 'Kaş ilçe merkezinin yanındaki eski liman yaklaşık 100 tekne kapasitelidir; yerel gezi-dalış tekneleri ile uğrak yatlar kullanmaktadır. Bağlama tonoz zinciriyle yapılmakta, çevrede ücretli duş-WC ve çamaşırhane bulunmaktadır.' FROM locations WHERE slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kas-belediye-limani' AND a.code IN ('shower', 'wc', 'laundry')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905325032673', 'Liman görevlisi (wikiderya)', true
+FROM locations l WHERE l.slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905337295131', 'Liman görevlisi (wikiderya)', false
+FROM locations l WHERE l.slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kalkan Belediye Limanı · güven: medium · kaynak: tkygm.uab.gov.tr, www.kas.bel.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalkan-belediye-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Kalkan Belediye Limanı', 'Kalkan''daki yaklaşık 50 tekne kapasiteli liman ve balıkçı barınağı yerel tekneler ile uğrak yatlara hizmet vermektedir. 2023''te zemin yenileme, çekek yeri ve bağlama halkaları yenileme çalışmaları tamamlanmıştır.',
+  ST_SetSRID(ST_MakePoint(29.4151, 36.2611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalkan Belediye Limanı', 'Kalkan''daki yaklaşık 50 tekne kapasiteli liman ve balıkçı barınağı yerel tekneler ile uğrak yatlara hizmet vermektedir. 2023''te zemin yenileme, çekek yeri ve bağlama halkaları yenileme çalışmaları tamamlanmıştır.' FROM locations WHERE slug = 'kalkan-belediye-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902428443131', NULL, true
+FROM locations l WHERE l.slug = 'kalkan-belediye-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Üçağız İskelesi · güven: medium · kaynak: gazeteoksijen.com, www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ucagiz-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Üçağız İskelesi', 'Kekova bölgesindeki Üçağız köy iskelesi yıllarca Demre Belediyesi tarafından işletilmiş, Haziran 2024''te bakanlık ihalesiyle 10 yıllığına özel bir gruba kiralanmıştır. Demre Belediyesi ihalenin iptali için hukuki süreç başlatmıştır.',
+  ST_SetSRID(ST_MakePoint(29.846849, 36.195387), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Üçağız İskelesi', 'Kekova bölgesindeki Üçağız köy iskelesi yıllarca Demre Belediyesi tarafından işletilmiş, Haziran 2024''te bakanlık ihalesiyle 10 yıllığına özel bir gruba kiralanmıştır. Demre Belediyesi ihalenin iptali için hukuki süreç başlatmıştır.' FROM locations WHERE slug = 'ucagiz-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+
+-- --- Demre Yat Limanı · güven: medium · kaynak: www.uab.gov.tr, www.navily.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'demre-yat-limani', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Demre Yat Limanı', 'Ulaştırma ve Altyapı Bakanlığı''nca Çayağzı mevkiinde yaptırılan Demre Yat Limanı 26 Temmuz 2025''te hizmete açılmıştır. 64.000 m² kara ve 120.000 m² korunaklı su alanına sahip tesisin 12 ay hizmet vermesi planlanmaktadır.',
+  ST_SetSRID(ST_MakePoint(29.942, 36.223), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Demre Yat Limanı', 'Ulaştırma ve Altyapı Bakanlığı''nca Çayağzı mevkiinde yaptırılan Demre Yat Limanı 26 Temmuz 2025''te hizmete açılmıştır. 64.000 m² kara ve 120.000 m² korunaklı su alanına sahip tesisin 12 ay hizmet vermesi planlanmaktadır.' FROM locations WHERE slug = 'demre-yat-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, true
+FROM locations WHERE slug = 'demre-yat-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'demre-yat-limani' AND sv.code IN ('winter_storage')
+ON CONFLICT DO NOTHING;
+
+-- --- Taşucu Limanı · güven: low · kaynak: tasinmazhaber.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tasucu-limani', 3, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Taşucu Limanı', 'Taşucu''nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.',
+  ST_SetSRID(ST_MakePoint(33.8811, 36.3158), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Taşucu Limanı', 'Taşucu''nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.' FROM locations WHERE slug = 'tasucu-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
 
