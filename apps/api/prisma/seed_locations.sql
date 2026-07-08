@@ -2790,7 +2790,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Değirmen Bükü (İngiliz Limanı)', 'Gökova Körfezi''nin en büyük koyu olan Değirmen Bükü yaklaşık 3 km uzunluğunda olup çevresinde çok sayıda güvenli demirleme yeri barındırır; batı kolu İngiliz Limanı olarak bilinir. 6-7 m derinliğe demirlenir; dip çamurdur, tutuş iyidir ve koy iyi korunaklıdır.' FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, true
+SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2809,7 +2809,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Okluk Koyu', 'Değirmen Bükü''nün güneydoğusundaki Okluk Koyu her yönden korunaklı bir demirleme alanıdır ve kayalıklardaki deniz kızı heykeliyle bilinir. Derinlik iç kesimde 12 m''den kıyıya doğru 7-8 m''ye düşer; dip çamurdur ve tutuş mükemmeldir.' FROM locations WHERE slug = 'okluk-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, true
+SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'okluk-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2828,7 +2828,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Löngöz Koyu (Kargılı)', 'Gökova Körfezi''nin güney kıyısında, Değirmen Bükü''nün batısında yer alan dar ve derin bir koydur. Dip kum, kaya ve çamur karışımıdır; demirlemeye izin verilir ve koyda küçük bir iskele bulunur.' FROM locations WHERE slug = 'longoz-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum, kaya ve çamur', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'longoz-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2847,7 +2847,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sedir Adası Demirleme Alanı', 'Antik Kedrai kentine ve Kleopatra Plajı''na ev sahipliği yapan Sedir Adası çevresinde doğu koyunda 8-12 m, güney koyunda 6-9 m derinliğe demirlenir. Ana demir yeri kuzey rüzgarlarına açıktır; güney koyu kuzey rüzgarlarına karşı daha korunaklıdır.' FROM locations WHERE slug = 'sedir-adasi-demirleme'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'sert kum', 'kuzey rüzgarlarına açıktır; kuvvetli rüzgarda belirgin dalga girer', true
+SELECT id, 'sand', 'kuzey rüzgarlarına açıktır; kuvvetli rüzgarda belirgin dalga girer', true
 FROM locations WHERE slug = 'sedir-adasi-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2866,7 +2866,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Akbük Koyu (Gökova)', 'Gökova Körfezi''nin kuzey kıyısında, çam ormanlarıyla çevrili bir demirleme koyudur. Dip kumdur; demirlemeye izin verilir ve kıyıda plaj ile küçük işletmeler bulunur.' FROM locations WHERE slug = 'akbuk-koyu-gokova'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', NULL, true
+SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'akbuk-koyu-gokova'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2885,7 +2885,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tuzla (Çanak) Koyu', 'Gökova Körfezi''nin güney kıyısında, Löngöz''ün batısında yer alan bir demirleme koyudur. Dip kumdur; demirlemeye izin verilir ve koyda iskele imkânı bulunur.' FROM locations WHERE slug = 'tuzla-koyu-gokova'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', NULL, true
+SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'tuzla-koyu-gokova'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2904,7 +2904,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bencik Koyu', 'Hisarönü Körfezi''nin iç ucunda, Datça Yarımadası''nın en dar noktasında yer alan derin ve dar, fiyort görünümlü bir koydur. Dip çamurdur; demirleyip kıçtan karaya halat verilebilir.' FROM locations WHERE slug = 'bencik-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, true
+SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'bencik-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2923,7 +2923,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Selimiye Koyu Demirleme Alanı', 'Bozburun Yarımadası''ndaki Selimiye köyünün önünde yer alan geniş bir demirleme alanıdır. Dip kum ve yosundur; demirlemeye ve kıçtan karaya bağlanmaya izin verilir.' FROM locations WHERE slug = 'selimiye-koyu-demirleme'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve yosun', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'selimiye-koyu-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2961,7 +2961,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dirsek Bükü Demirleme Alanı', 'Hisarönü Körfezi''nin güneybatı kıyısında, karayolu bağlantısı olmayan L şeklinde ıssız bir koydur ve bölge koyları arasında en iyi korunmayı sağlar. Dip kumdur ve tutuş iyidir.' FROM locations WHERE slug = 'dirsek-buku-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', 'kuvvetli kuzey rüzgarlarında koya dalga girer', true
+SELECT id, 'sand', 'kuvvetli kuzey rüzgarlarında koya dalga girer', true
 FROM locations WHERE slug = 'dirsek-buku-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2980,7 +2980,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Serçe Limanı', 'Bozburun Yarımadası''nın güney kıyısında, yaklaşık 135 m genişliğinde dar bir girişle girilen fiyort benzeri bu doğal liman her havada korunma sağlar. Kuzey bölümde 10 m, güney bölümde 5-8 m derinlikte kıçtan karaya demirlenir; dip iyi tutar.' FROM locations WHERE slug = 'serce-limani'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve çamur', 'hakim rüzgar sert estiğinde bir miktar dalga girebilir', true
+SELECT id, 'mixed', 'hakim rüzgar sert estiğinde bir miktar dalga girebilir', true
 FROM locations WHERE slug = 'serce-limani'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -2999,7 +2999,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gerbekse Koyu', 'Marmaris ile Bozburun arasında, kıyısından Bizans dönemi kilise kalıntıları görülen küçük bir koydur. Plaj önünde 5-7 m derinliğe demirlenir; koy meltemiye karşı iyi korunaklıdır.' FROM locations WHERE slug = 'gerbekse-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve yosun', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'gerbekse-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3018,7 +3018,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Söğüt Koyu Demirleme Alanı', 'Bozburun Yarımadası''nın güneyindeki Söğüt köyünün önünde yer alan bir demirleme alanıdır. Dip kum, yosun ve çamur karışımıdır; demirlemeye izin verilir.' FROM locations WHERE slug = 'sogut-koyu-demirleme'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum, yosun ve çamur', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'sogut-koyu-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3056,7 +3056,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çiftlik Koyu', 'Marmaris''in yaklaşık 14 deniz mili güneybatısında yer alan koy, önündeki Çiftlik Adası sayesinde meltemiye karşı korunur. Kuzeybatıda 7-10 m, ada tarafında 5-9 m derinliğe demirlenir; kıyı açığındaki sığ resiflere dikkat edilmelidir.' FROM locations WHERE slug = 'ciftlik-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'yosun ve kum', 'güneye açıktır; koyda sağanak rüzgarlar görülür', true
+SELECT id, 'mixed', 'güneye açıktır; koyda sağanak rüzgarlar görülür', true
 FROM locations WHERE slug = 'ciftlik-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3075,7 +3075,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kuruca Bükü', 'Datça Yarımadası''nın güney kıyısında, çam ormanlarıyla çevrili kuzeybatıya girintili bir koydur. Kamp alanı önünde 6-10 m derinliğe demirlenir; güneydoğu rüzgarları dışında her yönden korunma sağlar.' FROM locations WHERE slug = 'kuruca-buku'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'yosun ve kum', 'girişte hakim rüzgar dalgası hissedilir; güneydoğu rüzgarlarına açıktır', true
+SELECT id, 'mixed', 'girişte hakim rüzgar dalgası hissedilir; güneydoğu rüzgarlarına açıktır', true
 FROM locations WHERE slug = 'kuruca-buku'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3094,7 +3094,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Knidos Antik Limanı', 'Datça Yarımadası''nın batı ucunda, antik Knidos kentinin kalıntılarının önündeki tarihi limanda demirlenir. Dip kum, kaya ve yosun karışımıdır; demirlemeye izin verilir.' FROM locations WHERE slug = 'knidos-antik-limani'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum, kaya ve yosun', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'knidos-antik-limani'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3113,7 +3113,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mersincik Koyu', 'Datça Yarımadası''nın kuzeybatı ucunda yer alan ıssız bir demirleme koyudur. Dip kum ve yosundur; demirlemeye izin verilir ve kıyıda hizmet bulunmaz.' FROM locations WHERE slug = 'mersincik-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve yosun', NULL, true
+SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'mersincik-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3132,7 +3132,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sıralıbük Koyu', 'Göcek Körfezi''nin batı kıyısında, Sarsala ile Taşyaka arasında yer alan doğal bir demirleme koyudur. Zemin kum, çamur, kaya ve yosun karışımıdır; demirleme ve kıçtan karaya halat verme uygulanır.' FROM locations WHERE slug = 'siralibuk-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum, çamur ve yosun', NULL, false
+SELECT id, 'mixed', NULL, false
 FROM locations WHERE slug = 'siralibuk-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3151,7 +3151,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kille Bükü', 'Göcek Körfezi''nin batı kıyısında, Boynuzbükü''nün güneyinde yer alan sakin bir demirleme koyudur. Zemin kumdur; demirleme ve kıçtan karaya bağlama yapılır, koyda tesis bulunmaz.' FROM locations WHERE slug = 'kille-buku'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', NULL, false
+SELECT id, 'sand', NULL, false
 FROM locations WHERE slug = 'kille-buku'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3170,7 +3170,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yassıca Adaları Demirleme Alanı', 'Göcek önünde yer alan alçak ada grubudur; tekneler adalar arasındaki sığ kumluk alanda demirler veya kıçtan karaya bağlanır. Zemin kum ve kayadır; bölgede az sayıda misafir şamandırası bildirilmiştir.' FROM locations WHERE slug = 'yassica-adalari'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve kaya', NULL, false
+SELECT id, 'mixed', NULL, false
 FROM locations WHERE slug = 'yassica-adalari'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3189,7 +3189,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tersane Adası Koyu', 'Tersane Adası''nın koyunda, girişinde Bizans-Osmanlı dönemi tersane kalıntıları bulunan tarihi bir demirleme yeri vardır. Yaklaşık 14 m derinlikte demirlenip kıçtan karaya bağlanılır, tutuş iyidir; koyun dibindeki iki küçük ağız sığdır.' FROM locations WHERE slug = 'tersane-adasi-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'yosun, kaya ve çamur', 'kuzey-kuzeybatı rüzgarlarına açık', false
+SELECT id, 'mixed', 'kuzey-kuzeybatı rüzgarlarına açık', false
 FROM locations WHERE slug = 'tersane-adasi-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3208,7 +3208,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Hamam Koyu (Manastır Koyu) Demirleme Alanı', 'Manastır Koyu olarak da bilinen koy, kıyısındaki ''Kleopatra Hamamı'' kalıntılarıyla ünlü bir demirleme alanıdır. Güney/batı kesiminde 10-12 m derinlikte kumlu zemine demirlenir; koy kuzeye açıktır ve güneydoğu adacığından uzanan resif tehlike oluşturur.' FROM locations WHERE slug = 'hamam-koyu-demirleme'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', 'kuzeye açık', false
+SELECT id, 'sand', 'kuzeye açık', false
 FROM locations WHERE slug = 'hamam-koyu-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3227,7 +3227,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Katrancı Koyu', 'Fethiye Körfezi''nin doğu kıyısında, ormanlık tabiat parkı içinde yer alan bir koydur. Zemin çamurdur ve demirlemeye izin verilir; kıyıda plaj ve mevsimlik büfe bulunur.' FROM locations WHERE slug = 'katranci-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, true
+SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'katranci-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3246,7 +3246,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Küçük Kargı Koyu', 'Fethiye Körfezi''nin doğu kıyısında, Katrancı yakınında çam ormanlarıyla çevrili bir demirleme koyudur. Zemin çamurdur ve demirlemeye izin verilir; kıyıda plaj vardır.' FROM locations WHERE slug = 'kucuk-kargi-koyu'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, true
+SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'kucuk-kargi-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3284,7 +3284,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum', NULL, false
+SELECT id, 'sand', NULL, false
 FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3303,7 +3303,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'kum ve kaya', 'kuzeydoğuya açık', false
+SELECT id, 'mixed', 'kuzeydoğuya açık', false
 FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
 
@@ -3322,7 +3322,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
-SELECT id, 'çamur', NULL, false
+SELECT id, 'mud', NULL, false
 FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
 
