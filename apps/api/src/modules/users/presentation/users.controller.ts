@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Patch, Req, UseGuards } from '
 import { z } from 'zod';
 import { UsersService } from '../application/users.service';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { currentRequestId } from '../../../common/context/request-context';
 import { Principal } from '../../../core/auth/principal';
@@ -35,7 +36,8 @@ const patchMeSchema = z
   .strict();
 
 @Controller('users/me')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AccountGuard)
+@RequireAccount()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

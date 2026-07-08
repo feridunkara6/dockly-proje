@@ -12,6 +12,7 @@ import {
 import { z } from 'zod';
 import { BoatsService } from '../application/boats.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
@@ -26,13 +27,7 @@ const baseBoatShape = {
   lengthM: z.number().gt(0).max(200),
   brand: z.string().trim().max(60).nullable().optional(),
   model: z.string().trim().max(60).nullable().optional(),
-  buildYear: z
-    .number()
-    .int()
-    .min(1900)
-    .max(CURRENT_YEAR + 1)
-    .nullable()
-    .optional(),
+  buildYear: z.number().int().min(1900).max(CURRENT_YEAR + 1).nullable().optional(),
   beamM: z.number().gt(0).max(60).nullable().optional(),
   draftM: z.number().gt(0).max(30).nullable().optional(),
   engineTypeCode: z.string().min(1).max(40).nullable().optional(),
@@ -62,7 +57,8 @@ const updateBoatSchema = z
 const boatIdSchema = z.string().uuid();
 
 @Controller('boats')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AccountGuard)
+@RequireAccount()
 export class BoatsController {
   constructor(private readonly boatsService: BoatsService) {}
 
