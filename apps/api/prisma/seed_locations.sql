@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal · Toplama: 2026-07-07/08
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers · Toplama: 2026-07-07/08
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -165,6 +165,10 @@ ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Silifke', 'mersin-silifke'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Datça', 'mugla-datca'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mugla'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 -- --- Setur Kalamış & Fenerbahçe Marina · güven: high · kaynak: www.seturmarinas.com ---
@@ -2208,4 +2212,562 @@ ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Taşucu Limanı', 'Taşucu''nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.' FROM locations WHERE slug = 'tasucu-limani'
 ON CONFLICT (location_id, locale) DO NOTHING;
+
+-- --- Kapı Creek Restaurant · güven: high · kaynak: www.navily.com, sunseayachting.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kapi-creek-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Kapı Creek Restaurant', 'Skopea Körfezi girişindeki korunaklı Kapı Koyu''nda, iskelesinde yaklaşık 20 tekneye tonozlu bağlama imkânı sunan klasik koy restoranı. Personel bağlamada yardımcı olur.',
+  ST_SetSRID(ST_MakePoint(28.8933, 36.645), 4326)::geography,
+  NULL, NULL, 2, 2.5,
+  20, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kapı Creek Restaurant', 'Skopea Körfezi girişindeki korunaklı Kapı Koyu''nda, iskelesinde yaklaşık 20 tekneye tonozlu bağlama imkânı sunan klasik koy restoranı. Personel bağlamada yardımcı olur.' FROM locations WHERE slug = 'kapi-creek-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, Türk mutfağı', 20, NULL, NULL
+FROM locations WHERE slug = 'kapi-creek-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kapi-creek-restaurant' AND a.code IN ('restaurant', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'kapi-creek-restaurant' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+
+-- --- Göbün Restaurant · güven: high · kaynak: gotosailing.com, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gobun-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göbün Restaurant', '1979''dan beri işletilen Göbün Koyu restoranı; iki iskelesinde 40 tekneye kadar bağlama kapasitesi vardır. Güneş enerjisiyle elektrik, su, duş/WC ve Wi-Fi sağlanır.',
+  ST_SetSRID(ST_MakePoint(28.8933, 36.6416), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göbün Restaurant', '1979''dan beri işletilen Göbün Koyu restoranı; iki iskelesinde 40 tekneye kadar bağlama kapasitesi vardır. Güneş enerjisiyle elektrik, su, duş/WC ve Wi-Fi sağlanır.' FROM locations WHERE slug = 'gobun-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, mezeler, kuzu tandır', 40, 'yemek yiyene bağlama ücretsiz', true
+FROM locations WHERE slug = 'gobun-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gobun-restaurant' AND a.code IN ('restaurant', 'water', 'electricity', 'wifi', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'gobun-restaurant' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905322474065', NULL, true
+FROM locations l WHERE l.slug = 'gobun-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905553570987', NULL, false
+FROM locations l WHERE l.slug = 'gobun-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@kapicreek.com', NULL, false
+FROM locations l WHERE l.slug = 'gobun-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Adaia Göcek Restaurant · güven: high · kaynak: www.navily.com, www.gocekonline.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'adaia-gocek-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Adaia Göcek Restaurant', 'Wall Bay / Hamam (Kleopatra) Koyu''nda kendi iskelesi olan restoran; eski Wall Bay Restaurant''ın yerinde hizmet verir. İskelede su, duş ve WC mevcuttur.',
+  ST_SetSRID(ST_MakePoint(28.8512, 36.6447), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  30, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Adaia Göcek Restaurant', 'Wall Bay / Hamam (Kleopatra) Koyu''nda kendi iskelesi olan restoran; eski Wall Bay Restaurant''ın yerinde hizmet verir. İskelede su, duş ve WC mevcuttur.' FROM locations WHERE slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'Akdeniz mutfağı', 30, 'yemek yiyene bağlama ücretsiz', NULL
+FROM locations WHERE slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'adaia-gocek-restaurant' AND a.code IN ('restaurant', 'water', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905333313854', NULL, true
+FROM locations l WHERE l.slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Sarsala Restaurant · güven: high · kaynak: www.navily.com, boatscribe.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sarsala-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Sarsala Restaurant', 'Küçük Sarsala Koyu''ndaki restoran iskelesi yaklaşık 35 tekne kapasitelidir; su, duş ve WC imkânı bulunur.',
+  ST_SetSRID(ST_MakePoint(28.857, 36.657), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  35, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sarsala Restaurant', 'Küçük Sarsala Koyu''ndaki restoran iskelesi yaklaşık 35 tekne kapasitelidir; su, duş ve WC imkânı bulunur.' FROM locations WHERE slug = 'sarsala-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'Türk mutfağı, deniz ürünleri', 35, 'yemek yiyene bağlama ücretsiz', NULL
+FROM locations WHERE slug = 'sarsala-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sarsala-restaurant' AND a.code IN ('restaurant', 'water', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905324233345', NULL, true
+FROM locations l WHERE l.slug = 'sarsala-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Boynuzbükü Restaurant · güven: medium · kaynak: www.navily.com, www.gocekonline.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'boynuzbuku-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Boynuzbükü Restaurant', 'Skopea Körfezi''nin kuzeyindeki Boynuzbükü Koyu''nda iskeleli koy restoranı; iskelede yaklaşık 18 tekneye yer vardır ve su temini mümkündür.',
+  ST_SetSRID(ST_MakePoint(28.8967, 36.7112), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  18, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Boynuzbükü Restaurant', 'Skopea Körfezi''nin kuzeyindeki Boynuzbükü Koyu''nda iskeleli koy restoranı; iskelede yaklaşık 18 tekneye yer vardır ve su temini mümkündür.' FROM locations WHERE slug = 'boynuzbuku-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, 18, NULL, NULL
+FROM locations WHERE slug = 'boynuzbuku-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'boynuzbuku-restaurant' AND a.code IN ('restaurant', 'water')
+ON CONFLICT DO NOTHING;
+
+-- --- Miori Restaurant · güven: medium · kaynak: www.gocekonline.com, irmakyachting.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'miori-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Miori Restaurant', 'Bedri Rahmi (Taşyaka / Tomb Bay) Koyu''nda kendi iskelesi olan modern Akdeniz restoranı.',
+  ST_SetSRID(ST_MakePoint(28.8717, 36.6933), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Miori Restaurant', 'Bedri Rahmi (Taşyaka / Tomb Bay) Koyu''nda kendi iskelesi olan modern Akdeniz restoranı.' FROM locations WHERE slug = 'miori-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'modern Akdeniz mutfağı', NULL, 'yemek yiyene bağlama ücretsiz', true
+FROM locations WHERE slug = 'miori-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'miori-restaurant' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905351080048', NULL, true
+FROM locations l WHERE l.slug = 'miori-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Ersoy Restaurant · güven: medium · kaynak: www.navily.com, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ersoy-restaurant-orhaniye', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ersoy Restaurant', 'Orhaniye Keçibükü''nde kendi iskelesi olan aile restoranı; iskelede elektrik, su, duş, WC ve Wi-Fi imkânı bulunur.',
+  ST_SetSRID(ST_MakePoint(28.1295, 36.753), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ersoy Restaurant', 'Orhaniye Keçibükü''nde kendi iskelesi olan aile restoranı; iskelede elektrik, su, duş, WC ve Wi-Fi imkânı bulunur.' FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ersoy-restaurant-orhaniye' AND a.code IN ('restaurant', 'electricity', 'water', 'shower', 'wc', 'wifi')
+ON CONFLICT DO NOTHING;
+
+-- --- Aurora Restaurant · güven: low · kaynak: www.harbourmaps.com, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aurora-restaurant-selimiye', 5, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Aurora Restaurant', 'Selimiye kıyısında kendi iskelesi olan restoran; yemek yiyen teknelere bağlama, su, elektrik ve Wi-Fi sunulur.',
+  ST_SetSRID(ST_MakePoint(28.092273, 36.707164), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aurora Restaurant', 'Selimiye kıyısında kendi iskelesi olan restoran; yemek yiyen teknelere bağlama, su, elektrik ve Wi-Fi sunulur.' FROM locations WHERE slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'Türk mutfağı, deniz ürünleri', NULL, 'yemek yiyene bağlama ücretsiz', NULL
+FROM locations WHERE slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aurora-restaurant-selimiye' AND a.code IN ('restaurant', 'electricity', 'water', 'shower', 'wc', 'wifi')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524464097', NULL, true
+FROM locations l WHERE l.slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Poseidon Boutique Hotel & Yacht Club · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'poseidon-selimiye', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Poseidon Boutique Hotel & Yacht Club', 'Selimiye''de iskeleli butik otel ve restoran; misafir teknelere kendi iskelesinde bağlama imkânı sunar.',
+  ST_SetSRID(ST_MakePoint(28.102339, 36.706601), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Poseidon Boutique Hotel & Yacht Club', 'Selimiye''de iskeleli butik otel ve restoran; misafir teknelere kendi iskelesinde bağlama imkânı sunar.' FROM locations WHERE slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'poseidon-selimiye'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'poseidon-selimiye' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524464080', NULL, true
+FROM locations l WHERE l.slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@poseidonselimiye.com', NULL, false
+FROM locations l WHERE l.slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://poseidonselimiye.com', NULL, false
+FROM locations l WHERE l.slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Dirsek Bükü Restaurant · güven: high · kaynak: turkeymarinas.blogspot.com, www.coastguidetr.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dirsek-buku-restaurant', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Dirsek Bükü Restaurant', 'Karayolu bağlantısı olmayan Dirsek Bükü''ndeki tek restoran; taş iskelesine kıçtankara bağlanılır. Nisan-Ekim arası açıktır ve akşamları meze büfesiyle bilinir.',
+  ST_SetSRID(ST_MakePoint(27.980973, 36.691718), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dirsek Bükü Restaurant', 'Karayolu bağlantısı olmayan Dirsek Bükü''ndeki tek restoran; taş iskelesine kıçtankara bağlanılır. Nisan-Ekim arası açıktır ve akşamları meze büfesiyle bilinir.' FROM locations WHERE slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, mezeler, ev yemekleri, ızgara', NULL, NULL, NULL
+FROM locations WHERE slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dirsek-buku-restaurant' AND a.code IN ('restaurant', 'water', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905323940001', NULL, true
+FROM locations l WHERE l.slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO opening_seasons (id, location_id, opens_on_month, opens_on_day, closes_on_month, closes_on_day)
+SELECT gen_random_uuid(), l.id, 4, 1, 10, 31 FROM locations l
+WHERE l.slug = 'dirsek-buku-restaurant'
+  AND NOT EXISTS (SELECT 1 FROM opening_seasons os WHERE os.location_id = l.id)
+;
+
+-- --- Bozburun Yacht Club · güven: medium · kaynak: www.navily.com, www.harbourmaps.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bozburun-yacht-club', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Bozburun Yacht Club', 'Bozburun Koyu kıyısında iskelesi ve restoranı olan yat kulübü ve butik otel; misafir teknelere rıhtım bağlaması sunar.',
+  ST_SetSRID(ST_MakePoint(28.0483, 36.6753), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bozburun Yacht Club', 'Bozburun Koyu kıyısında iskelesi ve restoranı olan yat kulübü ve butik otel; misafir teknelere rıhtım bağlaması sunar.' FROM locations WHERE slug = 'bozburun-yacht-club'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'bozburun-yacht-club'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bozburun-yacht-club' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+
+-- --- Octopus Restaurant · güven: medium · kaynak: www.navily.com, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'octopus-restaurant-sogut', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Octopus Restaurant', 'Söğüt Koyu''ndaki köklü restoran; teknelere kendi iskelesinde bağlama imkânı verir. Duş, WC ve Wi-Fi mevcuttur.',
+  ST_SetSRID(ST_MakePoint(28.0833, 36.6587), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Octopus Restaurant', 'Söğüt Koyu''ndaki köklü restoran; teknelere kendi iskelesinde bağlama imkânı verir. Duş, WC ve Wi-Fi mevcuttur.' FROM locations WHERE slug = 'octopus-restaurant-sogut'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri', NULL, NULL, NULL
+FROM locations WHERE slug = 'octopus-restaurant-sogut'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'octopus-restaurant-sogut' AND a.code IN ('restaurant', 'shower', 'wc', 'wifi')
+ON CONFLICT DO NOTHING;
+
+-- --- Loryma Restaurant · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'loryma-restaurant-bozukkale', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Loryma Restaurant', 'Bozukkale (Loryma) Koyu''nda 20''den fazla yat kapasiteli iskelesi ve tonozları olan restoran; personel yanaşmada yardım eder. İskele önü derinliği 8-10 m''dir.',
+  ST_SetSRID(ST_MakePoint(28.011648, 36.576377), 4326)::geography,
+  NULL, NULL, 8, 10,
+  20, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Loryma Restaurant', 'Bozukkale (Loryma) Koyu''nda 20''den fazla yat kapasiteli iskelesi ve tonozları olan restoran; personel yanaşmada yardım eder. İskele önü derinliği 8-10 m''dir.' FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, Türk mutfağı', 20, 'restoran misafirlerine bağlama ücretsiz', NULL
+FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'loryma-restaurant-bozukkale' AND a.code IN ('restaurant', 'security')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'loryma-restaurant-bozukkale' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905333434264', NULL, true
+FROM locations l WHERE l.slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905372124339', NULL, false
+FROM locations l WHERE l.slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'paul@lorymarestaurant.com', NULL, false
+FROM locations l WHERE l.slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'http://lorymarestaurant.com', NULL, false
+FROM locations l WHERE l.slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Rosemary Yacht Harbour & Restaurant · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'rosemary-cokertme', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Rosemary Yacht Harbour & Restaurant', 'Çökertme Koyu''nda restoran iskelesi ve tonozlarıyla hizmet veren işletme; VHF 16''dan ''Rosemary Yacht Harbour'' çağrısıyla ulaşılır. İskelede su, elektrik, Wi-Fi ve duş/WC mevcuttur.',
+  ST_SetSRID(ST_MakePoint(27.793611, 37.00544), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Rosemary Yacht Harbour & Restaurant', 'Çökertme Koyu''nda restoran iskelesi ve tonozlarıyla hizmet veren işletme; VHF 16''dan ''Rosemary Yacht Harbour'' çağrısıyla ulaşılır. İskelede su, elektrik, Wi-Fi ve duş/WC mevcuttur.' FROM locations WHERE slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, Türk mutfağı', NULL, NULL, NULL
+FROM locations WHERE slug = 'rosemary-cokertme'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'rosemary-cokertme' AND a.code IN ('restaurant', 'water', 'electricity', 'wifi', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'rosemary-cokertme' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525310158', NULL, true
+FROM locations l WHERE l.slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905324325731', NULL, false
+FROM locations l WHERE l.slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'mahirvurmaz@superonline.com', NULL, false
+FROM locations l WHERE l.slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'http://rosemarycokertme.com', NULL, false
+FROM locations l WHERE l.slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Denizkızı Kaptan Restaurant · güven: low · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'denizkizi-kaptan-okluk', 5, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Denizkızı Kaptan Restaurant', 'Gökova''nın Okluk (Değirmen Bükü) Koyu''nda yaklaşık 20 tekne kapasiteli iskelesi olan restoran ve market; iskelede elektrik ve su sağlanır.',
+  ST_SetSRID(ST_MakePoint(28.169722, 36.9175), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  20, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Denizkızı Kaptan Restaurant', 'Gökova''nın Okluk (Değirmen Bükü) Koyu''nda yaklaşık 20 tekne kapasiteli iskelesi olan restoran ve market; iskelede elektrik ve su sağlanır.' FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, 'deniz ürünleri, et yemekleri', 20, NULL, NULL
+FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'denizkizi-kaptan-okluk' AND a.code IN ('restaurant', 'electricity', 'water', 'market')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'denizkizi-kaptan-okluk' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524655262', NULL, true
+FROM locations l WHERE l.slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905368622544', NULL, false
+FROM locations l WHERE l.slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@denizkizikaptan.com', NULL, false
+FROM locations l WHERE l.slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'http://denizkizikaptan.com', NULL, false
+FROM locations l WHERE l.slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Göcek Yakıt İskelesi (Petrol Ofisi) · güven: high · kaynak: www.sea-seek.com, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-yakit-iskelesi-po', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Yakıt İskelesi (Petrol Ofisi)', 'Göcek köy rıhtımının kuzeydoğu başında yer alan Petrol Ofisi yakıt iskelesi. Pompa hortumu iskelenin tamamına yetişir; tekneler aborda olarak ikmal yapar.',
+  ST_SetSRID(ST_MakePoint(28.939501, 36.751999), 4326)::geography,
+  NULL, NULL, 2.5, 4,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Yakıt İskelesi (Petrol Ofisi)', 'Göcek köy rıhtımının kuzeydoğu başında yer alan Petrol Ofisi yakıt iskelesi. Pompa hortumu iskelenin tamamına yetişir; tekneler aborda olarak ikmal yapar.' FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, 'Nakit ve kredi kartı'
+FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gocek-yakit-iskelesi-po' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Göcek Lukoil Yakıt İskelesi · güven: medium · kaynak: my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-lukoil-yakit-iskelesi', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Lukoil Yakıt İskelesi', 'Göcek koyunun batı kıyısında yüzer pontonlu Lukoil yakıt istasyonu. Tekneler pontona aborda olur; derinlik 4 m ve üzeridir, büyük yatlar için mobil tanker çağrılabilir.',
+  ST_SetSRID(ST_MakePoint(28.924889, 36.748169), 4326)::geography,
+  NULL, NULL, 4, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Lukoil Yakıt İskelesi', 'Göcek koyunun batı kıyısında yüzer pontonlu Lukoil yakıt istasyonu. Tekneler pontona aborda olur; derinlik 4 m ve üzeridir, büyük yatlar için mobil tanker çağrılabilir.' FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, 4, 'Nakit ve kredi kartı'
+FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gocek-lukoil-yakit-iskelesi' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902526451458', NULL, true
+FROM locations l WHERE l.slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Datça Limanı Yakıt İkmal Noktası · güven: low · kaynak: www.cruiserswiki.org, my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'datca-yakit-iskelesi', 6, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Datça Limanı Yakıt İkmal Noktası', 'Datça yat limanındaki yakıt ikmal noktası; kaynaklar sabit iskele ile mini-tanker servisi konusunda çelişmektedir.',
+  ST_SetSRID(ST_MakePoint(27.691667, 36.721667), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Datça Limanı Yakıt İkmal Noktası', 'Datça yat limanındaki yakıt ikmal noktası; kaynaklar sabit iskele ile mini-tanker servisi konusunda çelişmektedir.' FROM locations WHERE slug = 'datca-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'datca-yakit-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'datca-yakit-iskelesi' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Palmiye Yakıt İskelesi · güven: low · kaynak: my-sea.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'palmiye-yakit-kecibuku', 6, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Palmiye Yakıt İskelesi', 'Keçi Bükü''nde (Orhaniye) kıyıda yakıt tankı ve iskeleye uzanan ikmal hortumu bulunan küçük tesis; yakıt için VHF 73 kanalından çağrı yapılır.',
+  ST_SetSRID(ST_MakePoint(28.127146, 36.75876), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Palmiye Yakıt İskelesi', 'Keçi Bükü''nde (Orhaniye) kıyıda yakıt tankı ve iskeleye uzanan ikmal hortumu bulunan küçük tesis; yakıt için VHF 73 kanalından çağrı yapılır.' FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'palmiye-yakit-kecibuku' AND a.code IN ('fuel', 'restaurant')
+ON CONFLICT DO NOTHING;
 
