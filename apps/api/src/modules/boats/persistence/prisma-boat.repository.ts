@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
-import { BoatRepository, LookupIds, LookupResolution } from '../domain/boat.repository';
+import {
+  BoatRepository,
+  LookupIds,
+  LookupResolution,
+} from '../domain/boat.repository';
 import { Boat, CreateBoatInput, UpdateBoatInput } from '../domain/boat.types';
 
 type BoatRow = Prisma.BoatGetPayload<{ include: { boatType: true; engineType: true } }>;
@@ -11,24 +15,30 @@ export class PrismaBoatRepository implements BoatRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async listByOwner(ownerUserId: string): Promise<Boat[]> {
-    const rows = await this.prisma.boat.findMany({
-      where: { ownerUserId, deletedAt: null },
-      include: { boatType: true, engineType: true },
-      orderBy: [{ isPrimary: 'desc' }, { createdAt: 'desc' }],
-    });
+    const rows = await this.prisma.withUserContext(ownerUserId, (tx) =>
+      tx.boat.findMany({
+        where: { ownerUserId, deletedAt: null },
+        include: { boatType: true, engineType: true },
+        orderBy: [{ isPrimary: 'desc' }, { createdAt: 'desc' }],
+      }),
+    );
     return rows.map((r) => this.toBoat(r));
   }
 
   async findOwned(ownerUserId: string, boatId: string): Promise<Boat | null> {
-    const row = await this.prisma.boat.findFirst({
-      where: { id: boatId, ownerUserId, deletedAt: null },
-      include: { boatType: true, engineType: true },
-    });
+    const row = await this.prisma.withUserContext(ownerUserId, (tx) =>
+      tx.boat.findFirst({
+        where: { id: boatId, ownerUserId, deletedAt: null },
+        include: { boatType: true, engineType: true },
+      }),
+    );
     return row ? this.toBoat(row) : null;
   }
 
   async countActiveByOwner(ownerUserId: string): Promise<number> {
-    return this.prisma.boat.count({ where: { ownerUserId, deletedAt: null } });
+    return this.prisma.withUserContext(ownerUserId, (tx) =>
+      tx.boat.count({ where: { ownerUserId, deletedAt: null } }),
+    );
   }
 
   async resolveLookups(input: {
@@ -60,7 +70,7 @@ export class PrismaBoatRepository implements BoatRepository {
     input: CreateBoatInput,
     ids: LookupIds,
   ): Promise<Boat> {
-    const row = await this.prisma.$transaction(async (tx) => {
+    const row = await this.prisma.withUserContext(ownerUserId, async (tx) => {
       const activeCount = await tx.boat.count({ where: { ownerUserId, deletedAt: null } });
       // İlk tekne veya açık isPrimary=true → birincil olacak; önce mevcut birincil devredilir.
       const makePrimary = activeCount === 0 || input.isPrimary === true;
@@ -99,7 +109,7 @@ export class PrismaBoatRepository implements BoatRepository {
     patch: UpdateBoatInput,
     ids: LookupIds,
   ): Promise<Boat> {
-    const row = await this.prisma.$transaction(async (tx) => {
+    const row = await this.prisma.withUserContext(ownerUserId, async (tx) => {
       if (patch.isPrimary === true) {
         await tx.boat.updateMany({
           where: { ownerUserId, isPrimary: true, deletedAt: null, id: { not: boatId } },
@@ -135,26 +145,30 @@ export class PrismaBoatRepository implements BoatRepository {
   }
 
   async softDelete(ownerUserId: string, boatId: string, actorUserId: string): Promise<void> {
-    await this.prisma.boat.updateMany({
-      where: { id: boatId, ownerUserId, deletedAt: null },
-      data: { deletedAt: new Date(), deletedBy: actorUserId, isPrimary: false },
-    });
+    await this.prisma.withUserContext(ownerUserId, (tx) =>
+      tx.boat.updateMany({
+        where: { id: boatId, ownerUserId, deletedAt: null },
+        data: { deletedAt: new Date(), deletedBy: actorUserId, isPrimary: false },
+      }),
+    );
   }
 
   async promoteNewPrimaryIfNeeded(ownerUserId: string): Promise<void> {
-    const hasPrimary = await this.prisma.boat.findFirst({
-      where: { ownerUserId, isPrimary: true, deletedAt: null },
-      select: { id: true },
+    await this.prisma.withUserContext(ownerUserId, async (tx) => {
+      const hasPrimary = await tx.boat.findFirst({
+        where: { ownerUserId, isPrimary: true, deletedAt: null },
+        select: { id: true },
+      });
+      if (hasPrimary) return;
+      const newest = await tx.boat.findFirst({
+        where: { ownerUserId, deletedAt: null },
+        orderBy: { createdAt: 'desc' },
+        select: { id: true },
+      });
+      if (newest) {
+        await tx.boat.update({ where: { id: newest.id }, data: { isPrimary: true } });
+      }
     });
-    if (hasPrimary) return;
-    const newest = await this.prisma.boat.findFirst({
-      where: { ownerUserId, deletedAt: null },
-      orderBy: { createdAt: 'desc' },
-      select: { id: true },
-    });
-    if (newest) {
-      await this.prisma.boat.update({ where: { id: newest.id }, data: { isPrimary: true } });
-    }
   }
 
   private toBoat(row: BoatRow): Boat {

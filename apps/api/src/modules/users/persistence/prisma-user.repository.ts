@@ -18,37 +18,39 @@ export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getMe(userId: string): Promise<UserMe | null> {
-    const user = await this.prisma.user.findFirst({
-      where: { id: userId, deletedAt: null },
-      include: { role: true, profile: true, settings: true },
-    });
-    if (!user) return null;
-
-    // Lazy init: ilk erişimde varsayılan profil/ayar satırları oluşturulur.
-    // Rıza zamanları kayıt anındaki kabule dayanır (S-03 KVKK metni — docs/21).
-    if (!user.profile) {
-      await this.prisma.userProfile.create({
-        data: { userId, displayName: this.defaultDisplayName(user.email) },
-      });
-    }
-    if (!user.settings) {
-      const now = new Date();
-      await this.prisma.userSetting.create({
-        data: { userId, termsAcceptedAt: now, privacyAcceptedAt: now },
-      });
-    }
-    if (!user.profile || !user.settings) {
-      const fresh = await this.prisma.user.findUniqueOrThrow({
-        where: { id: userId },
+    return this.prisma.withUserContext(userId, async (tx) => {
+      const user = await tx.user.findFirst({
+        where: { id: userId, deletedAt: null },
         include: { role: true, profile: true, settings: true },
       });
-      return this.toMe(fresh);
-    }
-    return this.toMe(user);
+      if (!user) return null;
+
+      // Lazy init: ilk erişimde varsayılan profil/ayar satırları oluşturulur.
+      // Rıza zamanları kayıt anındaki kabule dayanır (S-03 KVKK metni — docs/21).
+      if (!user.profile) {
+        await tx.userProfile.create({
+          data: { userId, displayName: this.defaultDisplayName(user.email) },
+        });
+      }
+      if (!user.settings) {
+        const now = new Date();
+        await tx.userSetting.create({
+          data: { userId, termsAcceptedAt: now, privacyAcceptedAt: now },
+        });
+      }
+      if (!user.profile || !user.settings) {
+        const fresh = await tx.user.findUniqueOrThrow({
+          where: { id: userId },
+          include: { role: true, profile: true, settings: true },
+        });
+        return this.toMe(fresh);
+      }
+      return this.toMe(user);
+    });
   }
 
   async updateMe(userId: string, patch: UpdateMeInput): Promise<UserMe> {
-    await this.prisma.$transaction(async (tx) => {
+    await this.prisma.withUserContext(userId, async (tx) => {
       if (patch.locale !== undefined) {
         await tx.user.update({ where: { id: userId }, data: { locale: patch.locale } });
       }
@@ -88,7 +90,7 @@ export class PrismaUserRepository implements UserRepository {
 
   async softDeleteAndAnonymize(userId: string, audit: DeletionAudit): Promise<void> {
     const now = new Date();
-    await this.prisma.$transaction(async (tx) => {
+    await this.prisma.withUserContext(userId, async (tx) => {
       await tx.userProfile.upsert({
         where: { userId },
         create: { userId, displayName: ANONYMIZED_DISPLAY_NAME },

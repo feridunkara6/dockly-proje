@@ -1,5 +1,6 @@
 # CI hattı (docs/28 §3). Biçimlendirme otomatik düzeltilir ve bot tarafından commit'lenir;
 # hata özetleri annotation olarak yayınlanır (giriş gerektirmeden okunabilir).
+# Teknik borç (Faz 2): lockfile commit'lenince `npm ci` + cache'e dönülecek.
 name: ci
 
 on:
@@ -50,9 +51,10 @@ jobs:
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
               git add package-lock.json
               git commit -m "build: package-lock.json senkronu"
+              # Paralel koşu çakışması: reddedilirse rebase dene; olmazsa diğer koşu halletmiştir.
               git push origin HEAD:main \
                 || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
-                || echo "::notice::Lockfile push atlandı."
+                || echo "::notice::Lockfile push atlandı — başka koşu güncelledi."
             fi
           fi
       - name: Bağımlılık kurulumu (deterministik)
@@ -79,6 +81,12 @@ jobs:
             echo "::error title=Spatial::$(grep -E 'ERROR|EXCEPTION' /tmp/spatial.log | head -3 | tr '\n' ' § ')"
             exit 1
           fi
+      - name: RLS doğrulama paketi (gerçek PostGIS, tablo sahibi OLMAYAN rol — ADR-003)
+        run: |
+          if ! psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/tests/rls_validation.sql 2>&1 | tee /tmp/rls.log; then
+            echo "::error title=RLS::$(grep -E 'ERROR|EXCEPTION|ihlali' /tmp/rls.log | head -3 | tr '\n' ' § ')"
+            exit 1
+          fi
       - run: npm run lint
       - name: Prettier — otomatik biçimlendir ve gerekirse bot commit'i at
         run: |
@@ -91,8 +99,8 @@ jobs:
               git commit -m "style: prettier otomatik biçimlendirme"
               git push origin HEAD:main \
                 || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
-                || echo "::notice::Stil push atlandı."
-              echo "Biçimlendirme düzeltildi."
+                || echo "::notice::Stil push atlandı — başka koşu güncelledi."
+              echo "Biçimlendirme düzeltildi ve commit'lendi."
             fi
           fi
       - name: Testler (coverage kapılı)
@@ -171,13 +179,15 @@ jobs:
           ignore-unfixed: true
 
   mobile:
+    # Flutter monorepo doğrulaması (docs/26). Saf Dart paketleri + Flutter uygulaması:
+    # analyze (hata=kırar) + test. Firebase/UI 2.4b'de eklenecek.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.27.4
+          flutter-version: 3.24.0
           cache: true
       - name: dockly_core (saf Dart — analyze + test)
         working-directory: packages/dockly_core
