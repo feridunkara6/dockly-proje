@@ -26,10 +26,7 @@ export class AccountGuard implements CanActivate {
     const { principal } = context.switchToHttp().getRequest<AuthedRequest>();
     if (!principal) throw new AppProblem('invalid-token');
     if (principal.isGuest) {
-      throw new AppProblem(
-        'guest-not-allowed',
-        'Bu işlem için hesabınızla giriş yapmalısınız.',
-      );
+      throw new AppProblem('guest-not-allowed', 'Bu işlem için hesabınızla giriş yapmalısınız.');
     }
     return true;
   }
