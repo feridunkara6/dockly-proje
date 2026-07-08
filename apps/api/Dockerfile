@@ -11,7 +11,7 @@ FROM node:22-slim AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npm prune --omit=dev && npx prisma@5.22.0 generate
 
 FROM node:22-slim AS runtime
 ENV NODE_ENV=production
@@ -20,7 +20,7 @@ WORKDIR /app
 # upgrade: taban katmandaki düzeltmesi yayınlanmış CVE'leri kapatır (Trivy kapısı).
 RUN apt-get update \
   && apt-get upgrade -y \
-  && apt-get install -y --no-install-recommends openssl \
+  && apt-get install -y --no-install-recommends openssl libssl3 \
   && rm -rf /var/lib/apt/lists/*
 # Çalışma zamanında paket yöneticisine ihtiyaç yok: npm/npx/corepack/yarn imajdan
 # çıkarılır — tabanla gelen bağımlılık CVE'leri (sigstore/picomatch) ve saldırı
