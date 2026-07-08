@@ -50,7 +50,10 @@ const CATALOG: Record<ProblemType, { status: HttpStatus; title: string }> = {
   'validation-error': { status: HttpStatus.UNPROCESSABLE_ENTITY, title: 'Doğrulama hatası' },
   'rate-limited': { status: HttpStatus.TOO_MANY_REQUESTS, title: 'Çok fazla istek' },
   'payload-too-large': { status: HttpStatus.PAYLOAD_TOO_LARGE, title: 'İçerik çok büyük' },
-  'service-unavailable': { status: HttpStatus.SERVICE_UNAVAILABLE, title: 'Servis geçici olarak kullanılamıyor' },
+  'service-unavailable': {
+    status: HttpStatus.SERVICE_UNAVAILABLE,
+    title: 'Servis geçici olarak kullanılamıyor',
+  },
   internal: { status: HttpStatus.INTERNAL_SERVER_ERROR, title: 'Beklenmeyen hata' },
 };
 
