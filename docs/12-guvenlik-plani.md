@@ -1,7 +1,34 @@
 # Dockly — Güvenlik Planı (12)
 
 > Bu doküman [00-foundation.md](00-foundation.md) kanonik temel dokümanına bağlıdır. Tablo adları, enum'lar, endpoint'ler ve roller oradan birebir alınmıştır.
-> Kapsam: mobil uygulama (`com.dockly.app`), admin web (`com.dockly.admin`), Supabase backend, AWS S3/CloudFront, Firebase Authentication.
+> Kapsam: mobil uygulama (`com.dockly.app`), admin web (`com.dockly.admin`), backend API, AWS S3/CloudFront, Firebase Authentication.
+
+---
+
+## 0. GÜNCEL MİMARİ NOTU (ERRATA — 8 Temmuz 2026)
+
+> **Neden bu bölüm var:** Bu planın §1–§13'ü **Supabase + Edge Functions (Deno) + PostgREST RLS + Firebase Admin SDK** varsayımıyla yazıldı. Proje bu karardan bilinçli olarak saptı (bkz. ADR-004): gerçek backend **NestJS (Node 22) + Prisma ORM + kendi REST API'si (`/v1`)** üzerine kuruludur. Aşağıdaki eşleme tablosu okunmadan §1–§13 **olduğu gibi uygulanmamalıdır**. Pentest kapsamı ve güvenlik denetimi bu bölüme göre yürütülür. Her kontrolün gerçek koddaki karşılığı [`security-evidence.md`](./security-evidence.md) dosyasındadır.
+
+### 0.1 Planlanan → Gerçek eşleme
+
+| Doküman §X'te geçen | Gerçek implementasyon | Kanıt |
+|---|---|---|
+| Supabase + PostgREST + Edge Functions (Deno) | NestJS (Node 22, TypeScript) + Prisma ORM; kendi `/v1` REST API'si | `apps/api/src/main.ts` |
+| Firebase Admin SDK ile token doğrulama | Kendi doğrulayıcı: Google JWKS + RS256 (alg sabit), `aud`/`iss` pinleme; **firebase-admin paketi kullanılmıyor** | `src/infrastructure/firebase/firebase-token.verifier.ts` |
+| "Supabase JWT köprüsü" (§2.1) | Kendi RS256 imzalı köprü JWT'si; 15 dk erişim + rotasyonlu refresh (yalnız hash saklanır, reuse tespiti var) | `src/infrastructure/jwt/token.signer.ts`, `src/modules/auth/application/session.service.ts` |
+| PostgREST RLS `auth.uid()` politikaları (§3.2) | RLS migration'ı **var** (`prisma/migrations/0002_rls`) fakat **ŞU AN İNERT**: uygulama `app.user_id` oturum değişkenini set etmiyor ve politikalar fail-open. Tek gerçek koruma **uygulama katmanı sahiplik kontrolleridir** (404 döner). → **Faz A'da gerçekten devreye alınacak.** | `prisma/migrations/0002_rls/migration.sql`, `src/modules/boats/application/boats.service.ts` |
+| Kanonik hata formatı `{error:{code,message,details}}` (§6.2) | **RFC 9457 Problem Details** (`application/problem+json`); tek çıkış filtresi, 500 maskeleme | `src/common/problem/problem.filter.ts`, `problem.ts` |
+| API Gateway + Edge rate limiting (§6.1) | Redis tabanlı `RateLimiterService`; **şu an yalnız `POST /auth/sessions`** uygulanıyor, genel/yazma/admin limitleri henüz yok. Redis kesintisinde fail-open (bilinçli, izlenen risk) | `src/infrastructure/redis/rate-limiter.service.ts`, `src/modules/auth/presentation/auth.controller.ts` |
+| Acil token iptali (`revokeRefreshTokens`) | `jti` blacklist (Redis); Redis kesintisinde fail-open | `src/infrastructure/redis/jti-blacklist.service.ts` |
+| Supabase disk şifreleme / Supabase Vault (§4.1) | AWS RDS (eu-central-1, PG15+PostGIS — ADR-004); sırlar env (Zod ile fail-fast) + dağıtım platformu secret store; repoda secret yok (gitleaks CI) | `src/config/env.schema.ts`, `.gitleaks.toml` |
+| Misafir mod kısıtları (§2.3 tablosu) | `guest-not-allowed` problem tipi **tanımlı ama uygulanmıyor**; misafir şu an yazma uçlarına erişebiliyor. → **Faz A'da guard ile uygulanacak.** | `src/common/problem/problem.ts` |
+| KVKK silme — Firebase hesabı Admin SDK ile silinir (§5.3-2) | DB tarafı anonimleştirme **tam** (tek transaction); ancak firebase-admin olmadığından **Firebase hesabı şu an silinmiyor**. → Faz D'de bağlanacak. | `src/modules/users/persistence/prisma-user.repository.ts` |
+
+### 0.2 Bu güncellemeyle değişmeyenler
+Firebase Authentication (istemci tarafı 5 yöntem), S3/CloudFront fotoğraf mimarisi, KVKK ilkeleri, moderasyon akışı, incident response ve OWASP hedef profilleri **planlandığı gibi geçerlidir**. Değişen yalnızca "backend nasıl çalışır" katmanıdır (Supabase yerine kendi NestJS servisi).
+
+### 0.3 Launch-blocker güncel durumu (özet)
+✅ Karşılanan: token güvenliği (RS256 alg-pin), refresh reuse tespiti, RFC 9457, PII log maskeleme, env fail-fast, SQL injection kapalı, IDOR→404. · 🟠 Kısmi: jti iptali & rate-limit (fail-open), KVKK Firebase silme. · ❌ Açık: **RLS (inert), misafir kısıtları, güvenlik başlıkları (helmet/CORS/HSTS), admin 2FA**. Detay ve öncelik: `DOCKLY-PROJE-DENETIM-RAPORU.md` §6.
 
 ---
 

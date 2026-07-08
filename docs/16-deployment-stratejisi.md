@@ -6,6 +6,28 @@
 
 ---
 
+## 0. GÜNCEL DURUM NOTU (ERRATA — 8 Temmuz 2026)
+
+> **Neden bu bölüm var:** Bu planın backend/DB dağıtımı bölümleri (§1, §4) **Supabase + Edge Functions** varsayar. Proje ADR-004 ile **kendi NestJS/Prisma backend'ine + AWS RDS'e** geçti. Ayrıca §3'te tarif edilen 4 CI/CD workflow'undan şu an yalnız biri mevcut. Aşağıdaki tablo gerçek durumu ve hedefi ayırır. Mobil dağıtım, sürümleme, feature-flag ve rollback ilkeleri (§2, §6, §7, §8) planlandığı gibi geçerlidir.
+
+### 0.1 Planlanan → Gerçek / Hedef
+
+| Konu | Dokümanda (planlanan) | Şu anki gerçek | Hedef |
+|---|---|---|---|
+| Prod veritabanı | Supabase managed | — (henüz prod yok) | **AWS RDS** eu-central-1, PG15+PostGIS, MVP'de Single-AZ (ADR-004) |
+| Staging altyapısı | `dockly-staging` Supabase | **Geçici köprü:** Supabase (ücretsiz, yalnız Postgres+PostGIS) + **Render** (Docker web servisi, Redis) | AWS'ye taşınacak (prod'la aynı yığın) |
+| Backend deploy (§4) | `supabase db push` + Edge Function deploy | **Prisma migrate** + tek Docker imajı (Render) | AWS'de Docker (ECS/Fargate veya benzeri) + Prisma migrate |
+| Migration klasörü | `supabase/migrations/` | `apps/api/prisma/migrations/` (`0001_init`, `0002_rls`) | Aynı |
+| CI/CD workflow'ları (§3.1) | `pr-checks`, `deploy-staging`, `release-prod`, `nightly` (4 adet) | **Yalnız `ci.yml`** (lint+test+build+güvenlik taraması: gitleaks, Trivy, Semgrep, license) | Eksik 3 workflow Faz C/D'de eklenecek (denetim bulgusu D3) |
+| Fastlane lane'leri (§3.3) | Tanımlı | **Henüz yok** (mobil dağıtım hattı kurulmadı) | Mobil sprint'lerinde |
+| PITR / yedek (§4.3) | "PITR prod'da açık, RPO ≤ 2 dk" | **Kurulmadı / kanıtsız** (denetim bulgusu D2) | RDS otomatik yedek + PITR + restore tatbikatı (Faz D) |
+| Backup/DR | Supabase yönetimli | Single-AZ (failover yok) | Multi-AZ değerlendirmesi lansman öncesi |
+
+### 0.2 Backend deploy — güncel gerçek akış (staging)
+Şu an geçerli olan basitleştirilmiş akış: GitHub push → `ci.yml` (test + güvenlik) yeşil → GitHub'daki depo Render'a bağlı → Render `apps/api` kök dizininden Docker imajını kurar → Prisma migrate + seed. Canlı veritabanı güncellemeleri (Faz 5 verisi) Supabase SQL Editor üzerinden ayrıca uygulanır. §4'teki Supabase/Edge tabanlı ayrıntılı akış **prod hedefi için değil, tarihsel plan olarak** okunmalıdır.
+
+---
+
 ## 1. Ortamlar (Environments)
 
 Üç izole ortam vardır. **Hiçbir kaynak (proje, bucket, token) ortamlar arasında paylaşılmaz.**
