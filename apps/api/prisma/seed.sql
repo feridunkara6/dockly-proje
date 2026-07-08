@@ -196,5 +196,10 @@ INSERT INTO app_settings (key, value, description) VALUES
 ON CONFLICT (key) DO NOTHING;
 
 -- =====================================================================
+-- Gerçek lokasyon verisi (Faz 5 veri edinimi; kaynak/güven: prisma/data/*.json)
+-- =====================================================================
+\ir seed_locations.sql
+
+-- =====================================================================
 -- Seed sonu
 -- =====================================================================
