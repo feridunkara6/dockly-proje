@@ -1,0 +1,30 @@
+# Docker build context sadeleştirme (docs denetimi D7).
+# Bağlam kökü apps/api (Render Root Directory). Aşağıdakiler imaja GİRMEZ.
+
+# Bağımlılıklar imaj içinde `npm install` ile taze kurulur;
+# yerel node_modules kopyası `COPY . .` sırasında taze kurulanı EZMEMELİ.
+node_modules
+
+# Derleme çıktısı imajda `npm run build` ile yeniden üretilir.
+dist
+
+# Testler ve kapsam raporu çalışma zamanında gerekmez (tsconfig.build zaten hariç tutar).
+test
+coverage
+*.spec.ts
+
+# Sırlar asla imaja gömülmez (env, Render dashboard'dan gelir).
+.env
+.env.*
+!.env.example
+
+# Log ve geçici dosyalar
+*.log
+npm-debug.log*
+
+# Git / editör / OS artefaktları (bağlamda olsalar bile gereksiz)
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
