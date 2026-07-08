@@ -93,9 +93,7 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     const e2e = onlyE2E<Pin>(res.body.locations);
     // 2 E2E pini: private_marina + fuel_pier (taslak/silinmiş/kutu-dışı hariç)
     expect(e2e).toHaveLength(2);
-    expect(e2e.map((p) => p.type)).toEqual(
-      expect.arrayContaining(['private_marina', 'fuel_pier']),
-    );
+    expect(e2e.map((p) => p.type)).toEqual(expect.arrayContaining(['private_marina', 'fuel_pier']));
     // Taslak/silinmiş fixture'lar asla sızmaz
     const names = (res.body.locations as Pin[]).map((p) => p.name);
     expect(names).not.toContain('E2E Göcek Taslak');
