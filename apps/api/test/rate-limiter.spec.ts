@@ -21,7 +21,7 @@ class FakeRedis {
   }
 }
 
-describe('RateLimiterService (docs/30 §1 + fail-open kuralı)', () => {
+describe('RateLimiterService (docs/30 §1 + Redis kesintisinde bellek-içi yedek)', () => {
   let fake: FakeRedis;
   let limiter: RateLimiterService;
 
@@ -47,9 +47,20 @@ describe('RateLimiterService (docs/30 §1 + fail-open kuralı)', () => {
     expect(other.allowed).toBe(true);
   });
 
-  it('Redis düşükse FAIL-OPEN: istek geçer (docs/29 kabul edilen risk)', async () => {
+  it('Redis düşükse bellek-içi yedek DEVREYE girer: limit hâlâ uygulanır (fail-closed, A.3)', async () => {
     fake.failing = true;
-    const d = await limiter.consume('auth', '1.2.3.4', 1, 60);
-    expect(d.allowed).toBe(true);
+    // max=2: ilk iki istek geçer, üçüncü Redis olmadan da reddedilir (fail-open DEĞİL).
+    expect((await limiter.consume('auth', '9.9.9.9', 2, 60)).allowed).toBe(true);
+    expect((await limiter.consume('auth', '9.9.9.9', 2, 60)).allowed).toBe(true);
+    const denied = await limiter.consume('auth', '9.9.9.9', 2, 60);
+    expect(denied.allowed).toBe(false);
+    expect(denied.retryAfterSec).toBeGreaterThan(0);
+  });
+
+  it('bellek-içi yedek farklı kimlikleri ayırır', async () => {
+    fake.failing = true;
+    expect((await limiter.consume('auth', 'x', 1, 60)).allowed).toBe(true);
+    expect((await limiter.consume('auth', 'x', 1, 60)).allowed).toBe(false);
+    expect((await limiter.consume('auth', 'y', 1, 60)).allowed).toBe(true);
   });
 });
