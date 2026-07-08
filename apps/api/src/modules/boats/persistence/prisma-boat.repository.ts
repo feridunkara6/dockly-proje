@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
-import {
-  BoatRepository,
-  LookupIds,
-  LookupResolution,
-} from '../domain/boat.repository';
+import { BoatRepository, LookupIds, LookupResolution } from '../domain/boat.repository';
 import { Boat, CreateBoatInput, UpdateBoatInput } from '../domain/boat.types';
 
 type BoatRow = Prisma.BoatGetPayload<{ include: { boatType: true; engineType: true } }>;
