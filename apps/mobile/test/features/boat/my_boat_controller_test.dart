@@ -31,6 +31,9 @@ ProviderContainer _containerWith(FakeBoatStorage storage) {
 }
 
 void main() {
+  // Eklenti mock'u için binding gerekir (gerçek shared_preferences testi).
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('set → durumu günceller ve depoya yazar', () async {
     final FakeBoatStorage storage = FakeBoatStorage();
     final ProviderContainer c = _containerWith(storage);
@@ -61,7 +64,6 @@ void main() {
   });
 
   test('SharedPrefsBoatStorage: kaydet/yükle/temizle gidiş-dönüş', () async {
-    TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues(<String, Object>{});
     const SharedPrefsBoatStorage storage = SharedPrefsBoatStorage();
 
