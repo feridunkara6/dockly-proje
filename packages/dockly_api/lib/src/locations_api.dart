@@ -4,6 +4,7 @@ import 'dto/geo.dart';
 import 'dto/location_detail.dart';
 import 'dto/location_summary.dart';
 import 'dto/map_result.dart';
+import 'dto/review.dart';
 import 'problem_mapper.dart';
 
 /// `/v1/locations*` istemcisi (docs/23 §9). Anonim uçlar; tüm hatalar `AppFailure`'a
@@ -82,6 +83,23 @@ class LocationsApi {
       return data
           .whereType<Map<String, dynamic>>()
           .map(LocationSummary.fromJson)
+          .toList(growable: false);
+    });
+  }
+
+  /// Bir lokasyonun onaylı yorumları (docs/23 §11.3). En yeni önce; boş olabilir.
+  Future<List<Review>> reviews(String idOrSlug, {int? limit}) async {
+    return _call(() async {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/locations/${Uri.encodeComponent(idOrSlug)}/reviews',
+        queryParameters: <String, dynamic>{
+          if (limit != null) 'limit': limit,
+        },
+      );
+      final data = res.data!['data'] as List<dynamic>? ?? const <dynamic>[];
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(Review.fromJson)
           .toList(growable: false);
     });
   }

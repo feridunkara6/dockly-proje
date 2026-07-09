@@ -11,6 +11,7 @@ import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/presentation/boat_fit.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
+import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
 
@@ -146,6 +147,7 @@ class _DetailContent extends StatelessWidget {
           for (final Contact c in detail.contacts) _ContactRow(contact: c),
         ],
 
+        ReviewsSection(idOrSlug: detail.id),
         NearbyAlternatives(locationId: detail.id, position: detail.position),
       ],
     );

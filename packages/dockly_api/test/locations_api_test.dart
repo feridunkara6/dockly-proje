@@ -155,6 +155,42 @@ void main() {
     expect(adapter.received.single.queryParameters.containsKey('type'), isFalse);
   });
 
+  test('reviews: Review listesi + query paramları', () async {
+    adapter.enqueueJson(200, <String, dynamic>{
+      'data': <dynamic>[
+        <String, dynamic>{
+          'id': 'rev-1',
+          'authorName': 'Kaptan Ali',
+          'rating': 5,
+          'title': 'Harika yer',
+          'body': 'Personel çok yardımcı.',
+          'visitedOn': null,
+          'createdAt': '2026-07-01T10:00:00Z',
+          'helpfulCount': 3,
+        },
+      ],
+    });
+
+    final list = await api.reviews('d-marin-gocek', limit: 10);
+    expect(list, hasLength(1));
+    final r = list.single;
+    expect(r.authorName, 'Kaptan Ali');
+    expect(r.rating, 5);
+    expect(r.title, 'Harika yer');
+    expect(r.helpfulCount, 3);
+
+    final sent = adapter.received.single;
+    expect(sent.path, '/v1/locations/d-marin-gocek/reviews');
+    expect(sent.method, 'GET');
+    expect(sent.queryParameters['limit'], 10);
+  });
+
+  test('reviews: boş liste', () async {
+    adapter.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+    final list = await api.reviews('d-marin-gocek');
+    expect(list, isEmpty);
+  });
+
   test('mapByBbox 422 → ValidationFailure', () async {
     adapter.enqueueProblem(422, <String, dynamic>{
       'type': 'https://api.dockly.app/problems/validation-error',
