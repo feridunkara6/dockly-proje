@@ -24,6 +24,8 @@ void main() {
     expect(find.byKey(LocationDetailScreen.contentKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget); // private_marina etiketi
     expect(find.text('73'), findsOneWidget); // marina VHF kanalı
+    // Telefon iletişimi tıklanabilir → "harici uygulamada aç" ikonu görünür (P0).
+    expect(find.byIcon(Icons.open_in_new), findsOneWidget);
   });
 
   testWidgets('hata → mesaj + tekrar dene', (WidgetTester tester) async {

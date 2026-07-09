@@ -4,6 +4,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/external_links.dart';
 import '../../../core/location_type_labels.dart';
 import '../../boat/presentation/boat_fit.dart';
 import '../application/location_detail_controller.dart';
@@ -50,6 +51,11 @@ class _DetailContent extends StatelessWidget {
       key: LocationDetailScreen.contentKey,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: <Widget>[
+        // Kapak fotoğrafı (varsa) — misafirin ilk gördüğü şey (P0).
+        if (detail.media.cover != null) ...<Widget>[
+          _CoverPhoto(url: detail.media.cover!.url),
+          const SizedBox(height: 14),
+        ],
         // Başlık bloğu
         Row(
           children: <Widget>[
@@ -201,6 +207,46 @@ class _DetailContent extends StatelessWidget {
       v == v.roundToDouble() ? v.toInt().toString() : v.toString();
 }
 
+class _CoverPhoto extends StatelessWidget {
+  const _CoverPhoto({required this.url});
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Image.network(
+          url,
+          fit: BoxFit.cover,
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? progress) {
+            if (progress == null) return child;
+            return const ColoredBox(
+              color: Color(0x11000000),
+              child: Center(
+                child: SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+            );
+          },
+          errorBuilder: (BuildContext context, Object error, StackTrace? stack) {
+            return const ColoredBox(
+              color: Color(0x11000000),
+              child: Center(
+                child: Icon(Icons.image_not_supported_outlined, color: DocklyColors.brandDeep),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 class _Fact {
   const _Fact(this.label, this.value);
   final String label;
@@ -264,15 +310,25 @@ class _ContactRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+    final Uri? uri = contactUri(contact.type, contact.value);
+    final Widget inner = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: <Widget>[
           Icon(_iconFor(contact.type), size: 18, color: DocklyColors.brandPrimary),
           const SizedBox(width: 10),
           Expanded(child: Text(contact.value)),
+          if (uri != null)
+            const Icon(Icons.open_in_new, size: 16, color: DocklyColors.brandDeep),
         ],
       ),
+    );
+    // Açılabilen türler (telefon/WhatsApp/web/e-posta) tek dokunuşla çalışır;
+    // VHF gibi açılamayanlar düz metin kalır.
+    if (uri == null) return inner;
+    return InkWell(
+      onTap: () => launchContact(context, contact.type, contact.value),
+      child: inner,
     );
   }
 
