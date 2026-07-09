@@ -23,6 +23,13 @@ export const envSchema = z.object({
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(60),
   /** /auth uçları IP başına dakikalık tavan (docs/30 §1). */
   AUTH_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(10),
+  /**
+   * İzleme (monitoring) — OPSİYONEL (Faz A.6 iskeleti, docs/implementation/monitoring-kurulum-rehberi.md).
+   * DSN verilmezse Sentry devre dışı; hata izleme ara çözümü log tabanlı alarmdır
+   * (5xx logları `event: 'server_error'` etiketiyle akar). SDK bağlanınca burası okunur.
+   */
+  SENTRY_DSN: z.string().url().optional(),
+  SENTRY_ENVIRONMENT: z.enum(['development', 'staging', 'production', 'test']).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

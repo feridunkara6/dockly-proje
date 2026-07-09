@@ -1,11 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { currentRequestId } from '../context/request-context';
@@ -36,7 +29,13 @@ export class GlobalProblemFilter implements ExceptionFilter {
     const body = this.toProblem(exception, instance, requestId);
     if (body.status >= 500) {
       const err = exception instanceof Error ? exception.stack : String(exception);
-      this.logger.error({ requestId, instance, err }, 'Sunucu hatası');
+      // `event: 'server_error'` sabit etiketi log-tabanlı alarm içindir (Faz A.6 ara çözüm):
+      // Sentry SDK bağlanana dek hosting log alarmı bu satırı yakalar
+      // (docs/implementation/monitoring-kurulum-rehberi.md).
+      this.logger.error(
+        { event: 'server_error', status: body.status, requestId, instance, err },
+        'Sunucu hatası',
+      );
     }
     res.status(body.status).type(PROBLEM_CONTENT_TYPE).json(body);
   }
