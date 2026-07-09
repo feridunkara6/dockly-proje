@@ -10,6 +10,7 @@ import '../../../core/external_links.dart';
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/presentation/boat_fit.dart';
+import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
 
@@ -144,6 +145,8 @@ class _DetailContent extends StatelessWidget {
           const SizedBox(height: 6),
           for (final Contact c in detail.contacts) _ContactRow(contact: c),
         ],
+
+        NearbyAlternatives(locationId: detail.id, position: detail.position),
       ],
     );
   }

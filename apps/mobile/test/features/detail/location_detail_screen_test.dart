@@ -4,15 +4,22 @@ import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
+import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/detail_fakes.dart';
+import '../../support/nearby_fakes.dart';
 
+/// Detay ekranı testleri: yakın-alternatifler ağ geçidi boş sahte ile override
+/// edilir (aksi halde gerçek API zinciri appConfig'e ulaşıp fırlatır).
 Widget _app(LocationDetailGateway gateway) {
   return ProviderScope(
-    overrides: <Override>[locationDetailGatewayProvider.overrideWithValue(gateway)],
+    overrides: <Override>[
+      locationDetailGatewayProvider.overrideWithValue(gateway),
+      nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+    ],
     child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
   );
 }
@@ -45,6 +52,7 @@ void main() {
       ProviderScope(
         overrides: <Override>[
           locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+          nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
           originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
         ],
         child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),

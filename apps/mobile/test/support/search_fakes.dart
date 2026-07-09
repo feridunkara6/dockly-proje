@@ -9,6 +9,7 @@ LocationSummary sampleSummary(
   double? ratingAvg,
   String type = 'private_marina',
   String? city = 'Fethiye',
+  double distanceNm = 0,
 }) {
   return LocationSummary(
     id: id,
@@ -22,7 +23,7 @@ LocationSummary sampleSummary(
     priceTier: 'paid',
     city: city,
     waterBodyName: null,
-    distanceNm: 0,
+    distanceNm: distanceNm,
     amenityCodes: const <String>[],
   );
 }
