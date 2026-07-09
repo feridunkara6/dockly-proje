@@ -2,13 +2,14 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 
 import '../../map/presentation/map_screen.dart';
+import '../../search/presentation/search_screen.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
 /// Keşfet (harita) · Arama · Favoriler · Taleplerim · Profil.
 ///
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
-/// Keşfet dışındaki 4 sekme şimdilik bilgilendirici yer tutucudur — ilgili
-/// özellikler (arama, favoriler, talepler, profil) sonraki fazlarda bağlanacak.
+/// Keşfet ve Arama bağlı; Favoriler/Taleplerim/Profil şimdilik bilgilendirici
+/// yer tutucudur — ilgili özellikler sonraki fazlarda bağlanacak.
 /// Not: giriş/sign-in Firebase (2.4c) ile geldiğinde hesap-gerektiren sekmeler
 /// kayıt duvarına yönlendirecek; şimdilik misafir modda yer tutucu gösterilir.
 class DocklyShell extends StatefulWidget {
@@ -28,11 +29,7 @@ class _DocklyShellState extends State<DocklyShell> {
         index: _index,
         children: const <Widget>[
           MapScreen(),
-          _PlaceholderTab(
-            icon: Icons.search,
-            title: 'Arama',
-            message: 'Liman, koy, şehir ve ilçe araması yakında burada olacak.',
-          ),
+          SearchScreen(),
           _PlaceholderTab(
             icon: Icons.favorite_border,
             title: 'Favoriler',

@@ -112,6 +112,49 @@ void main() {
     expect(sent.queryParameters['limit'], 20);
   });
 
+  test('search: LocationSummary listesi + query paramları', () async {
+    adapter.enqueueJson(200, <String, dynamic>{
+      'data': <dynamic>[
+        <String, dynamic>{
+          'id': 'loc-1',
+          'name': 'D-Marin Göcek',
+          'type': 'private_marina',
+          'position': <String, dynamic>{'lat': 36.75, 'lon': 28.93},
+          'slug': 'd-marin-gocek',
+          'coverMedia': null,
+          'ratingAvg': 4.8,
+          'ratingCount': 12,
+          'priceTier': 'paid',
+          'city': 'Fethiye',
+          'waterBodyName': null,
+          'distanceNm': 0,
+          'amenityCodes': <dynamic>['electricity'],
+        },
+      ],
+    });
+
+    final list = await api.search(q: 'göcek', types: <String>['private_marina'], limit: 10);
+    expect(list, hasLength(1));
+    final s = list.single;
+    expect(s.name, 'D-Marin Göcek');
+    expect(s.city, 'Fethiye');
+    expect(s.distanceNm, 0);
+
+    final sent = adapter.received.single;
+    expect(sent.path, '/v1/locations/search');
+    expect(sent.method, 'GET');
+    expect(sent.queryParameters['q'], 'göcek');
+    expect(sent.queryParameters['type'], <String>['private_marina']);
+    expect(sent.queryParameters['limit'], 10);
+  });
+
+  test('search: eşleşme yoksa boş liste', () async {
+    adapter.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+    final list = await api.search(q: 'zzz');
+    expect(list, isEmpty);
+    expect(adapter.received.single.queryParameters.containsKey('type'), isFalse);
+  });
+
   test('mapByBbox 422 → ValidationFailure', () async {
     adapter.enqueueProblem(422, <String, dynamic>{
       'type': 'https://api.dockly.app/problems/validation-error',

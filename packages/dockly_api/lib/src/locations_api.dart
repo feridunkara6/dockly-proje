@@ -61,6 +61,31 @@ class LocationsApi {
     });
   }
 
+  /// Metinle arama (docs/23 §9, S-07) — ad/şehir/su-alanı. Konum bağımsız;
+  /// her öğede `distanceNm` = 0. Eşleşme yoksa boş liste.
+  Future<List<LocationSummary>> search({
+    required String q,
+    List<String>? types,
+    int? limit,
+  }) async {
+    return _call(() async {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/locations/search',
+        queryParameters: <String, dynamic>{
+          'q': q,
+          if (types != null && types.isNotEmpty) 'type': types,
+          if (limit != null) 'limit': limit,
+        },
+        options: Options(listFormat: ListFormat.multi),
+      );
+      final data = res.data!['data'] as List<dynamic>? ?? const <dynamic>[];
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(LocationSummary.fromJson)
+          .toList(growable: false);
+    });
+  }
+
   /// Liman detayı (docs/23 §10 #12, §11.3). id veya slug; bulunamazsa `NotFoundFailure`.
   Future<LocationDetail> detail(String idOrSlug) async {
     return _call(() async {
