@@ -10,6 +10,7 @@ class SearchState {
   const SearchState({
     this.query = '',
     this.types = const <String>{},
+    this.boatFitOnly = false,
     this.results = const <LocationSummary>[],
     this.isLoading = false,
     this.failure,
@@ -20,6 +21,10 @@ class SearchState {
 
   /// Seçili `location_type` kodları (boş = tüm türler). Aramayı daraltır.
   final Set<String> types;
+
+  /// "Teknem sığar" filtresi açık mı? Açıksa (ve tekne tanımlıysa) teknenin
+  /// kesinlikle sığmadığı sonuçlar gizlenir (istemci tarafı).
+  final bool boatFitOnly;
   final List<LocationSummary> results;
   final bool isLoading;
   final AppFailure? failure;
@@ -37,6 +42,7 @@ class SearchState {
   SearchState copyWith({
     String? query,
     Set<String>? types,
+    bool? boatFitOnly,
     List<LocationSummary>? results,
     bool? isLoading,
     AppFailure? failure,
@@ -46,6 +52,7 @@ class SearchState {
     return SearchState(
       query: query ?? this.query,
       types: types ?? this.types,
+      boatFitOnly: boatFitOnly ?? this.boatFitOnly,
       results: results ?? this.results,
       isLoading: isLoading ?? this.isLoading,
       failure: clearFailure ? null : (failure ?? this.failure),

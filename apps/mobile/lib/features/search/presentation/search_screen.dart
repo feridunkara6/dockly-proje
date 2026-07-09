@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/location_type_labels.dart';
+import '../../boat/application/my_boat_controller.dart';
+import '../../boat/domain/my_boat.dart';
+import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/search_controller.dart';
 import '../domain/search_state.dart';
@@ -36,6 +39,21 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget build(BuildContext context) {
     final SearchState state = ref.watch(searchControllerProvider);
     final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
+    final MyBoat? boat = ref.watch(myBoatProvider);
+
+    // "Teknem sığar" açık ve tekne tanımlıysa: kesinlikle sığmayanları gizle.
+    final List<LocationSummary> visible = (state.boatFitOnly && boat != null)
+        ? state.results
+            .where((LocationSummary s) =>
+                computeBoatFit(
+                  boat: boat,
+                  maxBoatLengthM: s.maxBoatLengthM,
+                  maxDraftM: s.maxDraftM,
+                ) !=
+                BoatFit.tooBig)
+            .toList(growable: false)
+        : state.results;
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 8,
@@ -58,55 +76,71 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ),
           ),
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(52),
-          child: _TypeFilterRow(selected: state.types, onToggle: controller.toggleType),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(52),
+          child: _FilterRow(),
         ),
       ),
-      body: _SearchBody(state: state, onRetry: () => controller.retry()),
+      body: _SearchBody(state: state, results: visible, onRetry: () => controller.retry()),
     );
   }
 }
 
-/// Arama kutusunun altında yatay kayan tür filtre çipleri. Seçili türler
-/// aramayı daraltır (backend `type` filtresi). Boş seçim = tüm türler.
-class _TypeFilterRow extends StatelessWidget {
-  const _TypeFilterRow({required this.selected, required this.onToggle});
-
-  final Set<String> selected;
-  final void Function(String type) onToggle;
+/// Arama kutusunun altında yatay kayan filtre çipleri: "Teknem sığar" (istemci
+/// tarafı boat-fit) + tür çipleri (backend `type` filtresi). Boş seçim = tümü.
+class _FilterRow extends ConsumerWidget {
+  const _FilterRow();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final SearchState state = ref.watch(searchControllerProvider);
+    final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
+    final MyBoat? boat = ref.watch(myBoatProvider);
     final List<String> types = DocklyMapColors.knownTypes.toList();
+
+    final List<Widget> chips = <Widget>[
+      FilterChip(
+        label: const Text('Teknem sığar'),
+        avatar: const Icon(Icons.sailing, size: 16),
+        selected: state.boatFitOnly,
+        // Tekne yoksa önce tanımlama sayfasını aç; varsa filtreyi aç/kapat.
+        onSelected: (bool _) {
+          if (boat == null) {
+            showBoatSheet(context);
+          } else {
+            controller.toggleBoatFitOnly();
+          }
+        },
+        visualDensity: VisualDensity.compact,
+      ),
+      for (final String type in types)
+        FilterChip(
+          label: Text(locationTypeLabelTr(type)),
+          selected: state.types.contains(type),
+          onSelected: (bool _) => controller.toggleType(type),
+          avatar: Icon(Icons.circle, size: 12, color: DocklyMapColors.forType(type)),
+          visualDensity: VisualDensity.compact,
+        ),
+    ];
+
     return SizedBox(
       height: 52,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemCount: types.length,
+        itemCount: chips.length,
         separatorBuilder: (BuildContext _, int __) => const SizedBox(width: 8),
-        itemBuilder: (BuildContext context, int i) {
-          final String type = types[i];
-          return Center(
-            child: FilterChip(
-              label: Text(locationTypeLabelTr(type)),
-              selected: selected.contains(type),
-              onSelected: (bool _) => onToggle(type),
-              avatar: Icon(Icons.circle, size: 12, color: DocklyMapColors.forType(type)),
-              visualDensity: VisualDensity.compact,
-            ),
-          );
-        },
+        itemBuilder: (BuildContext context, int i) => Center(child: chips[i]),
       ),
     );
   }
 }
 
 class _SearchBody extends StatelessWidget {
-  const _SearchBody({required this.state, required this.onRetry});
+  const _SearchBody({required this.state, required this.results, required this.onRetry});
 
   final SearchState state;
+  final List<LocationSummary> results;
   final VoidCallback onRetry;
 
   @override
@@ -117,22 +151,22 @@ class _SearchBody extends StatelessWidget {
         message: 'Aramak için en az 2 harf yaz.\nÖrn. "Göcek" ya da "D-Marin".',
       );
     }
-    if (state.isLoading && state.results.isEmpty) {
+    if (state.isLoading && results.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (state.failure != null && state.results.isEmpty) {
+    if (state.failure != null && results.isEmpty) {
       return _ErrorView(message: state.failure!.message, onRetry: onRetry);
     }
-    if (state.isEmpty) {
+    if (state.hasSearched && !state.isLoading && state.failure == null && results.isEmpty) {
       return const _Hint(
         icon: Icons.sailing_outlined,
-        message: 'Sonuç bulunamadı.\nFarklı bir isim dene.',
+        message: 'Sonuç bulunamadı.\nFarklı bir isim ya da filtre dene.',
       );
     }
     return ListView.separated(
-      itemCount: state.results.length,
+      itemCount: results.length,
       separatorBuilder: (BuildContext _, int __) => const Divider(height: 1),
-      itemBuilder: (BuildContext context, int i) => _ResultTile(item: state.results[i]),
+      itemBuilder: (BuildContext context, int i) => _ResultTile(item: results[i]),
     );
   }
 }

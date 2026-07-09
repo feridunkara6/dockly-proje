@@ -109,6 +109,15 @@ void main() {
     expect(gateway.queries, isEmpty);
   });
 
+  test('toggleBoatFitOnly bayrağı çevirir', () {
+    final ProviderContainer c = _containerWith(FakeSearchGateway());
+    expect(_state(c).boatFitOnly, isFalse);
+    _ctrl(c).toggleBoatFitOnly();
+    expect(_state(c).boatFitOnly, isTrue);
+    _ctrl(c).toggleBoatFitOnly();
+    expect(_state(c).boatFitOnly, isFalse);
+  });
+
   test('sorguyu temizleyince sonuçlar sıfırlanır', () async {
     final FakeSearchGateway gateway =
         FakeSearchGateway(results: <LocationSummary>[sampleSummary('loc-1', 'Göcek')]);

@@ -81,6 +81,11 @@ class LocationSearchController extends Notifier<SearchState> {
     }
   }
 
+  /// "Teknem sığar" filtresini aç/kapat (istemci tarafı — yeniden arama gerekmez).
+  void toggleBoatFitOnly() {
+    state = state.copyWith(boatFitOnly: !state.boatFitOnly);
+  }
+
   /// Hata ekranından son sorguyu yeniden dener.
   Future<void> retry() async {
     if (!state.isQueryTooShort) await _run();
