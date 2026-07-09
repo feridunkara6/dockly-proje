@@ -17,6 +17,10 @@ final Provider<MapLocationsGateway> mapLocationsGatewayProvider =
   (ref) => ApiMapLocationsGateway(ref.watch(locationsApiProvider)),
 );
 
+/// Keşfet sekmesi görünüm modu: false = harita, true = liste. Kullanıcı sağ
+/// üstteki düğmeyle değiştirir; sekme değişse de korunur (uygulama-ömürlü).
+final StateProvider<bool> mapViewIsListProvider = StateProvider<bool>((ref) => false);
+
 /// Harita çağrılarının debounce süresi (docs/14 perf — pan/zoom sırasında
 /// gereksiz istek olmasın). Testte `Duration.zero`'a override edilir.
 final Provider<Duration> mapDebounceProvider =

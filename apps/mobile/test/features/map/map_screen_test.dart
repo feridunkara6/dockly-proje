@@ -55,6 +55,17 @@ void main() {
     expect(find.byKey(LocationBottomCard.cardKey), findsNothing);
   });
 
+  testWidgets('liste görünümüne geçince liman listesi görünür', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult)));
+    await tester.pumpAndSettle();
+    expect(find.byType(ListTile), findsNothing); // harita modu (sahte yüzey ListTile kullanmaz)
+
+    await tester.tap(find.byIcon(Icons.view_list));
+    await tester.pumpAndSettle();
+    expect(find.byType(ListTile), findsOneWidget); // liste modu, tek pin
+    expect(find.byIcon(Icons.map_outlined), findsOneWidget); // haritaya dön ikonu
+  });
+
   testWidgets('boş bölge → boş görünüm', (WidgetTester tester) async {
     await tester.pumpWidget(_app(FakeMapGateway(
       result: const MapResult(
