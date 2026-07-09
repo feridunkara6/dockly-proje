@@ -50,13 +50,24 @@ class LocationSearchController extends Notifier<SearchState> {
     _debounce = Timer(ref.read(searchDebounceProvider), _run);
   }
 
+  /// Tür filtresini aç/kapat; sorgu yeterliyse anında yeniden ara (kullanıcı
+  /// bilinçli dokundu — debounce'a gerek yok).
+  void toggleType(String type) {
+    final Set<String> next = Set<String>.of(state.types);
+    if (!next.add(type)) next.remove(type);
+    state = state.copyWith(types: next);
+    _debounce?.cancel();
+    if (!state.isQueryTooShort) unawaited(_run());
+  }
+
   Future<void> _run() async {
     final String q = state.query.trim();
     if (q.length < kMinSearchLen) return;
     final int seq = ++_seq;
     state = state.copyWith(isLoading: true, clearFailure: true);
     try {
-      final List<LocationSummary> results = await _gateway.search(q);
+      final List<String>? types = state.types.isEmpty ? null : state.types.toList();
+      final List<LocationSummary> results = await _gateway.search(q, types: types);
       if (seq != _seq) return;
       state = state.copyWith(
         results: results,

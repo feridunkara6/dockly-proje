@@ -44,4 +44,16 @@ void main() {
     expect(find.text('D-Marin Göcek'), findsOneWidget);
     expect(gateway.queries, <String>['göcek']);
   });
+
+  testWidgets('tür çipine dokununca filtre uygulanır', (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[sampleSummary('loc-1', 'D-Marin Göcek')],
+    );
+    await tester.pumpWidget(_app(gateway));
+    await tester.enterText(find.byType(TextField), 'göcek');
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilterChip, 'Özel Marina'));
+    await tester.pumpAndSettle();
+    expect(gateway.typeArgs.last, contains('private_marina'));
+  });
 }

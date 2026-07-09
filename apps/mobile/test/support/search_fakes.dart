@@ -34,10 +34,12 @@ class FakeSearchGateway implements SearchGateway {
   List<LocationSummary> results;
   AppFailure? error;
   final List<String> queries = <String>[];
+  final List<List<String>?> typeArgs = <List<String>?>[];
 
   @override
   Future<List<LocationSummary>> search(String q, {List<String>? types}) {
     queries.add(q);
+    typeArgs.add(types);
     final AppFailure? err = error;
     if (err != null) return Future<List<LocationSummary>>.error(err);
     return Future<List<LocationSummary>>.value(results);

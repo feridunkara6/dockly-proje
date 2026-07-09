@@ -9,6 +9,7 @@ const int kMinSearchLen = 2;
 class SearchState {
   const SearchState({
     this.query = '',
+    this.types = const <String>{},
     this.results = const <LocationSummary>[],
     this.isLoading = false,
     this.failure,
@@ -16,6 +17,9 @@ class SearchState {
   });
 
   final String query;
+
+  /// Seçili `location_type` kodları (boş = tüm türler). Aramayı daraltır.
+  final Set<String> types;
   final List<LocationSummary> results;
   final bool isLoading;
   final AppFailure? failure;
@@ -32,6 +36,7 @@ class SearchState {
 
   SearchState copyWith({
     String? query,
+    Set<String>? types,
     List<LocationSummary>? results,
     bool? isLoading,
     AppFailure? failure,
@@ -40,6 +45,7 @@ class SearchState {
   }) {
     return SearchState(
       query: query ?? this.query,
+      types: types ?? this.types,
       results: results ?? this.results,
       isLoading: isLoading ?? this.isLoading,
       failure: clearFailure ? null : (failure ?? this.failure),

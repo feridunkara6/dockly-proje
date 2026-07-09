@@ -58,8 +58,47 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ),
           ),
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(52),
+          child: _TypeFilterRow(selected: state.types, onToggle: controller.toggleType),
+        ),
       ),
       body: _SearchBody(state: state, onRetry: () => controller.retry()),
+    );
+  }
+}
+
+/// Arama kutusunun altında yatay kayan tür filtre çipleri. Seçili türler
+/// aramayı daraltır (backend `type` filtresi). Boş seçim = tüm türler.
+class _TypeFilterRow extends StatelessWidget {
+  const _TypeFilterRow({required this.selected, required this.onToggle});
+
+  final Set<String> selected;
+  final void Function(String type) onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> types = DocklyMapColors.knownTypes.toList();
+    return SizedBox(
+      height: 52,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        itemCount: types.length,
+        separatorBuilder: (BuildContext _, int __) => const SizedBox(width: 8),
+        itemBuilder: (BuildContext context, int i) {
+          final String type = types[i];
+          return Center(
+            child: FilterChip(
+              label: Text(locationTypeLabelTr(type)),
+              selected: selected.contains(type),
+              onSelected: (bool _) => onToggle(type),
+              avatar: Icon(Icons.circle, size: 12, color: DocklyMapColors.forType(type)),
+              visualDensity: VisualDensity.compact,
+            ),
+          );
+        },
+      ),
     );
   }
 }

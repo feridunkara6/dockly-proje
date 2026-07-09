@@ -74,6 +74,41 @@ void main() {
     expect(s.hasSearched, isTrue);
   });
 
+  test('tür filtresi seçilince gateway types ile çağrılır + durum güncellenir', () async {
+    final FakeSearchGateway gateway =
+        FakeSearchGateway(results: <LocationSummary>[sampleSummary('loc-1', 'Göcek')]);
+    final ProviderContainer c = _containerWith(gateway);
+    _ctrl(c).onQueryChanged('göcek');
+    await _settle();
+    _ctrl(c).toggleType('private_marina');
+    await _settle();
+    expect(_state(c).types, contains('private_marina'));
+    expect(gateway.typeArgs.last, <String>['private_marina']);
+  });
+
+  test('tür filtresini kaldırınca types null ile çağrılır', () async {
+    final FakeSearchGateway gateway =
+        FakeSearchGateway(results: <LocationSummary>[sampleSummary('loc-1', 'Göcek')]);
+    final ProviderContainer c = _containerWith(gateway);
+    _ctrl(c).onQueryChanged('göcek');
+    await _settle();
+    _ctrl(c).toggleType('private_marina');
+    await _settle();
+    _ctrl(c).toggleType('private_marina'); // aynı türe tekrar dokun → kaldır
+    await _settle();
+    expect(_state(c).types, isEmpty);
+    expect(gateway.typeArgs.last, isNull);
+  });
+
+  test('kısa sorguda tür seçimi arama tetiklemez ama durum güncellenir', () async {
+    final FakeSearchGateway gateway = FakeSearchGateway();
+    final ProviderContainer c = _containerWith(gateway);
+    _ctrl(c).toggleType('private_marina');
+    await _settle();
+    expect(_state(c).types, contains('private_marina'));
+    expect(gateway.queries, isEmpty);
+  });
+
   test('sorguyu temizleyince sonuçlar sıfırlanır', () async {
     final FakeSearchGateway gateway =
         FakeSearchGateway(results: <LocationSummary>[sampleSummary('loc-1', 'Göcek')]);
