@@ -101,28 +101,28 @@ class _DetailContent extends StatelessWidget {
 
         if (facts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          _SectionTitle('Bilgiler'),
+          const _SectionTitle('Bilgiler'),
           const SizedBox(height: 6),
           for (final _Fact f in facts) _FactRow(label: f.label, value: f.value),
         ],
 
         if (detail.amenities.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          _SectionTitle('Olanaklar'),
+          const _SectionTitle('Olanaklar'),
           const SizedBox(height: 8),
           _Chips(labels: detail.amenities.map((AmenityLabeled a) => a.label).toList()),
         ],
 
         if (detail.services.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          _SectionTitle('Hizmetler'),
+          const _SectionTitle('Hizmetler'),
           const SizedBox(height: 8),
           _Chips(labels: detail.services.map((ServiceLabeled s) => s.label).toList()),
         ],
 
         if (detail.contacts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          _SectionTitle('İletişim'),
+          const _SectionTitle('İletişim'),
           const SizedBox(height: 6),
           for (final Contact c in detail.contacts) _ContactRow(contact: c),
         ],
