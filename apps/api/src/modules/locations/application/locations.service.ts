@@ -4,7 +4,8 @@ import { PIN_CAP, parseBbox, quantizeBbox } from '../domain/bbox';
 import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../domain/cluster';
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
 import { normalizeSearch } from '../domain/search';
-import { LocationDetail, LocationSummary, MapResult } from '../domain/location.types';
+import { parseReviewsLimit } from '../domain/reviews';
+import { LocationDetail, LocationSummary, MapResult, ReviewItem } from '../domain/location.types';
 import { pickLabel } from '../../../common/i18n/locale';
 import { AppProblem } from '../../../common/problem/problem';
 
@@ -25,7 +26,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -83,6 +86,18 @@ export class LocationsService {
     const query = normalizeSearch({ q: rawQ, limit: rawLimit });
     if (!query.searchable) return { data: [] };
     const data = await this.repo.findSearch({ q: query.q, types, limit: query.limit });
+    return { data };
+  }
+
+  /**
+   * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
+   * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
+   */
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
+    const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }
 

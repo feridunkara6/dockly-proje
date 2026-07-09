@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Headers, Param, Query } from '@nestjs/common';
 import { LocationsService } from '../application/locations.service';
-import { LocationDetail, LocationSummary, MapResult } from '../domain/location.types';
+import { LocationDetail, LocationSummary, MapResult, ReviewItem } from '../domain/location.types';
 import { resolveLocale } from '../../../common/i18n/locale';
 
 /**
@@ -50,6 +50,20 @@ export class LocationsController {
   }
 
   /**
+   * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug; en yeni önce.
+   * `:idOrSlug`'dan ÖNCE tanımlı: iki-segmentli `reviews` rotası param rotasından
+   * önce eşleşsin diye.
+   */
+  @Get(':idOrSlug/reviews')
+  @Header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+  async reviews(
+    @Param('idOrSlug') idOrSlug: string,
+    @Query('limit') limit?: string,
+  ): Promise<{ data: ReviewItem[] }> {
+    return this.locations.reviews(idOrSlug, limit);
+  }
+
+  /**
    * Liman detayı (docs/23 §10 #12, §11.3). id veya slug ile; i18n Accept-Language.
    * `nearby`/`search`'ten SONRA tanımlı — statik segment param'dan önce eşleşsin diye.
    */
@@ -67,8 +81,6 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type])
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }

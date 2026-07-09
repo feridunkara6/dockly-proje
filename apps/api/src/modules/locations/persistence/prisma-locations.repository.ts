@@ -10,6 +10,7 @@ import {
   LocationSummary,
   NearbyParams,
   RatingDimensionAvg,
+  ReviewItem,
   SearchParams,
   TypeDetails,
 } from '../domain/location.types';
@@ -63,6 +64,18 @@ interface SearchRow extends PinRow {
   amenityCodes: string[] | null;
 }
 
+/** Yorum satırı (ham projeksiyon). */
+interface ReviewRow {
+  id: string;
+  authorName: string | null;
+  rating: number;
+  title: string | null;
+  body: string | null;
+  visitedOn: string | null;
+  createdAt: Date;
+  helpfulCount: number | bigint;
+}
+
 interface ClusterRow {
   nodeLon: number;
   nodeLat: number;
@@ -81,7 +94,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -252,7 +267,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
@@ -398,11 +415,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -451,5 +464,46 @@ export class PrismaLocationsRepository implements LocationsRepository {
       typeDetails,
       ratingDimensions,
     };
+  }
+
+  async findReviews(idOrSlug: string, limit: number): Promise<ReviewItem[]> {
+    const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
+    const loc = await this.prisma.location.findFirst({
+      where: { ...where, status: 'published', deletedAt: null },
+      select: { id: true },
+    });
+    if (!loc) return [];
+
+    // Yalnız onaylı (moderasyondan geçmiş) + silinmemiş yorumlar; en yeni önce.
+    // Yazar adı user_profiles'ten; profil yoksa servis anonim fallback verir.
+    const rows = await this.prisma.$queryRaw<ReviewRow[]>(Prisma.sql`
+      SELECT
+        r.id::text                          AS id,
+        up.display_name                     AS "authorName",
+        r.overall_rating                    AS rating,
+        r.title                             AS title,
+        r.body                              AS body,
+        to_char(r.visited_on, 'YYYY-MM-DD') AS "visitedOn",
+        r.created_at                        AS "createdAt",
+        r.helpful_count                     AS "helpfulCount"
+      FROM reviews r
+      LEFT JOIN user_profiles up ON up.user_id = r.user_id
+      WHERE r.location_id = ${loc.id}::uuid
+        AND r.status = 'approved'
+        AND r.deleted_at IS NULL
+      ORDER BY r.created_at DESC
+      LIMIT ${limit}
+    `);
+
+    return rows.map((r) => ({
+      id: r.id,
+      authorName: r.authorName ?? 'Denizci',
+      rating: Number(r.rating),
+      title: r.title,
+      body: r.body,
+      visitedOn: r.visitedOn,
+      createdAt: r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt),
+      helpfulCount: Number(r.helpfulCount),
+    }));
   }
 }

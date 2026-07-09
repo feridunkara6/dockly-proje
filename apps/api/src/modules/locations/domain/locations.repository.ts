@@ -8,6 +8,7 @@ import {
   LocationSummary,
   NearbyParams,
   RatingDimensionAvg,
+  ReviewItem,
   SearchParams,
   SeasonDto,
   TypeDetails,
@@ -88,6 +89,12 @@ export interface LocationsRepository {
    * slug ile. Bulunamazsa `null`. i18n etiketleri ham döner (locale servis'te seçilir).
    */
   findDetail(idOrSlug: string): Promise<DetailData | null>;
+
+  /**
+   * Bir lokasyonun onaylı (silinmemiş) yorumları (docs/23 §11.3); id veya slug ile,
+   * en yeniden eskiye, `limit` ile tavanlanır. Lokasyon yoksa boş liste.
+   */
+  findReviews(idOrSlug: string, limit: number): Promise<ReviewItem[]>;
 }
 
 export const LOCATIONS_REPOSITORY = Symbol('LOCATIONS_REPOSITORY');

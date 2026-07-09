@@ -88,6 +88,22 @@ export interface SearchParams {
   limit: number;
 }
 
+/** Yayınlanmış (onaylı, silinmemiş) bir yorum — misafir okuma (docs/23 §11.3). */
+export interface ReviewItem {
+  id: string;
+  /** Yazarın görünen adı; profil yoksa anonim fallback. */
+  authorName: string;
+  /** Genel puan 1..5. */
+  rating: number;
+  title: string | null;
+  body: string | null;
+  /** Ziyaret tarihi "YYYY-MM-DD" ya da null. */
+  visitedOn: string | null;
+  /** Oluşturulma zamanı (ISO 8601). */
+  createdAt: string;
+  helpfulCount: number;
+}
+
 // --- LocationDetail (S-09, docs/23 §11.3) ---
 
 export interface AdminAreaRef {
@@ -203,7 +219,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve
