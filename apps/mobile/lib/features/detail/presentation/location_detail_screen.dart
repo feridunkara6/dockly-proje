@@ -14,6 +14,7 @@ import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
+import 'operating_info.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
 /// olanakları, iletişimi ve boyut/kapasite verisini gösterir. Yazma eylemleri
@@ -139,6 +140,12 @@ class _DetailContent extends StatelessWidget {
           const SizedBox(height: 8),
           _Chips(labels: detail.services.map((ServiceLabeled s) => s.label).toList()),
         ],
+
+        OperatingInfo(
+          hours: detail.hours,
+          seasons: detail.seasons,
+          is24h: detail.is24h,
+        ),
 
         if (detail.contacts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
