@@ -36,8 +36,22 @@ export class LocationsController {
   }
 
   /**
+   * Metinle arama (docs/23 §9, S-07) — ad/şehir/su-alanı. `:idOrSlug`'dan ÖNCE
+   * tanımlı: statik `search` segmenti param rotasından önce eşleşsin diye.
+   */
+  @Get('search')
+  @Header('Cache-Control', 'public, max-age=30, stale-while-revalidate=120')
+  async search(
+    @Query('q') q?: string,
+    @Query('type') type?: string | string[],
+    @Query('limit') limit?: string,
+  ): Promise<{ data: LocationSummary[] }> {
+    return this.locations.search(q, normalizeTypes(type), limit);
+  }
+
+  /**
    * Liman detayı (docs/23 §10 #12, §11.3). id veya slug ile; i18n Accept-Language.
-   * `nearby`'den SONRA tanımlı — statik segment param'dan önce eşleşsin diye.
+   * `nearby`/`search`'ten SONRA tanımlı — statik segment param'dan önce eşleşsin diye.
    */
   @Get(':idOrSlug')
   @Header('Cache-Control', 'public, max-age=300, s-maxage=300, stale-while-revalidate=600')
@@ -53,8 +67,6 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type])
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }

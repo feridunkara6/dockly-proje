@@ -80,6 +80,14 @@ export interface NearbyParams {
   limit: number;
 }
 
+/** Doğrulanmış metin-arama parametreleri (docs/23 §9 — S-07). */
+export interface SearchParams {
+  /** Normalize edilmiş arama metni (kırpılmış, >= MIN_SEARCH_LEN). */
+  q: string;
+  types?: string[];
+  limit: number;
+}
+
 // --- LocationDetail (S-09, docs/23 §11.3) ---
 
 export interface AdminAreaRef {
@@ -195,7 +203,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

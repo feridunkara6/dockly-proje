@@ -3,6 +3,7 @@ import { LOCATIONS_REPOSITORY, LocationsRepository } from '../domain/locations.r
 import { PIN_CAP, parseBbox, quantizeBbox } from '../domain/bbox';
 import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../domain/cluster';
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
+import { normalizeSearch } from '../domain/search';
 import { LocationDetail, LocationSummary, MapResult } from '../domain/location.types';
 import { pickLabel } from '../../../common/i18n/locale';
 import { AppProblem } from '../../../common/problem/problem';
@@ -24,7 +25,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -67,6 +70,21 @@ export class LocationsService {
       types,
       limit: q.limit,
     });
+    return { data };
+  }
+
+  /**
+   * Metinle arama (docs/23 §9, S-07). Query normalize edilir; q anlamlı uzunlukta
+   * değilse boş sonuç (422 değil — akıcı UX). Aksi halde ad/şehir/su-alanı araması.
+   */
+  async search(
+    rawQ: string | undefined,
+    types: string[] | undefined,
+    rawLimit: string | undefined,
+  ): Promise<{ data: LocationSummary[] }> {
+    const query = normalizeSearch({ q: rawQ, limit: rawLimit });
+    if (!query.searchable) return { data: [] };
+    const data = await this.repo.findSearch({ q: query.q, types, limit: query.limit });
     return { data };
   }
 

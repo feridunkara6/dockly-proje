@@ -10,6 +10,7 @@ import {
   LocationSummary,
   NearbyParams,
   RatingDimensionAvg,
+  SearchParams,
   TypeDetails,
 } from '../domain/location.types';
 
@@ -53,6 +54,15 @@ interface NearbyRow extends PinRow {
   amenityCodes: string[] | null;
 }
 
+/** Arama satırı = özet projeksiyonu (mesafe yok — konum bağımsız). */
+interface SearchRow extends PinRow {
+  slug: string;
+  ratingCount: number | bigint;
+  city: string | null;
+  waterBodyName: string | null;
+  amenityCodes: string[] | null;
+}
+
 interface ClusterRow {
   nodeLon: number;
   nodeLat: number;
@@ -71,7 +81,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -168,6 +180,73 @@ export class PrismaLocationsRepository implements LocationsRepository {
     }));
   }
 
+  async findSearch(params: SearchParams): Promise<LocationSummary[]> {
+    const typeFilter =
+      params.types && params.types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${params.types}::text[])`
+        : Prisma.empty;
+
+    // ILIKE = büyük/küçük harf duyarsız (v1; aksan katlama unaccent gelince).
+    // Kullanıcı metnindeki LIKE joker'leri (% _ \) kaçırılır → düz metin araması.
+    const esc = params.q.replace(/[\\%_]/g, (c) => `\\${c}`);
+    const contains = `%${esc}%`;
+    const prefix = `${esc}%`;
+
+    // Ad/şehir/su-alanı adında geçenler; ada baştan uyanlar önce, sonra önem.
+    // coverMedia medya alt sistemiyle gelecek → şimdilik null. ADR-005 ham SQL.
+    const rows = await this.prisma.$queryRaw<SearchRow[]>(Prisma.sql`
+      SELECT
+        l.id::text                       AS id,
+        l.name                           AS name,
+        lt.code                          AS type,
+        ST_Y(l.position::geometry)       AS lat,
+        ST_X(l.position::geometry)       AS lon,
+        l.slug                           AS slug,
+        l.rating_avg                     AS "ratingAvg",
+        l.rating_count                   AS "ratingCount",
+        l.price_tier::text               AS "priceTier",
+        aa.name                          AS city,
+        wb.name                          AS "waterBodyName",
+        (
+          SELECT array_agg(code ORDER BY so NULLS LAST)
+          FROM (
+            SELECT a.code AS code, a.sort_order AS so
+            FROM location_amenities la
+            JOIN amenities a ON a.id = la.amenity_id
+            WHERE la.location_id = l.id AND a.is_active = true
+            ORDER BY a.sort_order NULLS LAST
+            LIMIT 6
+          ) top6
+        )                                AS "amenityCodes"
+      FROM locations l
+      JOIN location_types lt ON lt.id = l.location_type_id
+      LEFT JOIN admin_areas aa ON aa.id = l.admin_area_id
+      LEFT JOIN water_bodies wb ON wb.id = l.water_body_id
+      WHERE l.status = 'published'
+        AND l.deleted_at IS NULL
+        AND (l.name ILIKE ${contains} OR aa.name ILIKE ${contains} OR wb.name ILIKE ${contains})
+        ${typeFilter}
+      ORDER BY (l.name ILIKE ${prefix}) DESC, l.rating_count DESC
+      LIMIT ${params.limit}
+    `);
+
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      type: r.type,
+      position: { lat: Number(r.lat), lon: Number(r.lon) },
+      slug: r.slug,
+      coverMedia: null,
+      ratingAvg: r.ratingAvg === null ? null : Number(r.ratingAvg),
+      ratingCount: Number(r.ratingCount),
+      priceTier: r.priceTier,
+      city: r.city ?? null,
+      waterBodyName: r.waterBodyName ?? null,
+      distanceNm: 0,
+      amenityCodes: r.amenityCodes ?? [],
+    }));
+  }
+
   async findClusters(
     bbox: Bbox,
     types: string[] | undefined,
@@ -175,7 +254,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
@@ -321,11 +402,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }

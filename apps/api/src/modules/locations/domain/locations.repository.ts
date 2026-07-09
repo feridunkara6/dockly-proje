@@ -8,6 +8,7 @@ import {
   LocationSummary,
   NearbyParams,
   RatingDimensionAvg,
+  SearchParams,
   SeasonDto,
   TypeDetails,
 } from './location.types';
@@ -73,6 +74,14 @@ export interface LocationsRepository {
     cellDeg: number,
     limit: number,
   ): Promise<Cluster[]>;
+
+  /**
+   * Metinle arama (docs/23 §9, S-07): `q` lokasyon adı, şehir (admin_area) veya
+   * su alanı adında geçen yayınlanmış (silinmemiş) lokasyonları döndürür. `types`
+   * verilirse location_type koduna göre OR filtresi. Sıralama: ada baştan uyanlar
+   * önce, sonra önem (rating_count DESC). Konum bağımsız olduğundan `distanceNm` = 0.
+   */
+  findSearch(params: SearchParams): Promise<LocationSummary[]>;
 
   /**
    * Yayınlanmış (silinmemiş) bir lokasyonun detay verisi (docs/23 §11.3); id veya
