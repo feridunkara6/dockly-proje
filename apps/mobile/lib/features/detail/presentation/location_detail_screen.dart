@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/location_type_labels.dart';
+import '../../boat/presentation/boat_fit.dart';
 import '../application/location_detail_controller.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
@@ -92,6 +93,12 @@ class _DetailContent extends StatelessWidget {
               const _Pill(label: '7/24'),
             ],
           ],
+        ),
+
+        const SizedBox(height: 12),
+        BoatFitRow(
+          maxBoatLengthM: detail.dimensions.maxBoatLengthM,
+          maxDraftM: detail.dimensions.maxDraftM,
         ),
 
         if (detail.description != null && detail.description!.trim().isNotEmpty) ...<Widget>[
