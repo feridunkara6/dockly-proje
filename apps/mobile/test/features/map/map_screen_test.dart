@@ -1,6 +1,7 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
 import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('selection')), findsOneWidget);
     expect(find.text('secili:loc-1'), findsOneWidget);
+  });
+
+  testWidgets('pin dokunma → alt detay kartı belirir; kapatınca kaybolur', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult)));
+    await tester.pumpAndSettle();
+    expect(find.byKey(LocationBottomCard.cardKey), findsNothing);
+
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
+    expect(find.text('Özel Marina'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(find.byKey(LocationBottomCard.cardKey), findsNothing);
   });
 
   testWidgets('boş bölge → boş görünüm', (WidgetTester tester) async {

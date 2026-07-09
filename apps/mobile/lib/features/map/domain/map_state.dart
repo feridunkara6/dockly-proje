@@ -30,6 +30,17 @@ class MapState {
   /// Boş durum ekranı: yalnızca bir yükleme BİTTİKTEN sonra veri yoksa gösterilir.
   bool get isEmpty => hasLoadedOnce && !hasData && !isLoading && failure == null;
 
+  /// Seçili pin'in verisi (alt detay kartı için). Seçim yoksa ya da pin artık
+  /// görünür pinler arasında değilse null (kart otomatik kaybolur).
+  LocationPin? get selectedPin {
+    final String? id = selectedPinId;
+    if (id == null) return null;
+    for (final LocationPin pin in pins) {
+      if (pin.id == id) return pin;
+    }
+    return null;
+  }
+
   MapState copyWith({
     List<LocationPin>? pins,
     List<Cluster>? clusters,

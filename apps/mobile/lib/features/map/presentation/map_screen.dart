@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
+import 'location_bottom_card.dart';
 import 'map_surface.dart';
 
 /// Harita ekranı (S-06). Somut harita yüzeyi üstüne durum katmanları:
@@ -51,6 +52,16 @@ class MapScreen extends ConsumerWidget {
               child: _ErrorView(
                 message: state.failure!.message,
                 onRetry: () => controller.retry(),
+              ),
+            ),
+          if (state.selectedPin != null)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: LocationBottomCard(
+                pin: state.selectedPin!,
+                onClose: controller.clearSelection,
               ),
             ),
         ],
