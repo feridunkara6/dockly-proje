@@ -37,3 +37,21 @@ String? priceTierLabelTr(String tier) {
       return null;
   }
 }
+
+/// Demirleme dip tutunma tipi kodu → Türkçe (docs/22 ck_anchorage_details_holding_type).
+String holdingTypeLabelTr(String code) {
+  switch (code) {
+    case 'sand':
+      return 'kum';
+    case 'mud':
+      return 'çamur';
+    case 'weed':
+      return 'yosun';
+    case 'rock':
+      return 'kaya';
+    case 'mixed':
+      return 'karışık (kum/çamur/yosun)';
+    default:
+      return code;
+  }
+}

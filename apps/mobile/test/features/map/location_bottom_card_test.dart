@@ -45,4 +45,30 @@ void main() {
     await tester.pump();
     expect(closed, isTrue);
   });
+
+  testWidgets('onOpenDetail verilince "Detay" butonu görünür ve çağırır', (WidgetTester tester) async {
+    bool opened = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: LocationBottomCard(
+            pin: testPin,
+            onClose: () {},
+            onOpenDetail: () => opened = true,
+          ),
+        ),
+      ),
+    );
+    expect(find.text('Detay'), findsOneWidget);
+    await tester.tap(find.text('Detay'));
+    await tester.pump();
+    expect(opened, isTrue);
+  });
+
+  testWidgets('onOpenDetail yoksa "Detay" butonu gösterilmez', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () {}))),
+    );
+    expect(find.text('Detay'), findsNothing);
+  });
 }

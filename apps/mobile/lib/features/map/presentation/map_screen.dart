@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../detail/presentation/location_detail_screen.dart';
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
 import 'location_bottom_card.dart';
@@ -17,6 +18,7 @@ class MapScreen extends ConsumerWidget {
     final MapState state = ref.watch(mapControllerProvider);
     final MapController controller = ref.read(mapControllerProvider.notifier);
     final MapSurfaceBuilder surfaceBuilder = ref.watch(mapSurfaceBuilderProvider);
+    final selectedPin = state.selectedPin;
 
     return Scaffold(
       body: Stack(
@@ -54,14 +56,19 @@ class MapScreen extends ConsumerWidget {
                 onRetry: () => controller.retry(),
               ),
             ),
-          if (state.selectedPin != null)
+          if (selectedPin != null)
             Positioned(
               left: 0,
               right: 0,
               bottom: 0,
               child: LocationBottomCard(
-                pin: state.selectedPin!,
+                pin: selectedPin,
                 onClose: controller.clearSelection,
+                onOpenDetail: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => LocationDetailScreen(idOrSlug: selectedPin.id),
+                  ),
+                ),
               ),
             ),
         ],

@@ -8,10 +8,18 @@ import '../../../core/location_type_labels.dart';
 /// tip (renk noktası + etiket), ad, puan ve fiyat rozeti. "Detay"/"Yol tarifi"
 /// aksiyonları B.4'te (navigasyon + harici harita) eklenir.
 class LocationBottomCard extends StatelessWidget {
-  const LocationBottomCard({required this.pin, required this.onClose, super.key});
+  const LocationBottomCard({
+    required this.pin,
+    required this.onClose,
+    this.onOpenDetail,
+    super.key,
+  });
 
   final LocationPin pin;
   final VoidCallback onClose;
+
+  /// "Detay" aksiyonu — verilmezse buton gösterilmez (B.3 uyumu).
+  final VoidCallback? onOpenDetail;
 
   static const ValueKey<String> cardKey = ValueKey<String>('location-bottom-card');
 
@@ -75,6 +83,17 @@ class LocationBottomCard extends StatelessWidget {
                     ],
                   ],
                 ),
+                if (onOpenDetail != null) ...<Widget>[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: DocklyButton(
+                      label: 'Detay',
+                      icon: Icons.arrow_forward,
+                      onPressed: onOpenDetail,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
