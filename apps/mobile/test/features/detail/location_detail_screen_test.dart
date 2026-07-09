@@ -24,7 +24,16 @@ void main() {
     expect(find.byKey(LocationDetailScreen.contentKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget); // private_marina etiketi
     expect(find.text('73'), findsOneWidget); // marina VHF kanalı
-    // Telefon iletişimi tıklanabilir → "harici uygulamada aç" ikonu görünür (P0).
+  });
+
+  testWidgets('telefon iletişimi tıklanabilir → "aç" ikonu görünür (P0)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+
+    // İletişim bölümü listenin altında; tembel liste onu görünür olana dek
+    // kaydır (aksi hâlde henüz çizilmemiş olur).
+    await tester.scrollUntilVisible(find.byIcon(Icons.open_in_new), 300);
     expect(find.byIcon(Icons.open_in_new), findsOneWidget);
   });
 
