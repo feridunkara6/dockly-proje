@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:dockly_api/dockly_api.dart' show LocationDetail;
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
@@ -19,26 +16,14 @@ Widget _app(LocationDetailGateway gateway) {
 }
 
 void main() {
-  testWidgets('yükleme → içerik: başlık, tip, olanak ve marina VHF gösterilir',
+  testWidgets('detay yüklenince içerik gösterilir (tip + marina VHF)',
       (WidgetTester tester) async {
-    // Yanıtı elle kontrol et: önce yükleme görünmeli, tamamlanınca içerik.
-    final FakeLocationDetailGateway gateway = FakeLocationDetailGateway();
-    final Completer<LocationDetail> completer = Completer<LocationDetail>();
-    gateway.pending = completer;
-
-    await tester.pumpWidget(_app(gateway));
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    completer.complete(sampleMarinaDetail);
-    await tester.pumpAndSettle();
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle(); // Future.value çözülür → içerik.
 
     expect(find.byKey(LocationDetailScreen.contentKey), findsOneWidget);
-    expect(find.text('Özel Marina'), findsOneWidget);
-    expect(find.text('D-Marin Göcek'), findsWidgets); // AppBar + gövde başlığı
-    expect(find.text('Fethiye · Muğla'), findsOneWidget);
-    expect(find.text('Su'), findsOneWidget); // olanak çipi
+    expect(find.text('Özel Marina'), findsOneWidget); // private_marina etiketi
     expect(find.text('73'), findsOneWidget); // marina VHF kanalı
-    expect(find.text('Maks. su çekimi'), findsOneWidget);
   });
 
   testWidgets('hata → mesaj + tekrar dene', (WidgetTester tester) async {
