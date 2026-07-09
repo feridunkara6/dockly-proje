@@ -1,0 +1,44 @@
+import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/fake_map_surface.dart';
+import '../../support/map_fakes.dart';
+
+Widget _app() {
+  return ProviderScope(
+    overrides: <Override>[
+      mapLocationsGatewayProvider.overrideWithValue(FakeMapGateway(result: pinResult)),
+      mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
+      mapDebounceProvider.overrideWithValue(Duration.zero),
+    ],
+    child: const MaterialApp(home: DocklyShell()),
+  );
+}
+
+void main() {
+  testWidgets('5 sekmeli alt menü; açılışta Keşfet (harita) aktif',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NavigationDestination), findsNWidgets(5));
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 0);
+    // Keşfet açık → sahte harita yüzeyi pin çizer.
+    expect(find.byKey(const ValueKey<String>('pin-loc-1')), findsOneWidget);
+  });
+
+  testWidgets('sekmeye dokununca seçili sekme değişir', (WidgetTester tester) async {
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(of: find.byType(NavigationBar), matching: find.text('Favoriler')),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 2);
+  });
+}

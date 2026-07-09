@@ -8,9 +8,9 @@ import 'core/providers.dart';
 import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
-import 'features/map/presentation/map_screen.dart';
 import 'features/map/presentation/map_surface.dart';
 import 'features/map/presentation/mapbox_map_surface.dart';
+import 'features/shell/presentation/dockly_shell.dart';
 
 /// Mapbox public erişim token'ı — `--dart-define=MAPBOX_ACCESS_TOKEN=pk...` ile
 /// gelir (repoya gömülmez). Boşsa harita gri kalır ama uygulama çökmez.
@@ -43,9 +43,9 @@ class DocklyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
-      // MVP: uygulama doğrudan haritaya açılır (anonim/misafir keşif). Giriş
-      // akışı (AuthGate/SignInScreen) router entegrasyonuyla geri bağlanacak.
-      home: const MapScreen(),
+      // MVP: uygulama 5 sekmeli kabuğa açılır; ilk sekme harita (anonim/misafir
+      // keşif). Giriş akışı (AuthGate/SignInScreen) Firebase 2.4c ile bağlanacak.
+      home: const DocklyShell(),
     );
   }
 }
