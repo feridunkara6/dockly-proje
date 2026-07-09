@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
@@ -54,8 +56,13 @@ class FakeLocationDetailGateway implements LocationDetailGateway {
   LocationDetail result;
   AppFailure? error;
 
+  /// Ayarlanırsa yanıt bu completer ile elle tamamlanır (yükleme durumu testi).
+  Completer<LocationDetail>? pending;
+
   @override
   Future<LocationDetail> fetch(String idOrSlug) {
+    final Completer<LocationDetail>? controlled = pending;
+    if (controlled != null) return controlled.future;
     final AppFailure? err = error;
     if (err != null) return Future<LocationDetail>.error(err);
     return Future<LocationDetail>.value(result);

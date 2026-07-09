@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dockly_api/dockly_api.dart' show LocationDetail;
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
@@ -18,11 +21,17 @@ Widget _app(LocationDetailGateway gateway) {
 void main() {
   testWidgets('yükleme → içerik: başlık, tip, olanak ve marina VHF gösterilir',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
-    // İlk kare: yükleme göstergesi.
+    // Yanıtı elle kontrol et: önce yükleme görünmeli, tamamlanınca içerik.
+    final FakeLocationDetailGateway gateway = FakeLocationDetailGateway();
+    final Completer<LocationDetail> completer = Completer<LocationDetail>();
+    gateway.pending = completer;
+
+    await tester.pumpWidget(_app(gateway));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
+    completer.complete(sampleMarinaDetail);
     await tester.pumpAndSettle();
+
     expect(find.byKey(LocationDetailScreen.contentKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget);
     expect(find.text('D-Marin Göcek'), findsWidgets); // AppBar + gövde başlığı
