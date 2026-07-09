@@ -35,7 +35,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final SearchState state = ref.watch(searchControllerProvider);
-    final SearchController controller = ref.read(searchControllerProvider.notifier);
+    final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 8,

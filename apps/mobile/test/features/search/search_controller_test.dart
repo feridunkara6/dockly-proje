@@ -18,7 +18,7 @@ ProviderContainer _containerWith(FakeSearchGateway gateway) {
   return container;
 }
 
-SearchController _ctrl(ProviderContainer c) => c.read(searchControllerProvider.notifier);
+LocationSearchController _ctrl(ProviderContainer c) => c.read(searchControllerProvider.notifier);
 SearchState _state(ProviderContainer c) => c.read(searchControllerProvider);
 
 /// Debounce (zero) timer + Future.value çözülene dek bekler.

@@ -21,7 +21,7 @@ final Provider<Duration> searchDebounceProvider =
 
 /// Arama ekranının beyni (docs/26 §4): sorgu değişimi → debounce → yükleme,
 /// sonuç/hata durumu. Kısa sorguda arama yapılmaz (backend ile aynı eşik).
-class SearchController extends Notifier<SearchState> {
+class LocationSearchController extends Notifier<SearchState> {
   Timer? _debounce;
   int _seq = 0;
 
@@ -76,5 +76,5 @@ class SearchController extends Notifier<SearchState> {
   }
 }
 
-final NotifierProvider<SearchController, SearchState> searchControllerProvider =
-    NotifierProvider<SearchController, SearchState>(SearchController.new);
+final NotifierProvider<LocationSearchController, SearchState> searchControllerProvider =
+    NotifierProvider<LocationSearchController, SearchState>(LocationSearchController.new);
