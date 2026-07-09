@@ -29,6 +29,8 @@ class LocationSummary {
     required this.waterBodyName,
     required this.distanceNm,
     required this.amenityCodes,
+    required this.maxBoatLengthM,
+    required this.maxDraftM,
   });
 
   final String id;
@@ -44,6 +46,12 @@ class LocationSummary {
   final String? waterBodyName;
   final double distanceNm;
   final List<String> amenityCodes;
+
+  /// Kabul edilen maks. tekne boyu (m) — tekne-uygunluğu filtresi için (null = bilinmiyor).
+  final double? maxBoatLengthM;
+
+  /// Kabul edilen maks. su çekimi (m) — tekne-uygunluğu filtresi için (null = bilinmiyor).
+  final double? maxDraftM;
 
   factory LocationSummary.fromJson(Map<String, dynamic> json) => LocationSummary(
         id: json['id'] as String,
@@ -63,5 +71,7 @@ class LocationSummary {
         amenityCodes: (json['amenityCodes'] as List<dynamic>? ?? const <dynamic>[])
             .map((dynamic e) => e as String)
             .toList(growable: false),
+        maxBoatLengthM: (json['maxBoatLengthM'] as num?)?.toDouble(),
+        maxDraftM: (json['maxDraftM'] as num?)?.toDouble(),
       );
 }

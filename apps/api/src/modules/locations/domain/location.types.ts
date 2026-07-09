@@ -69,6 +69,10 @@ export interface LocationSummary {
   waterBodyName: string | null;
   distanceNm: number;
   amenityCodes: string[];
+  /** Kabul edilen maks. tekne boyu (m) — tekne-uygunluğu filtresi için. */
+  maxBoatLengthM: number | null;
+  /** Kabul edilen maks. su çekimi (m) — tekne-uygunluğu filtresi için. */
+  maxDraftM: number | null;
 }
 
 /** Doğrulanmış nearby sorgu parametreleri (metreye çevrilmiş yarıçapla). */
@@ -219,7 +223,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

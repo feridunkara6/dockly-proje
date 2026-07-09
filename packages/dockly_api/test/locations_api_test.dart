@@ -129,6 +129,8 @@ void main() {
           'waterBodyName': null,
           'distanceNm': 0,
           'amenityCodes': <dynamic>['electricity'],
+          'maxBoatLengthM': 40,
+          'maxDraftM': 5,
         },
       ],
     });
@@ -139,6 +141,8 @@ void main() {
     expect(s.name, 'D-Marin Göcek');
     expect(s.city, 'Fethiye');
     expect(s.distanceNm, 0);
+    expect(s.maxBoatLengthM, 40);
+    expect(s.maxDraftM, 5);
 
     final sent = adapter.received.single;
     expect(sent.path, '/v1/locations/search');

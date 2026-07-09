@@ -53,6 +53,8 @@ interface NearbyRow extends PinRow {
   waterBodyName: string | null;
   distanceNm: number;
   amenityCodes: string[] | null;
+  maxBoatLengthM: Prisma.Decimal | number | null;
+  maxDraftM: Prisma.Decimal | number | null;
 }
 
 /** Arama satırı = özet projeksiyonu (mesafe yok — konum bağımsız). */
@@ -62,6 +64,8 @@ interface SearchRow extends PinRow {
   city: string | null;
   waterBodyName: string | null;
   amenityCodes: string[] | null;
+  maxBoatLengthM: Prisma.Decimal | number | null;
+  maxDraftM: Prisma.Decimal | number | null;
 }
 
 /** Yorum satırı (ham projeksiyon). */
@@ -94,7 +98,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -147,6 +153,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
         l.rating_avg                     AS "ratingAvg",
         l.rating_count                   AS "ratingCount",
         l.price_tier::text               AS "priceTier",
+        l.max_boat_length_m              AS "maxBoatLengthM",
+        l.max_draft_m                    AS "maxDraftM",
         aa.name                          AS city,
         wb.name                          AS "waterBodyName",
         ST_Distance(l.position, ref.g) / ${NM_TO_M} AS "distanceNm",
@@ -188,6 +196,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
       waterBodyName: r.waterBodyName ?? null,
       distanceNm: Math.round(Number(r.distanceNm) * 100) / 100,
       amenityCodes: r.amenityCodes ?? [],
+      maxBoatLengthM: dec(r.maxBoatLengthM),
+      maxDraftM: dec(r.maxDraftM),
     }));
   }
 
@@ -216,6 +226,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
         l.rating_avg                     AS "ratingAvg",
         l.rating_count                   AS "ratingCount",
         l.price_tier::text               AS "priceTier",
+        l.max_boat_length_m              AS "maxBoatLengthM",
+        l.max_draft_m                    AS "maxDraftM",
         aa.name                          AS city,
         wb.name                          AS "waterBodyName",
         (
@@ -255,6 +267,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
       waterBodyName: r.waterBodyName ?? null,
       distanceNm: 0,
       amenityCodes: r.amenityCodes ?? [],
+      maxBoatLengthM: dec(r.maxBoatLengthM),
+      maxDraftM: dec(r.maxDraftM),
     }));
   }
 
@@ -265,7 +279,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
@@ -411,11 +427,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }

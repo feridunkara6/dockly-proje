@@ -10,6 +10,8 @@ LocationSummary sampleSummary(
   String type = 'private_marina',
   String? city = 'Fethiye',
   double distanceNm = 0,
+  double? maxBoatLengthM,
+  double? maxDraftM,
 }) {
   return LocationSummary(
     id: id,
@@ -25,6 +27,8 @@ LocationSummary sampleSummary(
     waterBodyName: null,
     distanceNm: distanceNm,
     amenityCodes: const <String>[],
+    maxBoatLengthM: maxBoatLengthM,
+    maxDraftM: maxDraftM,
   );
 }
 

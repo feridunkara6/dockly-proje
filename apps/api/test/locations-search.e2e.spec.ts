@@ -44,6 +44,10 @@ runIf('Locations search API (e2e — gerçek PostGIS)', () => {
     await prisma.$executeRawUnsafe(`
       UPDATE locations SET deleted_at = now() WHERE slug = 'e2e-search-deleted';
     `);
+    // Marina'ya tekne boyut limitleri (özet projeksiyonunu doğrular).
+    await prisma.$executeRawUnsafe(`
+      UPDATE locations SET max_boat_length_m = 40, max_draft_m = 5 WHERE slug = 'e2e-search-marina';
+    `);
     // Marina'ya olanaklar bağla (amenityCodes yolunu doğrular).
     await prisma.$executeRawUnsafe(`
       INSERT INTO location_amenities (location_id, amenity_id)
@@ -83,6 +87,8 @@ runIf('Locations search API (e2e — gerçek PostGIS)', () => {
     expect(marina.distanceNm).toBe(0);
     expect([...marina.amenityCodes].sort()).toEqual(['electricity', 'water']);
     expect(marina.ratingAvg).toBe(4.5);
+    expect(marina.maxBoatLengthM).toBe(40);
+    expect(marina.maxDraftM).toBe(5);
     const fuel = bySlug(items, 'e2e-search-fuel');
     expect(fuel.ratingAvg).toBeNull();
     expect(fuel.amenityCodes).toEqual([]);
