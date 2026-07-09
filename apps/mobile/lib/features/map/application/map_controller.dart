@@ -62,6 +62,7 @@ class MapController extends Notifier<MapState> {
         truncated: result.truncated,
         isLoading: false,
         clearFailure: true,
+        hasLoadedOnce: true,
       );
     } on AppFailure catch (failure) {
       if (seq != _seq) return;

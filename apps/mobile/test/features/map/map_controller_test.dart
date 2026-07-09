@@ -27,12 +27,27 @@ MapController _ctrl(ProviderContainer c) => c.read(mapControllerProvider.notifie
 MapState _state(ProviderContainer c) => c.read(mapControllerProvider);
 
 void main() {
-  test('başlangıç durumu boş (marker yok, yükleme yok)', () {
+  test('başlangıç: marker yok, yükleme yok; boş-durum HENÜZ gösterilmez (P9 flicker yok)', () {
     final container = _containerWith(FakeMapGateway());
     final state = _state(container);
     expect(state.pins, isEmpty);
     expect(state.clusters, isEmpty);
     expect(state.isLoading, isFalse);
+    expect(state.hasLoadedOnce, isFalse);
+    expect(state.isEmpty, isFalse); // ilk yükleme bitmeden "liman yok" gösterilmez
+  });
+
+  test('ilk yükleme boş sonuç döndürünce → boş durum gösterilir', () async {
+    const emptyResult = MapResult(
+      clusters: <Cluster>[],
+      locations: <LocationPin>[],
+      truncated: false,
+    );
+    final container = _containerWith(FakeMapGateway(result: emptyResult));
+    await _ctrl(container).loadViewport(pinViewport);
+    final state = _state(container);
+    expect(state.hasLoadedOnce, isTrue);
+    expect(state.hasData, isFalse);
     expect(state.isEmpty, isTrue);
   });
 

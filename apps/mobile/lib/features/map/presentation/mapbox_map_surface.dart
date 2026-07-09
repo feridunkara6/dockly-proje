@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
+import 'package:dockly_ui/dockly_ui.dart' show DocklyMapColors;
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -126,9 +127,11 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       final CircleAnnotation annotation = await circles.create(
         CircleAnnotationOptions(
           geometry: Point(coordinates: Position(pin.position.lon, pin.position.lat)),
-          circleColor: selected ? 0xFFEA4335 : 0xFF0C7BDC,
-          circleRadius: selected ? 11.0 : 7.0,
-          circleStrokeColor: 0xFFFFFFFF,
+          // Dolgu = location_type kanonik rengi (docs/09 §1.4); seçili pin 1.3× ölçek
+          // + beyaz halka (renk değişmez — renk tip anlamına rezerve).
+          circleColor: DocklyMapColors.argbForType(pin.type),
+          circleRadius: selected ? 9.1 : 7.0,
+          circleStrokeColor: DocklyMapColors.strokeArgb,
           circleStrokeWidth: 2.0,
         ),
       );
@@ -141,9 +144,9 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       final CircleAnnotation annotation = await circles.create(
         CircleAnnotationOptions(
           geometry: geometry,
-          circleColor: 0xFF0C7BDC,
+          circleColor: DocklyMapColors.clusterArgb,
           circleRadius: 18.0,
-          circleStrokeColor: 0xFFFFFFFF,
+          circleStrokeColor: DocklyMapColors.strokeArgb,
           circleStrokeWidth: 2.0,
         ),
       );

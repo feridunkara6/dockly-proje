@@ -11,6 +11,7 @@ class MapState {
     this.isLoading = false,
     this.failure,
     this.selectedPinId,
+    this.hasLoadedOnce = false,
   });
 
   final List<LocationPin> pins;
@@ -20,10 +21,14 @@ class MapState {
   final AppFailure? failure;
   final String? selectedPinId;
 
+  /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
+  /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
+  final bool hasLoadedOnce;
+
   bool get hasData => pins.isNotEmpty || clusters.isNotEmpty;
 
-  /// İlk yükleme henüz veri getirmedi ve hata/yükleme yok → boş durum ekranı.
-  bool get isEmpty => !hasData && !isLoading && failure == null;
+  /// Boş durum ekranı: yalnızca bir yükleme BİTTİKTEN sonra veri yoksa gösterilir.
+  bool get isEmpty => hasLoadedOnce && !hasData && !isLoading && failure == null;
 
   MapState copyWith({
     List<LocationPin>? pins,
@@ -34,6 +39,7 @@ class MapState {
     bool clearFailure = false,
     String? selectedPinId,
     bool clearSelection = false,
+    bool? hasLoadedOnce,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -42,6 +48,7 @@ class MapState {
       isLoading: isLoading ?? this.isLoading,
       failure: clearFailure ? null : (failure ?? this.failure),
       selectedPinId: clearSelection ? null : (selectedPinId ?? this.selectedPinId),
+      hasLoadedOnce: hasLoadedOnce ?? this.hasLoadedOnce,
     );
   }
 }
