@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
 import '../data/api_map_locations_gateway.dart';
 import '../domain/map_locations_gateway.dart';
@@ -51,6 +53,13 @@ class MapController extends Notifier<MapState> {
   /// Eş zamanlı çağrılarda yalnız en son yanıt uygulanır (stale koruması).
   Future<void> loadViewport(MapViewport viewport, {List<String>? types}) async {
     _lastRequested = viewport;
+    // Deniz-rota başlangıç noktası = görüntülenen alanın merkezi (P2). İleride
+    // GPS ile gerçek konuma yükseltilecek; şimdilik "haritada baktığın yer".
+    final Bbox b = viewport.bbox;
+    ref.read(originProvider.notifier).state = GeoPoint(
+      lat: (b.minLat + b.maxLat) / 2,
+      lon: (b.minLon + b.maxLon) / 2,
+    );
     final seq = ++_seq;
     state = state.copyWith(isLoading: true, clearFailure: true);
     try {

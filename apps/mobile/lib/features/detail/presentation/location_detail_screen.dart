@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart' show AppFailure;
 import 'package:dockly_ui/dockly_ui.dart';
@@ -6,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/external_links.dart';
 import '../../../core/location_type_labels.dart';
+import '../../../core/origin_provider.dart';
 import '../../boat/presentation/boat_fit.dart';
+import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
@@ -106,6 +110,7 @@ class _DetailContent extends StatelessWidget {
           maxBoatLengthM: detail.dimensions.maxBoatLengthM,
           maxDraftM: detail.dimensions.maxDraftM,
         ),
+        _SeaRouteRow(destination: detail.position),
 
         if (detail.description != null && detail.description!.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),
@@ -245,6 +250,74 @@ class _CoverPhoto extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Deniz-rota önizlemesi (P2, docs vizyon — denizcilik-odaklı rota, karayolu YOK).
+/// Başlangıç noktası (harita merkezi) biliniyorsa: yön (pusula + ok) + kuşuçuşu
+/// deniz mili + kaba süre. Başlangıç yoksa gizlenir.
+class _SeaRouteRow extends ConsumerWidget {
+  const _SeaRouteRow({required this.destination});
+
+  final GeoPoint destination;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final GeoPoint? origin = ref.watch(originProvider);
+    if (origin == null) return const SizedBox.shrink();
+    final SeaRoutePreview route = computeSeaRoute(origin, destination);
+    if (route.distanceNm < 0.05) return const SizedBox.shrink();
+    final ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          border: Border.all(color: DocklyColors.brandPrimary),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: <Widget>[
+            Transform.rotate(
+              angle: route.bearingDeg * math.pi / 180.0,
+              child: const Icon(Icons.navigation, color: DocklyColors.brandPrimary),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Deniz yolu · ${route.compass}', style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${_fmtNm(route.distanceNm)} deniz mili · ~${_fmtEta(route.etaHoursAtCruise)} (8 kn)',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  Text(
+                    'Haritada baktığın konumdan · kuşuçuşu',
+                    style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
+
+String _fmtEta(double hours) {
+  if (!hours.isFinite) return '—';
+  if (hours < 1) return '${(hours * 60).round()} dk';
+  int h = hours.floor();
+  int m = ((hours - h) * 60).round();
+  if (m == 60) {
+    h += 1;
+    m = 0;
+  }
+  return m == 0 ? '$h sa' : '$h sa $m dk';
 }
 
 class _Fact {

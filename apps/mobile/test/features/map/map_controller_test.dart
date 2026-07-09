@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,6 +50,15 @@ void main() {
     expect(state.hasLoadedOnce, isTrue);
     expect(state.hasData, isFalse);
     expect(state.isEmpty, isTrue);
+  });
+
+  test('loadViewport → origin haritanın merkezine yazılır (deniz-rota başlangıcı)', () async {
+    final container = _containerWith(FakeMapGateway(result: pinResult));
+    await _ctrl(container).loadViewport(pinViewport);
+    final GeoPoint? origin = container.read(originProvider);
+    expect(origin, isNotNull);
+    expect(origin!.lat, moreOrLessEquals(36.75, epsilon: 0.001)); // (36.70+36.80)/2
+    expect(origin.lon, moreOrLessEquals(28.95, epsilon: 0.001)); // (28.90+29.00)/2
   });
 
   test('loadViewport başarı → pin modu verisi', () async {

@@ -1,4 +1,6 @@
+import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
@@ -35,6 +37,23 @@ void main() {
     // kaydır (aksi hâlde henüz çizilmemiş olur).
     await tester.scrollUntilVisible(find.byIcon(Icons.open_in_new), 300);
     expect(find.byIcon(Icons.open_in_new), findsOneWidget);
+  });
+
+  testWidgets('origin biliniyorsa deniz yolu bölümü gösterilir (P2)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[
+          locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+          originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
+        ],
+        child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // Deniz yolu bölümü listede aşağıda olabilir → görünene dek kaydır.
+    await tester.scrollUntilVisible(find.textContaining('Deniz yolu'), 200);
+    expect(find.textContaining('Deniz yolu'), findsOneWidget);
   });
 
   testWidgets('hata → mesaj + tekrar dene', (WidgetTester tester) async {
