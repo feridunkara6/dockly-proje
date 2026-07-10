@@ -74,16 +74,24 @@ ThemeData buildDocklyTheme(Brightness brightness) {
       backgroundColor: surface,
       showCheckmark: true,
     ),
+    // Birincil buton (tasarım .btn-primary): mavi dolgu, beyaz metin, mavi gölge.
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
         minimumSize: const Size.fromHeight(52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        elevation: 6,
+        shadowColor: primary,
       ),
     ),
+    // İkincil buton (tasarım .btn-secondary): şeffaf zemin, 1.5px mavi kenar, mavi metin.
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
+        foregroundColor: primary,
         minimumSize: const Size.fromHeight(52),
+        side: BorderSide(color: primary, width: 1.5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
