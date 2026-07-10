@@ -189,7 +189,12 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     expect(b.amenities).toHaveLength(2);
     expect(b.amenities[0].label).toBe('Elektrik');
     expect(b.services[0].code).toBe('mooring_assist');
-    expect(b.contacts[0]).toEqual({ type: 'phone', value: '+902520000000', isPrimary: true, label: null });
+    expect(b.contacts[0]).toEqual({
+      type: 'phone',
+      value: '+902520000000',
+      isPrimary: true,
+      label: null,
+    });
     const day1 = b.hours.find((h: { dayOfWeek: number }) => h.dayOfWeek === 1);
     expect(day1).toEqual({ dayOfWeek: 1, opensAt: '08:00', closesAt: '22:00' });
     const day2 = b.hours.find((h: { dayOfWeek: number }) => h.dayOfWeek === 2);
