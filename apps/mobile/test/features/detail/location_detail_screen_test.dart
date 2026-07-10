@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dar
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
+import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,11 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
+
+/// İkonlar artık SVG tabanlı [DocklyIcon]; Material `find.byIcon` yerine ikon
+/// verisiyle bulunur.
+Finder _docklyIcon(DocklyIconData d) =>
+    find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
 /// Detay ekranı testleri: yakın-alternatifler ve yorumlar ağ geçitleri boş sahte
 /// ile override edilir (aksi halde gerçek API zinciri appConfig'e ulaşıp fırlatır).
@@ -45,8 +51,8 @@ void main() {
 
     // İletişim bölümü listenin altında; tembel liste onu görünür olana dek
     // kaydır (aksi hâlde henüz çizilmemiş olur).
-    await tester.scrollUntilVisible(find.byIcon(Icons.open_in_new), 300);
-    expect(find.byIcon(Icons.open_in_new), findsOneWidget);
+    await tester.scrollUntilVisible(_docklyIcon(DocklyIcons.openInNew), 300);
+    expect(_docklyIcon(DocklyIcons.openInNew), findsOneWidget);
   });
 
   testWidgets('origin biliniyorsa deniz yolu bölümü gösterilir (P2)',

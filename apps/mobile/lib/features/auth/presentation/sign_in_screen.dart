@@ -61,14 +61,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               const SizedBox(height: 40),
               DocklyButton(
                 label: 'Apple ile devam et',
-                icon: Icons.apple,
+                icon: DocklyIcons.apple,
                 loading: _busyKind == AuthProviderKind.apple,
                 onPressed: busy ? null : () => _signIn(AuthProviderKind.apple),
               ),
               const SizedBox(height: 12),
               DocklyButton(
                 label: 'Google ile devam et',
-                icon: Icons.g_mobiledata,
+                icon: DocklyIcons.google,
                 loading: _busyKind == AuthProviderKind.google,
                 onPressed: busy ? null : () => _signIn(AuthProviderKind.google),
               ),
@@ -76,14 +76,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               DocklyButton(
                 label: 'E-posta ile devam et',
                 variant: DocklyButtonVariant.secondary,
-                icon: Icons.mail_outline,
+                icon: DocklyIcons.mailOutline,
                 onPressed: busy ? null : _comingSoon,
               ),
               const SizedBox(height: 12),
               DocklyButton(
                 label: 'Telefon ile devam et',
                 variant: DocklyButtonVariant.secondary,
-                icon: Icons.phone_outlined,
+                icon: DocklyIcons.phoneOutlined,
                 onPressed: busy ? null : _comingSoon,
               ),
               const SizedBox(height: 24),

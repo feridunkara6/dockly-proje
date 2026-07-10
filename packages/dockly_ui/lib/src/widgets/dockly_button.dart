@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'dockly_icon.dart';
+
 /// Buton varyantları (docs/10 component library).
 enum DocklyButtonVariant { primary, secondary }
 
@@ -19,7 +21,7 @@ class DocklyButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final DocklyButtonVariant variant;
   final bool loading;
-  final IconData? icon;
+  final DocklyIconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +47,16 @@ class _Label extends StatelessWidget {
   const _Label({required this.label, this.icon});
 
   final String label;
-  final IconData? icon;
+  final DocklyIconData? icon;
 
   @override
   Widget build(BuildContext context) {
+    final DocklyIconData? icon = this.icon;
     if (icon == null) return Text(label);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Icon(icon, size: 20),
+        DocklyIcon(icon, size: 20),
         const SizedBox(width: 8),
         Text(label),
       ],

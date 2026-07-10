@@ -102,8 +102,8 @@ class _Stars extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (int i = 1; i <= 5; i++)
-          Icon(
-            i <= rating ? Icons.star : Icons.star_border,
+          DocklyIcon(
+            i <= rating ? DocklyIcons.star : DocklyIcons.starBorder,
             size: 16,
             color: DocklyColors.warning,
           ),

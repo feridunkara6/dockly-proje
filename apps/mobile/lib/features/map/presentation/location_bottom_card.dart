@@ -59,7 +59,7 @@ class LocationBottomCard extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close),
+                      icon: const DocklyIcon(DocklyIcons.close),
                       onPressed: onClose,
                       tooltip: 'Kapat',
                     ),
@@ -74,7 +74,7 @@ class LocationBottomCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 Row(
                   children: <Widget>[
-                    const Icon(Icons.star, size: 18, color: DocklyColors.warning),
+                    const DocklyIcon(DocklyIcons.star, size: 18, color: DocklyColors.warning),
                     const SizedBox(width: 4),
                     Text(pin.ratingAvg != null ? pin.ratingAvg!.toStringAsFixed(1) : 'Puan yok'),
                     if (priceLabel != null) ...<Widget>[
@@ -89,7 +89,7 @@ class LocationBottomCard extends StatelessWidget {
                     width: double.infinity,
                     child: DocklyButton(
                       label: 'Detay',
-                      icon: Icons.arrow_forward,
+                      icon: DocklyIcons.arrowForward,
                       onPressed: onOpenDetail,
                     ),
                   ),

@@ -4,12 +4,17 @@ import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
 import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/fake_map_surface.dart';
 import '../../support/map_fakes.dart';
+
+/// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
+Finder _docklyIcon(DocklyIconData d) =>
+    find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
 Widget _app(FakeMapGateway gateway) {
   return ProviderScope(
@@ -50,7 +55,7 @@ void main() {
     expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(_docklyIcon(DocklyIcons.close));
     await tester.pumpAndSettle();
     expect(find.byKey(LocationBottomCard.cardKey), findsNothing);
   });
@@ -60,10 +65,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ListTile), findsNothing); // harita modu (sahte yüzey ListTile kullanmaz)
 
-    await tester.tap(find.byIcon(Icons.view_list));
+    await tester.tap(_docklyIcon(DocklyIcons.viewList));
     await tester.pumpAndSettle();
     expect(find.byType(ListTile), findsOneWidget); // liste modu, tek pin
-    expect(find.byIcon(Icons.map_outlined), findsOneWidget); // haritaya dön ikonu
+    expect(_docklyIcon(DocklyIcons.mapOutlined), findsOneWidget); // haritaya dön ikonu
   });
 
   testWidgets('boş bölge → boş görünüm', (WidgetTester tester) async {

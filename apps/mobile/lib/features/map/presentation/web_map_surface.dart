@@ -52,7 +52,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Icon(Icons.map_outlined, size: 48, color: DocklyColors.brandDeep),
+              const DocklyIcon(DocklyIcons.mapOutlined, size: 48, color: DocklyColors.brandDeep),
               const SizedBox(height: 12),
               const Text(
                 'Web önizlemesinde harita gösterilmiyor.\n'

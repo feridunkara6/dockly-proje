@@ -21,7 +21,7 @@ class BoatFitRow extends ConsumerWidget {
       return Align(
         alignment: Alignment.centerLeft,
         child: ActionChip(
-          avatar: const Icon(Icons.straighten, size: 18),
+          avatar: const DocklyIcon(DocklyIcons.straighten, size: 18),
           label: const Text('Teknen sığar mı? · Tekneni tanımla'),
           onPressed: () => showBoatSheet(context),
         ),
@@ -53,10 +53,10 @@ class BoatFitBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (IconData icon, String label, Color color) = switch (fit) {
-      BoatFit.fits => (Icons.check_circle, 'Teknen sığar', DocklyColors.success),
-      BoatFit.tooBig => (Icons.error_outline, 'Teknen sığmayabilir', DocklyColors.warning),
-      BoatFit.unknown => (Icons.help_outline, 'Uygunluk bilinmiyor', DocklyColors.brandDeep),
+    final (DocklyIconData icon, String label, Color color) = switch (fit) {
+      BoatFit.fits => (DocklyIcons.checkCircle, 'Teknen sığar', DocklyColors.success),
+      BoatFit.tooBig => (DocklyIcons.errorOutline, 'Teknen sığmayabilir', DocklyColors.warning),
+      BoatFit.unknown => (DocklyIcons.helpOutline, 'Uygunluk bilinmiyor', DocklyColors.brandDeep),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -67,7 +67,7 @@ class BoatFitBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(icon, size: 16, color: color),
+          DocklyIcon(icon, size: 16, color: color),
           const SizedBox(width: 6),
           Text(
             label,

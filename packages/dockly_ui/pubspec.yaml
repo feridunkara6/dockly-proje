@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Çizgi ikonları SVG (path tabanlı) olarak çizer — ikon fontuna bağlı değildir,
+  # bu yüzden web'de (mobil Safari dahil) güvenilir görünür.
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

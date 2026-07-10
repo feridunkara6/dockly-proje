@@ -34,7 +34,7 @@ class ProfileScreen extends ConsumerWidget {
           Text('Hesap', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           const _InfoCard(
-            icon: Icons.lock_outline,
+            icon: DocklyIcons.lockOutline,
             message:
                 'Yakında: hesap oluşturarak favori limanlarını kaydet, yorum yaz '
                 've rezervasyon iste. Şimdilik tüm keşif özellikleri giriş '
@@ -64,7 +64,7 @@ class _BoatCard extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                const Icon(Icons.sailing, color: DocklyColors.brandPrimary),
+                const DocklyIcon(DocklyIcons.sailing, color: DocklyColors.brandPrimary),
                 const SizedBox(width: 10),
                 Text('Boy ${_fmt(boat.lengthM)} m', style: theme.textTheme.titleMedium),
               ],
@@ -80,13 +80,13 @@ class _BoatCard extends StatelessWidget {
               children: <Widget>[
                 TextButton.icon(
                   onPressed: onEdit,
-                  icon: const Icon(Icons.edit, size: 18),
+                  icon: const DocklyIcon(DocklyIcons.edit, size: 18),
                   label: const Text('Düzenle'),
                 ),
                 const SizedBox(width: 8),
                 TextButton.icon(
                   onPressed: onRemove,
-                  icon: const Icon(Icons.delete_outline, size: 18),
+                  icon: const DocklyIcon(DocklyIcons.deleteOutline, size: 18),
                   label: const Text('Kaldır'),
                 ),
               ],
@@ -132,7 +132,7 @@ class _BoatEmptyCard extends StatelessWidget {
 class _InfoCard extends StatelessWidget {
   const _InfoCard({required this.icon, required this.message});
 
-  final IconData icon;
+  final DocklyIconData icon;
   final String message;
 
   @override
@@ -143,7 +143,7 @@ class _InfoCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Icon(icon, color: DocklyColors.brandDeep),
+            DocklyIcon(icon, color: DocklyColors.brandDeep),
             const SizedBox(width: 12),
             Expanded(child: Text(message)),
           ],

@@ -1,9 +1,14 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
+import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/map_fakes.dart';
+
+/// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
+Finder _docklyIcon(DocklyIconData d) =>
+    find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
 void main() {
   testWidgets('kart: tip etiketi + ad + puan + fiyat rozeti gösterir', (WidgetTester tester) async {
@@ -41,7 +46,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () => closed = true))),
     );
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(_docklyIcon(DocklyIcons.close));
     await tester.pump();
     expect(closed, isTrue);
   });

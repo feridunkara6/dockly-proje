@@ -65,9 +65,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             hintText: 'Liman, koy, şehir ara',
             border: InputBorder.none,
             suffixIcon: state.query.isEmpty
-                ? const Icon(Icons.search)
+                ? const DocklyIcon(DocklyIcons.search)
                 : IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon: const DocklyIcon(DocklyIcons.clear),
                     tooltip: 'Temizle',
                     onPressed: () {
                       _ctrl.clear();
@@ -101,7 +101,7 @@ class _FilterRow extends ConsumerWidget {
     final List<Widget> chips = <Widget>[
       FilterChip(
         label: const Text('Teknem sığar'),
-        avatar: const Icon(Icons.sailing, size: 16),
+        avatar: const DocklyIcon(DocklyIcons.sailing, size: 16),
         selected: state.boatFitOnly,
         // Tekne yoksa önce tanımlama sayfasını aç; varsa filtreyi aç/kapat.
         onSelected: (bool _) {
@@ -118,7 +118,7 @@ class _FilterRow extends ConsumerWidget {
           label: Text(locationTypeLabelTr(type)),
           selected: state.types.contains(type),
           onSelected: (bool _) => controller.toggleType(type),
-          avatar: Icon(Icons.circle, size: 12, color: DocklyMapColors.forType(type)),
+          avatar: DocklyIcon(DocklyIcons.circle, size: 12, color: DocklyMapColors.forType(type)),
           visualDensity: VisualDensity.compact,
         ),
     ];
@@ -147,7 +147,7 @@ class _SearchBody extends StatelessWidget {
   Widget build(BuildContext context) {
     if (state.isQueryTooShort) {
       return const _Hint(
-        icon: Icons.search,
+        icon: DocklyIcons.search,
         message: 'Aramak için en az 2 harf yaz.\nÖrn. "Göcek" ya da "D-Marin".',
       );
     }
@@ -159,7 +159,7 @@ class _SearchBody extends StatelessWidget {
     }
     if (state.hasSearched && !state.isLoading && state.failure == null && results.isEmpty) {
       return const _Hint(
-        icon: Icons.sailing_outlined,
+        icon: DocklyIcons.sailingOutlined,
         message: 'Sonuç bulunamadı.\nFarklı bir isim ya da filtre dene.',
       );
     }
@@ -183,14 +183,14 @@ class _ResultTile extends StatelessWidget {
       if (_place(item) != null) _place(item)!,
     ].join(' · ');
     return ListTile(
-      leading: Icon(Icons.place, size: 30, color: DocklyMapColors.forType(item.type)),
+      leading: DocklyIcon(DocklyIcons.place, size: 30, color: DocklyMapColors.forType(item.type)),
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: item.ratingAvg != null
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Icon(Icons.star, size: 16, color: DocklyColors.warning),
+                const DocklyIcon(DocklyIcons.star, size: 16, color: DocklyColors.warning),
                 const SizedBox(width: 2),
                 Text(item.ratingAvg!.toStringAsFixed(1)),
               ],
@@ -215,7 +215,7 @@ class _ResultTile extends StatelessWidget {
 class _Hint extends StatelessWidget {
   const _Hint({required this.icon, required this.message});
 
-  final IconData icon;
+  final DocklyIconData icon;
   final String message;
 
   @override
@@ -226,7 +226,7 @@ class _Hint extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(icon, size: 48, color: DocklyColors.brandPrimary),
+            DocklyIcon(icon, size: 48, color: DocklyColors.brandPrimary),
             const SizedBox(height: 12),
             Text(
               message,

@@ -109,7 +109,7 @@ class _ViewToggle extends StatelessWidget {
       elevation: 3,
       borderRadius: BorderRadius.circular(24),
       child: IconButton(
-        icon: Icon(isList ? Icons.map_outlined : Icons.view_list),
+        icon: DocklyIcon(isList ? DocklyIcons.mapOutlined : DocklyIcons.viewList),
         tooltip: isList ? 'Harita görünümü' : 'Liste görünümü',
         onPressed: onToggle,
       ),
@@ -142,7 +142,7 @@ class _MapListView extends ConsumerWidget {
             ? '${locationTypeLabelTr(pin.type)} · ★ ${pin.ratingAvg!.toStringAsFixed(1)}'
             : locationTypeLabelTr(pin.type);
         return ListTile(
-          leading: Icon(Icons.place, color: DocklyMapColors.forType(pin.type)),
+          leading: DocklyIcon(DocklyIcons.place, color: DocklyMapColors.forType(pin.type)),
           title: Text(pin.name, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
           trailing: distNm != null ? Text('${_fmtNm(distNm)} dnz mili') : null,

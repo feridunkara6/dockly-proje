@@ -78,7 +78,7 @@ class _DetailContent extends StatelessWidget {
             Text(locationTypeLabelTr(detail.type), style: theme.textTheme.labelLarge),
             if (detail.verifiedAt != null) ...<Widget>[
               const SizedBox(width: 8),
-              const Icon(Icons.verified, size: 16, color: DocklyColors.success),
+              const DocklyIcon(DocklyIcons.verified, size: 16, color: DocklyColors.success),
             ],
           ],
         ),
@@ -91,7 +91,7 @@ class _DetailContent extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: <Widget>[
-            const Icon(Icons.star, size: 18, color: DocklyColors.warning),
+            const DocklyIcon(DocklyIcons.star, size: 18, color: DocklyColors.warning),
             const SizedBox(width: 4),
             Text(
               detail.rating.avg != null
@@ -254,7 +254,7 @@ class _CoverPhoto extends StatelessWidget {
             return const ColoredBox(
               color: Color(0x11000000),
               child: Center(
-                child: Icon(Icons.image_not_supported_outlined, color: DocklyColors.brandDeep),
+                child: DocklyIcon(DocklyIcons.imageOff, color: DocklyColors.brandDeep),
               ),
             );
           },
@@ -291,7 +291,7 @@ class _SeaRouteRow extends ConsumerWidget {
           children: <Widget>[
             Transform.rotate(
               angle: route.bearingDeg * math.pi / 180.0,
-              child: const Icon(Icons.navigation, color: DocklyColors.brandPrimary),
+              child: const DocklyIcon(DocklyIcons.navigation, color: DocklyColors.brandPrimary),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -400,11 +400,11 @@ class _ContactRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: <Widget>[
-          Icon(_iconFor(contact.type), size: 18, color: DocklyColors.brandPrimary),
+          DocklyIcon(_iconFor(contact.type), size: 18, color: DocklyColors.brandPrimary),
           const SizedBox(width: 10),
           Expanded(child: Text(contact.value)),
           if (uri != null)
-            const Icon(Icons.open_in_new, size: 16, color: DocklyColors.brandDeep),
+            const DocklyIcon(DocklyIcons.openInNew, size: 16, color: DocklyColors.brandDeep),
         ],
       ),
     );
@@ -417,23 +417,23 @@ class _ContactRow extends StatelessWidget {
     );
   }
 
-  static IconData _iconFor(String type) {
+  static DocklyIconData _iconFor(String type) {
     switch (type) {
       case 'phone':
-        return Icons.phone;
+        return DocklyIcons.phone;
       case 'whatsapp':
-        return Icons.chat;
+        return DocklyIcons.chat;
       case 'email':
-        return Icons.email;
+        return DocklyIcons.email;
       case 'website':
-        return Icons.language;
+        return DocklyIcons.language;
       case 'vhf':
-        return Icons.radio;
+        return DocklyIcons.radio;
       case 'instagram':
       case 'facebook':
-        return Icons.public;
+        return DocklyIcons.social;
       default:
-        return Icons.info_outline;
+        return DocklyIcons.infoOutline;
     }
   }
 }

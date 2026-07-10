@@ -32,12 +32,12 @@ class _DocklyShellState extends State<DocklyShell> {
           MapScreen(),
           SearchScreen(),
           _PlaceholderTab(
-            icon: Icons.favorite_border,
+            icon: DocklyIcons.favoriteBorder,
             title: 'Favoriler',
             message: 'Beğendiğin limanları burada toplayacaksın. (Giriş gerektirir)',
           ),
           _PlaceholderTab(
-            icon: Icons.event_note_outlined,
+            icon: DocklyIcons.eventNoteOutlined,
             title: 'Taleplerim',
             message: 'Bıraktığın rezervasyon talepleri burada görünecek. (Giriş gerektirir)',
           ),
@@ -49,28 +49,28 @@ class _DocklyShellState extends State<DocklyShell> {
         onDestinationSelected: (int i) => setState(() => _index = i),
         destinations: const <NavigationDestination>[
           NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
+            icon: DocklyIcon(DocklyIcons.exploreOutlined),
+            selectedIcon: DocklyIcon(DocklyIcons.explore),
             label: 'Keşfet',
           ),
           NavigationDestination(
-            icon: Icon(Icons.search),
-            selectedIcon: Icon(Icons.search),
+            icon: DocklyIcon(DocklyIcons.search),
+            selectedIcon: DocklyIcon(DocklyIcons.search),
             label: 'Arama',
           ),
           NavigationDestination(
-            icon: Icon(Icons.favorite_border),
-            selectedIcon: Icon(Icons.favorite),
+            icon: DocklyIcon(DocklyIcons.favoriteBorder),
+            selectedIcon: DocklyIcon(DocklyIcons.favorite),
             label: 'Favoriler',
           ),
           NavigationDestination(
-            icon: Icon(Icons.event_note_outlined),
-            selectedIcon: Icon(Icons.event_note),
+            icon: DocklyIcon(DocklyIcons.eventNoteOutlined),
+            selectedIcon: DocklyIcon(DocklyIcons.eventNote),
             label: 'Taleplerim',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+            icon: DocklyIcon(DocklyIcons.personOutline),
+            selectedIcon: DocklyIcon(DocklyIcons.person),
             label: 'Profil',
           ),
         ],
@@ -83,7 +83,7 @@ class _DocklyShellState extends State<DocklyShell> {
 class _PlaceholderTab extends StatelessWidget {
   const _PlaceholderTab({required this.icon, required this.title, required this.message});
 
-  final IconData icon;
+  final DocklyIconData icon;
   final String title;
   final String message;
 
@@ -97,7 +97,7 @@ class _PlaceholderTab extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(icon, size: 56, color: DocklyColors.brandPrimary),
+              DocklyIcon(icon, size: 56, color: DocklyColors.brandPrimary),
               const SizedBox(height: 16),
               Text(
                 message,
