@@ -41,6 +41,9 @@ void main() {
 
     expect(find.byKey(LocationDetailScreen.contentKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget); // private_marina etiketi
+    // VHF '73' bilgi bölümünde (listede aşağıda) — tembel liste onu görünür
+    // olana dek kaydır (aksi hâlde henüz çizilmemiş olur).
+    await tester.scrollUntilVisible(find.text('73'), 300);
     expect(find.text('73'), findsOneWidget); // marina VHF kanalı
   });
 
