@@ -32,7 +32,9 @@ void main() {
         opts.firstWhere((ReservationOption o) => o.channel == ReservationChannel.whatsapp);
     expect(wa.uri.host, 'wa.me');
     expect(wa.uri.path, contains('90'));
-    expect(Uri.decodeComponent(wa.uri.queryParameters['text'] ?? ''), contains('12 metre teknem'));
+    // Tek-çözme (decodeFull) — sorgu içindeki %20'ler boşluğa döner; ham Türkçe
+    // metinde çift-çözmeye gerek yok.
+    expect(Uri.decodeFull(wa.uri.query), contains('12 metre teknem'));
   });
 
   test('tekne yoksa mesaj "teknem için" der, "metre" içermez', () {
