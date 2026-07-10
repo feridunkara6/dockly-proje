@@ -162,6 +162,8 @@ export interface ContactDto {
   type: string;
   value: string;
   isPrimary: boolean;
+  // İnsan-okur etiket (ör. "Marina Ofisi", "Acil Durum"). Geriye uyumlu: yoksa null.
+  label?: string | null;
 }
 
 /** Gün içi çalışma saati; kapalı günlerde opensAt/closesAt null. */
@@ -223,7 +225,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

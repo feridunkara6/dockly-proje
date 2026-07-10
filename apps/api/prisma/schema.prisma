@@ -95,6 +95,8 @@ enum ContactType {
   vhf
   instagram
   facebook
+  reservation_link
+  emergency
 
   @@map("contact_type")
 }
