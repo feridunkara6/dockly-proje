@@ -1,0 +1,49 @@
+name: web-preview
+
+# Web önizleme: uygulamayı tarayıcıda açılacak şekilde derler ve GitHub Pages'e
+# yayınlar. Harita web'de gösterilmez (Mapbox web'de çalışmaz) — yerine liste.
+# Bu iş kırmızı olsa bile api/mobile/security işlerini etkilemez (ayrı workflow).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# GitHub Pages'e yayın için gereken izinler.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Aynı anda tek yayın.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.27.4
+          cache: true
+      - name: Web iskeleti + derleme
+        working-directory: apps/mobile
+        run: |
+          flutter create --platforms=web --project-name dockly_mobile .
+          flutter pub get
+          flutter build web --release \
+            --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
+            --base-href="/${{ github.event.repository.name }}/"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/mobile/build/web
+      - id: deploy
+        uses: actions/deploy-pages@v4
