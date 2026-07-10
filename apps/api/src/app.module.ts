@@ -36,8 +36,7 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport:
-            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),
@@ -59,7 +58,10 @@ export class AppModule implements NestModule {
     // önizlemesini (farklı köken) engellemez. Modülde tanımlı → üretimde VE
     // e2e testlerinde aynı şekilde uygulanır.
     consumer
-      .apply(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }), RequestContextMiddleware)
+      .apply(
+        helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }),
+        RequestContextMiddleware,
+      )
       .forRoutes('*');
   }
 }
