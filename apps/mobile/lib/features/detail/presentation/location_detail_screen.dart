@@ -131,14 +131,24 @@ class _DetailContent extends StatelessWidget {
           const SizedBox(height: 20),
           const _SectionTitle('Olanaklar'),
           const SizedBox(height: 8),
-          _Chips(labels: detail.amenities.map((AmenityLabeled a) => a.label).toList()),
+          _IconChips(
+            items: <(DocklyIconData, String)>[
+              for (final AmenityLabeled a in detail.amenities)
+                (DocklyIcons.forAmenity(a.code), a.label),
+            ],
+          ),
         ],
 
         if (detail.services.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
           const _SectionTitle('Hizmetler'),
           const SizedBox(height: 8),
-          _Chips(labels: detail.services.map((ServiceLabeled s) => s.label).toList()),
+          _IconChips(
+            items: <(DocklyIconData, String)>[
+              for (final ServiceLabeled s in detail.services)
+                (DocklyIcons.forAmenity(s.code), s.label),
+            ],
+          ),
         ],
 
         OperatingInfo(
@@ -373,9 +383,11 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _Chips extends StatelessWidget {
-  const _Chips({required this.labels});
-  final List<String> labels;
+/// Olanak/hizmet çipleri — her biri tasarım sistemi denizcilik ikonuyla (docs/09,
+/// design §03). İkon marka mavisi; çip kenarlığı temadan gelir.
+class _IconChips extends StatelessWidget {
+  const _IconChips({required this.items});
+  final List<(DocklyIconData, String)> items;
 
   @override
   Widget build(BuildContext context) {
@@ -383,7 +395,11 @@ class _Chips extends StatelessWidget {
       spacing: 8,
       runSpacing: 4,
       children: <Widget>[
-        for (final String label in labels) Chip(label: Text(label)),
+        for (final (DocklyIconData icon, String label) in items)
+          Chip(
+            avatar: DocklyIcon(icon, size: 18, color: DocklyColors.brandPrimary),
+            label: Text(label),
+          ),
       ],
     );
   }

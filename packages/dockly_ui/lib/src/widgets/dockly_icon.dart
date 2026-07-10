@@ -262,4 +262,115 @@ abstract final class DocklyIcons {
     '<line x1="3.95" y1="6.06" x2="8.54" y2="14"/>'
     '<line x1="10.88" y1="21.94" x2="15.46" y2="8"/>',
   );
+
+  // ── Olanak / hizmet ikonları (tasarım sistemi §03 İkonografi — denizcilik seti).
+  // electricity/water/fuel/restaurant/shower/market/laundry/wifi/security/mooring
+  // yolları tasarım HTML'inden birebir alınmıştır.
+  static const DocklyIconData amElectricity = DocklyIconData(
+    '<path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>',
+  );
+  static const DocklyIconData amWater = DocklyIconData(
+    '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  );
+  static const DocklyIconData amFuel = DocklyIconData(
+    '<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M4 21h10M14 10h2a2 2 0 0 1 2 2v5'
+    'a1.5 1.5 0 0 0 3 0V9l-3-3M6 9h6"/>',
+  );
+  static const DocklyIconData amRestaurant = DocklyIconData(
+    '<path d="M5 3v7a2 2 0 0 0 2 2v9M9 3v7M5 6h4M16 3c-1.5 2-2 4-2 6v3h3v9M17 3v18"/>',
+  );
+  static const DocklyIconData amShower = DocklyIconData(
+    '<path d="M5 21V8a4 4 0 0 1 8 0M9 21h8M11 11l1.5 1.5M13 8.5L14.5 10M15 6l1.5 1.5"/>',
+  );
+  static const DocklyIconData amMarket = DocklyIconData(
+    '<path d="M6 7h12l1 4H5l1-4zM5 11v9h14v-9M9 15h6"/>',
+  );
+  static const DocklyIconData amLaundry = DocklyIconData(
+    '<rect x="4" y="3" width="16" height="18" rx="2"/>'
+    '<circle cx="12" cy="13" r="4.5"/>'
+    '<circle cx="8" cy="6.5" r="0.5"/>'
+    '<circle cx="11" cy="6.5" r="0.5"/>',
+  );
+  static const DocklyIconData amWifi = DocklyIconData(
+    '<path d="M3 9.5C5.5 7 8.5 5.5 12 5.5S18.5 7 21 9.5M6 13c1.7-1.6 3.7-2.5 6-2.5s4.3.9 6 2.5'
+    'M9 16.5c.9-.8 1.9-1.2 3-1.2s2.1.4 3 1.2"/>'
+    '<circle cx="12" cy="19.5" r="1" fill="#000000" stroke="none"/>',
+  );
+  static const DocklyIconData amSecurity = DocklyIconData(
+    '<path d="M12 3l8 3.5V11c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6.5L12 3z"/>'
+    '<path d="M9 12l2 2 4-4"/>',
+  );
+  static const DocklyIconData amClock = DocklyIconData(
+    '<circle cx="12" cy="12" r="9"/>'
+    '<path d="M12 7v5l3.5 2"/>',
+  );
+  static const DocklyIconData amMooring = DocklyIconData(
+    '<path d="M12 3v14M12 17c-3.5 0-5-2.5-7-2.5M12 17c3.5 0 5-2.5 7-2.5'
+    'M12 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>',
+  );
+  static const DocklyIconData amTool = DocklyIconData(
+    '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94'
+    'l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+  );
+  static const DocklyIconData amCrane = DocklyIconData(
+    '<path d="M3 5h18M6 5v15M18 5v15M12 5v7M12 12a1 1 0 1 0 2 0"/>',
+  );
+  static const DocklyIconData amPumpOut = DocklyIconData(
+    '<path d="M12 3v6M9 7l3 3 3-3"/>'
+    '<path d="M5 13h14v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/>',
+  );
+  static const DocklyIconData amWc = DocklyIconData(
+    '<path d="M6 3h2v9H6z"/>'
+    '<path d="M8 6h9a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4H8"/>'
+    '<path d="M10 16l-1 5M14 16l1 5"/>',
+  );
+
+  /// Olanak/hizmet kodunu tasarım ikonuna eşler. Bilinmeyen kod → onay ikonu
+  /// ("mevcut" anlamı olanaklara uygun).
+  static DocklyIconData forAmenity(String code) {
+    switch (code) {
+      case 'electricity':
+      case 'electric':
+        return amElectricity;
+      case 'water':
+      case 'drinking_water':
+        return amWater;
+      case 'fuel':
+        return amFuel;
+      case 'restaurant':
+        return amRestaurant;
+      case 'shower':
+        return amShower;
+      case 'market':
+      case 'mini_market':
+      case 'chandlery':
+        return amMarket;
+      case 'laundry':
+        return amLaundry;
+      case 'wifi':
+        return amWifi;
+      case 'security':
+        return amSecurity;
+      case 'open_24h':
+      case 'is24h':
+        return amClock;
+      case 'mooring_assist':
+      case 'mooring':
+      case 'guest_mooring':
+        return amMooring;
+      case 'technical_service':
+      case 'repair':
+        return amTool;
+      case 'crane':
+      case 'travel_lift':
+        return amCrane;
+      case 'pump_out':
+        return amPumpOut;
+      case 'wc':
+      case 'toilet':
+        return amWc;
+      default:
+        return checkCircle;
+    }
+  }
 }
