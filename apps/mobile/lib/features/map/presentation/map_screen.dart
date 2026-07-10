@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../detail/presentation/location_detail_screen.dart';
+import '../../location/presentation/locate_button.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
@@ -45,18 +46,27 @@ class MapScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          // Harita ↔ liste geçiş düğmesi — yalnız pin (yakın zoom) verisi varken.
-          if (state.pins.isNotEmpty)
-            Positioned(
-              top: 12,
-              right: 12,
-              child: SafeArea(
-                child: _ViewToggle(
-                  isList: isList,
-                  onToggle: () => ref.read(mapViewIsListProvider.notifier).state = !isList,
-                ),
+          // Üst-sağ kontroller: "Konumum" (her zaman) + harita↔liste geçişi
+          // (yalnız pin/yakın zoom verisi varken).
+          Positioned(
+            top: 12,
+            right: 12,
+            child: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  const LocateButton(),
+                  if (state.pins.isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 8),
+                    _ViewToggle(
+                      isList: isList,
+                      onToggle: () =>
+                          ref.read(mapViewIsListProvider.notifier).state = !isList,
+                    ),
+                  ],
+                ],
               ),
             ),
+          ),
           if (state.isLoading && state.hasData)
             const Positioned(
               top: 0,
