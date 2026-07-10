@@ -10,6 +10,8 @@ import '../../../core/external_links.dart';
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/presentation/boat_fit.dart';
+import '../../favorites/domain/favorite_location.dart';
+import '../../favorites/presentation/favorite_button.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
@@ -29,8 +31,14 @@ class LocationDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<LocationDetail> async = ref.watch(locationDetailProvider(idOrSlug));
+    final LocationDetail? loaded = async.valueOrNull;
     return Scaffold(
-      appBar: AppBar(title: Text(async.valueOrNull?.name ?? 'Liman')),
+      appBar: AppBar(
+        title: Text(loaded?.name ?? 'Liman'),
+        actions: <Widget>[
+          if (loaded != null) FavoriteButton(favorite: _favoriteFrom(loaded)),
+        ],
+      ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (Object err, _) => _DetailError(
@@ -41,6 +49,14 @@ class LocationDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Detaydan favori anlık görüntüsü üretir (ad/tip/şehir) — Favoriler sekmesinde
+/// gösterim için gereken az veri.
+FavoriteLocation _favoriteFrom(LocationDetail d) {
+  final AdminAreaRef? area = d.geo.adminArea;
+  final String? city = area?.name ?? d.geo.waterBody?.name;
+  return FavoriteLocation(id: d.id, name: d.name, type: d.type, city: city);
 }
 
 class _DetailContent extends StatelessWidget {

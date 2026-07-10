@@ -1,6 +1,7 @@
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 
+import '../../favorites/presentation/favorites_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../search/presentation/search_screen.dart';
@@ -31,11 +32,7 @@ class _DocklyShellState extends State<DocklyShell> {
         children: const <Widget>[
           MapScreen(),
           SearchScreen(),
-          _PlaceholderTab(
-            icon: DocklyIcons.favoriteBorder,
-            title: 'Favoriler',
-            message: 'Beğendiğin limanları burada toplayacaksın. (Giriş gerektirir)',
-          ),
+          FavoritesScreen(),
           _PlaceholderTab(
             icon: DocklyIcons.eventNoteOutlined,
             title: 'Taleplerim',
