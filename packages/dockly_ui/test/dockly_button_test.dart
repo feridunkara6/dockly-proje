@@ -47,9 +47,13 @@ void main() {
 
   testWidgets('icon verilince ikon + etiket render eder', (tester) async {
     await tester.pumpWidget(
-      _host(DocklyButton(label: 'Google', icon: Icons.login, onPressed: () {})),
+      _host(DocklyButton(label: 'Google', icon: DocklyIcons.google, onPressed: () {})),
     );
-    expect(find.byIcon(Icons.login), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+          (Widget w) => w is DocklyIcon && w.data == DocklyIcons.google),
+      findsOneWidget,
+    );
     expect(find.text('Google'), findsOneWidget);
   });
 }
