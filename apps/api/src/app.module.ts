@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import helmet from 'helmet';
 import { LoggerModule } from 'nestjs-pino';
 import { AppConfigModule } from './config/config.module';
 import { EnvService } from './config/env.service';
@@ -35,7 +36,8 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport:
+            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),
@@ -51,6 +53,13 @@ const REDACT_PATHS = [
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(RequestContextMiddleware).forRoutes('*');
+    // Güvenlik başlıkları (helmet): HSTS, X-Content-Type-Options=nosniff,
+    // X-Frame-Options, CSP vb. (docs/12 §6.5 API sertleştirme, launch-blocker).
+    // JSON API çapraz-köken tüketildiği için CORP 'cross-origin' — misafir web
+    // önizlemesini (farklı köken) engellemez. Modülde tanımlı → üretimde VE
+    // e2e testlerinde aynı şekilde uygulanır.
+    consumer
+      .apply(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }), RequestContextMiddleware)
+      .forRoutes('*');
   }
 }

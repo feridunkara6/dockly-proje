@@ -54,6 +54,12 @@ describe('API çekirdeği (e2e-lite)', () => {
     dbHealthy = true;
   });
 
+  it('güvenlik başlıkları uygulanır (helmet: nosniff + HSTS)', async () => {
+    const res = await request(app.getHttpServer()).get('/healthz').expect(200);
+    expect(res.headers['x-content-type-options']).toBe('nosniff');
+    expect(res.headers['strict-transport-security']).toBeDefined();
+  });
+
   it('GET /readyz → 200 ve kontrol raporu', async () => {
     const res = await request(app.getHttpServer()).get('/readyz').expect(200);
     expect(res.body.checks).toEqual({ database: 'ok', redis: 'ok' });
