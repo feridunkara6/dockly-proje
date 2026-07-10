@@ -40,6 +40,7 @@ jobs:
           flutter pub get
           flutter build web --release \
             --no-tree-shake-icons \
+            --pwa-strategy=none \
             --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
             --base-href="/${{ github.event.repository.name }}/"
       - uses: actions/configure-pages@v5
