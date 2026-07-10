@@ -447,14 +447,29 @@ class _ContactRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final String? label = contact.label;
     final Uri? uri = contactUri(contact.type, contact.value);
+    final Widget valueWidget = label == null
+        ? Text(contact.value)
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                label,
+                style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+              ),
+              Text(contact.value),
+            ],
+          );
     final Widget inner = Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: <Widget>[
           DocklyIcon(_iconFor(contact.type), size: 18, color: DocklyColors.brandPrimary),
           const SizedBox(width: 10),
-          Expanded(child: Text(contact.value)),
+          Expanded(child: valueWidget),
           if (uri != null)
             const DocklyIcon(DocklyIcons.openInNew, size: 16, color: DocklyColors.brandDeep),
         ],
@@ -472,6 +487,7 @@ class _ContactRow extends StatelessWidget {
   static DocklyIconData _iconFor(String type) {
     switch (type) {
       case 'phone':
+      case 'emergency':
         return DocklyIcons.phone;
       case 'whatsapp':
         return DocklyIcons.chat;
@@ -479,6 +495,8 @@ class _ContactRow extends StatelessWidget {
         return DocklyIcons.email;
       case 'website':
         return DocklyIcons.language;
+      case 'reservation_link':
+        return DocklyIcons.openInNew;
       case 'vhf':
         return DocklyIcons.radio;
       case 'instagram':

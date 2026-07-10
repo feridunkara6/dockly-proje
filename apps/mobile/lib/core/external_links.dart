@@ -9,6 +9,7 @@ Uri? contactUri(String type, String value) {
   if (v.isEmpty) return null;
   switch (type) {
     case 'phone':
+    case 'emergency':
       final String d = _telDigits(v);
       return d.isEmpty ? null : Uri.parse('tel:$d');
     case 'whatsapp':
@@ -17,6 +18,7 @@ Uri? contactUri(String type, String value) {
     case 'email':
       return Uri.parse('mailto:$v');
     case 'website':
+    case 'reservation_link':
     case 'instagram':
     case 'facebook':
       return _webUri(v);

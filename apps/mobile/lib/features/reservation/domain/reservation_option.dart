@@ -65,6 +65,16 @@ List<ReservationOption> resolveReservationOptions(
     }
   }
 
+  // Online rezervasyon linki — genel web sitesinden ÖNCE gelir (strateji öncelik 4).
+  final String? resv = _firstValue(contacts, 'reservation_link');
+  if (resv != null) {
+    final Uri? u = _websiteUri(resv);
+    if (u != null) {
+      out.add(ReservationOption(
+          channel: ReservationChannel.website, uri: u, label: 'Online rezervasyon'));
+    }
+  }
+
   final String? web = _firstValue(contacts, 'website');
   if (web != null) {
     final Uri? u = _websiteUri(web);

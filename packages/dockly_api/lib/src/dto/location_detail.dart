@@ -210,16 +210,26 @@ class ServiceLabeled {
 }
 
 class Contact {
-  const Contact({required this.type, required this.value, required this.isPrimary});
+  const Contact({
+    required this.type,
+    required this.value,
+    required this.isPrimary,
+    this.label,
+  });
 
   final String type;
   final String value;
   final bool isPrimary;
 
+  /// İnsan-okur etiket (ör. "Marina Ofisi", "Acil Durum", "Online Rezervasyon").
+  /// Geriye uyumlu: yoksa null (backend gönderene dek boş kalır).
+  final String? label;
+
   factory Contact.fromJson(Map<String, dynamic> json) => Contact(
         type: json['type'] as String,
         value: json['value'] as String,
         isPrimary: json['isPrimary'] as bool? ?? false,
+        label: json['label'] as String?,
       );
 }
 

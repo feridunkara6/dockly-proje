@@ -63,4 +63,19 @@ void main() {
     ]);
     expect(opts.first.uri.toString(), contains('902520000000'));
   });
+
+  test('online rezervasyon linki, genel web sitesinden ÖNCE gelir', () {
+    final List<ReservationOption> opts = resolveReservationOptions(<Contact>[
+      _c('website', 'marina.com'),
+      _c('reservation_link', 'book.marina.com'),
+    ]);
+    expect(opts.map((ReservationOption o) => o.label).toList(),
+        <String>['Online rezervasyon', 'Web sitesinden']);
+  });
+
+  test('acil durum (emergency) numarası rezervasyon başlatmada KULLANILMAZ', () {
+    final List<ReservationOption> opts =
+        resolveReservationOptions(<Contact>[_c('emergency', '112')]);
+    expect(opts, isEmpty);
+  });
 }

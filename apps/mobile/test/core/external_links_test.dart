@@ -35,6 +35,15 @@ void main() {
       expect(contactUri('vhf', '73'), isNull);
     });
 
+    test('reservation_link → web gibi açılır (https eklenir)', () {
+      expect(contactUri('reservation_link', 'book.dmarin.com').toString(),
+          'https://book.dmarin.com');
+    });
+
+    test('emergency → tel: şeması (telefon gibi)', () {
+      expect(contactUri('emergency', '112').toString(), 'tel:112');
+    });
+
     test('boş değer → null', () {
       expect(contactUri('phone', '   '), isNull);
     });
