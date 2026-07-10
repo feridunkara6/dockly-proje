@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
+import '../../reservations/presentation/reservations_screen.dart';
 import '../../search/presentation/search_screen.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
 /// Keşfet (harita) · Arama · Favoriler · Taleplerim · Profil.
 ///
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
-/// Keşfet, Arama ve Profil bağlı; Favoriler/Taleplerim şimdilik bilgilendirici
-/// yer tutucudur (giriş/hesap sonraki fazda).
-/// Not: giriş/sign-in Firebase (2.4c) ile geldiğinde hesap-gerektiren sekmeler
-/// kayıt duvarına yönlendirecek; şimdilik misafir modda yer tutucu gösterilir.
+/// Tüm sekmeler misafir modda çalışır (favoriler/talepler cihazda saklanır);
+/// hesap/giriş geldiğinde bunlar buluta senkronlanacak.
 class DocklyShell extends StatefulWidget {
   const DocklyShell({super.key});
 
@@ -33,11 +32,7 @@ class _DocklyShellState extends State<DocklyShell> {
           MapScreen(),
           SearchScreen(),
           FavoritesScreen(),
-          _PlaceholderTab(
-            icon: DocklyIcons.eventNoteOutlined,
-            title: 'Taleplerim',
-            message: 'Bıraktığın rezervasyon talepleri burada görünecek. (Giriş gerektirir)',
-          ),
+          ReservationsScreen(),
           ProfileScreen(),
         ],
       ),
@@ -71,39 +66,6 @@ class _DocklyShellState extends State<DocklyShell> {
             label: 'Profil',
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Henüz yapılmamış sekmeler için bilgilendirici yer tutucu ekran.
-class _PlaceholderTab extends StatelessWidget {
-  const _PlaceholderTab({required this.icon, required this.title, required this.message});
-
-  final DocklyIconData icon;
-  final String title;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              DocklyIcon(icon, size: 56, color: DocklyColors.brandPrimary),
-              const SizedBox(height: 16),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
