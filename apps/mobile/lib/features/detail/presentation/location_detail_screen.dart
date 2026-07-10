@@ -13,7 +13,7 @@ import '../../boat/presentation/boat_fit.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
-import '../../reservations/presentation/reservation_request_sheet.dart';
+import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
@@ -141,13 +141,12 @@ class _DetailContent extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: DocklyButton(
-            label: 'Rezervasyon Talebi Gönder',
+            label: 'Rezervasyon Talebi',
             icon: DocklyIcons.eventNote,
             onPressed: () => showReservationSheet(
               context,
-              locationId: detail.id,
               locationName: detail.name,
-              locationType: detail.type,
+              contacts: detail.contacts,
             ),
           ),
         ),

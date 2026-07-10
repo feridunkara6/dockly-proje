@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
-import '../../reservations/presentation/reservations_screen.dart';
+import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
@@ -32,7 +32,7 @@ class _DocklyShellState extends State<DocklyShell> {
           MapScreen(),
           SearchScreen(),
           FavoritesScreen(),
-          ReservationsScreen(),
+          ReservationsPlaceholderScreen(),
           ProfileScreen(),
         ],
       ),
