@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/location_type_labels.dart';
+import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/search_controller.dart';
+import '../application/search_view_options.dart';
 import '../domain/search_state.dart';
 
 /// Arama ekranı (S-07, docs/01-prd §6.13). Misafir: liman/koy/şehir adıyla arar,
@@ -42,7 +44,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final MyBoat? boat = ref.watch(myBoatProvider);
 
     // "Teknem sığar" açık ve tekne tanımlıysa: kesinlikle sığmayanları gizle.
-    final List<LocationSummary> visible = (state.boatFitOnly && boat != null)
+    final List<LocationSummary> base = (state.boatFitOnly && boat != null)
         ? state.results
             .where((LocationSummary s) =>
                 computeBoatFit(
@@ -53,6 +55,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 BoatFit.tooBig)
             .toList(growable: false)
         : state.results;
+
+    // İstemci-tarafı görünüm: "ücretsiz" süzgeci + sıralama (puan/yakınlık).
+    final List<LocationSummary> visible = applySearchView(
+      base,
+      freeOnly: ref.watch(searchFreeOnlyProvider),
+      sort: ref.watch(searchSortProvider),
+      origin: ref.watch(originProvider),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -97,6 +107,9 @@ class _FilterRow extends ConsumerWidget {
     final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
     final MyBoat? boat = ref.watch(myBoatProvider);
     final List<String> types = DocklyMapColors.knownTypes.toList();
+    final SearchSort sort = ref.watch(searchSortProvider);
+    final bool freeOnly = ref.watch(searchFreeOnlyProvider);
+    final GeoPoint? origin = ref.watch(originProvider);
 
     final List<Widget> chips = <Widget>[
       FilterChip(
@@ -113,6 +126,30 @@ class _FilterRow extends ConsumerWidget {
         },
         visualDensity: VisualDensity.compact,
       ),
+      // Ücretsiz süzgeci + sıralama (istemci tarafı).
+      FilterChip(
+        label: const Text('Ücretsiz'),
+        selected: freeOnly,
+        onSelected: (bool _) =>
+            ref.read(searchFreeOnlyProvider.notifier).state = !freeOnly,
+        visualDensity: VisualDensity.compact,
+      ),
+      FilterChip(
+        label: const Text('Puana göre'),
+        selected: sort == SearchSort.rating,
+        onSelected: (bool _) => ref.read(searchSortProvider.notifier).state =
+            sort == SearchSort.rating ? SearchSort.relevance : SearchSort.rating,
+        visualDensity: VisualDensity.compact,
+      ),
+      // "Yakınıma göre" yalnız konum biliniyorsa anlamlı (Konumum alındıysa).
+      if (origin != null)
+        FilterChip(
+          label: const Text('Yakınıma göre'),
+          selected: sort == SearchSort.distance,
+          onSelected: (bool _) => ref.read(searchSortProvider.notifier).state =
+              sort == SearchSort.distance ? SearchSort.relevance : SearchSort.distance,
+          visualDensity: VisualDensity.compact,
+        ),
       for (final String type in types)
         FilterChip(
           label: Text(locationTypeLabelTr(type)),
