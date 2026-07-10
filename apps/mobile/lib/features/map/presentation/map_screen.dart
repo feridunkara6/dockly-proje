@@ -152,7 +152,7 @@ class _MapListView extends ConsumerWidget {
             ? '${locationTypeLabelTr(pin.type)} · ★ ${pin.ratingAvg!.toStringAsFixed(1)}'
             : locationTypeLabelTr(pin.type);
         return ListTile(
-          leading: DocklyIcon(DocklyIcons.place, color: DocklyMapColors.forType(pin.type)),
+          leading: DocklyTypeAvatar(type: pin.type),
           title: Text(pin.name, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
           trailing: distNm != null ? Text('${_fmtNm(distNm)} dnz mili') : null,

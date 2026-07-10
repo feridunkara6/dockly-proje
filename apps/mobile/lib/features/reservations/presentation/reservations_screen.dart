@@ -53,6 +53,8 @@ class _ReservationCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                DocklyTypeAvatar(type: request.locationType, size: 40),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(request.locationName, style: theme.textTheme.titleMedium),
                 ),

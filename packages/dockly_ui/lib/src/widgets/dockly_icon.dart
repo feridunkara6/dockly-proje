@@ -373,4 +373,25 @@ abstract final class DocklyIcons {
         return checkCircle;
     }
   }
+
+  /// Lokasyon tipini (marina, koy, yakıt iskelesi…) temsil eden denizcilik
+  /// ikonuna eşler — kapak yer tutucuları ve liste görselleri için.
+  static DocklyIconData forLocationType(String type) {
+    switch (type) {
+      case 'private_marina':
+      case 'municipal_marina':
+      case 'boat_club':
+        return sailing;
+      case 'fuel_pier':
+        return amFuel;
+      case 'restaurant_pier':
+        return amRestaurant;
+      case 'guest_mooring':
+      case 'mooring_point':
+      case 'anchorage':
+        return amMooring;
+      default:
+        return place;
+    }
+  }
 }

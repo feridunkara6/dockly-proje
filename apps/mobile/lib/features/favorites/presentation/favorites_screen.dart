@@ -41,7 +41,7 @@ class _FavoriteTile extends ConsumerWidget {
       if (favorite.city != null) favorite.city!,
     ].join(' · ');
     return ListTile(
-      leading: DocklyIcon(DocklyIcons.place, size: 30, color: DocklyMapColors.forType(favorite.type)),
+      leading: DocklyTypeAvatar(type: favorite.type),
       title: Text(favorite.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: IconButton(

@@ -220,7 +220,7 @@ class _ResultTile extends StatelessWidget {
       if (_place(item) != null) _place(item)!,
     ].join(' · ');
     return ListTile(
-      leading: DocklyIcon(DocklyIcons.place, size: 30, color: DocklyMapColors.forType(item.type)),
+      leading: DocklyTypeAvatar(type: item.type),
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: item.ratingAvg != null

@@ -59,7 +59,7 @@ class _AltTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: DocklyIcon(DocklyIcons.place, color: DocklyMapColors.forType(item.type)),
+      leading: DocklyTypeAvatar(type: item.type),
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(locationTypeLabelTr(item.type)),
       trailing: Text('${_fmtDistance(item.distanceNm)} dnz mili'),

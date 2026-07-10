@@ -75,9 +75,14 @@ class _DetailContent extends StatelessWidget {
       key: LocationDetailScreen.contentKey,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: <Widget>[
-        // Kapak fotoğrafı (varsa) — misafirin ilk gördüğü şey (P0).
+        // Kapak: fotoğraf varsa onu, yoksa tasarımlı tip-renkli yer tutucu
+        // göster (misafirin ilk gördüğü şey — sayfa hiç boş görünmesin, P0).
         if (detail.media.cover != null) ...<Widget>[
           _CoverPhoto(url: detail.media.cover!.url),
+          const SizedBox(height: 14),
+        ] else ...<Widget>[
+          // Etiket YOK: tip zaten hemen altta gösteriliyor (tekrar olmasın).
+          DocklyCoverPlaceholder(type: detail.type),
           const SizedBox(height: 14),
         ],
         // Başlık bloğu
