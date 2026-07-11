@@ -17,6 +17,7 @@ import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
+import 'maritime_info_panel.dart';
 import 'operating_info.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
@@ -68,8 +69,13 @@ class _DetailContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final List<_Fact> facts = _dimensionFacts(detail.dimensions)
-      ..addAll(_typeFacts(detail.typeDetails));
+    // Denizci bilgileri: boyut + türe özel veriden yalnız DOLU alanlar stat'a
+    // çevrilir (uydurma veri yok). Tekne boyu/su çekimi zaten BoatFitRow'da
+    // gösterildiği için burada tekrar edilmez.
+    final List<MaritimeStat> stats = <MaritimeStat>[
+      ..._dimensionStats(detail.dimensions),
+      ..._typeStats(detail.typeDetails),
+    ];
 
     return ListView(
       key: LocationDetailScreen.contentKey,
@@ -156,12 +162,7 @@ class _DetailContent extends StatelessWidget {
           Text(detail.description!, style: theme.textTheme.bodyLarge),
         ],
 
-        if (facts.isNotEmpty) ...<Widget>[
-          const SizedBox(height: 20),
-          const _SectionTitle('Bilgiler'),
-          const SizedBox(height: 6),
-          for (final _Fact f in facts) _FactRow(label: f.label, value: f.value),
-        ],
+        MaritimeInfoPanel(stats: stats),
 
         if (detail.amenities.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
@@ -217,47 +218,96 @@ class _DetailContent extends StatelessWidget {
     return parts.isEmpty ? null : parts.join(' · ');
   }
 
-  static List<_Fact> _dimensionFacts(Dimensions d) {
-    final List<_Fact> facts = <_Fact>[];
-    if (d.maxBoatLengthM != null) facts.add(_Fact('Maks. tekne boyu', '${_num(d.maxBoatLengthM!)} m'));
-    if (d.maxDraftM != null) facts.add(_Fact('Maks. su çekimi', '${_num(d.maxDraftM!)} m'));
-    if (d.depthMinM != null || d.depthMaxM != null) {
-      facts.add(_Fact('Derinlik', _range(d.depthMinM, d.depthMaxM)));
-    }
-    if (d.capacity != null) facts.add(_Fact('Kapasite', '${d.capacity} tekne'));
-    return facts;
+  /// Boyut verisi → stat kartları. Tekne boyu & su çekimi bilerek DIŞARIDA:
+  /// onları BoatFitRow zaten üstte gösteriyor (tekrar olmasın).
+  static List<MaritimeStat> _dimensionStats(Dimensions d) {
+    return <MaritimeStat>[
+      if (d.depthMinM != null || d.depthMaxM != null)
+        MaritimeStat(
+          icon: DocklyIcons.straighten,
+          value: _range(d.depthMinM, d.depthMaxM),
+          label: 'Derinlik',
+        ),
+      if (d.capacity != null)
+        MaritimeStat(icon: DocklyIcons.amMooring, value: '${d.capacity}', label: 'Kapasite'),
+    ];
   }
 
-  static List<_Fact> _typeFacts(TypeDetails? td) {
-    if (td == null) return <_Fact>[];
+  /// Türe özel detay → stat kartları (yalnız dolu alanlar; switch EXPRESSION ile
+  /// enum'lar üzerinde tam kapsama).
+  static List<MaritimeStat> _typeStats(TypeDetails? td) {
+    if (td == null) return const <MaritimeStat>[];
     return switch (td) {
-      MarinaTypeDetails m => <_Fact>[
-          if (m.berthCount != null) _Fact('Bağlama kapasitesi', '${m.berthCount}'),
-          if (m.vhfChannel != null) _Fact('VHF kanalı', m.vhfChannel!),
-          if (m.hasBlueFlag == true) const _Fact('Mavi Bayrak', 'Var'),
+      MarinaTypeDetails m => <MaritimeStat>[
+          if (m.berthCount != null)
+            MaritimeStat(icon: DocklyIcons.amMooring, value: '${m.berthCount}', label: 'Bağlama'),
+          if (m.vhfChannel != null)
+            MaritimeStat(icon: DocklyIcons.radio, value: m.vhfChannel!, label: 'VHF kanalı'),
+          if (m.hasBlueFlag == true)
+            const MaritimeStat(icon: DocklyIcons.verified, value: 'Var', label: 'Mavi Bayrak'),
           if (m.travelLiftCapacityTons != null)
-            _Fact('Travel-lift', '${_num(m.travelLiftCapacityTons!)} ton'),
-          if (m.winterStorage == true) const _Fact('Kışlama', 'Var'),
+            MaritimeStat(
+              icon: DocklyIcons.amCrane,
+              value: '${_num(m.travelLiftCapacityTons!)} ton',
+              label: 'Travel-lift',
+            ),
+          if (m.winterStorage == true)
+            const MaritimeStat(icon: DocklyIcons.amTool, value: 'Var', label: 'Kışlama'),
         ],
-      FuelDockTypeDetails f => <_Fact>[
-          if (f.hasDiesel == true) const _Fact('Dizel', 'Var'),
-          if (f.hasGasoline == true) const _Fact('Benzin', 'Var'),
-          if (f.hasAdblue == true) const _Fact('AdBlue', 'Var'),
-          if (f.minDepthM != null) _Fact('Yanaşma derinliği', '${_num(f.minDepthM!)} m'),
-          if (f.paymentNote != null) _Fact('Ödeme', f.paymentNote!),
+      FuelDockTypeDetails f => <MaritimeStat>[
+          if (f.hasDiesel == true)
+            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'Dizel'),
+          if (f.hasGasoline == true)
+            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'Benzin'),
+          if (f.hasAdblue == true)
+            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'AdBlue'),
+          if (f.minDepthM != null)
+            MaritimeStat(
+              icon: DocklyIcons.straighten,
+              value: '${_num(f.minDepthM!)} m',
+              label: 'Yanaşma derinliği',
+            ),
+          if (f.paymentNote != null)
+            MaritimeStat(icon: DocklyIcons.infoOutline, value: f.paymentNote!, label: 'Ödeme'),
         ],
-      RestaurantDockTypeDetails r => <_Fact>[
-          if (r.cuisine != null) _Fact('Mutfak', r.cuisine!),
-          if (r.berthCountFree != null) _Fact('Ücretsiz bağlama', '${r.berthCountFree} tekne'),
-          if (r.minSpendPolicy != null) _Fact('Politika', r.minSpendPolicy!),
-          if (r.reservationRecommended == true) const _Fact('Rezervasyon', 'Önerilir'),
+      RestaurantDockTypeDetails r => <MaritimeStat>[
+          if (r.cuisine != null)
+            MaritimeStat(icon: DocklyIcons.amRestaurant, value: r.cuisine!, label: 'Mutfak'),
+          if (r.berthCountFree != null)
+            MaritimeStat(
+              icon: DocklyIcons.amMooring,
+              value: '${r.berthCountFree}',
+              label: 'Ücretsiz bağlama',
+            ),
+          if (r.minSpendPolicy != null)
+            MaritimeStat(icon: DocklyIcons.infoOutline, value: r.minSpendPolicy!, label: 'Politika'),
+          if (r.reservationRecommended == true)
+            const MaritimeStat(
+              icon: DocklyIcons.eventNote,
+              value: 'Önerilir',
+              label: 'Rezervasyon',
+            ),
         ],
-      AnchorageTypeDetails a => <_Fact>[
-          if (a.holdingType != null) _Fact('Dip tutunma', holdingTypeLabelTr(a.holdingType!)),
-          if (a.swellExposure != null) _Fact('Dalga maruziyeti', a.swellExposure!),
-          _Fact('Ücret', a.isFree ? 'Ücretsiz' : 'Ücretli'),
+      AnchorageTypeDetails a => <MaritimeStat>[
+          if (a.holdingType != null)
+            MaritimeStat(
+              icon: DocklyIcons.amMooring,
+              value: holdingTypeLabelTr(a.holdingType!),
+              label: 'Dip tutunma',
+            ),
+          if (a.swellExposure != null)
+            MaritimeStat(
+              icon: DocklyIcons.sailing,
+              value: a.swellExposure!,
+              label: 'Dalga maruziyeti',
+            ),
+          MaritimeStat(
+            icon: DocklyIcons.infoOutline,
+            value: a.isFree ? 'Ücretsiz' : 'Ücretli',
+            label: 'Ücret',
+          ),
         ],
-      UnknownTypeDetails() => <_Fact>[],
+      UnknownTypeDetails() => const <MaritimeStat>[],
     };
   }
 
@@ -376,37 +426,6 @@ String _fmtEta(double hours) {
     m = 0;
   }
   return m == 0 ? '$h sa' : '$h sa $m dk';
-}
-
-class _Fact {
-  const _Fact(this.label, this.value);
-  final String label;
-  final String value;
-}
-
-class _FactRow extends StatelessWidget {
-  const _FactRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 150,
-            child: Text(label, style: const TextStyle(color: DocklyColors.brandDeep)),
-          ),
-          const SizedBox(width: 12),
-          Expanded(child: Text(value)),
-        ],
-      ),
-    );
-  }
 }
 
 class _SectionTitle extends StatelessWidget {
