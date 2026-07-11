@@ -20,7 +20,8 @@ ProviderContainer _containerWith(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapDebounceProvider.overrideWithValue(debounce),
-      if (cache != null) mapCacheProvider.overrideWithValue(cache),
+      // Önbellek HER ZAMAN sahte (testler arası sızıntı olmasın — determinizm).
+      mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
     ],
   );
   addTearDown(container.dispose);

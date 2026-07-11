@@ -25,7 +25,10 @@ Widget _app(FakeMapGateway gateway, {FakeMapCache? cache}) {
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
-      if (cache != null) mapCacheProvider.overrideWithValue(cache),
+      // Önbellek HER ZAMAN sahte: gerçek shared_preferences testler arasında
+      // sızıntı yapar (önceki testin kaydettiği veri sonrakinde "çevrimdışı
+      // görünüm" tetikler). Varsayılan: boş sahte önbellek.
+      mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
     ],
     child: const MaterialApp(home: MapScreen()),
   );
