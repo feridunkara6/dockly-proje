@@ -104,7 +104,7 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'app.dockly.mobile',
-          tileDisplay: TileDisplay.instantaneous(),
+          tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 19,
         ),
         MarkerLayer(
