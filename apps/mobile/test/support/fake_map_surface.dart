@@ -34,7 +34,10 @@ class _FakeMapSurfaceState extends State<FakeMapSurface> {
 
   @override
   Widget build(BuildContext context) {
+    // Üstte harita çipleri/kontrolleri var (MapScreen bindirmeleri); sahte
+    // butonlar onların ALTINDA kalsın ki testte dokunuşlar engellenmesin.
     return ListView(
+      padding: const EdgeInsets.only(top: 120),
       children: <Widget>[
         for (final LocationPin pin in widget.data.pins)
           TextButton(

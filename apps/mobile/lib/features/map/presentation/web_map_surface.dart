@@ -155,10 +155,33 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
           ],
         ),
         // Yasal atıf: OSM karoları + OpenSeaMap katmanı (ODbL/CC — zorunlu).
-        const SimpleAttributionWidget(
-          source: Text('© OpenStreetMap katkıcıları · OpenSeaMap'),
-        ),
+        const _MapAttribution(),
       ],
+    );
+  }
+}
+
+/// Sağ-alt köşede zorunlu kaynak atfı (ODbL/CC): yarı saydam şerit üstünde
+/// küçük metin. Harici bileşen yerine yerli — davranışı tamamen bizde.
+class _MapAttribution extends StatelessWidget {
+  const _MapAttribution();
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: const Color(0xB3FFFFFF),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: const Text(
+          '© OpenStreetMap katkıcıları · OpenSeaMap',
+          style: TextStyle(fontSize: 10, color: Color(0xFF0A2540)),
+        ),
+      ),
     );
   }
 }

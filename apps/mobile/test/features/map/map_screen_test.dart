@@ -93,7 +93,9 @@ void main() {
   testWidgets('ilk yüklemede dost mesaj gösterilir (sunucu uyanıyor)', (WidgetTester tester) async {
     final FakeMapGateway gateway = FakeMapGateway()..pending = Completer<MapResult>();
     await tester.pumpWidget(_app(gateway));
-    await tester.pump(); // debounce zamanlayıcısı → yükleme başlar
+    // Süreli pump: sahte-saat ilerlesin ki debounce zamanlayıcısı ateşlensin
+    // (bare pump() zamanlayıcıları ÇALIŞTIRMAZ — saat ilerlemez).
+    await tester.pump(const Duration(milliseconds: 20));
     await tester.pump(); // durum değişikliği ekrana yansır
     expect(find.textContaining('Limanlar yükleniyor'), findsOneWidget);
     gateway.pending!.complete(pinResult); // testi temiz bitir
