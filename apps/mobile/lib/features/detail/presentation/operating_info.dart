@@ -1,5 +1,4 @@
 import 'package:dockly_api/dockly_api.dart';
-import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 
 /// Detayda çalışma saatleri + sezon bölümü (docs/23 §11.3). Veri yoksa gizlenir.
@@ -96,7 +95,10 @@ class _Row extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             width: 120,
-            child: Text(label, style: const TextStyle(color: DocklyColors.brandDeep)),
+            child: Text(
+              label,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(child: Text(value)),

@@ -143,7 +143,7 @@ class _InfoCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            DocklyIcon(icon, color: DocklyColors.brandDeep),
+            DocklyIcon(icon, color: Theme.of(context).colorScheme.onSurfaceVariant),
             const SizedBox(width: 12),
             Expanded(child: Text(message)),
           ],

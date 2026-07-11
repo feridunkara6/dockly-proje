@@ -120,12 +120,16 @@ class _NoContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        DocklyIcon(DocklyIcons.infoOutline, size: 20, color: DocklyColors.brandDeep),
-        SizedBox(width: 10),
-        Expanded(
+        DocklyIcon(
+          DocklyIcons.infoOutline,
+          size: 20,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: 10),
+        const Expanded(
           child: Text(
             'Bu lokasyon için kayıtlı iletişim bilgisi yok. En kısa sürede '
             'ekleyeceğiz. Bu arada haritadan komşu noktaları deneyebilirsin.',

@@ -68,8 +68,9 @@ class _StatTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: DocklyColors.bgSurface,
-        border: Border.all(color: DocklyColors.hairline),
+        // Tema-duyarlı: karanlık modda koyu yüzey/çizgi (sabit açık renk DEĞİL).
+        color: theme.colorScheme.surface,
+        border: Border.all(color: theme.colorScheme.outline),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -90,7 +91,8 @@ class _StatTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   stat.label,
-                  style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

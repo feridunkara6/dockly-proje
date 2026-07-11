@@ -366,7 +366,8 @@ class _SeaRouteRow extends ConsumerWidget {
                   ),
                   Text(
                     'Haritada baktığın konumdan · kuşuçuşu',
-                    style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
                 ],
               ),
@@ -441,7 +442,8 @@ class _ContactRow extends StatelessWidget {
             children: <Widget>[
               Text(
                 label,
-                style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
               ),
               Text(contact.value),
             ],
@@ -454,7 +456,8 @@ class _ContactRow extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(child: valueWidget),
           if (uri != null)
-            const DocklyIcon(DocklyIcons.openInNew, size: 16, color: DocklyColors.brandDeep),
+            DocklyIcon(DocklyIcons.openInNew,
+                size: 16, color: theme.colorScheme.onSurfaceVariant),
         ],
       ),
     );

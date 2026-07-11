@@ -56,7 +56,11 @@ class BoatFitBadge extends StatelessWidget {
     final (DocklyIconData icon, String label, Color color) = switch (fit) {
       BoatFit.fits => (DocklyIcons.checkCircle, 'Teknen sığar', DocklyColors.success),
       BoatFit.tooBig => (DocklyIcons.errorOutline, 'Teknen sığmayabilir', DocklyColors.warning),
-      BoatFit.unknown => (DocklyIcons.helpOutline, 'Uygunluk bilinmiyor', DocklyColors.brandDeep),
+      BoatFit.unknown => (
+          DocklyIcons.helpOutline,
+          'Uygunluk bilinmiyor',
+          Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

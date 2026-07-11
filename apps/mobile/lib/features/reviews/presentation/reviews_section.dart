@@ -73,7 +73,8 @@ class _ReviewCard extends StatelessWidget {
               ),
               Text(
                 _fmtDate(review.createdAt),
-                style: theme.textTheme.bodySmall?.copyWith(color: DocklyColors.brandDeep),
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
               ),
             ],
           ),

@@ -37,10 +37,13 @@ class CoverPhoto extends StatelessWidget {
                 );
               },
               errorBuilder: (BuildContext context, Object error, StackTrace? stack) {
-                return const ColoredBox(
-                  color: Color(0x11000000),
+                return ColoredBox(
+                  color: const Color(0x11000000),
                   child: Center(
-                    child: DocklyIcon(DocklyIcons.imageOff, color: DocklyColors.brandDeep),
+                    child: DocklyIcon(
+                      DocklyIcons.imageOff,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 );
               },
