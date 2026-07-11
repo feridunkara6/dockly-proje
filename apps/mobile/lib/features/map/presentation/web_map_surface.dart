@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:math' as math;
 
-import 'package:dockly_api/dockly_api.dart' show Bbox, LocationPin;
+import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -9,10 +10,12 @@ import 'package:latlong2/latlong.dart';
 import '../domain/map_viewport.dart';
 import 'map_surface.dart';
 
-/// Web harita yüzeyi. Mapbox web'de çalışmadığı için burada tarayıcıda çalışan,
-/// jeton (token) istemeyen gerçek bir harita kullanılır: flutter_map +
-/// OpenStreetMap karoları. Pinler marker olarak çizilir; kamera hareket edince
-/// görünür alan (bbox) sunucuya bildirilir. Mapbox import ETMEZ.
+/// Web harita yüzeyi. Mapbox web'de çalışmadığı için tarayıcıda çalışan, jeton
+/// istemeyen gerçek bir harita kullanılır: flutter_map + OpenStreetMap karoları.
+/// Görsel dil, tasarım sistemi (design/dockly-design-system.html §06 Map
+/// Markers) ile birebir: damla-formlu, beyaz konturlu tip-renkli pinler; cam
+/// görünümlü dairede sayı taşıyan cluster'lar; seçili pin büyür. Cluster'a
+/// dokununca kamera o bölgeye yaklaşır → sunucu tekil pinleri döndürür.
 
 /// Açılışta yüklenecek varsayılan görünüm — Ege–Marmara–İstanbul kıyısı.
 /// Her kenar ≤ 5° (sunucu bbox sınırı, docs/23 §9.5) → veri hemen gelir.
@@ -44,8 +47,7 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
   @override
   void initState() {
     super.initState();
-    // Açılışta varsayılan bölgeyi bildir (kamera henüz hazır olmasa da) → pinler
-    // yüklensin. build sırasında sağlayıcı güncellemesi olmasın diye postFrame.
+    // Açılışta varsayılan bölgeyi bildir → pinler/cluster'lar yüklensin.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.callbacks.onViewportChanged(
         const MapViewport(bbox: _initialBbox, zoom: _initialZoom),
@@ -89,6 +91,16 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
     );
   }
 
+  /// Cluster'a dokununca: kontrolcüye haber ver + kamerayı o bölgeye yaklaştır,
+  /// ardından yeni görünümü bildir (programatik hareket onPositionChanged'te
+  /// hasGesture=false geldiği için elle emit edilir).
+  void _onClusterTap(Cluster c) {
+    widget.callbacks.onClusterTap(c);
+    final double targetZoom = math.min(_map.camera.zoom + 2.5, 14.0);
+    _map.move(LatLng(c.position.lat, c.position.lon), targetZoom);
+    _emit(_map.camera);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -109,11 +121,22 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
         ),
         MarkerLayer(
           markers: <Marker>[
+            // Cluster'lar — cam dairede sayı (tasarım §06); dokununca yaklaş.
+            for (final Cluster c in widget.data.clusters)
+              Marker(
+                point: LatLng(c.position.lat, c.position.lon),
+                width: 48,
+                height: 48,
+                child: _ClusterMarker(count: c.count, onTap: () => _onClusterTap(c)),
+              ),
+            // Tekil pinler — damla form, tip rengi, beyaz kontur + beyaz ikon.
+            // Damlanın ucu koordinata basar (alignment: topCenter).
             for (final LocationPin p in widget.data.pins)
               Marker(
                 point: LatLng(p.position.lat, p.position.lon),
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
+                alignment: Alignment.topCenter,
                 child: _PinMarker(
                   type: p.type,
                   selected: p.id == widget.data.selectedPinId,
@@ -127,8 +150,8 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
   }
 }
 
-/// Harita üstünde tek bir liman işareti: tipe göre renkli, beyaz kenarlı yuvarlak
-/// + beyaz tip ikonu. Seçiliyse biraz büyür.
+/// Damla-formlu liman pini (tasarım §06): tip rengi zemin, 2.5px beyaz kontur,
+/// içinde beyaz tip ikonu; seçiliyse %25 büyür.
 class _PinMarker extends StatelessWidget {
   const _PinMarker({required this.type, required this.selected, required this.onTap});
 
@@ -139,26 +162,79 @@ class _PinMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = DocklyMapColors.forType(type);
-    final double s = selected ? 34 : 26;
+    final double s = selected ? 40 : 32;
+    return GestureDetector(
+      onTap: onTap,
+      child: Center(
+        child: Transform.rotate(
+          // CSS eşleniği: rotate(-45deg) → damlanın ucu (bottomLeft) aşağı bakar.
+          angle: -math.pi / 4,
+          child: Container(
+            width: s,
+            height: s,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(s / 2),
+                topRight: Radius.circular(s / 2),
+                bottomRight: Radius.circular(s / 2),
+                bottomLeft: const Radius.circular(4),
+              ),
+              border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
+              boxShadow: const <BoxShadow>[
+                BoxShadow(color: Color(0x590A2540), blurRadius: 12, offset: Offset(0, 4)),
+              ],
+            ),
+            child: Transform.rotate(
+              angle: math.pi / 4,
+              child: Center(
+                child: DocklyIcon(
+                  DocklyIcons.forLocationType(type),
+                  size: s * 0.48,
+                  color: const Color(0xFFFFFFFF),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Cluster işaretçisi (tasarım §06): cam görünümlü beyaz daire, 2px beyaz
+/// kontur, kalın sayı. Dokununca kamera bölgeye yaklaşır.
+class _ClusterMarker extends StatelessWidget {
+  const _ClusterMarker({required this.count, required this.onTap});
+
+  final int count;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Center(
         child: Container(
-          width: s,
-          height: s,
+          constraints: const BoxConstraints(minWidth: 44),
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
-            color: color,
+            color: const Color(0xC9FFFFFF),
             shape: BoxShape.circle,
             border: Border.all(color: const Color(0xFFFFFFFF), width: 2),
             boxShadow: const <BoxShadow>[
-              BoxShadow(color: Color(0x40000000), blurRadius: 3, offset: Offset(0, 1)),
+              BoxShadow(color: Color(0x4D0A2540), blurRadius: 12, offset: Offset(0, 4)),
             ],
           ),
           child: Center(
-            child: DocklyIcon(
-              DocklyIcons.forLocationType(type),
-              size: s * 0.55,
-              color: const Color(0xFFFFFFFF),
+            child: Text(
+              '$count',
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                color: Color(0xFF0A2540),
+              ),
             ),
           ),
         ),

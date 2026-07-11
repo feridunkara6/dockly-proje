@@ -7,7 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('web yüzeyi gerçek harita (flutter_map) çizer + geçerli görünüm bildirir',
+  testWidgets('web yüzeyi gerçek harita çizer: cluster sayısı + pin görünür, görünüm bildirilir',
       (WidgetTester tester) async {
     MapViewport? reported;
     final MapSurfaceCallbacks callbacks = MapSurfaceCallbacks(
@@ -16,8 +16,23 @@ void main() {
       onClusterTap: (_) {},
     );
     const MapSurfaceData data = MapSurfaceData(
-      pins: <LocationPin>[],
-      clusters: <Cluster>[],
+      pins: <LocationPin>[
+        LocationPin(
+          id: 'p1',
+          name: 'D-Marin Göcek',
+          type: 'private_marina',
+          position: GeoPoint(lat: 36.75, lon: 28.93),
+          ratingAvg: 4.8,
+          priceTier: 'paid',
+        ),
+      ],
+      clusters: <Cluster>[
+        Cluster(
+          position: GeoPoint(lat: 40.9, lon: 29.05),
+          count: 33,
+          bbox: Bbox(minLon: 28.8, minLat: 40.0, maxLon: 30.2, maxLat: 41.4),
+        ),
+      ],
       selectedPinId: null,
     );
 
@@ -32,8 +47,9 @@ void main() {
     );
     await tester.pump(); // postFrame callback çalışsın (açılış görünümü)
 
-    // Gerçek harita widget'ı çizildi.
+    // Gerçek harita + cluster sayısı çizildi (tasarım §06).
     expect(find.byType(FlutterMap), findsOneWidget);
+    expect(find.text('33'), findsOneWidget);
 
     // Açılışta geçerli bir görünüm bildirilir (pinler yüklensin).
     expect(reported, isNotNull);
