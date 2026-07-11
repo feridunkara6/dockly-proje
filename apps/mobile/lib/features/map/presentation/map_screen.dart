@@ -81,6 +81,14 @@ class MapScreen extends ConsumerWidget {
               right: 0,
               child: LinearProgressIndicator(minHeight: 3),
             ),
+          // Çevrimdışı görünüm şeridi: cihazdaki son başarılı veri gösteriliyor.
+          if (state.isOffline)
+            const Positioned(
+              top: 60,
+              left: 0,
+              right: 0,
+              child: SafeArea(child: Center(child: _OfflineBanner())),
+            ),
           if (state.truncated) const _TruncatedHint(),
           if (state.isLoading && !state.hasData)
             const Positioned.fill(child: _CenterProgress()),
@@ -197,6 +205,41 @@ class _CenterProgress extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Çevrimdışı bilgi şeridi: bağlantı yokken cihazdaki son görülen limanların
+/// gösterildiğini söyler. Haritayı gezdirmek yeniden denemeyi tetikler.
+class _OfflineBanner extends StatelessWidget {
+  const _OfflineBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      elevation: 2,
+      borderRadius: BorderRadius.circular(999),
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            DocklyIcon(
+              DocklyIcons.infoOutline,
+              size: 16,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              'Çevrimdışı — son görülen limanlar',
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
       ),
     );
   }

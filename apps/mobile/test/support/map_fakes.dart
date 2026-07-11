@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_locations_gateway.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 
@@ -60,5 +61,22 @@ class FakeMapGateway implements MapLocationsGateway {
     final err = error;
     if (err != null) return Future<MapResult>.error(err);
     return Future<MapResult>.value(result);
+  }
+}
+
+/// Testte `MapCache` yerine geçen sahte (bellek içi).
+class FakeMapCache implements MapCache {
+  FakeMapCache({this.cached});
+
+  CachedMap? cached;
+  int saveCount = 0;
+
+  @override
+  Future<CachedMap?> load() async => cached;
+
+  @override
+  Future<void> save(List<LocationPin> pins, List<Cluster> clusters) async {
+    saveCount += 1;
+    cached = CachedMap(pins: pins, clusters: clusters, savedAt: DateTime(2026));
   }
 }

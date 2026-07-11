@@ -4,6 +4,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,11 +14,13 @@ import '../../support/map_fakes.dart';
 ProviderContainer _containerWith(
   FakeMapGateway gateway, {
   Duration debounce = Duration.zero,
+  FakeMapCache? cache,
 }) {
   final container = ProviderContainer(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapDebounceProvider.overrideWithValue(debounce),
+      if (cache != null) mapCacheProvider.overrideWithValue(cache),
     ],
   );
   addTearDown(container.dispose);
@@ -120,6 +123,63 @@ void main() {
     await _ctrl(container).toggleType('private_marina'); // kapat
     expect(_state(container).types, isEmpty);
     expect(gateway.typeArgs.last, isNull);
+  });
+
+  test('başarılı yükleme önbelleğe yazılır; filtre açıkken YAZILMAZ', () async {
+    final cache = FakeMapCache();
+    final gateway = FakeMapGateway(result: pinResult);
+    final container = _containerWith(gateway, cache: cache);
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(cache.saveCount, 1);
+    expect(cache.cached!.pins.single.id, 'loc-1');
+
+    await _ctrl(container).toggleType('private_marina'); // filtreli yeniden yükleme
+    expect(cache.saveCount, 1); // filtreli sonuç önbelleği KİRLETMEZ
+  });
+
+  test('ağ hatası + boş ekran + önbellek dolu → çevrimdışı görünüm (veri + isOffline)', () async {
+    final cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    final container = _containerWith(gateway, cache: cache);
+    await _ctrl(container).loadViewport(pinViewport);
+    final state = _state(container);
+    expect(state.isOffline, isTrue);
+    expect(state.pins.single.id, 'loc-1');
+    expect(state.failure, isNull); // veri gösteriliyor → tam-ekran hata yok
+  });
+
+  test('ağ hatası + önbellek boş → eski davranış (failure)', () async {
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    final container = _containerWith(gateway, cache: FakeMapCache());
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(_state(container).failure, isA<NetworkFailure>());
+    expect(_state(container).isOffline, isFalse);
+  });
+
+  test('çevrimdışıyken bağlantı dönerse → isOffline kapanır, taze veri gelir', () async {
+    final cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    final container = _containerWith(gateway, cache: cache);
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(_state(container).isOffline, isTrue);
+
+    gateway.error = null;
+    gateway.result = clusterResult;
+    await _ctrl(container).loadViewport(clusterViewport);
+    expect(_state(container).isOffline, isFalse);
+    expect(_state(container).clusters.single.count, 34);
   });
 
   test('selectPin / clearSelection', () {

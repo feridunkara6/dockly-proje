@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
 import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
@@ -18,12 +19,13 @@ import '../../support/map_fakes.dart';
 Finder _docklyIcon(DocklyIconData d) =>
     find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
-Widget _app(FakeMapGateway gateway) {
+Widget _app(FakeMapGateway gateway, {FakeMapCache? cache}) {
   return ProviderScope(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
+      if (cache != null) mapCacheProvider.overrideWithValue(cache),
     ],
     child: const MaterialApp(home: MapScreen()),
   );
@@ -124,6 +126,22 @@ void main() {
     )));
     await tester.pumpAndSettle();
     expect(find.textContaining('yakınlaştırın'), findsOneWidget);
+  });
+
+  testWidgets('ağ yokken önbellek doluysa → çevrimdışı şerit + son limanlar', (WidgetTester tester) async {
+    final FakeMapCache cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    await tester.pumpWidget(_app(FakeMapGateway(error: const NetworkFailure()), cache: cache));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Çevrimdışı'), findsOneWidget);
+    expect(find.byKey(_pinKey), findsOneWidget); // son görülen liman haritada
+    expect(find.text('Tekrar dene'), findsNothing); // tam-ekran hata YOK
   });
 
   testWidgets('hata → hata görünümü + retry başarıyla toparlar', (WidgetTester tester) async {

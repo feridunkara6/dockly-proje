@@ -13,6 +13,7 @@ class MapState {
     this.selectedPinId,
     this.hasLoadedOnce = false,
     this.types = const <String>{},
+    this.isOffline = false,
   });
 
   final List<LocationPin> pins;
@@ -24,6 +25,10 @@ class MapState {
 
   /// Seçili tip filtreleri (haritadaki renkli çipler). Boş = tüm tipler.
   final Set<String> types;
+
+  /// Çevrimdışı görünüm: ağ hatasında cihazdaki son başarılı veri gösteriliyor.
+  /// Bir sonraki başarılı yüklemede kapanır.
+  final bool isOffline;
 
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
@@ -56,6 +61,7 @@ class MapState {
     bool clearSelection = false,
     bool? hasLoadedOnce,
     Set<String>? types,
+    bool? isOffline,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -66,6 +72,7 @@ class MapState {
       selectedPinId: clearSelection ? null : (selectedPinId ?? this.selectedPinId),
       hasLoadedOnce: hasLoadedOnce ?? this.hasLoadedOnce,
       types: types ?? this.types,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }

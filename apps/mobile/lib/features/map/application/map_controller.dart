@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
 import '../data/api_map_locations_gateway.dart';
+import '../data/shared_prefs_map_cache.dart';
+import '../domain/map_cache.dart';
 import '../domain/map_locations_gateway.dart';
 import '../domain/map_state.dart';
 import '../domain/map_viewport.dart';
@@ -16,6 +18,10 @@ final Provider<MapLocationsGateway> mapLocationsGatewayProvider =
     Provider<MapLocationsGateway>(
   (ref) => ApiMapLocationsGateway(ref.watch(locationsApiProvider)),
 );
+
+/// Çevrimdışı önbellek sağlayıcısı — testte sahte ile override edilir.
+final Provider<MapCache> mapCacheProvider =
+    Provider<MapCache>((ref) => const SharedPrefsMapCache());
 
 /// Keşfet sekmesi görünüm modu: false = harita, true = liste. Kullanıcı sağ
 /// üstteki düğmeyle değiştirir; sekme değişse de korunur (uygulama-ömürlü).
@@ -79,9 +85,33 @@ class MapController extends Notifier<MapState> {
         isLoading: false,
         clearFailure: true,
         hasLoadedOnce: true,
+        isOffline: false,
       );
+      // Çevrimdışı görünüm için son başarılı veriyi sakla (en iyi çaba;
+      // filtresiz genel görünümü bozmasın diye yalnız filtre yokken).
+      if (state.types.isEmpty && (result.locations.isNotEmpty || result.clusters.isNotEmpty)) {
+        await ref.read(mapCacheProvider).save(result.locations, result.clusters);
+      }
     } on AppFailure catch (failure) {
       if (seq != _seq) return;
+      // Ağ yoksa ve ekranda hiç veri yoksa: cihazdaki son başarılı veriyi
+      // göster (çevrimdışı görünüm) — denizde bağlantı gidince uygulama kör
+      // kalmasın. Veri zaten varsa mevcut davranış: veri korunur, hata bindirilmez.
+      if (!state.hasData) {
+        final CachedMap? cached = await ref.read(mapCacheProvider).load();
+        if (seq != _seq) return;
+        if (cached != null && !cached.isEmpty) {
+          state = state.copyWith(
+            pins: cached.pins,
+            clusters: cached.clusters,
+            isLoading: false,
+            clearFailure: true,
+            hasLoadedOnce: true,
+            isOffline: true,
+          );
+          return;
+        }
+      }
       state = state.copyWith(isLoading: false, failure: failure);
     }
   }
