@@ -43,6 +43,7 @@ DISTRICTS = {
     "antalya-finike": ("antalya", "Finike"), "antalya-konyaalti": ("antalya", "Konyaaltı"),
     "antalya-kas": ("antalya", "Kaş"), "antalya-kemer": ("antalya", "Kemer"),
     "antalya-alanya": ("antalya", "Alanya"), "mersin-yenisehir": ("mersin", "Yenişehir"),
+    "antalya-gazipasa": ("antalya", "Gazipaşa"), "mersin-erdemli": ("mersin", "Erdemli"),
     "izmir-balcova": ("izmir", "Balçova"), "izmir-foca": ("izmir", "Foça"),
     "canakkale-merkez": ("canakkale", "Merkez"), "canakkale-gelibolu": ("canakkale", "Gelibolu"),
     "balikesir-erdek": ("balikesir", "Erdek"), "bursa-mudanya": ("bursa", "Mudanya"),
@@ -243,7 +244,7 @@ def emit(records, batch_meta):
 def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
-               "batch5_expansion.json", "batch6_istanbul.json"]
+               "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b

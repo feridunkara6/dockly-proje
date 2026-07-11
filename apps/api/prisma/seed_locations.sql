@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -127,6 +127,14 @@ FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.sl
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Yenişehir', 'mersin-yenisehir'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gazipaşa', 'antalya-gazipasa'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'antalya'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Erdemli', 'mersin-erdemli'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -4483,5 +4491,77 @@ ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://kiyimarina.com/', NULL, false
 FROM locations l WHERE l.slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kumkuyu Marina · güven: medium · kaynak: www.denizpazari.com, www.erdemlikumkuyumarina.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kumkuyu-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Kumkuyu Marina', 'Erdemli Kumkuyu''da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.',
+  ST_SetSRID(ST_MakePoint(34.2302, 36.5304), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kumkuyu Marina', 'Erdemli Kumkuyu''da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.' FROM locations WHERE slug = 'kumkuyu-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 200, '72', NULL, 80, NULL
+FROM locations WHERE slug = 'kumkuyu-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kumkuyu-marina' AND a.code IN ('electricity', 'water', 'fuel', 'wifi', 'security', 'restaurant', 'crane', 'travel_lift')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'kumkuyu-marina' AND sv.code IN ('technical_service', 'crane')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905436219383', NULL, true
+FROM locations l WHERE l.slug = 'kumkuyu-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@erdemlikumkuyumarina.com', NULL, false
+FROM locations l WHERE l.slug = 'kumkuyu-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.erdemlikumkuyumarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'kumkuyu-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gazipaşa Gold Marina · güven: high · kaynak: www.denizticaretodasi.org.tr, gazipasagoldmarina.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gazipasa-gold-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-gazipasa'),
+  'Gazipaşa Gold Marina', 'Gazipaşa''da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.',
+  ST_SetSRID(ST_MakePoint(32.28, 36.2638), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gazipaşa Gold Marina', 'Gazipaşa''da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.' FROM locations WHERE slug = 'gazipasa-gold-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '72', NULL, NULL, NULL
+FROM locations WHERE slug = 'gazipasa-gold-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902425107000', NULL, true
+FROM locations l WHERE l.slug = 'gazipasa-gold-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@gazipasagoldmarina.com', NULL, false
+FROM locations l WHERE l.slug = 'gazipasa-gold-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://gazipasagoldmarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'gazipasa-gold-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
