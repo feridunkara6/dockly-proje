@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -4563,5 +4563,77 @@ ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://gazipasagoldmarina.com/', NULL, false
 FROM locations l WHERE l.slug = 'gazipasa-gold-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kairos Marina · güven: high · kaynak: marinakedisi.com, www.denizticaretodasi.org.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kairos-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Kairos Marina', 'Datça''da 246 deniz ve 256 kara kapasiteli özel marina.',
+  ST_SetSRID(ST_MakePoint(27.6195, 36.7718), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  246, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kairos Marina', 'Datça''da 246 deniz ve 256 kara kapasiteli özel marina.' FROM locations WHERE slug = 'kairos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 246, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'kairos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905320642648', NULL, true
+FROM locations l WHERE l.slug = 'kairos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Marintürk Göcek Exclusive Marina · güven: medium · kaynak: www.denizticaretodasi.org.tr, marinalar.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'marinturk-gocek-exclusive', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Marintürk Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Marintürk tarafından işletilen özel marina.',
+  ST_SetSRID(ST_MakePoint(28.9237, 36.7557), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Marintürk Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Marintürk tarafından işletilen özel marina.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '69/73', NULL, NULL, NULL
+FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902169991480', NULL, true
+FROM locations l WHERE l.slug = 'marinturk-gocek-exclusive'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Aganlar Marina · güven: medium · kaynak: www.denizticaretodasi.org.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aganlar-marina-bodrum', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Aganlar Marina', 'Bodrum''da marina ve yat çekek yeri.',
+  ST_SetSRID(ST_MakePoint(27.4512, 37.0136), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aganlar Marina', 'Bodrum''da marina ve yat çekek yeri.' FROM locations WHERE slug = 'aganlar-marina-bodrum'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '72/16', NULL, NULL, NULL
+FROM locations WHERE slug = 'aganlar-marina-bodrum'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524444808', NULL, true
+FROM locations l WHERE l.slug = 'aganlar-marina-bodrum'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
