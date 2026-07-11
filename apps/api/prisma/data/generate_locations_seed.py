@@ -50,6 +50,7 @@ DISTRICTS = {
     "antalya-demre": ("antalya", "Demre"), "mersin-silifke": ("mersin", "Silifke"),
     "mugla-datca": ("mugla", "Datça"), "mugla-ula": ("mugla", "Ula"),
     "istanbul-beykoz": ("istanbul", "Beykoz"), "istanbul-adalar": ("istanbul", "Adalar"),
+    "istanbul-buyukcekmece": ("istanbul", "Büyükçekmece"),
     "balikesir-marmara": ("balikesir", "Marmara"), "balikesir-bandirma": ("balikesir", "Bandırma"),
     "balikesir-burhaniye": ("balikesir", "Burhaniye"), "canakkale-biga": ("canakkale", "Biga"),
     "canakkale-bozcaada": ("canakkale", "Bozcaada"), "canakkale-gokceada": ("canakkale", "Gökçeada"),
@@ -242,7 +243,7 @@ def emit(records, batch_meta):
 def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
-               "batch5_expansion.json"]
+               "batch5_expansion.json", "batch6_istanbul.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b
@@ -251,7 +252,7 @@ def main():
         data = json.loads(p.read_text(encoding="utf-8"))
         records.extend(data["records"])
         batch_names.append(data["batch"])
-    data = {"batch": " + ".join(batch_names), "collectedAt": "2026-07-07/08"}
+    data = {"batch": " + ".join(batch_names), "collectedAt": "2026-07-07/08, 2026-07-11"}
     errors, warnings = validate(records)
     for w in warnings:
         print(f"UYARI: {w}")

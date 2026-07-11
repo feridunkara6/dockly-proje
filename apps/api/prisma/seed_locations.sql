@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege · Toplama: 2026-07-07/08
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -183,6 +183,10 @@ FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.sl
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Adalar', 'istanbul-adalar'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Büyükçekmece', 'istanbul-buyukcekmece'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -4412,4 +4416,72 @@ INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'didim-akbuk-marina'
 ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Güzelce Marina · güven: high · kaynak: guzelcemarina.com, www.denizticaretodasi.org.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'guzelce-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-buyukcekmece'),
+  'Güzelce Marina', 'Büyükçekmece''de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m''ye kadar yat kabul eder.',
+  ST_SetSRID(ST_MakePoint(28.5097, 40.9998), 4326)::geography,
+  60, NULL, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güzelce Marina', 'Büyükçekmece''de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'guzelce-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 250, '72/16', NULL, NULL, NULL
+FROM locations WHERE slug = 'guzelce-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'guzelce-marina' AND a.code IN ('electricity', 'water', 'crane', 'wifi', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902122443333', NULL, true
+FROM locations l WHERE l.slug = 'guzelce-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@guzelcemarina.com', NULL, false
+FROM locations l WHERE l.slug = 'guzelce-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://guzelcemarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'guzelce-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kıyı İstanbul Marina · güven: medium · kaynak: www.denizticaretodasi.org.tr, kiyimarina.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kiyi-istanbul-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-buyukcekmece'),
+  'Kıyı İstanbul Marina', 'Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.',
+  ST_SetSRID(ST_MakePoint(28.5822, 41.0156), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kıyı İstanbul Marina', 'Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.' FROM locations WHERE slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902128820090', NULL, true
+FROM locations l WHERE l.slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@kiyiistanbul.com', NULL, false
+FROM locations l WHERE l.slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://kiyimarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'kiyi-istanbul-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
