@@ -66,8 +66,11 @@ class MapController extends Notifier<MapState> {
     );
     final seq = ++_seq;
     state = state.copyWith(isLoading: true, clearFailure: true);
+    // Parametre verilmediyse haritadaki çip filtreleri kullanılır (boş = tümü).
+    final List<String>? effectiveTypes =
+        types ?? (state.types.isEmpty ? null : state.types.toList(growable: false));
     try {
-      final result = await _gateway.loadViewport(viewport, types: types);
+      final result = await _gateway.loadViewport(viewport, types: effectiveTypes);
       if (seq != _seq) return;
       state = state.copyWith(
         pins: result.locations,
@@ -81,6 +84,16 @@ class MapController extends Notifier<MapState> {
       if (seq != _seq) return;
       state = state.copyWith(isLoading: false, failure: failure);
     }
+  }
+
+  /// Tip filtresini aç/kapat (haritadaki renkli çipler; aynı zamanda lejant).
+  /// Değişince son görünüm yeni filtreyle hemen yeniden yüklenir.
+  Future<void> toggleType(String code) async {
+    final Set<String> next = Set<String>.of(state.types);
+    if (!next.add(code)) next.remove(code);
+    state = state.copyWith(types: next);
+    final viewport = _lastRequested;
+    if (viewport != null) await loadViewport(viewport);
   }
 
   void selectPin(String pinId) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
@@ -53,7 +55,14 @@ void main() {
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
     expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
-    expect(find.text('Özel Marina'), findsOneWidget);
+    // Tip etiketi üstteki filtre çipinde de geçer; kartın İÇİNDE aranır.
+    expect(
+      find.descendant(
+        of: find.byKey(LocationBottomCard.cardKey),
+        matching: find.text('Özel Marina'),
+      ),
+      findsOneWidget,
+    );
 
     await tester.tap(_docklyIcon(DocklyIcons.close));
     await tester.pumpAndSettle();
@@ -69,6 +78,26 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ListTile), findsOneWidget); // liste modu, tek pin
     expect(_docklyIcon(DocklyIcons.mapOutlined), findsOneWidget); // haritaya dön ikonu
+  });
+
+  testWidgets('tip çipine dokununca filtre sunucuya geçer', (WidgetTester tester) async {
+    final FakeMapGateway gateway = FakeMapGateway(result: pinResult);
+    await tester.pumpWidget(_app(gateway));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilterChip, 'Özel Marina'));
+    await tester.pumpAndSettle();
+    expect(gateway.typeArgs.last, <String>['private_marina']);
+  });
+
+  testWidgets('ilk yüklemede dost mesaj gösterilir (sunucu uyanıyor)', (WidgetTester tester) async {
+    final FakeMapGateway gateway = FakeMapGateway()..pending = Completer<MapResult>();
+    await tester.pumpWidget(_app(gateway));
+    await tester.pump(); // debounce zamanlayıcısı → yükleme başlar
+    await tester.pump(); // durum değişikliği ekrana yansır
+    expect(find.textContaining('Limanlar yükleniyor'), findsOneWidget);
+    gateway.pending!.complete(pinResult); // testi temiz bitir
+    await tester.pumpAndSettle();
   });
 
   testWidgets('boş bölge → boş görünüm', (WidgetTester tester) async {

@@ -119,6 +119,15 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
           tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 19,
         ),
+        // Denizcilik katmanı: OpenSeaMap seamark'ları (şamandıra, fener, liman
+        // işaretleri) — açık lisanslı, jetonsuz. Şeffaf bindirme; yakın zoom'da
+        // görünür hale gelir. (Navionics/C-MAP ticari lisans ister — v2 adayı.)
+        TileLayer(
+          urlTemplate: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
+          userAgentPackageName: 'app.dockly.mobile',
+          tileDisplay: const TileDisplay.instantaneous(),
+          maxZoom: 18,
+        ),
         MarkerLayer(
           markers: <Marker>[
             // Cluster'lar — cam dairede sayı (tasarım §06); dokununca yaklaş.
@@ -144,6 +153,10 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
                 ),
               ),
           ],
+        ),
+        // Yasal atıf: OSM karoları + OpenSeaMap katmanı (ODbL/CC — zorunlu).
+        const SimpleAttributionWidget(
+          source: Text('© OpenStreetMap katkıcıları · OpenSeaMap'),
         ),
       ],
     );

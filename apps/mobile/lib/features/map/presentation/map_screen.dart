@@ -46,6 +46,13 @@ class MapScreen extends ConsumerWidget {
                     ),
                   ),
           ),
+          // Üst-sol: tip filtre çipleri (renk noktalı — aynı zamanda lejant).
+          Positioned(
+            top: 12,
+            left: 0,
+            right: 64,
+            child: SafeArea(child: _TypeFilterRow(selected: state.types)),
+          ),
           // Üst-sağ kontroller: "Konumum" (her zaman) + harita↔liste geçişi
           // (yalnız pin/yakın zoom verisi varken).
           Positioned(
@@ -174,7 +181,63 @@ class _CenterProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
+    // İlk yükleme dost mesajı: ücretsiz sunucu uykudan uyanırken kullanıcı
+    // "uygulama bozuk" sanmasın (P0 algı). Veri geldikten sonra görünmez.
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CircularProgressIndicator(),
+          SizedBox(height: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              'Limanlar yükleniyor…\nİlk açılışta bu 1 dakikayı bulabilir.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Harita üstü tip filtre çipleri: her çipte tipin harita rengi nokta olarak
+/// bulunur — filtre + lejant tek bileşende. Boş seçim = tüm tipler.
+class _TypeFilterRow extends ConsumerWidget {
+  const _TypeFilterRow({required this.selected});
+
+  final Set<String> selected;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<String> types = DocklyMapColors.knownTypes.toList();
+    return SizedBox(
+      height: 40,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        itemCount: types.length,
+        separatorBuilder: (BuildContext _, int __) => const SizedBox(width: 6),
+        itemBuilder: (BuildContext context, int i) {
+          final String type = types[i];
+          return Center(
+            child: FilterChip(
+              label: Text(locationTypeLabelTr(type)),
+              avatar: DocklyIcon(
+                DocklyIcons.circle,
+                size: 12,
+                color: DocklyMapColors.forType(type),
+              ),
+              selected: selected.contains(type),
+              onSelected: (bool _) =>
+                  ref.read(mapControllerProvider.notifier).toggleType(type),
+              visualDensity: VisualDensity.compact,
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 

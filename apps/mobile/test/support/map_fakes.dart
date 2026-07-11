@@ -45,12 +45,16 @@ class FakeMapGateway implements MapLocationsGateway {
 
   final List<MapViewport> calls = <MapViewport>[];
 
+  /// Her çağrıda geçirilen tip filtresi (null = tümü) — filtre testleri için.
+  final List<List<String>?> typeArgs = <List<String>?>[];
+
   /// Ayarlanırsa yanıt bu completer ile elle tamamlanır (yarış/stale testi).
   Completer<MapResult>? pending;
 
   @override
   Future<MapResult> loadViewport(MapViewport viewport, {List<String>? types}) {
     calls.add(viewport);
+    typeArgs.add(types);
     final controlled = pending;
     if (controlled != null) return controlled.future;
     final err = error;

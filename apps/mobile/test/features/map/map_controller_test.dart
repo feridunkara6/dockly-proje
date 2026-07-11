@@ -107,6 +107,21 @@ void main() {
     expect(state.pins.single.id, 'loc-1');
   });
 
+  test('toggleType: filtre eklenir → son görünüm filtreyle yeniden yüklenir; ikinci dokunuş kaldırır', () async {
+    final gateway = FakeMapGateway();
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(gateway.typeArgs.last, isNull); // filtre yok = tümü
+
+    await _ctrl(container).toggleType('private_marina');
+    expect(_state(container).types, contains('private_marina'));
+    expect(gateway.typeArgs.last, <String>['private_marina']);
+
+    await _ctrl(container).toggleType('private_marina'); // kapat
+    expect(_state(container).types, isEmpty);
+    expect(gateway.typeArgs.last, isNull);
+  });
+
   test('selectPin / clearSelection', () {
     final container = _containerWith(FakeMapGateway());
     _ctrl(container).selectPin('loc-1');
