@@ -17,6 +17,7 @@ import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
+import 'cover_photo.dart';
 import 'maritime_info_panel.dart';
 import 'operating_info.dart';
 
@@ -84,7 +85,7 @@ class _DetailContent extends StatelessWidget {
         // Kapak: fotoğraf varsa onu, yoksa tasarımlı tip-renkli yer tutucu
         // göster (misafirin ilk gördüğü şey — sayfa hiç boş görünmesin, P0).
         if (detail.media.cover != null) ...<Widget>[
-          _CoverPhoto(url: detail.media.cover!.url),
+          CoverPhoto(cover: detail.media.cover!),
           const SizedBox(height: 14),
         ] else ...<Widget>[
           // Etiket YOK: tip zaten hemen altta gösteriliyor (tekrar olmasın).
@@ -318,46 +319,6 @@ class _DetailContent extends StatelessWidget {
 
   static String _num(double v) =>
       v == v.roundToDouble() ? v.toInt().toString() : v.toString();
-}
-
-class _CoverPhoto extends StatelessWidget {
-  const _CoverPhoto({required this.url});
-  final String url;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(14),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Image.network(
-          url,
-          fit: BoxFit.cover,
-          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? progress) {
-            if (progress == null) return child;
-            return const ColoredBox(
-              color: Color(0x11000000),
-              child: Center(
-                child: SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-              ),
-            );
-          },
-          errorBuilder: (BuildContext context, Object error, StackTrace? stack) {
-            return const ColoredBox(
-              color: Color(0x11000000),
-              child: Center(
-                child: DocklyIcon(DocklyIcons.imageOff, color: DocklyColors.brandDeep),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
 }
 
 /// Deniz-rota önizlemesi (P2, docs vizyon — denizcilik-odaklı rota, karayolu YOK).

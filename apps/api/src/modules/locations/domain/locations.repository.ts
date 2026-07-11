@@ -2,6 +2,7 @@ import {
   Bbox,
   Cluster,
   ContactDto,
+  CoverMedia,
   Dimensions,
   HourDto,
   LocationPin,
@@ -41,6 +42,7 @@ export interface DetailData {
   ratingCount: number;
   reviewCount: number;
   photoCount: number;
+  cover: CoverMedia | null;
   amenities: { code: string; category: string | null; translations: TranslationRow[] }[];
   services: { code: string; translations: TranslationRow[] }[];
   contacts: ContactDto[];

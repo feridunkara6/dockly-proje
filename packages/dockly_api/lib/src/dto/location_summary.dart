@@ -2,14 +2,29 @@ import 'geo.dart';
 
 /// Kart kapak görseli (docs/23 §11.2). `url` her zaman varyant CDN URL'idir.
 class CoverMedia {
-  const CoverMedia({required this.url, required this.blurhash});
+  const CoverMedia({
+    required this.url,
+    required this.blurhash,
+    this.credit,
+    this.license,
+    this.sourceUrl,
+  });
 
   final String url;
   final String? blurhash;
 
+  /// Atıf alanları — dış (CC/Commons) lisanslı görsellerde dolar. `credit` ve
+  /// `license` varsa görselin altında GÖSTERİLMESİ zorunludur (CC şartı).
+  final String? credit;
+  final String? license;
+  final String? sourceUrl;
+
   factory CoverMedia.fromJson(Map<String, dynamic> json) => CoverMedia(
         url: json['url'] as String,
         blurhash: json['blurhash'] as String?,
+        credit: json['credit'] as String?,
+        license: json['license'] as String?,
+        sourceUrl: json['sourceUrl'] as String?,
       );
 }
 

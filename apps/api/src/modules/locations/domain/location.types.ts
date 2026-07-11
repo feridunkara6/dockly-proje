@@ -43,10 +43,17 @@ export interface MapResult {
   truncated: boolean;
 }
 
-/** Kart kapak görseli (docs/23 §11.2). `url` her zaman varyant CDN URL'idir (§12). */
+/**
+ * Kart/detay kapak görseli (docs/23 §11.2). `url` barındırılan varyant CDN URL'i
+ * ya da dış (CC/Commons) görsel URL'idir. `credit`/`license`/`sourceUrl` yalnız
+ * dış lisanslı görsellerde dolar ve istemcide GÖSTERİLMESİ zorunludur (CC atfı).
+ */
 export interface CoverMedia {
   url: string;
   blurhash: string | null;
+  credit: string | null;
+  license: string | null;
+  sourceUrl: string | null;
 }
 
 /**
@@ -225,7 +232,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

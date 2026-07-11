@@ -1,9 +1,6 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import {
-  DetailData,
-  LocationsRepository,
-} from '../src/modules/locations/domain/locations.repository';
+import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -29,6 +26,7 @@ const SAMPLE: DetailData = {
   ratingCount: 50,
   reviewCount: 50,
   photoCount: 24,
+  cover: null,
   amenities: [
     {
       code: 'electricity',
@@ -61,6 +59,19 @@ const SAMPLE: DetailData = {
 /** Alt-tip detayı olmayan lokasyon (ör. şamandıra) — typeDetails null yolu. */
 const BARE: DetailData = { ...SAMPLE, slug: 'bare', typeDetails: null, ratingDimensions: [] };
 
+/** Dış (CC/Commons) lisanslı kapak görseli olan lokasyon — atıf geçişi. */
+const WITHCOVER: DetailData = {
+  ...SAMPLE,
+  slug: 'covered',
+  cover: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/x.jpg',
+    blurhash: null,
+    credit: 'Foto: Jane Doe',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:X.jpg',
+  },
+};
+
 class FakeRepo implements LocationsRepository {
   findPinsInBbox(): Promise<never[]> {
     return Promise.resolve([]);
@@ -74,6 +85,7 @@ class FakeRepo implements LocationsRepository {
   findDetail(idOrSlug: string): Promise<DetailData | null> {
     if (idOrSlug === 'd-marin') return Promise.resolve(SAMPLE);
     if (idOrSlug === 'bare') return Promise.resolve(BARE);
+    if (idOrSlug === 'covered') return Promise.resolve(WITHCOVER);
     return Promise.resolve(null);
   }
 }
@@ -126,11 +138,23 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     expect(d.rating.dimensions).toEqual([]);
   });
 
-  it('halen ertelenen alanlar null (media.cover, userContext)', async () => {
+  it('kapak görseli yoksa media.cover null (userContext de null)', async () => {
     const d = await service.detail('d-marin', 'tr');
     expect(d.media).toEqual({ cover: null, count: 24 });
     expect(d.userContext).toBeNull();
     expect(d.counts).toEqual({ reviews: 50, photos: 24 });
+  });
+
+  it('dış lisanslı kapak görseli, atıf alanlarıyla (credit/license/source) geçirilir', async () => {
+    const d = await service.detail('covered', 'tr');
+    expect(d.media.cover).toEqual({
+      url: 'https://upload.wikimedia.org/wikipedia/commons/x.jpg',
+      blurhash: null,
+      credit: 'Foto: Jane Doe',
+      license: 'CC BY-SA 4.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:X.jpg',
+    });
+    expect(d.media.count).toBe(24);
   });
 
   it('bulunamayan id/slug → not-found (AppProblem)', async () => {

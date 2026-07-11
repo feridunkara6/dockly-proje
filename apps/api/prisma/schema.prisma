@@ -516,6 +516,10 @@ model Media {
   height             Int?
   sizeBytes          Int?              @map("size_bytes")
   blurhash           String?
+  externalUrl        String?           @map("external_url")
+  credit             String?
+  licenseCode        String?           @map("license_code")
+  sourceUrl          String?           @map("source_url")
   takenAt            DateTime?         @map("taken_at") @db.Timestamptz(6)
   moderationStatus   ModerationStatus  @default(pending) @map("moderation_status")
   createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
