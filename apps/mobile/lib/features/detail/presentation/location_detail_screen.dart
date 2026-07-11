@@ -89,7 +89,7 @@ class _DetailContent extends StatelessWidget {
           const SizedBox(height: 14),
         ] else ...<Widget>[
           // Etiket YOK: tip zaten hemen altta gösteriliyor (tekrar olmasın).
-          DocklyCoverPlaceholder(type: detail.type),
+          DocklyCoverPlaceholder(type: detail.type, title: detail.name),
           const SizedBox(height: 14),
         ],
         // Başlık bloğu
@@ -112,7 +112,10 @@ class _DetailContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        Text(detail.name, style: theme.textTheme.headlineSmall),
+        // Fotoğraf varsa isim burada (H1); yer tutucu "hero" kullanılıyorsa isim
+        // zaten kapağın üstünde, tekrar etmemek için gizlenir.
+        if (detail.media.cover != null)
+          Text(detail.name, style: theme.textTheme.headlineSmall),
         if (_locationLine(detail.geo) != null) ...<Widget>[
           const SizedBox(height: 4),
           Text(_locationLine(detail.geo)!, style: theme.textTheme.bodyMedium),

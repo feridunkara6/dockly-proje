@@ -11,12 +11,18 @@ import 'dockly_icon.dart';
 class DocklyCoverPlaceholder extends StatelessWidget {
   const DocklyCoverPlaceholder({
     required this.type,
+    this.title,
     this.label,
     this.height,
     super.key,
   });
 
   final String type;
+
+  /// Verilirse kapak "hero" olur: altta okunurluk degradesi üstünde büyük isim
+  /// (ör. marina adı) + tip ikonu gösterilir. Verilmezse ortada tip ikonu.
+  final String? title;
+
   final String? label;
 
   /// Verilirse sabit yükseklik; verilmezse 16:9 en-boy oranı kullanılır.
@@ -28,6 +34,7 @@ class DocklyCoverPlaceholder extends StatelessWidget {
     final Color deep = Color.lerp(base, DocklyColors.brandDeep, 0.55) ?? base;
     final DocklyIconData icon = DocklyIcons.forLocationType(type);
     final String? label = this.label;
+    final String? title = this.title;
 
     final Widget inner = DecoratedBox(
       decoration: BoxDecoration(
@@ -46,10 +53,61 @@ class DocklyCoverPlaceholder extends StatelessWidget {
             bottom: -26,
             child: DocklyIcon(icon, size: 140, color: Colors.white.withValues(alpha: 0.14)),
           ),
-          Center(
-            child: DocklyIcon(icon, size: 46, color: Colors.white.withValues(alpha: 0.95)),
-          ),
-          if (label != null)
+          // Başlık yoksa: ortada tip ikonu (eski davranış — kart/küçük kullanım).
+          if (title == null)
+            Center(
+              child: DocklyIcon(icon, size: 46, color: Colors.white.withValues(alpha: 0.95)),
+            ),
+          // Başlık varsa: altta okunurluk degradesi + isim "hero" + tip ikonu.
+          if (title != null) ...<Widget>[
+            const Positioned(left: 0, right: 0, bottom: 0, child: _BottomScrim()),
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 14,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      DocklyIcon(icon, size: 18, color: Colors.white.withValues(alpha: 0.95)),
+                      if (label != null) ...<Widget>[
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.92),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      height: 1.1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          // Başlık yokken sol-üst etiket (eski davranış).
+          if (label != null && title == null)
             Positioned(
               left: 14,
               top: 14,
@@ -64,6 +122,28 @@ class DocklyCoverPlaceholder extends StatelessWidget {
       child: height != null
           ? SizedBox(height: height, width: double.infinity, child: inner)
           : AspectRatio(aspectRatio: 16 / 9, child: inner),
+    );
+  }
+}
+
+/// Hero başlığın altında okunurluğu artıran hafif koyu degrade (alttan yukarı).
+class _BottomScrim extends StatelessWidget {
+  const _BottomScrim();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 88,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: <Color>[
+            Colors.black.withValues(alpha: 0.48),
+            Colors.black.withValues(alpha: 0.0),
+          ],
+        ),
+      ),
     );
   }
 }

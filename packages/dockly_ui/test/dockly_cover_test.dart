@@ -17,6 +17,23 @@ void main() {
     expect(find.byType(DocklyIcon), findsWidgets);
   });
 
+  testWidgets('kapak hero: başlık verilince isim büyük + tip etiketi çizilir',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _host(const SizedBox(
+        width: 320,
+        child: DocklyCoverPlaceholder(
+          type: 'private_marina',
+          title: 'Netsel Marmaris Marina',
+          label: 'Özel Marina',
+        ),
+      )),
+    );
+    expect(find.text('Netsel Marmaris Marina'), findsOneWidget);
+    expect(find.text('Özel Marina'), findsOneWidget);
+    expect(find.byType(DocklyIcon), findsWidgets);
+  });
+
   testWidgets('tip avatarı: ikon çizer', (WidgetTester tester) async {
     await tester.pumpWidget(_host(const DocklyTypeAvatar(type: 'mooring_point')));
     expect(find.byType(DocklyIcon), findsOneWidget);
