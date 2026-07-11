@@ -95,4 +95,34 @@ void main() {
     expect(find.text('Sığan Marina'), findsOneWidget);
     expect(find.text('Küçük İskele'), findsNothing); // 15 m tekne 8 m limite sığmaz
   });
+
+  testWidgets('tekne tanımlıysa her sonuçta uygunluk rozeti görünür',
+      (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[
+        sampleSummary('fits', 'Sığan Marina', maxBoatLengthM: 40, maxDraftM: 5),
+        sampleSummary('big', 'Küçük İskele', maxBoatLengthM: 8, maxDraftM: 1),
+      ],
+    );
+    await tester.pumpWidget(_app(gateway, boat: const MyBoat(lengthM: 15, draftM: 2)));
+    await tester.enterText(find.byType(TextField), 'liman');
+    await tester.pumpAndSettle();
+    // 15 m tekne: 40 m marinaya sığar, 8 m iskeleye sığmaz → iki farklı rozet.
+    expect(find.text('Teknen sığar'), findsOneWidget);
+    expect(find.text('Teknen sığmayabilir'), findsOneWidget);
+  });
+
+  testWidgets('tekne tanımsızsa sonuçlarda uygunluk rozeti çıkmaz',
+      (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[
+        sampleSummary('fits', 'Sığan Marina', maxBoatLengthM: 40, maxDraftM: 5),
+      ],
+    );
+    await tester.pumpWidget(_app(gateway)); // tekne yok
+    await tester.enterText(find.byType(TextField), 'liman');
+    await tester.pumpAndSettle();
+    expect(find.text('Teknen sığar'), findsNothing);
+    expect(find.text('Teknen sığmayabilir'), findsNothing);
+  });
 }

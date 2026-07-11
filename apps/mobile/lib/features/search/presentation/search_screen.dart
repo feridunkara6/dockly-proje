@@ -7,6 +7,7 @@ import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
+import '../../boat/presentation/boat_fit.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/search_controller.dart';
@@ -208,21 +209,44 @@ class _SearchBody extends StatelessWidget {
   }
 }
 
-class _ResultTile extends StatelessWidget {
+class _ResultTile extends ConsumerWidget {
   const _ResultTile({required this.item});
 
   final LocationSummary item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final String subtitle = <String>[
       locationTypeLabelTr(item.type),
       if (_place(item) != null) _place(item)!,
     ].join(' · ');
+
+    // Tekne-uyum rozeti: yalnız tekne tanımlıysa VE lokasyonun bilinen bir
+    // limiti varsa gösterilir. Böylece kullanıcı listeye bakar bakmaz "teknem
+    // sığar mı" görür (denizci-odaklı fark). Veri yoksa (unknown) rozet çıkmaz.
+    final MyBoat? boat = ref.watch(myBoatProvider);
+    final BoatFit fit = computeBoatFit(
+      boat: boat,
+      maxBoatLengthM: item.maxBoatLengthM,
+      maxDraftM: item.maxDraftM,
+    );
+    final bool showFit = boat != null && fit != BoatFit.unknown;
+
     return ListTile(
+      isThreeLine: showFit,
       leading: DocklyTypeAvatar(type: item.type),
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
+          if (showFit) ...<Widget>[
+            const SizedBox(height: 4),
+            BoatFitBadge(fit: fit),
+          ],
+        ],
+      ),
       trailing: item.ratingAvg != null
           ? Row(
               mainAxisSize: MainAxisSize.min,
