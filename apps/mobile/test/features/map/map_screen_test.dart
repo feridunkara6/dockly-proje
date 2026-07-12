@@ -14,8 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
+
 import '../../support/fake_map_surface.dart';
 import '../../support/map_fakes.dart';
+import '../../support/nearby_fakes.dart';
+import '../../support/search_fakes.dart';
 
 /// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
 Finder _docklyIcon(DocklyIconData d) =>
@@ -29,7 +33,12 @@ class _FixedBoat extends MyBoatController {
   MyBoat? build() => _boat;
 }
 
-Widget _app(FakeMapGateway gateway, {FakeMapCache? cache, MyBoat? boat}) {
+Widget _app(
+  FakeMapGateway gateway, {
+  FakeMapCache? cache,
+  MyBoat? boat,
+  FakeNearbyGateway? nearby,
+}) {
   return ProviderScope(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
@@ -39,6 +48,9 @@ Widget _app(FakeMapGateway gateway, {FakeMapCache? cache, MyBoat? boat}) {
       // sızıntı yapar (önceki testin kaydettiği veri sonrakinde "çevrimdışı
       // görünüm" tetikler). Varsayılan: boş sahte önbellek.
       mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
+      // Yakın-liman rayı da HER ZAMAN sahte (varsayılan boş → ray gizli) —
+      // gerçek ağ geçidi testte HTTP'ye çıkardı.
+      nearbyGatewayProvider.overrideWithValue(nearby ?? FakeNearbyGateway()),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: MapScreen()),
@@ -169,6 +181,36 @@ void main() {
     expect(find.textContaining('Çevrimdışı'), findsOneWidget);
     expect(find.byKey(_pinKey), findsOneWidget); // son görülen liman haritada
     expect(find.text('Tekrar dene'), findsNothing); // tam-ekran hata YOK
+  });
+
+  testWidgets('yakınındaki limanlar rayı: mini kartlar görünür (ad + mesafe)', (WidgetTester tester) async {
+    final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
+      sampleSummary('n1', 'Marina Symi', ratingAvg: 4.7, distanceNm: 2.1),
+      sampleSummary('n2', 'Gökkaya Koyu', type: 'mooring_point', distanceNm: 5.4),
+    ]);
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Yakınındaki Limanlar'), findsOneWidget);
+    expect(find.text('Marina Symi'), findsOneWidget);
+    expect(find.text('Gökkaya Koyu'), findsOneWidget);
+    // Alt satır: tip · ★puan · mesafe (tasarım mini-card formatı).
+    expect(find.textContaining('★ 4.7'), findsOneWidget);
+    expect(find.textContaining('2.1 nm'), findsOneWidget);
+  });
+
+  testWidgets('pin seçilince yakın rayı gizlenir (yerini detay kartı alır)', (WidgetTester tester) async {
+    final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
+      sampleSummary('n1', 'Marina Symi', distanceNm: 2.1),
+    ]);
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
+    await tester.pumpAndSettle();
+    expect(find.text('Yakınındaki Limanlar'), findsOneWidget);
+
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    expect(find.text('Yakınındaki Limanlar'), findsNothing);
+    expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
   });
 
   testWidgets('hata → hata görünümü + retry başarıyla toparlar', (WidgetTester tester) async {

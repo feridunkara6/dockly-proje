@@ -9,6 +9,7 @@ import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../location/presentation/locate_button.dart';
+import '../../nearby/presentation/nearby_sheet.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
@@ -102,6 +103,10 @@ class MapScreen extends ConsumerWidget {
                 onRetry: () => controller.retry(),
               ),
             ),
+          // "Yakınındaki Limanlar" alt-sayfası (tasarım §07 peek durumu):
+          // harita modunda, seçili pin yokken. Pin seçilince yerini karta bırakır.
+          if (!isList && selectedPin == null)
+            const Positioned(left: 0, right: 0, bottom: 0, child: NearbySheet()),
           if (!isList && selectedPin != null)
             Positioned(
               left: 0,

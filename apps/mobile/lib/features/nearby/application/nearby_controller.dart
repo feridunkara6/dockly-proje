@@ -33,3 +33,24 @@ final nearbyAlternativesProvider =
       .take(kNearbyAltLimit)
       .toList(growable: false);
 });
+
+/// Harita alt-sayfası "Yakınındaki Limanlar" sorgu anahtarı — merkez koordinat.
+/// Çağıran taraf ~1 km'ye yuvarlar (her küçük kaydırışta yeni istek atılmasın;
+/// sunucu cache'iyle de uyumlu). Record → yapısal eşitlik (family cache anahtarı).
+typedef MapNearbyKey = ({double lat, double lon});
+
+/// Alt-sayfa rayında gösterilecek maksimum kart sayısı.
+const int kMapNearbyLimit = 10;
+
+/// Haritada bakılan noktanın çevresindeki en yakın limanlar (docs/23 §9.6,
+/// S-06 rayı) — tasarım §07 alt-sayfa mini-kartlarını besler. Mesafeye göre
+/// artan sıralı gelir (sunucu sıralar).
+final mapNearbyProvider =
+    FutureProvider.family<List<LocationSummary>, MapNearbyKey>((ref, MapNearbyKey key) {
+  return ref.watch(nearbyGatewayProvider).fetch(
+        lat: key.lat,
+        lon: key.lon,
+        radiusNm: 25,
+        limit: kMapNearbyLimit,
+      );
+});
