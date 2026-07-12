@@ -6,6 +6,7 @@ import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
+import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -251,6 +252,63 @@ void main() {
     _ctrl(container).onViewportChanged(clusterViewport);
     await Future<void>.delayed(const Duration(milliseconds: 10));
     expect(gateway.calls, contains(clusterViewport));
+  });
+
+  test('hızlı yol: kapsanan alana yakınlaşınca ağa çıkılmaz — pinler anında süzülür', () async {
+    final gateway = FakeMapGateway(result: pinResult);
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(pinViewport); // ağ: önbelleği doldurur
+    expect(gateway.calls, hasLength(1));
+
+    // testBbox İÇİNDE kalan daha dar alan + daha derin zoom → ağ çağrısı YOK.
+    const MapViewport zoomedIn = MapViewport(
+      bbox: Bbox(minLon: 28.92, minLat: 36.73, maxLon: 28.96, maxLat: 36.78),
+      zoom: 14,
+    );
+    await _ctrl(container).loadViewport(zoomedIn);
+    expect(gateway.calls, hasLength(1)); // ikinci ağ çağrısı olmadı
+    expect(_state(container).pins.single.id, 'loc-1'); // (28.93, 36.75) alanda
+    expect(_state(container).isLoading, isFalse);
+    expect(_state(container).clusters, isEmpty);
+
+    // Pin'i DIŞARIDA bırakan dar köşe → yine ağ yok, pinler doğru süzülür (boş).
+    const MapViewport farCorner = MapViewport(
+      bbox: Bbox(minLon: 28.96, minLat: 36.76, maxLon: 28.99, maxLat: 36.79),
+      zoom: 14,
+    );
+    await _ctrl(container).loadViewport(farCorner);
+    expect(gateway.calls, hasLength(1));
+    expect(_state(container).pins, isEmpty);
+  });
+
+  test('hızlı yol: truncated yanıt önbelleğe alınmaz → yakınlaşma ağa gider', () async {
+    final gateway = FakeMapGateway(
+      result: const MapResult(
+        clusters: <Cluster>[],
+        locations: <LocationPin>[testPin],
+        truncated: true, // 500 tavanı aşıldı — eksik olabilir, süzme güvensiz
+      ),
+    );
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(gateway.calls, hasLength(1));
+
+    const MapViewport zoomedIn = MapViewport(
+      bbox: Bbox(minLon: 28.92, minLat: 36.73, maxLon: 28.96, maxLat: 36.78),
+      zoom: 14,
+    );
+    await _ctrl(container).loadViewport(zoomedIn);
+    expect(gateway.calls, hasLength(2)); // önbellek yok → normal ağ yolu
+  });
+
+  test('hızlı yol: cluster modunda (zoom < 10) kullanılmaz', () async {
+    final gateway = FakeMapGateway(result: pinResult);
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(pinViewport); // pin önbelleği dolu
+    gateway.result = clusterResult;
+    await _ctrl(container).loadViewport(clusterViewport); // zoom 6 → ağ
+    expect(gateway.calls, hasLength(2));
+    expect(_state(container).clusters.single.count, 34);
   });
 
   test('stale koruması: eski yanıt geç gelirse yok sayılır (en son kazanır)', () async {

@@ -28,9 +28,20 @@ final Provider<MapCache> mapCacheProvider =
 final StateProvider<bool> mapViewIsListProvider = StateProvider<bool>((ref) => false);
 
 /// Harita çağrılarının debounce süresi (docs/14 perf — pan/zoom sırasında
-/// gereksiz istek olmasın). Testte `Duration.zero`'a override edilir.
+/// gereksiz istek olmasın). Kısa tutulur: harita yüzeyinin kendi debounce'u
+/// (150ms) zaten var; ikisinin toplamı algılanan gecikmeyi belirler.
+/// Testte `Duration.zero`'a override edilir.
 final Provider<Duration> mapDebounceProvider =
-    Provider<Duration>((ref) => const Duration(milliseconds: 300));
+    Provider<Duration>((ref) => const Duration(milliseconds: 120));
+
+/// Sunucu pin eşiğinin aynası (apps/api cluster.ts MIN_PIN_ZOOM):
+/// zoom ≥ 10 → pin modu. Bellek-içi hızlı yol bu eşiğe göre çalışır.
+const int _minPinZoom = 10;
+
+/// Bellek-içi pin önbelleğinin tazelik süresi — sunucunun CDN cache'iyle
+/// (Cache-Control 120s) hizalı: bu süre içinde ağa çıkmak zaten aynı veriyi
+/// döndürürdü.
+const Duration _pinCacheTtl = Duration(seconds: 120);
 
 /// Harita ekranının beyni (docs/26 §4): görünüm değişimi → debounce → yükleme,
 /// marker/cluster durumu, seçim, hata + retry. Somut haritadan bağımsızdır.
@@ -38,6 +49,13 @@ class MapController extends Notifier<MapState> {
   Timer? _debounce;
   MapViewport? _lastRequested;
   int _seq = 0;
+
+  // Bellek-içi pin önbelleği (perf): son BAŞARILI, filtre-siz, TAM (truncated
+  // değil) pin yanıtı. Yakınlaşınca yeni bbox bu kapsamın İÇİNDEYSE ağa hiç
+  // çıkılmaz — pinler anında süzülüp gösterilir (yakınlaştırma gecikmesi biter).
+  Bbox? _pinCacheBbox;
+  List<LocationPin> _pinCachePins = const <LocationPin>[];
+  DateTime? _pinCacheAt;
 
   @override
   MapState build() {
@@ -71,6 +89,30 @@ class MapController extends Notifier<MapState> {
       lon: (b.minLon + b.maxLon) / 2,
     );
     final seq = ++_seq;
+    // Parametre verilmediyse haritadaki çip filtreleri kullanılır (boş = tümü).
+    final List<String>? effectiveTypes =
+        types ?? (state.types.isEmpty ? null : state.types.toList(growable: false));
+    // HIZLI YOL (perf): pin modunda, elimizde bu alanı KAPSAYAN taze ve tam bir
+    // pin yanıtı varsa ağa çıkmadan anında süz — yakınlaşınca pinler beklemeden
+    // ayrı lokasyonlarına dağılır. (Filtre açıkken ve truncated yanıtlarda
+    // kullanılmaz — eksik veri gösterme riski yok.)
+    if (effectiveTypes == null &&
+        viewport.zoom >= _minPinZoom &&
+        _pinCacheBbox != null &&
+        _pinCacheAt != null &&
+        DateTime.now().difference(_pinCacheAt!) <= _pinCacheTtl &&
+        _containsBbox(_pinCacheBbox!, viewport.bbox)) {
+      state = state.copyWith(
+        pins: _pinsInBbox(_pinCachePins, viewport.bbox),
+        clusters: const <Cluster>[],
+        truncated: false,
+        isLoading: false,
+        clearFailure: true,
+        hasLoadedOnce: true,
+        isOffline: false,
+      );
+      return;
+    }
     state = state.copyWith(isLoading: true, clearFailure: true);
     // SICAK BAŞLANGIÇ (algılanan hız): ilk yüklemede, taze veri gelene dek
     // cihazdaki son başarılı veri ANINDA gösterilir — açılışta boş harita ve
@@ -82,12 +124,15 @@ class MapController extends Notifier<MapState> {
       }
       if (seq != _seq) return;
     }
-    // Parametre verilmediyse haritadaki çip filtreleri kullanılır (boş = tümü).
-    final List<String>? effectiveTypes =
-        types ?? (state.types.isEmpty ? null : state.types.toList(growable: false));
     try {
       final result = await _gateway.loadViewport(viewport, types: effectiveTypes);
       if (seq != _seq) return;
+      // Hızlı yolun kaynağını güncelle: filtre-siz, tam pin yanıtları saklanır.
+      if (effectiveTypes == null && viewport.zoom >= _minPinZoom && !result.truncated) {
+        _pinCacheBbox = viewport.bbox;
+        _pinCachePins = result.locations;
+        _pinCacheAt = DateTime.now();
+      }
       state = state.copyWith(
         pins: result.locations,
         clusters: result.clusters,
@@ -138,11 +183,15 @@ class MapController extends Notifier<MapState> {
   }
 
   /// Tip filtresini aç/kapat (haritadaki renkli çipler; aynı zamanda lejant).
-  /// Değişince son görünüm yeni filtreyle hemen yeniden yüklenir.
+  /// Değişince son görünüm yeni filtreyle hemen yeniden yüklenir. Bellek-içi
+  /// pin önbelleği düşürülür — filtre oynadıktan sonra taze veri çekilir.
   Future<void> toggleType(String code) async {
     final Set<String> next = Set<String>.of(state.types);
     if (!next.add(code)) next.remove(code);
     state = state.copyWith(types: next);
+    _pinCacheBbox = null;
+    _pinCacheAt = null;
+    _pinCachePins = const <LocationPin>[];
     final viewport = _lastRequested;
     if (viewport != null) await loadViewport(viewport);
   }
@@ -164,3 +213,19 @@ class MapController extends Notifier<MapState> {
 
 final NotifierProvider<MapController, MapState> mapControllerProvider =
     NotifierProvider<MapController, MapState>(MapController.new);
+
+/// `inner` bbox'ı `outer` tarafından tamamen kapsanıyor mu? (Hızlı yol koşulu.)
+bool _containsBbox(Bbox outer, Bbox inner) =>
+    inner.minLon >= outer.minLon &&
+    inner.maxLon <= outer.maxLon &&
+    inner.minLat >= outer.minLat &&
+    inner.maxLat <= outer.maxLat;
+
+/// Önbellekteki pinlerden yalnız görünür alana düşenler (istemci-yanı süzme).
+List<LocationPin> _pinsInBbox(List<LocationPin> pins, Bbox b) => pins
+    .where((LocationPin p) =>
+        p.position.lon >= b.minLon &&
+        p.position.lon <= b.maxLon &&
+        p.position.lat >= b.minLat &&
+        p.position.lat <= b.maxLat)
+    .toList(growable: false);

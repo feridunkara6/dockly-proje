@@ -237,7 +237,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

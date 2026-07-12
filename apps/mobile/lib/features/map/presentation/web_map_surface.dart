@@ -57,9 +57,14 @@ class _WebMapSurface extends ConsumerStatefulWidget {
   ConsumerState<_WebMapSurface> createState() => _WebMapSurfaceState();
 }
 
+/// Sunucu pin eşiğinin aynası (apps/api cluster.ts MIN_PIN_ZOOM): zoom ≥ 10 →
+/// pin modu. Eşik GEÇİLİRKEN debounce beklenmez — pinler anında istenir.
+const int _minPinZoom = 10;
+
 class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   final MapController _map = MapController();
   Timer? _debounce;
+  double _lastZoom = 7; // _initialZoom ile hizalı; eşik-geçişi tespiti için
 
   @override
   void initState() {
@@ -78,12 +83,21 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     super.dispose();
   }
 
-  // Kullanıcı haritayı gezdirince, durulmasını bekleyip (debounce) yeni görünür
-  // alanı bildir. Sunucu limiti gereği her kenar ≤ 5°'ye kırpılır.
+  // Kullanıcı haritayı gezdirince, durulmasını bekleyip (kısa debounce) yeni
+  // görünür alanı bildir. Sunucu limiti gereği her kenar ≤ 5°'ye kırpılır.
+  // İSTİSNA: zoom pin eşiğini (10) GEÇERKEN hiç beklenmez — balonlardan pinlere
+  // geçiş isteği parmak daha ekrandayken atılır, pinler gecikmeden dağılır.
   void _onMove(MapCamera camera, bool hasGesture) {
     if (!hasGesture) return;
+    final bool crossedPinThreshold =
+        (_lastZoom.round() >= _minPinZoom) != (camera.zoom.round() >= _minPinZoom);
+    _lastZoom = camera.zoom;
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 400), () => _emit(camera));
+    if (crossedPinThreshold) {
+      _emit(camera);
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 150), () => _emit(camera));
   }
 
   void _emit(MapCamera camera) {
@@ -116,6 +130,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     // Pin eşiği 10 olduğundan hedef en az 10.5 — baloncuğa dokunuş her zaman
     // tekil pin bölgesine indirir (bir kez daha dokunma gereği kalmaz).
     final double targetZoom = math.min(math.max(_map.camera.zoom + 2.5, 10.5), 14.0);
+    _lastZoom = targetZoom; // programatik hareket — eşik-geçiş takibi güncel kalsın
     _map.move(LatLng(c.position.lat, c.position.lon), targetZoom);
     _emit(_map.camera);
   }
