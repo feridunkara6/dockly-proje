@@ -26,7 +26,7 @@ async function bootstrap(): Promise<void> {
   if (process.env.SEED_ON_BOOT === 'true') {
     try {
       await runBootSeed(env.get('DATABASE_URL'), join(process.cwd(), 'prisma', 'seed.sql'));
-      logger.log('boot-seed: içerik seed\'i uygulandı (idempotent)');
+      logger.log("boot-seed: içerik seed'i uygulandı (idempotent)");
     } catch (err) {
       logger.error({ err }, 'boot-seed başarısız — uygulama mevcut veriyle açılıyor');
     }
