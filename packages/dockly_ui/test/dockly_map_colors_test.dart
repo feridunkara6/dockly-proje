@@ -29,14 +29,20 @@ void main() {
       expect(DocklyMapColors.knownTypes.length, 9);
     });
 
-    test('küme ülke renkleri: TR mavi, GR turkuaz; bilinmeyen → marka birincil', () {
-      expect(DocklyMapColors.clusterArgbForCountry('TR'), 0xFF0C7BDC);
-      expect(DocklyMapColors.clusterArgbForCountry('GR'), 0xFF2EC4B6);
-      expect(DocklyMapColors.clusterArgbForCountry(''), DocklyMapColors.clusterArgb);
-      expect(DocklyMapColors.clusterArgbForCountry('XX'), DocklyMapColors.clusterArgb);
-      expect(DocklyMapColors.clusterColorForCountry('GR'), const Color(0xFF2EC4B6));
-      expect(DocklyMapColors.clusterDeepColorForCountry('TR'), const Color(0xFF0A2540));
-      expect(DocklyMapColors.clusterDeepColorForCountry('GR'), const Color(0xFF0B5D54));
+    test('küme ülke renkleri (pastel + vurgu): TR mavi, GR turkuaz; bilinmeyen → nötr/marka', () {
+      // Vurgu (halka + sayı): canlı ton.
+      expect(DocklyMapColors.clusterAccentArgbForCountry('TR'), 0xFF0C7BDC);
+      expect(DocklyMapColors.clusterAccentArgbForCountry('GR'), 0xFF0E8577);
+      expect(DocklyMapColors.clusterAccentArgbForCountry(''), DocklyMapColors.clusterArgb);
+      expect(DocklyMapColors.clusterAccentArgbForCountry('XX'), DocklyMapColors.clusterArgb);
+      // Dolgu: açık pastel — koyu değil (kibar baloncuk kararı).
+      expect(DocklyMapColors.clusterFillColorForCountry('TR'), const Color(0xFFE3F2FF));
+      expect(DocklyMapColors.clusterFillColorForCountry('GR'), const Color(0xFFDEF6F2));
+      expect(DocklyMapColors.clusterFillColorForCountry('XX'), const Color(0xFFEDF2F8));
+      expect(
+        DocklyMapColors.clusterAccentColorForCountry('TR'),
+        const Color(0xFF0C7BDC),
+      );
     });
   });
 }

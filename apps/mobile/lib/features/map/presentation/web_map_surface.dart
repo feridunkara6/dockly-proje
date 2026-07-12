@@ -155,15 +155,25 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
           userAgentPackageName: 'app.moorira.mobile',
           tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 19,
+          // Perf: kaydırırken bir halka komşu karo önceden yüklenir; geri
+          // dönüşte karo atılmasın diye tampon büyütüldü → akıcı gezinme.
+          panBuffer: 1,
+          keepBuffer: 4,
         ),
         // Denizcilik katmanı: OpenSeaMap seamark'ları (şamandıra, fener, liman
-        // işaretleri) — açık lisanslı, jetonsuz. Şeffaf bindirme; yakın zoom'da
-        // görünür hale gelir. (Navionics/C-MAP ticari lisans ister — v2 adayı.)
-        TileLayer(
-          urlTemplate: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
-          userAgentPackageName: 'app.moorira.mobile',
-          tileDisplay: const TileDisplay.instantaneous(),
-          maxZoom: 18,
+        // işaretleri) — açık lisanslı, jetonsuz. Şeffaf bindirme. Perf: işaretler
+        // ancak yakın zoom'da çizildiğinden katman zoom ≥ 9'da yüklenir — uzak
+        // görünümde her karede boş karo indirme maliyeti sıfırlanır.
+        Builder(
+          builder: (BuildContext context) {
+            if (MapCamera.of(context).zoom < 9) return const SizedBox.shrink();
+            return TileLayer(
+              urlTemplate: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
+              userAgentPackageName: 'app.moorira.mobile',
+              tileDisplay: const TileDisplay.instantaneous(),
+              maxZoom: 18,
+            );
+          },
         ),
         MarkerLayer(
           markers: <Marker>[
@@ -174,10 +184,14 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 point: LatLng(c.position.lat, c.position.lon),
                 width: 64,
                 height: 64,
-                child: _ClusterMarker(
-                  count: c.count,
-                  countryCode: c.countryCode,
-                  onTap: () => _onClusterTap(c),
+                // RepaintBoundary (perf): kamera oynarken işaretçiler yeniden
+                // boyanmaz — kendi katmanlarında taşınır.
+                child: RepaintBoundary(
+                  child: _ClusterMarker(
+                    count: c.count,
+                    countryCode: c.countryCode,
+                    onTap: () => _onClusterTap(c),
+                  ),
                 ),
               ),
             // Tekil pinler — damla form, tip rengi, beyaz kontur + beyaz ikon.
@@ -188,15 +202,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 width: 44,
                 height: 44,
                 alignment: Alignment.topCenter,
-                child: _PinMarker(
-                  type: p.type,
-                  selected: p.id == widget.data.selectedPinId,
-                  fit: computeBoatFit(
-                    boat: boat,
-                    maxBoatLengthM: p.maxBoatLengthM,
-                    maxDraftM: p.maxDraftM,
+                child: RepaintBoundary(
+                  child: _PinMarker(
+                    type: p.type,
+                    selected: p.id == widget.data.selectedPinId,
+                    fit: computeBoatFit(
+                      boat: boat,
+                      maxBoatLengthM: p.maxBoatLengthM,
+                      maxDraftM: p.maxDraftM,
+                    ),
+                    onTap: () => widget.callbacks.onPinTap(p.id),
                   ),
-                  onTap: () => widget.callbacks.onPinTap(p.id),
                 ),
               ),
           ],
@@ -286,8 +302,9 @@ class _PinMarker extends StatelessWidget {
                 bottomLeft: const Radius.circular(4),
               ),
               border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
+              // Hafif gölge (perf: yüksek blur yüzlerce pinde kasmaya yol açar).
               boxShadow: const <BoxShadow>[
-                BoxShadow(color: Color(0x590A2540), blurRadius: 12, offset: Offset(0, 4)),
+                BoxShadow(color: Color(0x400A2540), blurRadius: 5, offset: Offset(0, 3)),
               ],
             ),
             child: Transform.rotate(
@@ -334,10 +351,11 @@ class _FitDot extends StatelessWidget {
   }
 }
 
-/// Cluster işaretçisi: ÜLKEYE göre renklenen baloncuk — Türkiye marka mavisi,
-/// Yunanistan Ege turkuazı (bilinmeyen ülke: kayrak grisi). Beyaz kontur +
-/// beyaz kalın sayı, altında küçük ülke kodu. Kalabalık bölge daha büyük
-/// baloncuk (<10 → 40, <50 → 50, 50+ → 60). Dokununca kamera bölgeye yaklaşır.
+/// Cluster işaretçisi — KİBAR/PASTEL tasarım: açık pastel dolgu üstünde ülkeye
+/// göre canlı halka + sayı (TR mavi, GR turkuaz; tasarım §06 cam baloncuk dili).
+/// Koyu dolgu yok — harita üstünde yumuşak durur, sayı yüksek kontrastla okunur.
+/// Kalabalık bölge daha büyük baloncuk (<10 → 40, <50 → 50, 50+ → 60).
+/// Dokununca kamera bölgeye yaklaşır.
 class _ClusterMarker extends StatelessWidget {
   const _ClusterMarker({
     required this.count,
@@ -353,10 +371,8 @@ class _ClusterMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final double s = count >= 50 ? 60 : (count >= 10 ? 50 : 40);
     // Ülke → renk eşlemesi tasarım paketinde (ham hex yasak — docs/09 §0).
-    final List<Color> colors = <Color>[
-      DocklyMapColors.clusterColorForCountry(countryCode),
-      DocklyMapColors.clusterDeepColorForCountry(countryCode),
-    ];
+    final Color fill = DocklyMapColors.clusterFillColorForCountry(countryCode);
+    final Color accent = DocklyMapColors.clusterAccentColorForCountry(countryCode);
     return GestureDetector(
       onTap: onTap,
       child: Center(
@@ -364,15 +380,12 @@ class _ClusterMarker extends StatelessWidget {
           width: s,
           height: s,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: colors,
-            ),
+            color: fill,
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
+            border: Border.all(color: accent, width: 2),
+            // Hafif gölge (perf: düşük blur — yüzlerce işaretçide fark eder).
             boxShadow: const <BoxShadow>[
-              BoxShadow(color: Color(0x590A2540), blurRadius: 12, offset: Offset(0, 4)),
+              BoxShadow(color: Color(0x2E0A2540), blurRadius: 6, offset: Offset(0, 2)),
             ],
           ),
           child: Column(
@@ -384,7 +397,7 @@ class _ClusterMarker extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   fontSize: s * 0.30,
                   height: 1.05,
-                  color: const Color(0xFFFFFFFF),
+                  color: accent,
                 ),
               ),
               if (countryCode.isNotEmpty)
@@ -395,7 +408,7 @@ class _ClusterMarker extends StatelessWidget {
                     fontSize: s * 0.16,
                     height: 1.0,
                     letterSpacing: 0.6,
-                    color: const Color(0xD9FFFFFF),
+                    color: accent.withValues(alpha: 0.72),
                   ),
                 ),
             ],

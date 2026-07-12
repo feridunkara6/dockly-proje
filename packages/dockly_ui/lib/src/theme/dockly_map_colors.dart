@@ -27,31 +27,35 @@ abstract final class DocklyMapColors {
   /// Küme (cluster) rozeti rengi (docs/09 §1.4: baskın tip; v1'de marka birincil).
   static const int clusterArgb = 0xFF0C7BDC;
 
-  /// Küme baloncuğu ÜLKE renkleri — balonlar ülkeye göre ayrılır ve renklenir:
-  /// Türkiye marka mavisi, Yunanistan Ege turkuazı. Bilinmeyen/eski veri →
-  /// marka birincil (geriye uyumlu). Yeni ülke eklenince buraya satır eklenir.
-  static const Map<String, int> _clusterArgbByCountry = <String, int>{
+  /// Küme baloncuğu ÜLKE renkleri — kibar/pastel tasarım: açık pastel dolgu
+  /// üstünde canlı vurgu (halka + sayı metni). Türkiye mavi, Yunanistan turkuaz;
+  /// bilinmeyen/eski veri nötr açık ton + marka vurgusu (geriye uyumlu).
+  /// Yeni ülke eklenince iki tabloya birer satır eklenir.
+  static const Map<String, int> _clusterFillArgbByCountry = <String, int>{
+    'TR': 0xFFE3F2FF, // pastel mavi
+    'GR': 0xFFDEF6F2, // pastel turkuaz
+  };
+  static const Map<String, int> _clusterAccentArgbByCountry = <String, int>{
     'TR': 0xFF0C7BDC, // marka birincil
-    'GR': 0xFF2EC4B6, // Ege turkuazı (accent)
+    'GR': 0xFF0E8577, // koyultulmuş turkuaz — açık zeminde okunur (kontrast)
   };
+  static const int _clusterFillFallbackArgb = 0xFFEDF2F8; // nötr açık gri-mavi
 
-  /// Baloncuk degradesinin koyu ucu (ülke başına).
-  static const Map<String, int> _clusterDeepArgbByCountry = <String, int>{
-    'TR': 0xFF0A2540, // marka derin lacivert
-    'GR': 0xFF0B5D54, // derin turkuaz
-  };
+  /// Baloncuk dolgusu (açık pastel) — web.
+  static Color clusterFillColorForCountry(String countryCode) =>
+      Color(clusterFillArgbForCountry(countryCode));
 
-  /// Mapbox (native) küme rengi — annotation API tek renk ister (ARGB int).
-  static int clusterArgbForCountry(String countryCode) =>
-      _clusterArgbByCountry[countryCode] ?? clusterArgb;
+  /// Baloncuk vurgusu: halka + sayı (canlı ton) — web.
+  static Color clusterAccentColorForCountry(String countryCode) =>
+      Color(clusterAccentArgbForCountry(countryCode));
 
-  /// Küme degradesi açık ucu (web baloncukları).
-  static Color clusterColorForCountry(String countryCode) =>
-      Color(_clusterArgbByCountry[countryCode] ?? clusterArgb);
+  /// Mapbox (native) baloncuk dolgusu — annotation API ARGB int ister.
+  static int clusterFillArgbForCountry(String countryCode) =>
+      _clusterFillArgbByCountry[countryCode] ?? _clusterFillFallbackArgb;
 
-  /// Küme degradesi koyu ucu (web baloncukları).
-  static Color clusterDeepColorForCountry(String countryCode) =>
-      Color(_clusterDeepArgbByCountry[countryCode] ?? 0xFF0A2540);
+  /// Mapbox (native) baloncuk vurgusu (halka + sayı).
+  static int clusterAccentArgbForCountry(String countryCode) =>
+      _clusterAccentArgbByCountry[countryCode] ?? clusterArgb;
 
   /// Pin dolgu ikonu ve halkası (docs/09 §1.4: ikon/halka #FFFFFF).
   static const int strokeArgb = 0xFFFFFFFF;

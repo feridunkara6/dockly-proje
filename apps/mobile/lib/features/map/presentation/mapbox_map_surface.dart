@@ -220,10 +220,12 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       final CircleAnnotation ann = await circles.create(
         CircleAnnotationOptions(
           geometry: geometry,
-          // Ülkeye göre renk: TR mavi, GR turkuaz (web ile aynı semantik).
-          circleColor: DocklyMapColors.clusterArgbForCountry(cluster.countryCode),
+          // Kibar/pastel baloncuk: açık dolgu + ülkeye göre canlı halka
+          // (TR mavi, GR turkuaz) — web ile aynı semantik.
+          circleColor: DocklyMapColors.clusterFillArgbForCountry(cluster.countryCode),
           circleRadius: 18.0,
-          circleStrokeColor: DocklyMapColors.strokeArgb,
+          circleStrokeColor:
+              DocklyMapColors.clusterAccentArgbForCountry(cluster.countryCode),
           circleStrokeWidth: 2.0,
         ),
       );
@@ -234,7 +236,8 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         PointAnnotationOptions(
           geometry: geometry,
           textField: '${cluster.count}',
-          textColor: DocklyMapColors.strokeArgb,
+          // Açık pastel dolguda okunması için sayı vurgu renginde.
+          textColor: DocklyMapColors.clusterAccentArgbForCountry(cluster.countryCode),
           textSize: 12.0,
         ),
       );

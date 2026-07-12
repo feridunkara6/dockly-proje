@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 class SplashGate extends StatefulWidget {
   const SplashGate({
     required this.child,
-    this.duration = const Duration(milliseconds: 2400),
+    // 1600ms: marka görünür ama bekletmez (algılanan-hız kararı; eskisi 2400).
+    this.duration = const Duration(milliseconds: 1600),
     super.key,
   });
 
