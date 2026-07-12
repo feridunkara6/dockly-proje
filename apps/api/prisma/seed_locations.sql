@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -90,6 +90,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Meis (Kastellorizo)', 'gr-meis')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Tilos', 'gr-tilos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Halki (Herke)', 'gr-halki')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6004,5 +6007,55 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'yesilkoy-firnaz-koyu' AND a.code IN ('water', 'market')
+ON CONFLICT DO NOTHING;
+
+-- --- Emporios Rıhtımı (Halki) · güven: medium · kaynak: grecosailor.com, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'halki-emporios-rihtimi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-halki'),
+  'Emporios Rıhtımı (Halki)', 'Halki''nin (Herke) pastel renkli tek kasabası Emporios''ta rıhtım + mevsimlik T-ponton (Mayıs-Kasım). Kıçtankara/pontona bağlama; ücretsiz su, kasabada yakıt tedariki. Koy 12-18 m derinliğinde. Ücret örneği: 12,4 m tekne için ~15€. Rodos''un batı komşusu — sakin bir mola.',
+  ST_SetSRID(ST_MakePoint(27.613056, 36.222806), 4326)::geography,
+  NULL, NULL, 12, 18,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Emporios Rıhtımı (Halki)', 'Halki''nin (Herke) pastel renkli tek kasabası Emporios''ta rıhtım + mevsimlik T-ponton (Mayıs-Kasım). Kıçtankara/pontona bağlama; ücretsiz su, kasabada yakıt tedariki. Koy 12-18 m derinliğinde. Ücret örneği: 12,4 m tekne için ~15€. Rodos''un batı komşusu — sakin bir mola.' FROM locations WHERE slug = 'halki-emporios-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'halki-emporios-rihtimi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246045220', NULL, true
+FROM locations l WHERE l.slug = 'halki-emporios-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/chalki-island/', NULL, false
+FROM locations l WHERE l.slug = 'halki-emporios-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Üçağız Rıhtımı (Kekova) · güven: low · kaynak: sailparking.com, en.wikipedia.org ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ucagiz-rihtimi', 3, 'draft', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Üçağız Rıhtımı (Kekova)', 'Kekova''nın kalbi Üçağız''da kooperatifin işlettiği iki iskele; yatlar T-iskeleye bağlanır. İskelede 2-5 m derinlik, elektrik ve su; ücret karşılığı WC/duş. Dip çamur — demirlerken çapa yer yer kayabilir. Her rüzgârda iyi korunma. Kooperatif görevlileri bağlamada yardım eder.',
+  ST_SetSRID(ST_MakePoint(29.85, 36.2), 4326)::geography,
+  NULL, NULL, 2, 5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Üçağız Rıhtımı (Kekova)', 'Kekova''nın kalbi Üçağız''da kooperatifin işlettiği iki iskele; yatlar T-iskeleye bağlanır. İskelede 2-5 m derinlik, elektrik ve su; ücret karşılığı WC/duş. Dip çamur — demirlerken çapa yer yer kayabilir. Her rüzgârda iyi korunma. Kooperatif görevlileri bağlamada yardım eder.' FROM locations WHERE slug = 'ucagiz-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ucagiz-rihtimi' AND a.code IN ('electricity', 'water', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'ucagiz-rihtimi' AND sv.code IN ('mooring_assist')
 ON CONFLICT DO NOTHING;
 

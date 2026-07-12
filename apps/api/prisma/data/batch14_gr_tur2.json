@@ -1,0 +1,94 @@
+{
+ "batch": "14-gr-tur2-halki-ucagiz-taslak",
+ "collectedAt": "2026-07-12",
+ "method": "Yunanistan 2. tur başlangıcı + Üçağız veri kaydı. Halki (Emporios): grecosailor.com kaptan rehberi (koordinat DMS, VHF, telefon, ücret örneği) + sailingissues.com (mevsimlik T-ponton, 12-18 m derinlik) + litando.gr (liman fonu yetkisi). Üçağız: sailparking.com rehberi (T-iskele, kooperatif, derinlik, tesis) — hassas koordinat HİÇBİR kaynakta yok; Wikipedia köy koordinatı yalnız dakika hassasiyetinde (±1 km) → kayıt TASLAK statüsünde (haritada gösterilmez), hassas koordinat bulununca yayınlanır. Tahmin/uydurma YOK.",
+ "notes": [
+  "Halki, Onikiadalar zincirinin eksik halkasıydı (batch11'de koordinatsızlıktan ertelenmişti) — tamamlandı.",
+  "Üçağız TASLAK: veri hazır, pin koordinatı beklemede. Kaba koordinatla yayınlamak yanlış yere pin koyardı (Alaçatı kararıyla aynı ilke).",
+  "Sonraki turlar: Kos-Kalymnos-Leros-Patmos liman fonları (özel tur gerektiriyor), Gökçeada, Gökova iç koy restoran iskeleleri, Kaş belediye limanı."
+ ],
+ "records": [
+  {
+   "slug": "halki-emporios-rihtimi",
+   "name": "Emporios Rıhtımı (Halki)",
+   "operator": "Güney Onikiadalar Belediye Liman Fonu",
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-halki",
+   "districtSlug": null,
+   "lat": 36.222806,
+   "lon": 27.613056,
+   "coordSource": "grecosailor.com kaptan rehberi (36°13'22.1\"N 27°36'47.0\"E → 36.222806, 27.613056)",
+   "descriptionTr": "Halki'nin (Herke) pastel renkli tek kasabası Emporios'ta rıhtım + mevsimlik T-ponton (Mayıs-Kasım). Kıçtankara/pontona bağlama; ücretsiz su, kasabada yakıt tedariki. Koy 12-18 m derinliğinde. Ücret örneği: 12,4 m tekne için ~15€. Rodos'un batı komşusu — sakin bir mola.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 12,
+   "depthMaxM": 18,
+   "vhfChannel": "12",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302246045220",
+     "primary": true
+    },
+    {
+     "type": "website",
+     "value": "https://www.litando.gr/chalki-island/"
+    }
+   ],
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/halki/ (koordinat, VHF 12, telefon, ücret örneği)",
+    "https://sailingissues.com/greekislands/rhodos.html (mevsimlik T-ponton Mayıs-Kasım, 12-18 m)",
+    "https://www.litando.gr/ (liman idaresi: Güney Onikiadalar Belediye Liman Fonu)"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Elektrik bilgisi kaynaklarda net değil → amenity verilmedi. Ponton mevsimlik (Mayıs-Kasım)."
+  },
+  {
+   "slug": "ucagiz-rihtimi",
+   "name": "Üçağız Rıhtımı (Kekova)",
+   "operator": "Kooperatif",
+   "status": "draft",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "antalya",
+   "districtSlug": "antalya-demre",
+   "lat": 36.2,
+   "lon": 29.85,
+   "coordSource": "YALNIZ KABA: Wikipedia Kaleüçağız köy koordinatı (36°12'N 29°51'E, ±1 km) — rıhtım için yetersiz hassasiyet, kayıt bu yüzden TASLAK",
+   "descriptionTr": "Kekova'nın kalbi Üçağız'da kooperatifin işlettiği iki iskele; yatlar T-iskeleye bağlanır. İskelede 2-5 m derinlik, elektrik ve su; ücret karşılığı WC/duş. Dip çamur — demirlerken çapa yer yer kayabilir. Her rüzgârda iyi korunma. Kooperatif görevlileri bağlamada yardım eder.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2,
+   "depthMaxM": 5,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "amenities": [
+    "electricity",
+    "water",
+    "wc",
+    "shower"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [],
+   "sourceUrls": [
+    "http://sailparking.com/en/ucagiz (iskele/derinlik/tesis bilgileri)",
+    "https://en.wikipedia.org/wiki/Kale%C3%BC%C3%A7a%C4%9F%C4%B1z,_Demre (kaba köy koordinatı)"
+   ],
+   "confidence": "low",
+   "missingNotes": "Hassas rıhtım koordinatı hiçbir açık kaynakta bulunamadı — bulunana dek yayınlanmaz (draft). Telefon yok."
+  }
+ ]
+}

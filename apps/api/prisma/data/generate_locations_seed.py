@@ -71,6 +71,7 @@ GR_PROVINCES = {
     "gr-selanik": "Selanik", "gr-halkidiki": "Halkidiki", "gr-midilli": "Midilli",
     "gr-samos": "Samos", "gr-leros": "Leros", "gr-kos": "Kos", "gr-rodos": "Rodos",
     "gr-symi": "Symi", "gr-meis": "Meis (Kastellorizo)", "gr-tilos": "Tilos",
+    "gr-halki": "Halki (Herke)",
 }
 
 # slug → ülke (validasyon + emit için)
@@ -279,7 +280,7 @@ def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
                "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json",
-               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json"]
+               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json", "batch14_gr_tur2.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b
