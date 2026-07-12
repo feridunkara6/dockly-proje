@@ -83,7 +83,7 @@ void main() {
     expect(_state(container).pins, isEmpty);
   });
 
-  test('hata → failure set edilir ama önceki marker korunur', () async {
+  test('veri varken hata → önceki marker korunur + çevrimdışı şerit (tam-ekran hata YOK)', () async {
     final gateway = FakeMapGateway(result: pinResult);
     final container = _containerWith(gateway);
     await _ctrl(container).loadViewport(pinViewport);
@@ -92,7 +92,10 @@ void main() {
     gateway.error = const NetworkFailure();
     await _ctrl(container).loadViewport(clusterViewport);
     final state = _state(container);
-    expect(state.failure, isA<NetworkFailure>());
+    // Yeni sözleşme: ekranda veri varsa hata bindirilmez; veri korunur ve
+    // çevrimdışı şerit gösterilir (gezinmek yeniden dener).
+    expect(state.failure, isNull);
+    expect(state.isOffline, isTrue);
     expect(state.isLoading, isFalse);
     expect(state.pins, hasLength(1)); // eski veri silinmedi
   });
