@@ -11,6 +11,7 @@ import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
 import 'features/shell/presentation/dockly_shell.dart';
+import 'features/splash/presentation/splash_screen.dart';
 // Harita platform katmanı: mobilde Mapbox, web'de liste-yüzeyi (Mapbox web'de
 // derlenmez). Koşullu import ile doğru dosya seçilir.
 import 'platform/map_platform.dart'
@@ -48,9 +49,9 @@ class DocklyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
-      // MVP: uygulama 5 sekmeli kabuğa açılır; ilk sekme harita (anonim/misafir
-      // keşif). Giriş akışı (AuthGate/SignInScreen) Firebase 2.4c ile bağlanacak.
-      home: const DocklyShell(),
+      // Açılış ekranı (marka + slogan) → ardından 5 sekmeli kabuk; ilk sekme
+      // harita. Giriş akışı (AuthGate/SignInScreen) Firebase 2.4c ile bağlanacak.
+      home: const SplashGate(child: DocklyShell()),
     );
   }
 }
