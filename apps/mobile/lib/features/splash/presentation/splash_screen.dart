@@ -145,15 +145,19 @@ class _AnimatedSailState extends State<_AnimatedSail> with TickerProviderStateMi
                 child: child,
               ),
             ),
-            // Demir: halatın ucunda iner; ilk karelerde görünmez (gövde ardında).
+            // Demir: teknenin UCUNDAN (baş taraf, merkezden +20 px) halatla
+            // iner; ilk karelerde görünmez (gövde ardında).
             Positioned(
               top: 60 + drop * 24,
-              child: Opacity(
-                opacity: (_drop.value * 3).clamp(0.0, 1.0).toDouble(),
-                child: const DocklyIcon(
-                  DocklyIcons.amMooring,
-                  size: 18,
-                  color: Color(0xFFFFFFFF),
+              child: Transform.translate(
+                offset: const Offset(20, 0),
+                child: Opacity(
+                  opacity: (_drop.value * 3).clamp(0.0, 1.0).toDouble(),
+                  child: const DocklyIcon(
+                    DocklyIcons.amMooring,
+                    size: 18,
+                    color: Color(0xFFFFFFFF),
+                  ),
                 ),
               ),
             ),
@@ -197,14 +201,14 @@ class _SplashScenePainter extends CustomPainter {
       wind.color = const Color(0xFFFFFFFF).withValues(alpha: 0.45 * math.sin(p * math.pi));
       canvas.drawLine(Offset(x, y), Offset(x + l[2], y), wind);
     }
-    // Demir halatı: tekne gövdesinden demire ince beyaz hat.
+    // Demir halatı: teknenin UCUNDAN (baş, merkez +20 px) demire ince beyaz hat.
     if (drop > 0.02) {
       final Paint rope = Paint()
         ..color = const Color(0xB3FFFFFF)
         ..strokeWidth = 1.6
         ..strokeCap = StrokeCap.round;
-      final double cx = size.width / 2;
-      canvas.drawLine(Offset(cx, 58 + bob), Offset(cx, 62 + drop * 24), rope);
+      final double cx = size.width / 2 + 20;
+      canvas.drawLine(Offset(cx, 56 + bob), Offset(cx, 62 + drop * 24), rope);
     }
   }
 

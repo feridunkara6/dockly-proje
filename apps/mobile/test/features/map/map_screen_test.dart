@@ -191,7 +191,7 @@ void main() {
     await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
     await tester.pumpAndSettle();
 
-    expect(find.text('Yakınındaki Limanlar'), findsOneWidget);
+    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
     expect(find.text('Marina Symi'), findsOneWidget);
     expect(find.text('Gökkaya Koyu'), findsOneWidget);
     // Alt satır: tip · ★puan · mesafe (tasarım mini-card formatı).
@@ -205,11 +205,11 @@ void main() {
     ]);
     await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
     await tester.pumpAndSettle();
-    expect(find.text('Yakınındaki Limanlar'), findsOneWidget);
+    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
 
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
-    expect(find.text('Yakınındaki Limanlar'), findsNothing);
+    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsNothing);
     expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
   });
 

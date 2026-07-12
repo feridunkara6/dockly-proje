@@ -10,7 +10,7 @@ import '../../../core/origin_provider.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
 
-/// Harita altındaki "Yakınındaki Limanlar" alt-sayfası (tasarım §07 phone
+/// Harita altındaki "Yakınımdaki Bağlanma Noktaları" alt-sayfası (tasarım §07 phone
 /// mockup'ı: Apple Maps tarzı peek durumu). Cam zemin + tutamaç + başlık ve
 /// yatay mini-kart rayı (tasarım .mini-card: 132 px, kapak degradesi, ad,
 /// "tip · ★puan · mesafe"). Haritada bakılan noktaya göre en yakın limanlar;
@@ -64,14 +64,14 @@ class NearbySheet extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    'Yakınındaki Limanlar',
+                    'Yakınımdaki Bağlanma Noktaları',
                     style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
                 SizedBox(
-                  // Kart içeriği (56 kapak + metinler) + pay: taşma testte hata
+                  // Kart içeriği (64 kapak + metinler) + pay: taşma testte hata
                   // sayılır, farklı yazı ölçeklerine karşı bolluk bırakılır.
-                  height: 126,
+                  height: 134,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
@@ -109,7 +109,11 @@ class _NearbyMiniCard extends StatelessWidget {
       width: 132,
       child: Material(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        // Tasarım .mini-card: 12 px köşe + ince (hairline) çerçeve.
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: theme.dividerColor.withValues(alpha: 0.5)),
+        ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => Navigator.of(context).push(
@@ -120,7 +124,8 @@ class _NearbyMiniCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              DocklyCoverPlaceholder(type: item.type, height: 56),
+              // Tasarım .mini-img: 64 px yüksek tip-renkli kapak degradesi.
+              DocklyCoverPlaceholder(type: item.type, height: 64),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 7, 10, 8),
                 child: Column(

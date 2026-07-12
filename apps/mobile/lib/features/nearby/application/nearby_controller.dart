@@ -39,8 +39,9 @@ final nearbyAlternativesProvider =
 /// sunucu cache'iyle de uyumlu). Record → yapısal eşitlik (family cache anahtarı).
 typedef MapNearbyKey = ({double lat, double lon});
 
-/// Alt-sayfa rayında gösterilecek maksimum kart sayısı.
-const int kMapNearbyLimit = 10;
+/// Alt-sayfa rayında gösterilecek maksimum kart sayısı — az tutulur (ürün
+/// kararı: kullanıcı dostu, kalabalık yapmayan bir ray; en yakın 5 yeter).
+const int kMapNearbyLimit = 5;
 
 /// Haritada bakılan noktanın çevresindeki en yakın limanlar (docs/23 §9.6,
 /// S-06 rayı) — tasarım §07 alt-sayfa mini-kartlarını besler. Mesafeye göre
