@@ -135,12 +135,13 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         ),
         MarkerLayer(
           markers: <Marker>[
-            // Cluster'lar — cam dairede sayı (tasarım §06); dokununca yaklaş.
+            // Cluster'lar — marka renkli baloncukta sayı; kalabalık büyür,
+            // dokununca yaklaşır.
             for (final Cluster c in widget.data.clusters)
               Marker(
                 point: LatLng(c.position.lat, c.position.lon),
-                width: 48,
-                height: 48,
+                width: 64,
+                height: 64,
                 child: _ClusterMarker(count: c.count, onTap: () => _onClusterTap(c)),
               ),
             // Tekil pinler — damla form, tip rengi, beyaz kontur + beyaz ikon.
@@ -297,8 +298,9 @@ class _FitDot extends StatelessWidget {
   }
 }
 
-/// Cluster işaretçisi (tasarım §06): cam görünümlü beyaz daire, 2px beyaz
-/// kontur, kalın sayı. Dokununca kamera bölgeye yaklaşır.
+/// Cluster işaretçisi: marka mavisinden derin laciverte geçen RENKLİ baloncuk,
+/// beyaz kontur + beyaz kalın sayı. Kalabalık bölge daha büyük baloncuk
+/// (<10 → 40, <50 → 50, 50+ → 60). Dokununca kamera bölgeye yaklaşır.
 class _ClusterMarker extends StatelessWidget {
   const _ClusterMarker({required this.count, required this.onTap});
 
@@ -307,28 +309,32 @@ class _ClusterMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double s = count >= 50 ? 60 : (count >= 10 ? 50 : 40);
     return GestureDetector(
       onTap: onTap,
       child: Center(
         child: Container(
-          constraints: const BoxConstraints(minWidth: 44),
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          width: s,
+          height: s,
           decoration: BoxDecoration(
-            color: const Color(0xC9FFFFFF),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[DocklyColors.brandPrimary, DocklyColors.brandDeep],
+            ),
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFFFFFFF), width: 2),
+            border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
             boxShadow: const <BoxShadow>[
-              BoxShadow(color: Color(0x4D0A2540), blurRadius: 12, offset: Offset(0, 4)),
+              BoxShadow(color: Color(0x590A2540), blurRadius: 12, offset: Offset(0, 4)),
             ],
           ),
           child: Center(
             child: Text(
               '$count',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 15,
-                color: Color(0xFF0A2540),
+                fontSize: s * 0.34,
+                color: const Color(0xFFFFFFFF),
               ),
             ),
           ),

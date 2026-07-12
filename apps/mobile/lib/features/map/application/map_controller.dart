@@ -72,6 +72,16 @@ class MapController extends Notifier<MapState> {
     );
     final seq = ++_seq;
     state = state.copyWith(isLoading: true, clearFailure: true);
+    // SICAK BAŞLANGIÇ (algılanan hız): ilk yüklemede, taze veri gelene dek
+    // cihazdaki son başarılı veri ANINDA gösterilir — açılışta boş harita ve
+    // uzun spinner yerine dolu harita + ince yükleme çubuğu.
+    if (!state.hasLoadedOnce && !state.hasData) {
+      final CachedMap? warm = await ref.read(mapCacheProvider).load();
+      if (seq == _seq && warm != null && !warm.isEmpty && !state.hasData) {
+        state = state.copyWith(pins: warm.pins, clusters: warm.clusters);
+      }
+      if (seq != _seq) return;
+    }
     // Parametre verilmediyse haritadaki çip filtreleri kullanılır (boş = tümü).
     final List<String>? effectiveTypes =
         types ?? (state.types.isEmpty ? null : state.types.toList(growable: false));
@@ -94,9 +104,20 @@ class MapController extends Notifier<MapState> {
       }
     } on AppFailure catch (failure) {
       if (seq != _seq) return;
+      // Ekranda veri VARSA (sıcak başlangıç ya da önceki yükleme): tam-ekran
+      // hata yerine çevrimdışı şerit — veri korunur, gezinmek yeniden dener.
+      if (state.hasData) {
+        state = state.copyWith(
+          isLoading: false,
+          clearFailure: true,
+          hasLoadedOnce: true,
+          isOffline: true,
+        );
+        return;
+      }
       // Ağ yoksa ve ekranda hiç veri yoksa: cihazdaki son başarılı veriyi
       // göster (çevrimdışı görünüm) — denizde bağlantı gidince uygulama kör
-      // kalmasın. Veri zaten varsa mevcut davranış: veri korunur, hata bindirilmez.
+      // kalmasın.
       if (!state.hasData) {
         final CachedMap? cached = await ref.read(mapCacheProvider).load();
         if (seq != _seq) return;

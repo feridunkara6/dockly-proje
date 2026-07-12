@@ -18,6 +18,17 @@ class DocklyClient {
   }
 
   final Dio dio;
+
+  /// Sunucuyu erkenden uyandırır (ücretsiz barındırmada uykudan dönüş uzun
+  /// sürer; uygulama açılır açılmaz atılan bu hafif istek, kullanıcı haritaya
+  /// bakarken sunucunun ısınmasını sağlar). En iyi çaba: hata yutulur.
+  Future<void> warmUp() async {
+    try {
+      await dio.get<void>('/healthz');
+    } catch (_) {
+      // sessizce geç — asıl istekler kendi hatalarını yönetir
+    }
+  }
 }
 
 /// Her isteğe korelasyon kimliği ekler (docs/23 §18). Sunucu aynı başlığı yanıta yansıtır.

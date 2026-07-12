@@ -183,6 +183,47 @@ void main() {
     expect(_state(container).clusters.single.count, 34);
   });
 
+  test('sıcak başlangıç: önbellek ANINDA gösterilir, taze veri gelince yerini alır', () async {
+    final cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    final gateway = FakeMapGateway()..pending = Completer<MapResult>();
+    final container = _containerWith(gateway, cache: cache);
+
+    final Future<void> loading = _ctrl(container).loadViewport(clusterViewport);
+    await Future<void>.delayed(const Duration(milliseconds: 1));
+    // Taze veri henüz gelmedi ama harita DOLU (önbellek) + ince yükleme sürüyor.
+    expect(_state(container).pins.single.id, 'loc-1');
+    expect(_state(container).isLoading, isTrue);
+    expect(_state(container).isOffline, isFalse);
+
+    gateway.pending!.complete(clusterResult);
+    await loading;
+    expect(_state(container).clusters.single.count, 34); // taze veri kazandı
+    expect(_state(container).isLoading, isFalse);
+  });
+
+  test('sıcak başlangıç sonrası ağ hatası → veri korunur + çevrimdışı şerit (tam-ekran hata YOK)', () async {
+    final cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    final container = _containerWith(gateway, cache: cache);
+    await _ctrl(container).loadViewport(pinViewport);
+    final state = _state(container);
+    expect(state.pins.single.id, 'loc-1');
+    expect(state.isOffline, isTrue);
+    expect(state.failure, isNull);
+  });
+
   test('selectPin / clearSelection', () {
     final container = _containerWith(FakeMapGateway());
     _ctrl(container).selectPin('loc-1');

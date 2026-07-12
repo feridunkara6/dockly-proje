@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dockly_api/dockly_api.dart' show DocklyClient;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +24,9 @@ const String _mapboxToken = String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
 void bootstrap(AppConfig config) {
   WidgetsFlutterBinding.ensureInitialized();
   mapplat.applyMapAccessToken(_mapboxToken);
+  // Sunucuyu HEMEN uyandır (fire-and-forget): ücretsiz barındırma uykudaysa,
+  // kullanıcı daha ilk ekrana bakarken ısınma başlasın → veri daha erken gelir.
+  unawaited(DocklyClient(baseUrl: config.apiBaseUrl).warmUp());
   runApp(
     ProviderScope(
       overrides: <Override>[
