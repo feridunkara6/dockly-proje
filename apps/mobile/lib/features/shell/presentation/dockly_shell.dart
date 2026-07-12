@@ -1,11 +1,13 @@
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
+import '../../welcome/presentation/welcome_prompt.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
 /// Keşfet (harita) · Arama · Favoriler · Taleplerim · Profil.
@@ -13,15 +15,24 @@ import '../../search/presentation/search_screen.dart';
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
 /// Tüm sekmeler misafir modda çalışır (favoriler/talepler cihazda saklanır);
 /// hesap/giriş geldiğinde bunlar buluta senkronlanacak.
-class DocklyShell extends StatefulWidget {
+class DocklyShell extends ConsumerStatefulWidget {
   const DocklyShell({super.key});
 
   @override
-  State<DocklyShell> createState() => _DocklyShellState();
+  ConsumerState<DocklyShell> createState() => _DocklyShellState();
 }
 
-class _DocklyShellState extends State<DocklyShell> {
+class _DocklyShellState extends ConsumerState<DocklyShell> {
   int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // İlk açılış karşılaması: "Teknen kaç metre?" (bir kez; wow kişiselleştirme).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowWelcomePrompt(context, ref);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
