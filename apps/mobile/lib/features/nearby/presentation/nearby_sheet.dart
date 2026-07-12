@@ -69,7 +69,9 @@ class NearbySheet extends ConsumerWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 118,
+                  // Kart içeriği (56 kapak + metinler) + pay: taşma testte hata
+                  // sayılır, farklı yazı ölçeklerine karşı bolluk bırakılır.
+                  height: 126,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
@@ -124,13 +126,19 @@ class _NearbyMiniCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    // Tasarım .mini-card ölçüleri SABİT (11.5/10 px): tema yazı
+                    // ölçüsünden bağımsız → kart yüksekliği deterministik,
+                    // RenderFlex taşması olmaz (CI kırmızısının kökü buydu).
                     Text(
                       item.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        height: 1.2,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.1,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -138,8 +146,11 @@ class _NearbyMiniCard extends StatelessWidget {
                       subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall
-                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.2,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),

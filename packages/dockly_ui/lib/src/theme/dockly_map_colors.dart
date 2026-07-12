@@ -20,8 +20,8 @@ abstract final class DocklyMapColors {
     'restaurant_pier': 0xFFF97316, // Restoran İskelesi
     'fuel_pier': 0xFFEAB308, // Yakıt İskelesi
     'boat_club': 0xFF8B5CF6, // Tekne Kulübü
-    'mooring_point': 0xFF64748B, // Bağlama Noktası
-    'buoy': 0xFFEF4444, // Şamandıra
+    'mooring_point': 0xFFEF4444, // Bağlama Noktası (ürün kararı: gri↔kırmızı takas)
+    'buoy': 0xFF64748B, // Şamandıra (ürün kararı: gri↔kırmızı takas)
   };
 
   /// Küme (cluster) rozeti rengi (docs/09 §1.4: baskın tip; v1'de marka birincil).

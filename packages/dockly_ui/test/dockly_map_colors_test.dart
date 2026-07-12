@@ -12,8 +12,9 @@ void main() {
       expect(DocklyMapColors.argbForType('restaurant_pier'), 0xFFF97316);
       expect(DocklyMapColors.argbForType('fuel_pier'), 0xFFEAB308);
       expect(DocklyMapColors.argbForType('boat_club'), 0xFF8B5CF6);
-      expect(DocklyMapColors.argbForType('mooring_point'), 0xFF64748B);
-      expect(DocklyMapColors.argbForType('buoy'), 0xFFEF4444);
+      // Ürün kararı: bağlama noktası KIRMIZI, şamandıra GRİ (takas edildi).
+      expect(DocklyMapColors.argbForType('mooring_point'), 0xFFEF4444);
+      expect(DocklyMapColors.argbForType('buoy'), 0xFF64748B);
     });
 
     test('bilinmeyen/yeni tip → marka birincil fallback (çökme yok)', () {
@@ -22,7 +23,7 @@ void main() {
     });
 
     test('forType Color döndürür ve argbForType ile tutarlı', () {
-      expect(DocklyMapColors.forType('buoy'), const Color(0xFFEF4444));
+      expect(DocklyMapColors.forType('buoy'), const Color(0xFF64748B));
     });
 
     test('9 kanonik tip tanımlı', () {
