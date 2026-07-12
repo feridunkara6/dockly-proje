@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -84,6 +84,12 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Rodos', 'gr-rodos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Symi', 'gr-symi')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Meis (Kastellorizo)', 'gr-meis')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Tilos', 'gr-tilos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -5263,4 +5269,212 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/symi-island/', NULL, false
 FROM locations l WHERE l.slug = 'symi-panormitis-iskelesi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mandraki Limanı (Rodos) · güven: high · kaynak: www.rodosmarina.com, www.litando.gr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'rodos-mandraki-limani', 2, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
+  'Mandraki Limanı (Rodos)', 'Rodos''un tarihî yat limanı — antik Kolossos''un yerinde, üç yel değirmeni manzaralı. Kıçtankara bağlama; rıhtımda su + 220V, tankerle yakıt, ofis yanında WC/sıcak duş. Yer ayırtma en az 48 saat önce önerilir; dipte eski tonoz hatları olduğundan bol kaloma bırakın.',
+  ST_SetSRID(ST_MakePoint(28.22615, 36.45113), 4326)::geography,
+  30, NULL, NULL, NULL,
+  175, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mandraki Limanı (Rodos)', 'Rodos''un tarihî yat limanı — antik Kolossos''un yerinde, üç yel değirmeni manzaralı. Kıçtankara bağlama; rıhtımda su + 220V, tankerle yakıt, ofis yanında WC/sıcak duş. Yer ayırtma en az 48 saat önce önerilir; dipte eski tonoz hatları olduğundan bol kaloma bırakın.' FROM locations WHERE slug = 'rodos-mandraki-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 175, '09', NULL, NULL, NULL
+FROM locations WHERE slug = 'rodos-mandraki-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'rodos-mandraki-limani' AND a.code IN ('electricity', 'water', 'fuel', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302241037927', NULL, true
+FROM locations l WHERE l.slug = 'rodos-mandraki-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.rodosmarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'rodos-mandraki-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kastellorizo (Meis) Rıhtımı · güven: medium · kaynak: www.litando.gr, www.predictwind.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kastellorizo-meis-rihtimi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-meis'),
+  'Kastellorizo (Meis) Rıhtımı', 'Kaş''ın 2 deniz mili karşısındaki Meis adasının renkli kasaba rıhtımı; 82 m iskele, -6,3 m derinlik. Yunanistan''a GİRİŞ LİMANIDIR (gümrük/pasaport işlemi yapılır) — Türkiye''den geçiş yapan tekneler için ilk durak. Rıhtımda elektrik, su, Wi-Fi, duş/WC.',
+  ST_SetSRID(ST_MakePoint(29.59206, 36.15103), 4326)::geography,
+  NULL, NULL, NULL, 6.3,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kastellorizo (Meis) Rıhtımı', 'Kaş''ın 2 deniz mili karşısındaki Meis adasının renkli kasaba rıhtımı; 82 m iskele, -6,3 m derinlik. Yunanistan''a GİRİŞ LİMANIDIR (gümrük/pasaport işlemi yapılır) — Türkiye''den geçiş yapan tekneler için ilk durak. Rıhtımda elektrik, su, Wi-Fi, duş/WC.' FROM locations WHERE slug = 'kastellorizo-meis-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kastellorizo-meis-rihtimi' AND a.code IN ('electricity', 'water', 'wifi', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246049269', NULL, true
+FROM locations l WHERE l.slug = 'kastellorizo-meis-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@megisti.gr', NULL, false
+FROM locations l WHERE l.slug = 'kastellorizo-meis-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/kastellorizo-island-megisti/', NULL, false
+FROM locations l WHERE l.slug = 'kastellorizo-meis-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Livadia Rıhtımı (Tilos) · güven: medium · kaynak: www.litando.gr, www.marinatips.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tilos-livadia-rihtimi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-tilos'),
+  'Livadia Rıhtımı (Tilos)', 'Tilos adasının ana limanı Livadia''da belediye rıhtımı; 35 tekneye kadar yer, tatlı su ve elektrik bağlantısı. İskele güney kolu ~50 m, kullanılabilir derinlik -8 m. Liman duvarı içi iyi korunaklı; aborda bağlama alanı sınırlı.',
+  ST_SetSRID(ST_MakePoint(27.3858, 36.4167), 4326)::geography,
+  NULL, NULL, NULL, 8,
+  35, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Livadia Rıhtımı (Tilos)', 'Tilos adasının ana limanı Livadia''da belediye rıhtımı; 35 tekneye kadar yer, tatlı su ve elektrik bağlantısı. İskele güney kolu ~50 m, kullanılabilir derinlik -8 m. Liman duvarı içi iyi korunaklı; aborda bağlama alanı sınırlı.' FROM locations WHERE slug = 'tilos-livadia-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tilos-livadia-rihtimi' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246044212', NULL, true
+FROM locations l WHERE l.slug = 'tilos-livadia-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'dimtilos@otenet.gr', NULL, false
+FROM locations l WHERE l.slug = 'tilos-livadia-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/tilos-island/', NULL, false
+FROM locations l WHERE l.slug = 'tilos-livadia-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Lindos Koyu (Rodos) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lindos-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
+  'Lindos Koyu (Rodos)', 'Rodos''un simgesi Lindos akropolünün altındaki demirleme koyu — rehberde ''Onikiadalar''ın en özel duraklarından'' diye geçer. Korunaklı, manzarası eşsiz; yaz aylarında kalabalık olabilir.',
+  ST_SetSRID(ST_MakePoint(28.08342, 36.09539), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lindos Koyu (Rodos)', 'Rodos''un simgesi Lindos akropolünün altındaki demirleme koyu — rehberde ''Onikiadalar''ın en özel duraklarından'' diye geçer. Korunaklı, manzarası eşsiz; yaz aylarında kalabalık olabilir.' FROM locations WHERE slug = 'lindos-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'lindos-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Anthony Quinn Koyu (Rodos) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'anthony-quinn-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
+  'Anthony Quinn Koyu (Rodos)', 'Rodos''un doğu kıyısında turkuaz suları ve kayalık kollarıyla ünlü küçük koy; adını 1961''de burada film çeken aktörden alır. 8-10 m kuma demirlenir, bol kaloma önerilir.',
+  ST_SetSRID(ST_MakePoint(28.20977, 36.31991), 4326)::geography,
+  NULL, NULL, 8, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Anthony Quinn Koyu (Rodos)', 'Rodos''un doğu kıyısında turkuaz suları ve kayalık kollarıyla ünlü küçük koy; adını 1961''de burada film çeken aktörden alır. 8-10 m kuma demirlenir, bol kaloma önerilir.' FROM locations WHERE slug = 'anthony-quinn-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'anthony-quinn-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Nanou Koyu (Symi) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'simi-nanou-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Nanou Koyu (Symi)', 'Symi''nin doğu kıyısında, yüksek kayalıklarla çevrili sakin demirleme koyu; rehberde ''mahremiyet noktası'' diye geçer. Kıyıda mevsimlik taverna bulunabilir.',
+  ST_SetSRID(ST_MakePoint(27.86264, 36.58148), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Nanou Koyu (Symi)', 'Symi''nin doğu kıyısında, yüksek kayalıklarla çevrili sakin demirleme koyu; rehberde ''mahremiyet noktası'' diye geçer. Kıyıda mevsimlik taverna bulunabilir.' FROM locations WHERE slug = 'simi-nanou-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'simi-nanou-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Marathounta Koyu (Symi) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'simi-marathounta-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Marathounta Koyu (Symi)', 'Symi''nin güneydoğusunda çakıl plajlı, tenha demirleme koyu; Pedi ve Gialos''a tekneyle kısa mesafede.',
+  ST_SetSRID(ST_MakePoint(27.86444, 36.5675), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Marathounta Koyu (Symi)', 'Symi''nin güneydoğusunda çakıl plajlı, tenha demirleme koyu; Pedi ve Gialos''a tekneyle kısa mesafede.' FROM locations WHERE slug = 'simi-marathounta-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'simi-marathounta-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Emporios Koyu (Symi) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'simi-emporios-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Emporios Koyu (Symi)', 'Gialos''un kuzeybatısındaki Emporios (Nimborios) koyu — ana limana yürüme mesafesinde, daha sakin bir demirleme alternatifi.',
+  ST_SetSRID(ST_MakePoint(27.81858, 36.62482), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Emporios Koyu (Symi)', 'Gialos''un kuzeybatısındaki Emporios (Nimborios) koyu — ana limana yürüme mesafesinde, daha sakin bir demirleme alternatifi.' FROM locations WHERE slug = 'simi-emporios-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'simi-emporios-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Agios Vasileios Koyu (Symi) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'simi-agios-vasileios-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Agios Vasileios Koyu (Symi)', 'Symi''nin batı kıyısında, küçük şapeliyle bilinen korunaklı demirleme koyu; batı rüzgârlarında dikkatli olunmalı.',
+  ST_SetSRID(ST_MakePoint(27.80502, 36.58747), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Vasileios Koyu (Symi)', 'Symi''nin batı kıyısında, küçük şapeliyle bilinen korunaklı demirleme koyu; batı rüzgârlarında dikkatli olunmalı.' FROM locations WHERE slug = 'simi-agios-vasileios-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'simi-agios-vasileios-koyu'
+ON CONFLICT (location_id) DO NOTHING;
 
