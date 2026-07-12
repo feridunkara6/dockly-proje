@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -5925,4 +5925,84 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_fre
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'karaloz-limani-kekova'
 ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Ekincik Köy Rıhtımı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ekincik-koy-rihtimi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Ekincik Köy Rıhtımı', 'Dalyan-Kaunos kapısı Ekincik''te kooperatifin işlettiği köy rıhtımı; baş-kıç bağlamayla ~15 tekne alır. Kuzeybatı köşedeki uzun iskelede su ve elektrik bağlantısı var. Yakıt Köyceğiz''den tankerle gelir. Kaunos antik kentine günübirlik tekneler buradan kalkar; Maden rıhtımındaki My Marina restoranı balığıyla ünlüdür.',
+  ST_SetSRID(ST_MakePoint(28.54875, 36.828556), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  15, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ekincik Köy Rıhtımı', 'Dalyan-Kaunos kapısı Ekincik''te kooperatifin işlettiği köy rıhtımı; baş-kıç bağlamayla ~15 tekne alır. Kuzeybatı köşedeki uzun iskelede su ve elektrik bağlantısı var. Yakıt Köyceğiz''den tankerle gelir. Kaunos antik kentine günübirlik tekneler buradan kalkar; Maden rıhtımındaki My Marina restoranı balığıyla ünlüdür.' FROM locations WHERE slug = 'ekincik-koy-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ekincik-koy-rihtimi' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+
+-- --- Ekincik Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ekincik-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Ekincik Koyu', 'Marmaris-Göcek arasının klasik molası; kuzey rüzgârlarından korunaklı geniş koy. 5-15 m kuma demirlenir, tutuş iyi. Kuzeydoğu bölümü meltemiye karşı en iyi korumayı verir ama kalabalık olur; güneybatı köşesi daha sakindir.',
+  ST_SetSRID(ST_MakePoint(28.556333, 36.818083), 4326)::geography,
+  NULL, NULL, 5, 15,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ekincik Koyu', 'Marmaris-Göcek arasının klasik molası; kuzey rüzgârlarından korunaklı geniş koy. 5-15 m kuma demirlenir, tutuş iyi. Kuzeydoğu bölümü meltemiye karşı en iyi korumayı verir ama kalabalık olur; güneybatı köşesi daha sakindir.' FROM locations WHERE slug = 'ekincik-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'ekincik-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Karacaören Adası Demirleme · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karacaoren-adasi-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Karacaören Adası Demirleme', 'Gemiler Adası''nın batısında, Bizans kilise kalıntıları ve freskli mezar odalarıyla bilinen adacığın demirleme alanı. DİKKAT: geçitte su seviyesinde kayalar ve resifler var — adanın DOĞU yakasından yaklaşın; kayalar ile ada arasındaki geçit temizdir. Güneyden resifler koruma sağlar.',
+  ST_SetSRID(ST_MakePoint(29.059238, 36.540464), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karacaören Adası Demirleme', 'Gemiler Adası''nın batısında, Bizans kilise kalıntıları ve freskli mezar odalarıyla bilinen adacığın demirleme alanı. DİKKAT: geçitte su seviyesinde kayalar ve resifler var — adanın DOĞU yakasından yaklaşın; kayalar ile ada arasındaki geçit temizdir. Güneyden resifler koruma sağlar.' FROM locations WHERE slug = 'karacaoren-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'karacaoren-adasi-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Yeşilköy Koyu (Fırnaz) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yesilkoy-firnaz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Yeşilköy Koyu (Fırnaz)', 'Kalkan''ın 2 mil batısında berrak sulu koy. Kuzeybatı köşede 5-10 m, plaj önünde 6-10 m; dip kum+yosun — çapayı kumlu yamaya atın, yosunda tutuş zayıftır. Hakim rüzgârlardan korunaklı ama güney/güneydoğuya açık. Kıyıda restoran, büfe ve market var.',
+  ST_SetSRID(ST_MakePoint(29.36938, 36.261124), 4326)::geography,
+  NULL, NULL, 5, 12,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeşilköy Koyu (Fırnaz)', 'Kalkan''ın 2 mil batısında berrak sulu koy. Kuzeybatı köşede 5-10 m, plaj önünde 6-10 m; dip kum+yosun — çapayı kumlu yamaya atın, yosunda tutuş zayıftır. Hakim rüzgârlardan korunaklı ama güney/güneydoğuya açık. Kıyıda restoran, büfe ve market var.' FROM locations WHERE slug = 'yesilkoy-firnaz-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'yesilkoy-firnaz-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yesilkoy-firnaz-koyu' AND a.code IN ('water', 'market')
+ON CONFLICT DO NOTHING;
 

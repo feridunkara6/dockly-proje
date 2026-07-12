@@ -1,0 +1,141 @@
+{
+ "batch": "13-tr-tur2-ekincik-kekova-cevresi-bozcaada",
+ "collectedAt": "2026-07-12",
+ "method": "Türkiye tamamlama 2. tur — turkeymarinas.blogspot.com rehber sayfaları (batch4/12 ile aynı kaynak ve yöntem): DMS koordinatlar ondalığa çevrildi, derinlik/tutuş/tesis bilgileri aynen aktarıldı. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "Ekincik (rıhtım + demirleme) Marmaris-Göcek arasındaki büyük boşluğu kapatır; Yeşilköy/Fırnaz Kalkan bölgesinin ilk kaydı; Bozcaada Kuzey Ege'nin ilk ada limanı.",
+  "Üçağız rıhtımı ve Kaş belediye limanı için hassas koordinat kaynağı BU TURDA DA bulunamadı — liste başında durmaya devam ediyor (uydurma koordinat girilmez).",
+  "Sonraki turlar: Yunanistan 2. tur (Kos-Kalymnos-Leros-Patmos liman fonları + Chalki koordinatı), Gökçeada, Gökova iç koy restoran iskeleleri (işletme başına kaynak gerekiyor).",
+  "Bozcaada Limanı zaten veri setindeydi (batch5) — doğrulayıcı mükerrer girişi engelledi; bu turda çıkarıldı."
+ ],
+ "records": [
+  {
+   "slug": "ekincik-koy-rihtimi",
+   "name": "Ekincik Köy Rıhtımı",
+   "operator": "Köy Kooperatifi",
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": null,
+   "lat": 36.828556,
+   "lon": 28.54875,
+   "coordSource": "turkeymarinas (rıhtım: 36°49'42.8\"N 28°32'55.5\"E → 36.828556, 28.548750)",
+   "descriptionTr": "Dalyan-Kaunos kapısı Ekincik'te kooperatifin işlettiği köy rıhtımı; baş-kıç bağlamayla ~15 tekne alır. Kuzeybatı köşedeki uzun iskelede su ve elektrik bağlantısı var. Yakıt Köyceğiz'den tankerle gelir. Kaunos antik kentine günübirlik tekneler buradan kalkar; Maden rıhtımındaki My Marina restoranı balığıyla ünlüdür.",
+   "berthCount": 15,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "unknown",
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/05/ekincik-cove-anchorage.html"
+   ],
+   "confidence": "high",
+   "missingNotes": "Rıhtım derinliği ve iletişim kaynakta yok → null."
+  },
+  {
+   "slug": "ekincik-koyu-demirleme",
+   "name": "Ekincik Koyu",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": null,
+   "lat": 36.818083,
+   "lon": 28.556333,
+   "coordSource": "turkeymarinas (demirleme alanı: 36°49'05.1\"N 28°33'22.8\"E → 36.818083, 28.556333)",
+   "descriptionTr": "Marmaris-Göcek arasının klasik molası; kuzey rüzgârlarından korunaklı geniş koy. 5-15 m kuma demirlenir, tutuş iyi. Kuzeydoğu bölümü meltemiye karşı en iyi korumayı verir ama kalabalık olur; güneybatı köşesi daha sakindir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 5,
+   "depthMaxM": 15,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/05/ekincik-cove-anchorage.html"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "karacaoren-adasi-demirleme",
+   "name": "Karacaören Adası Demirleme",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": null,
+   "lat": 36.540464,
+   "lon": 29.059238,
+   "coordSource": "turkeymarinas (36°32'25.7\"N 29°03'33.3\"E → 36.540464, 29.059238)",
+   "descriptionTr": "Gemiler Adası'nın batısında, Bizans kilise kalıntıları ve freskli mezar odalarıyla bilinen adacığın demirleme alanı. DİKKAT: geçitte su seviyesinde kayalar ve resifler var — adanın DOĞU yakasından yaklaşın; kayalar ile ada arasındaki geçit temizdir. Güneyden resifler koruma sağlar.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": null,
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/04/karacaoren-island-anchorage.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik/tutuş rakamı kaynakta yok → null."
+  },
+  {
+   "slug": "yesilkoy-firnaz-koyu",
+   "name": "Yeşilköy Koyu (Fırnaz)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "antalya",
+   "districtSlug": null,
+   "lat": 36.261124,
+   "lon": 29.36938,
+   "coordSource": "turkeymarinas (36°15'40.0\"N 29°22'09.8\"E → 36.261124, 29.369380)",
+   "descriptionTr": "Kalkan'ın 2 mil batısında berrak sulu koy. Kuzeybatı köşede 5-10 m, plaj önünde 6-10 m; dip kum+yosun — çapayı kumlu yamaya atın, yosunda tutuş zayıftır. Hakim rüzgârlardan korunaklı ama güney/güneydoğuya açık. Kıyıda restoran, büfe ve market var.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 5,
+   "depthMaxM": 12,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "amenities": [
+    "water",
+    "market"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/04/yesilkoy-koyu-firnaz-anchorage.html"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  }
+ ]
+}
