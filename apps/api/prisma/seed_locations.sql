@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -5476,5 +5476,453 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'simi-agios-vasileios-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- İstinye Tekne Park Yakıt İskelesi (Türk Petrol) · güven: medium · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'istinye-tekne-park-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'İstinye Tekne Park Yakıt İskelesi (Türk Petrol)', 'Boğaz''da İstinye koyundaki İstmarin Tekne Park içinde yakıt iskelesi (Türk Petrol).',
+  ST_SetSRID(ST_MakePoint(29.058, 41.1146), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İstinye Tekne Park Yakıt İskelesi (Türk Petrol)', 'Boğaz''da İstinye koyundaki İstmarin Tekne Park içinde yakıt iskelesi (Türk Petrol).' FROM locations WHERE slug = 'istinye-tekne-park-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'istinye-tekne-park-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'istinye-tekne-park-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Setur Kuşadası Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'setur-kusadasi-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'aydin'),
+  'Setur Kuşadası Marina Yakıt İskelesi (OPET)', 'Setur Kuşadası Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(27.258333, 37.866667), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Kuşadası Marina Yakıt İskelesi (OPET)', 'Setur Kuşadası Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-kusadasi-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'setur-kusadasi-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'setur-kusadasi-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Ece Saray Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ecesaray-fethiye-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Ece Saray Marina Yakıt İskelesi (OPET)', 'Fethiye Ece Saray Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(29.102778, 36.631944), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ece Saray Marina Yakıt İskelesi (OPET)', 'Fethiye Ece Saray Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'ecesaray-fethiye-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'ecesaray-fethiye-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ecesaray-fethiye-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Setur Kalamış Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'setur-kalamis-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'Setur Kalamış Marina Yakıt İskelesi (OPET)', 'Setur Kalamış-Fenerbahçe Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(29.036667, 40.978333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Kalamış Marina Yakıt İskelesi (OPET)', 'Setur Kalamış-Fenerbahçe Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-kalamis-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'setur-kalamis-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'setur-kalamis-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Netsel Marmaris Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'netsel-marmaris-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Netsel Marmaris Marina Yakıt İskelesi (OPET)', 'Marmaris Netsel Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(28.268333, 36.850556), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Netsel Marmaris Marina Yakıt İskelesi (OPET)', 'Marmaris Netsel Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'netsel-marmaris-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'netsel-marmaris-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'netsel-marmaris-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Setur Ayvalık Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'setur-ayvalik-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'balikesir'),
+  'Setur Ayvalık Marina Yakıt İskelesi (OPET)', 'Setur Ayvalık Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(26.688056, 39.314167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Ayvalık Marina Yakıt İskelesi (OPET)', 'Setur Ayvalık Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-ayvalik-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'setur-ayvalik-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'setur-ayvalik-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Setur Yalova Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'setur-yalova-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'yalova'),
+  'Setur Yalova Marina Yakıt İskelesi (OPET)', 'Setur Yalova Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(29.274, 40.661783), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Yalova Marina Yakıt İskelesi (OPET)', 'Setur Yalova Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-yalova-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'setur-yalova-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'setur-yalova-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Kaş Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kas-marina-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Kaş Marina Yakıt İskelesi (OPET)', 'Kaş Marina içinde OPET yakıt iskelesi — Meis/Kekova rotasının yakıt noktası.',
+  ST_SetSRID(ST_MakePoint(29.624167, 36.205278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaş Marina Yakıt İskelesi (OPET)', 'Kaş Marina içinde OPET yakıt iskelesi — Meis/Kekova rotasının yakıt noktası.' FROM locations WHERE slug = 'kas-marina-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kas-marina-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kas-marina-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Finike Marina Yakıt İskelesi (OPET) · güven: medium · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'finike-marina-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Finike Marina Yakıt İskelesi (OPET)', 'Setur Finike Marina içinde OPET yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(30.153333, 36.294), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Finike Marina Yakıt İskelesi (OPET)', 'Setur Finike Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'finike-marina-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'finike-marina-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'finike-marina-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Mersin Yat Limanı Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mersin-yat-limani-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mersin'),
+  'Mersin Yat Limanı Yakıt İskelesi (OPET)', 'Mersin Yat Limanı içinde OPET yakıt iskelesi — Doğu Akdeniz''in ana yakıt noktalarından.',
+  ST_SetSRID(ST_MakePoint(34.575556, 36.771667), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mersin Yat Limanı Yakıt İskelesi (OPET)', 'Mersin Yat Limanı içinde OPET yakıt iskelesi — Doğu Akdeniz''in ana yakıt noktalarından.' FROM locations WHERE slug = 'mersin-yat-limani-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'mersin-yat-limani-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'mersin-yat-limani-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Ören Marina Yakıt İskelesi (OPET) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'oren-gokova-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Ören Marina Yakıt İskelesi (OPET)', 'Gökova Ören Marina içinde OPET yakıt iskelesi — Gökova Körfezi''nin kuzey kıyısı.',
+  ST_SetSRID(ST_MakePoint(27.981972, 37.031417), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ören Marina Yakıt İskelesi (OPET)', 'Gökova Ören Marina içinde OPET yakıt iskelesi — Gökova Körfezi''nin kuzey kıyısı.' FROM locations WHERE slug = 'oren-gokova-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'oren-gokova-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'oren-gokova-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Ataköy Marina Yakıt İskelesi (Moil) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'atakoy-marina-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'Ataköy Marina Yakıt İskelesi (Moil)', 'Ataköy Marina içinde Moil Deniz yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(28.881944, 40.972778), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ataköy Marina Yakıt İskelesi (Moil)', 'Ataköy Marina içinde Moil Deniz yakıt iskelesi.' FROM locations WHERE slug = 'atakoy-marina-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'atakoy-marina-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'atakoy-marina-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- City Port Marina Yakıt İskelesi (Shell) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'city-port-kartal-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'City Port Marina Yakıt İskelesi (Shell)', 'Kartal City Port Marina içinde Shell yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(29.238056, 40.871389), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'City Port Marina Yakıt İskelesi (Shell)', 'Kartal City Port Marina içinde Shell yakıt iskelesi.' FROM locations WHERE slug = 'city-port-kartal-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'city-port-kartal-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'city-port-kartal-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yalıkavak Marina Yakıt İskelesi (Lukoil) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yalikavak-marina-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Yalıkavak Marina Yakıt İskelesi (Lukoil)', 'Bodrum Yalıkavak Marina içinde Lukoil yakıt iskelesi — megayat kapasiteli.',
+  ST_SetSRID(ST_MakePoint(27.284529, 37.102322), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yalıkavak Marina Yakıt İskelesi (Lukoil)', 'Bodrum Yalıkavak Marina içinde Lukoil yakıt iskelesi — megayat kapasiteli.' FROM locations WHERE slug = 'yalikavak-marina-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'yalikavak-marina-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yalikavak-marina-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Teos Marina Yakıt İskelesi (Petrol Ofisi) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'teos-marina-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'izmir'),
+  'Teos Marina Yakıt İskelesi (Petrol Ofisi)', 'Sığacık Teos Marina içinde Petrol Ofisi yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(26.783083, 38.196075), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Teos Marina Yakıt İskelesi (Petrol Ofisi)', 'Sığacık Teos Marina içinde Petrol Ofisi yakıt iskelesi.' FROM locations WHERE slug = 'teos-marina-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'teos-marina-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'teos-marina-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Milta Bodrum Marina Yakıt İskelesi (Aytemiz) · güven: high · kaynak: marinakedisi.com, www.petrolofisi.com.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'milta-bodrum-yakit', 6, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Milta Bodrum Marina Yakıt İskelesi (Aytemiz)', 'Milta Bodrum Marina içinde Aytemiz yakıt iskelesi.',
+  ST_SetSRID(ST_MakePoint(27.430556, 37.033333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Milta Bodrum Marina Yakıt İskelesi (Aytemiz)', 'Milta Bodrum Marina içinde Aytemiz yakıt iskelesi.' FROM locations WHERE slug = 'milta-bodrum-yakit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'milta-bodrum-yakit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'milta-bodrum-yakit' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Gökkaya Koyu (Kekova) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gokkaya-koyu-kekova', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Gökkaya Koyu (Kekova)', 'Kekova''nın en büyük koyu; her yönden korunaklı. 7-8 m çamura demirlenir, tutuş iyidir. Koy içinde restoranlar var; dar boğazın başındaki Smugglers Inn tekneden alma servisi yapar. Dikkat: adacıkların batısında üzerinde 3,5 m su olan tekil kaya.',
+  ST_SetSRID(ST_MakePoint(29.891167, 36.210667), 4326)::geography,
+  NULL, NULL, 7, 8,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gökkaya Koyu (Kekova)', 'Kekova''nın en büyük koyu; her yönden korunaklı. 7-8 m çamura demirlenir, tutuş iyidir. Koy içinde restoranlar var; dar boğazın başındaki Smugglers Inn tekneden alma servisi yapar. Dikkat: adacıkların batısında üzerinde 3,5 m su olan tekil kaya.' FROM locations WHERE slug = 'gokkaya-koyu-kekova'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mud', NULL, true
+FROM locations WHERE slug = 'gokkaya-koyu-kekova'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kaleköy (Simena) Restoran Pontonları · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalekoy-simena-restoran-pontonlari', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir.',
+  ST_SetSRID(ST_MakePoint(29.847325, 36.195433), 4326)::geography,
+  NULL, NULL, 4.5, 14,
+  NULL, 'unknown', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir.' FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kalekoy-simena-restoran-pontonlari' AND a.code IN ('electricity', 'water', 'wifi', 'laundry', 'restaurant')
+ON CONFLICT DO NOTHING;
+
+-- --- Tersane Koyu (Kekova) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kekova-tersane-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Tersane Koyu (Kekova)', 'Kekova Adası''nın kuzeybatısında, koy başında Bizans kilisesi kalıntısı olan korunaklı koy. 4-5 m kuma demirlenir, tutuş iyi; kıç bağı için kayalarda halat delikleri var. Sezonda 09:00-20:00 arası günübirlik tekne trafiği yoğundur — geliş/gidiş saatini ona göre planlayın.',
+  ST_SetSRID(ST_MakePoint(29.846333, 36.172167), 4326)::geography,
+  NULL, NULL, 4, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tersane Koyu (Kekova)', 'Kekova Adası''nın kuzeybatısında, koy başında Bizans kilisesi kalıntısı olan korunaklı koy. 4-5 m kuma demirlenir, tutuş iyi; kıç bağı için kayalarda halat delikleri var. Sezonda 09:00-20:00 arası günübirlik tekne trafiği yoğundur — geliş/gidiş saatini ona göre planlayın.' FROM locations WHERE slug = 'kekova-tersane-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'kekova-tersane-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Karalöz Limanı (Kekova) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaloz-limani-kekova', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Karalöz Limanı (Kekova)', 'Kekova Adası''nın güneyinde tamamen kara ile çevrili, dört yönden korunaklı gizli fiyort (Port Saint Stefano). Girişte 8-10 m, güney bölümde 7-14 m; dip çamur/yosun, tutuş iyi. Kıç bağı önerilir; sağanak rüzgâr hamleleri olabilir. Tamamen ıssızdır.',
+  ST_SetSRID(ST_MakePoint(29.888333, 36.183333), 4326)::geography,
+  NULL, NULL, 7, 14,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karalöz Limanı (Kekova)', 'Kekova Adası''nın güneyinde tamamen kara ile çevrili, dört yönden korunaklı gizli fiyort (Port Saint Stefano). Girişte 8-10 m, güney bölümde 7-14 m; dip çamur/yosun, tutuş iyi. Kıç bağı önerilir; sağanak rüzgâr hamleleri olabilir. Tamamen ıssızdır.' FROM locations WHERE slug = 'karaloz-limani-kekova'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mud', NULL, true
+FROM locations WHERE slug = 'karaloz-limani-kekova'
 ON CONFLICT (location_id) DO NOTHING;
 
