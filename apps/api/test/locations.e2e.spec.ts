@@ -52,6 +52,11 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     await prisma.$executeRawUnsafe(`
       UPDATE locations SET deleted_at = now() WHERE slug = 'e2e-gocek-deleted';
     `);
+    // Tekne-uyum limitleri: pin DTO'suna geçtiğini doğrulamak için (idempotent).
+    await prisma.$executeRawUnsafe(`
+      UPDATE locations SET max_boat_length_m = 40, max_draft_m = 5
+      WHERE slug = 'e2e-gocek-marina';
+    `);
     // Marina'ya olanaklar bağla (amenityCodes array_agg yolunu doğrular).
     await prisma.$executeRawUnsafe(`
       INSERT INTO location_amenities (location_id, amenity_id)
@@ -93,7 +98,9 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     const e2e = onlyE2E<Pin>(res.body.locations);
     // 2 E2E pini: private_marina + fuel_pier (taslak/silinmiş/kutu-dışı hariç)
     expect(e2e).toHaveLength(2);
-    expect(e2e.map((p) => p.type)).toEqual(expect.arrayContaining(['private_marina', 'fuel_pier']));
+    expect(e2e.map((p) => p.type)).toEqual(
+      expect.arrayContaining(['private_marina', 'fuel_pier']),
+    );
     // Taslak/silinmiş fixture'lar asla sızmaz
     const names = (res.body.locations as Pin[]).map((p) => p.name);
     expect(names).not.toContain('E2E Göcek Taslak');
@@ -111,8 +118,12 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     expect(marina.ratingAvg).toBeCloseTo(4.8, 2);
     expect(marina.position.lat).toBeCloseTo(36.75, 4);
     expect(marina.position.lon).toBeCloseTo(28.93, 4);
+    // Tekne-uyum limitleri pin'de taşınır (harita rozetleri için).
+    expect(marina.maxBoatLengthM).toBe(40);
+    expect(marina.maxDraftM).toBe(5);
     const fuel = res.body.locations.find((p: Pin) => p.name === 'E2E Göcek Yakıt');
     expect(fuel.ratingAvg).toBeNull();
+    expect(fuel.maxBoatLengthM).toBeNull();
   });
 
   it('type filtresi (OR): yalnız fuel_pier', async () => {

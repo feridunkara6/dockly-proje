@@ -1,60 +1,117 @@
 import 'package:dockly_api/dockly_api.dart';
+import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
+import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/map/presentation/web_map_surface.dart';
+import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() {
-  testWidgets('web yüzeyi gerçek harita çizer: cluster sayısı + pin görünür, görünüm bildirilir',
-      (WidgetTester tester) async {
-    MapViewport? reported;
-    final MapSurfaceCallbacks callbacks = MapSurfaceCallbacks(
-      onViewportChanged: (MapViewport v) => reported = v,
+/// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
+class _FixedBoat extends MyBoatController {
+  _FixedBoat(this._boat);
+  final MyBoat _boat;
+  @override
+  MyBoat? build() => _boat;
+}
+
+Finder _docklyIcon(DocklyIconData d) =>
+    find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
+
+const MapSurfaceData _data = MapSurfaceData(
+  pins: <LocationPin>[
+    // 15 m tekneye SIĞAN marina (40 m limit)
+    LocationPin(
+      id: 'fits',
+      name: 'D-Marin Göcek',
+      type: 'private_marina',
+      position: GeoPoint(lat: 36.75, lon: 28.93),
+      ratingAvg: 4.8,
+      priceTier: 'paid',
+      maxBoatLengthM: 40,
+      maxDraftM: 5,
+    ),
+    // 15 m tekneye SIĞMAYAN iskele (8 m limit)
+    LocationPin(
+      id: 'big',
+      name: 'Küçük İskele',
+      type: 'municipal_pier',
+      position: GeoPoint(lat: 36.80, lon: 28.90),
+      ratingAvg: null,
+      priceTier: 'unknown',
+      maxBoatLengthM: 8,
+      maxDraftM: 1,
+    ),
+  ],
+  clusters: <Cluster>[
+    Cluster(
+      position: GeoPoint(lat: 40.9, lon: 29.05),
+      count: 33,
+      bbox: Bbox(minLon: 28.8, minLat: 40.0, maxLon: 30.2, maxLat: 41.4),
+    ),
+  ],
+  selectedPinId: null,
+);
+
+Widget _app(MapSurfaceCallbacks callbacks, {MyBoat? boat}) {
+  return ProviderScope(
+    overrides: <Override>[
+      if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
+    ],
+    child: MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (BuildContext context) => webMapSurfaceBuilder(context, _data, callbacks),
+        ),
+      ),
+    ),
+  );
+}
+
+MapSurfaceCallbacks _callbacks(void Function(MapViewport) onViewport) =>
+    MapSurfaceCallbacks(
+      onViewportChanged: onViewport,
       onPinTap: (String _) {},
       onClusterTap: (_) {},
     );
-    const MapSurfaceData data = MapSurfaceData(
-      pins: <LocationPin>[
-        LocationPin(
-          id: 'p1',
-          name: 'D-Marin Göcek',
-          type: 'private_marina',
-          position: GeoPoint(lat: 36.75, lon: 28.93),
-          ratingAvg: 4.8,
-          priceTier: 'paid',
-        ),
-      ],
-      clusters: <Cluster>[
-        Cluster(
-          position: GeoPoint(lat: 40.9, lon: 29.05),
-          count: 33,
-          bbox: Bbox(minLon: 28.8, minLat: 40.0, maxLon: 30.2, maxLat: 41.4),
-        ),
-      ],
-      selectedPinId: null,
-    );
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (BuildContext context) => webMapSurfaceBuilder(context, data, callbacks),
-          ),
-        ),
-      ),
-    );
+void main() {
+  testWidgets('web yüzeyi gerçek harita çizer: cluster sayısı görünür, görünüm bildirilir',
+      (WidgetTester tester) async {
+    MapViewport? reported;
+    await tester.pumpWidget(_app(_callbacks((MapViewport v) => reported = v)));
     await tester.pump(); // postFrame callback çalışsın (açılış görünümü)
 
-    // Gerçek harita + cluster sayısı çizildi (tasarım §06).
     expect(find.byType(FlutterMap), findsOneWidget);
     expect(find.text('33'), findsOneWidget);
 
-    // Açılışta geçerli bir görünüm bildirilir (pinler yüklensin).
     expect(reported, isNotNull);
     // bbox her kenarı ≤ 5° olmalı (sunucu sınırı — aksi halde 422).
     expect(reported!.bbox.maxLat - reported!.bbox.minLat, lessThanOrEqualTo(5.0));
     expect(reported!.bbox.maxLon - reported!.bbox.minLon, lessThanOrEqualTo(5.0));
+  });
+
+  testWidgets('tekne tanımlıysa pinlerde uyum rozeti: yeşil (sığar) + turuncu (sığmaz)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      _callbacks((MapViewport _) {}),
+      boat: const MyBoat(lengthM: 15, draftM: 2),
+    ));
+    await tester.pump();
+
+    // 40 m limitli marinada yeşil onay, 8 m limitli iskelede turuncu uyarı.
+    expect(_docklyIcon(DocklyIcons.checkCircle), findsOneWidget);
+    expect(_docklyIcon(DocklyIcons.errorOutline), findsOneWidget);
+  });
+
+  testWidgets('tekne tanımsızsa pinlerde rozet çıkmaz', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(_callbacks((MapViewport _) {})));
+    await tester.pump();
+
+    expect(_docklyIcon(DocklyIcons.checkCircle), findsNothing);
+    expect(_docklyIcon(DocklyIcons.errorOutline), findsNothing);
   });
 }

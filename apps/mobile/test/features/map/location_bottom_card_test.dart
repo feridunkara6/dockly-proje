@@ -1,4 +1,5 @@
 import 'package:dockly_api/dockly_api.dart';
+import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -75,5 +76,27 @@ void main() {
       MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () {}))),
     );
     expect(find.text('Detay'), findsNothing);
+  });
+
+  testWidgets('fit verilince uyum rozeti gösterilir; unknown/verilmezse gösterilmez',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.fits),
+        ),
+      ),
+    );
+    expect(find.text('Teknen sığar'), findsOneWidget);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.unknown),
+        ),
+      ),
+    );
+    expect(find.text('Teknen sığar'), findsNothing);
+    expect(find.text('Uygunluk bilinmiyor'), findsNothing);
   });
 }

@@ -44,6 +44,8 @@ interface PinRow {
   lon: number;
   ratingAvg: Prisma.Decimal | number | null;
   priceTier: string;
+  maxBoatLengthM: Prisma.Decimal | number | null;
+  maxDraftM: Prisma.Decimal | number | null;
 }
 
 interface NearbyRow extends PinRow {
@@ -98,7 +100,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -110,7 +114,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
         ST_Y(l.position::geometry)     AS lat,
         ST_X(l.position::geometry)     AS lon,
         l.rating_avg                   AS "ratingAvg",
-        l.price_tier::text             AS "priceTier"
+        l.price_tier::text             AS "priceTier",
+        l.max_boat_length_m            AS "maxBoatLengthM",
+        l.max_draft_m                  AS "maxDraftM"
       FROM locations l
       JOIN location_types lt ON lt.id = l.location_type_id
       WHERE l.status = 'published'
@@ -128,6 +134,8 @@ export class PrismaLocationsRepository implements LocationsRepository {
       position: { lat: Number(r.lat), lon: Number(r.lon) },
       ratingAvg: r.ratingAvg === null ? null : Number(r.ratingAvg),
       priceTier: r.priceTier,
+      maxBoatLengthM: dec(r.maxBoatLengthM),
+      maxDraftM: dec(r.maxDraftM),
     }));
   }
 
@@ -277,7 +285,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
@@ -424,11 +434,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -475,12 +481,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({

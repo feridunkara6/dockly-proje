@@ -17,6 +17,8 @@ const LocationPin testPin = LocationPin(
   position: GeoPoint(lat: 36.75, lon: 28.93),
   ratingAvg: 4.8,
   priceTier: 'paid',
+  maxBoatLengthM: 40,
+  maxDraftM: 5,
 );
 
 const Cluster testCluster = Cluster(

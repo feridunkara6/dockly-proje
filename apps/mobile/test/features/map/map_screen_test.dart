@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
+import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
@@ -19,7 +21,15 @@ import '../../support/map_fakes.dart';
 Finder _docklyIcon(DocklyIconData d) =>
     find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
-Widget _app(FakeMapGateway gateway, {FakeMapCache? cache}) {
+/// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
+class _FixedBoat extends MyBoatController {
+  _FixedBoat(this._boat);
+  final MyBoat _boat;
+  @override
+  MyBoat? build() => _boat;
+}
+
+Widget _app(FakeMapGateway gateway, {FakeMapCache? cache, MyBoat? boat}) {
   return ProviderScope(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
@@ -29,6 +39,7 @@ Widget _app(FakeMapGateway gateway, {FakeMapCache? cache}) {
       // sızıntı yapar (önceki testin kaydettiği veri sonrakinde "çevrimdışı
       // görünüm" tetikler). Varsayılan: boş sahte önbellek.
       mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
+      if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: MapScreen()),
   );
@@ -83,6 +94,19 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ListTile), findsOneWidget); // liste modu, tek pin
     expect(_docklyIcon(DocklyIcons.mapOutlined), findsOneWidget); // haritaya dön ikonu
+  });
+
+  testWidgets('tekne tanımlıysa alt kartta uyum rozeti görünür', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      boat: const MyBoat(lengthM: 15, draftM: 2),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    // testPin limiti 40 m → 15 m tekne sığar.
+    expect(find.text('Teknen sığar'), findsOneWidget);
   });
 
   testWidgets('tip çipine dokununca filtre sunucuya geçer', (WidgetTester tester) async {

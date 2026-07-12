@@ -9,6 +9,8 @@ class LocationPin {
     required this.position,
     required this.ratingAvg,
     required this.priceTier,
+    this.maxBoatLengthM,
+    this.maxDraftM,
   });
 
   final String id;
@@ -20,6 +22,11 @@ class LocationPin {
   final double? ratingAvg;
   final String priceTier;
 
+  /// Kabul limitleri (null = bilinmiyor) — haritada tekne-uyum rozeti için.
+  /// Geriye uyumlu: eski sunucu göndermezse null kalır.
+  final double? maxBoatLengthM;
+  final double? maxDraftM;
+
   factory LocationPin.fromJson(Map<String, dynamic> json) => LocationPin(
         id: json['id'] as String,
         name: json['name'] as String,
@@ -27,6 +34,8 @@ class LocationPin {
         position: GeoPoint.fromJson(json['position'] as Map<String, dynamic>),
         ratingAvg: (json['ratingAvg'] as num?)?.toDouble(),
         priceTier: json['priceTier'] as String,
+        maxBoatLengthM: (json['maxBoatLengthM'] as num?)?.toDouble(),
+        maxDraftM: (json['maxDraftM'] as num?)?.toDouble(),
       );
 }
 

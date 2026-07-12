@@ -56,6 +56,8 @@ class SharedPrefsMapCache implements MapCache {
               'position': <String, double>{'lat': p.position.lat, 'lon': p.position.lon},
               'ratingAvg': p.ratingAvg,
               'priceTier': p.priceTier,
+              'maxBoatLengthM': p.maxBoatLengthM,
+              'maxDraftM': p.maxDraftM,
             },
         ],
         'clusters': <Map<String, dynamic>>[

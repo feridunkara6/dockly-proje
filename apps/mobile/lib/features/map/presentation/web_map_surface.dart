@@ -5,8 +5,11 @@ import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../boat/application/my_boat_controller.dart';
+import '../../boat/domain/my_boat.dart';
 import '../domain/map_viewport.dart';
 import 'map_surface.dart';
 
@@ -30,17 +33,17 @@ Widget webMapSurfaceBuilder(
   return _WebMapSurface(data: data, callbacks: callbacks);
 }
 
-class _WebMapSurface extends StatefulWidget {
+class _WebMapSurface extends ConsumerStatefulWidget {
   const _WebMapSurface({required this.data, required this.callbacks});
 
   final MapSurfaceData data;
   final MapSurfaceCallbacks callbacks;
 
   @override
-  State<_WebMapSurface> createState() => _WebMapSurfaceState();
+  ConsumerState<_WebMapSurface> createState() => _WebMapSurfaceState();
 }
 
-class _WebMapSurfaceState extends State<_WebMapSurface> {
+class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   final MapController _map = MapController();
   Timer? _debounce;
 
@@ -103,6 +106,8 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
 
   @override
   Widget build(BuildContext context) {
+    // Tekne tanımlıysa pinlerde uyum rozeti gösterilir (wow kişiselleştirme).
+    final MyBoat? boat = ref.watch(myBoatProvider);
     return FlutterMap(
       mapController: _map,
       options: MapOptions(
@@ -149,6 +154,11 @@ class _WebMapSurfaceState extends State<_WebMapSurface> {
                 child: _PinMarker(
                   type: p.type,
                   selected: p.id == widget.data.selectedPinId,
+                  fit: computeBoatFit(
+                    boat: boat,
+                    maxBoatLengthM: p.maxBoatLengthM,
+                    maxDraftM: p.maxDraftM,
+                  ),
                   onTap: () => widget.callbacks.onPinTap(p.id),
                 ),
               ),
@@ -187,13 +197,20 @@ class _MapAttribution extends StatelessWidget {
 }
 
 /// Damla-formlu liman pini (tasarım §06): tip rengi zemin, 2.5px beyaz kontur,
-/// içinde beyaz tip ikonu; seçiliyse %25 büyür.
+/// içinde beyaz tip ikonu; seçiliyse %25 büyür. Tekne tanımlıysa sağ-üstte
+/// uyum rozeti: yeşil = sığar, turuncu = sığmayabilir (bilinmiyorsa rozet yok).
 class _PinMarker extends StatelessWidget {
-  const _PinMarker({required this.type, required this.selected, required this.onTap});
+  const _PinMarker({
+    required this.type,
+    required this.selected,
+    required this.onTap,
+    this.fit = BoatFit.unknown,
+  });
 
   final String type;
   final bool selected;
   final VoidCallback onTap;
+  final BoatFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +218,22 @@ class _PinMarker extends StatelessWidget {
     final double s = selected ? 40 : 32;
     return GestureDetector(
       onTap: onTap,
-      child: Center(
+      child: Stack(
+        children: <Widget>[
+          if (fit != BoatFit.unknown)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: _FitDot(fits: fit == BoatFit.fits),
+            ),
+          _pinBody(color, s),
+        ].reversed.toList(growable: false),
+      ),
+    );
+  }
+
+  Widget _pinBody(Color color, double s) {
+    return Center(
         child: Transform.rotate(
           // CSS eşleniği: rotate(-45deg) → damlanın ucu (bottomLeft) aşağı bakar.
           angle: -math.pi / 4,
@@ -232,6 +264,33 @@ class _PinMarker extends StatelessWidget {
               ),
             ),
           ),
+        ),
+    );
+  }
+}
+
+/// Pin köşesindeki uyum rozeti: yeşil (sığar) / turuncu (sığmayabilir), beyaz
+/// konturlu küçük daire — haritada tek bakışta uygunluk.
+class _FitDot extends StatelessWidget {
+  const _FitDot({required this.fits});
+
+  final bool fits;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 15,
+      height: 15,
+      decoration: BoxDecoration(
+        color: fits ? DocklyColors.success : DocklyColors.warning,
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFFFFFFF), width: 1.5),
+      ),
+      child: Center(
+        child: DocklyIcon(
+          fits ? DocklyIcons.checkCircle : DocklyIcons.errorOutline,
+          size: 9,
+          color: const Color(0xFFFFFFFF),
         ),
       ),
     );

@@ -13,6 +13,9 @@ export interface LocationPin {
   position: GeoPoint;
   ratingAvg: number | null;
   priceTier: string;
+  /** Kabul limitleri (null = bilinmiyor) — istemci tekne-uyum rozetini haritada çizer. */
+  maxBoatLengthM: number | null;
+  maxDraftM: number | null;
 }
 
 /** Sınırlayıcı kutu (`minLon,minLat,maxLon,maxLat`, docs/23 §9.5). */
@@ -232,7 +235,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

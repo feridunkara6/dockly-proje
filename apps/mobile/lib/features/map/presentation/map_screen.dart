@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
+import '../../boat/application/my_boat_controller.dart';
+import '../../boat/domain/my_boat.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../route/domain/sea_route.dart';
@@ -107,6 +109,12 @@ class MapScreen extends ConsumerWidget {
               bottom: 0,
               child: LocationBottomCard(
                 pin: selectedPin,
+                // Tekne tanımlıysa kartta uyum rozeti (harita pinleriyle tutarlı).
+                fit: computeBoatFit(
+                  boat: ref.watch(myBoatProvider),
+                  maxBoatLengthM: selectedPin.maxBoatLengthM,
+                  maxDraftM: selectedPin.maxDraftM,
+                ),
                 onClose: controller.clearSelection,
                 onOpenDetail: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(

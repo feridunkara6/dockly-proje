@@ -3,6 +3,8 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/location_type_labels.dart';
+import '../../boat/domain/my_boat.dart';
+import '../../boat/presentation/boat_fit.dart';
 
 /// Harita alt detay kartı (S-06, docs/01-prd §6.3). Pine dokununca alttan belirir:
 /// tip (renk noktası + etiket), ad, puan ve fiyat rozeti. "Detay"/"Yol tarifi"
@@ -12,6 +14,7 @@ class LocationBottomCard extends StatelessWidget {
     required this.pin,
     required this.onClose,
     this.onOpenDetail,
+    this.fit,
     super.key,
   });
 
@@ -20,6 +23,10 @@ class LocationBottomCard extends StatelessWidget {
 
   /// "Detay" aksiyonu — verilmezse buton gösterilmez (B.3 uyumu).
   final VoidCallback? onOpenDetail;
+
+  /// Tekne-uyum rozeti (verilirse ve `unknown` değilse gösterilir). Ekran
+  /// hesaplar; kart sağlayıcı-bağımsız kalır (testte sarma gerekmez).
+  final BoatFit? fit;
 
   static const ValueKey<String> cardKey = ValueKey<String>('location-bottom-card');
 
@@ -83,6 +90,10 @@ class LocationBottomCard extends StatelessWidget {
                     ],
                   ],
                 ),
+                if (fit != null && fit != BoatFit.unknown) ...<Widget>[
+                  const SizedBox(height: 8),
+                  BoatFitBadge(fit: fit!),
+                ],
                 if (onOpenDetail != null) ...<Widget>[
                   const SizedBox(height: 12),
                   SizedBox(
