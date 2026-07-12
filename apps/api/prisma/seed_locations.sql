@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -81,6 +81,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Kos', 'gr-kos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Rodos', 'gr-rodos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Symi', 'gr-symi')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -5173,5 +5176,91 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302241039663', NULL, true
 FROM locations l WHERE l.slug = 'rodos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Marina Symi (Pedi) · güven: high · kaynak: greek-marinas.gr, www.marina-symi.gr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'marina-symi-pedi', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Marina Symi (Pedi)', 'Symi adası Pedi koyunda 2021''de açılan marina; Gialos''a 2 km. Her tonozda elektrik ve su bağlantısı, ücretsiz Wi-Fi, duş/WC. Datça-Bozburun karşı kıyısı.',
+  ST_SetSRID(ST_MakePoint(27.85778, 36.61639), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Marina Symi (Pedi)', 'Symi adası Pedi koyunda 2021''de açılan marina; Gialos''a 2 km. Her tonozda elektrik ve su bağlantısı, ücretsiz Wi-Fi, duş/WC. Datça-Bozburun karşı kıyısı.' FROM locations WHERE slug = 'marina-symi-pedi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 50, '71', NULL, NULL, NULL
+FROM locations WHERE slug = 'marina-symi-pedi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'marina-symi-pedi' AND a.code IN ('electricity', 'water', 'wifi', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246071161', NULL, true
+FROM locations l WHERE l.slug = 'marina-symi-pedi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@marina-symi.gr', NULL, false
+FROM locations l WHERE l.slug = 'marina-symi-pedi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.marina-symi.gr/', NULL, false
+FROM locations l WHERE l.slug = 'marina-symi-pedi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Symi Gialos Rıhtımı · güven: medium · kaynak: www.litando.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'symi-gialos-rihtimi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Symi Gialos Rıhtımı', 'Symi''nin ikonik ana limanı Gialos''ta kasaba rıhtımı; kıçtankara bağlama, liman görevlisi yönlendirir. Feribot neta''sına dikkat. Rıhtımda su/elektrik noktaları var ancak kullanılabilirlik değişken — varışta teyit edin.',
+  ST_SetSRID(ST_MakePoint(27.83905, 36.61792), 4326)::geography,
+  NULL, NULL, 3, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Symi Gialos Rıhtımı', 'Symi''nin ikonik ana limanı Gialos''ta kasaba rıhtımı; kıçtankara bağlama, liman görevlisi yönlendirir. Feribot neta''sına dikkat. Rıhtımda su/elektrik noktaları var ancak kullanılabilirlik değişken — varışta teyit edin.' FROM locations WHERE slug = 'symi-gialos-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246070110', NULL, true
+FROM locations l WHERE l.slug = 'symi-gialos-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@symi.gr', NULL, false
+FROM locations l WHERE l.slug = 'symi-gialos-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/symi-island/', NULL, false
+FROM locations l WHERE l.slug = 'symi-gialos-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Panormitis İskelesi (Symi) · güven: medium · kaynak: www.litando.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'symi-panormitis-iskelesi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-symi'),
+  'Panormitis İskelesi (Symi)', 'Symi''nin güneyinde, ünlü Panormitis Manastırı''nın korunaklı koyunda C-biçimli iskele (70 m) ve rıhtım (120 m). Yatlar ve yelkenliler için sakin bağlanma; derinlik iskele başında 5 m''ye kadar.',
+  ST_SetSRID(ST_MakePoint(27.84868, 36.55169), 4326)::geography,
+  NULL, NULL, 2, 5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Panormitis İskelesi (Symi)', 'Symi''nin güneyinde, ünlü Panormitis Manastırı''nın korunaklı koyunda C-biçimli iskele (70 m) ve rıhtım (120 m). Yatlar ve yelkenliler için sakin bağlanma; derinlik iskele başında 5 m''ye kadar.' FROM locations WHERE slug = 'symi-panormitis-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302246070110', NULL, true
+FROM locations l WHERE l.slug = 'symi-panormitis-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.litando.gr/symi-island/', NULL, false
+FROM locations l WHERE l.slug = 'symi-panormitis-iskelesi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 

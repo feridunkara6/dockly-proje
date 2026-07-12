@@ -1,0 +1,121 @@
+{
+  "batch": "10-symi",
+  "collectedAt": "2026-07-12",
+  "method": "Symi adası bağlanma yerleri. Kaynaklar: (1) Marina Symi (Pedi) — Yunan Marinalar Birliği üye sayfası (greek-marinas.gr) + marinanın resmî sitesi (marina-symi.gr), koordinat iki kaynakta aynı (36°36'59\"N 27°51'28\"E; birlik sayfasındaki 27°51'286\" bariz dizgi hatası, resmî site esas). (2) Gialos ana rıhtımı ve Panormitis — resmî liman idaresi Güney Onikiadalar Belediye Liman Fonu (litando.gr) tanım/iletişim; Gialos koordinatı PredictWind liman kaydından, Panormitis koordinatı sailingissues.com rehberinden. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+  "notes": [
+    "Kullanıcı tespiti üzerine eklendi: batch9 yalnız birlik üyesi 20 marinayı kapsıyordu; Marina Symi (Pedi) birlik üyesi olduğu hâlde listeye girmemişti.",
+    "Gialos rıhtımında elektrik/su: kaynaklar çelişiyor (sailingissues Haz-2024: direkler var akım yok; PredictWind: sınırlı, varışta teyit). Rozet YANLIŞ vaat olmasın diye amenity verilmedi; durum açıklamada.",
+    "Marina Symi VHF: birlik sayfası 'F1' (dizgi hatası görünümlü), sailingissues kanal 71 — 71 esas alındı, missingNotes'ta belgelendi."
+  ],
+  "records": [
+    {
+      "slug": "marina-symi-pedi",
+      "name": "Marina Symi (Pedi)",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "countryCode": "GR",
+      "provinceSlug": "gr-symi",
+      "districtSlug": null,
+      "lat": 36.61639,
+      "lon": 27.85778,
+      "coordSource": "Resmî site marina-symi.gr (36°36'59\"N 27°51'28\"E → 36.61639, 27.85778); birlik sayfası greek-marinas.gr aynı değer (27°51'286\" dizgi hatası 28.6\" okundu)",
+      "descriptionTr": "Symi adası Pedi koyunda 2021'de açılan marina; Gialos'a 2 km. Her tonozda elektrik ve su bağlantısı, ücretsiz Wi-Fi, duş/WC. Datça-Bozburun karşı kıyısı.",
+      "berthCount": 50,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "71",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": ["electricity", "water", "wifi", "wc", "shower"],
+      "services": [],
+      "contacts": [
+        { "type": "phone", "value": "+302246071161", "primary": true },
+        { "type": "email", "value": "info@marina-symi.gr" },
+        { "type": "website", "value": "https://www.marina-symi.gr/" }
+      ],
+      "sourceUrls": [
+        "https://greek-marinas.gr/en/marinas/marina-symi/ (Yunan Marinalar Birliği üye sayfası)",
+        "https://www.marina-symi.gr/ (marinanın resmî sitesi)",
+        "https://sailingissues.com/greekislands/simi.html (VHF 71, 50+ tonoz çapraz teyit)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Maks. boy/su çekimi hiçbir kaynakta rakamla verilmiyor → null. VHF: birlik sayfası 'F1' (geçersiz kanal adı, dizgi hatası görünümlü), sailingissues 71 → 71 esas alındı."
+    },
+    {
+      "slug": "symi-gialos-rihtimi",
+      "name": "Symi Gialos Rıhtımı",
+      "operator": "Güney Onikiadalar Belediye Liman Fonu",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "GR",
+      "provinceSlug": "gr-symi",
+      "districtSlug": null,
+      "lat": 36.61792,
+      "lon": 27.83905,
+      "coordSource": "PredictWind liman kaydı (36.61792 N, 27.83905 E); litando.gr resmî liman tanımıyla (Gialos ana rıhtımı, 622 m rıhtım hattı) tutarlı",
+      "descriptionTr": "Symi'nin ikonik ana limanı Gialos'ta kasaba rıhtımı; kıçtankara bağlama, liman görevlisi yönlendirir. Feribot neta'sına dikkat. Rıhtımda su/elektrik noktaları var ancak kullanılabilirlik değişken — varışta teyit edin.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 3,
+      "depthMaxM": null,
+      "vhfChannel": "12",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        { "type": "phone", "value": "+302246070110", "primary": true },
+        { "type": "email", "value": "info@symi.gr" },
+        { "type": "website", "value": "https://www.litando.gr/symi-island/" }
+      ],
+      "sourceUrls": [
+        "https://www.litando.gr/symi-island/ (Güney Onikiadalar Belediye Liman Fonu — resmî liman idaresi)",
+        "https://sailingissues.com/greekislands/simi.html (VHF 12, kıçtankara/tonoz düzeni)",
+        "https://www.predictwind.com/marinas/greece/south-aegean/symi-harbour (koordinat, MLW derinlik 3m+)"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Tekne kapasitesi resmî kaynakta yok → null. Elektrik/su çelişkili (sailingissues Haz-2024: akım yok; PredictWind: sınırlı) → amenity verilmedi, açıklamada belirtildi. Liman Bşk. (Sahil Güvenlik) ayrıca: +30 22460 71205."
+    },
+    {
+      "slug": "symi-panormitis-iskelesi",
+      "name": "Panormitis İskelesi (Symi)",
+      "operator": "Güney Onikiadalar Belediye Liman Fonu",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "GR",
+      "provinceSlug": "gr-symi",
+      "districtSlug": null,
+      "lat": 36.55169,
+      "lon": 27.84868,
+      "coordSource": "sailingissues.com Symi rehberi (36.55169 N, 27.84868 E); litando.gr resmî iskele tanımıyla (C-biçimli 70 m iskele) tutarlı",
+      "descriptionTr": "Symi'nin güneyinde, ünlü Panormitis Manastırı'nın korunaklı koyunda C-biçimli iskele (70 m) ve rıhtım (120 m). Yatlar ve yelkenliler için sakin bağlanma; derinlik iskele başında 5 m'ye kadar.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 2,
+      "depthMaxM": 5,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        { "type": "phone", "value": "+302246070110", "primary": true },
+        { "type": "website", "value": "https://www.litando.gr/symi-island/" }
+      ],
+      "sourceUrls": [
+        "https://www.litando.gr/symi-island/ (resmî liman idaresi — iskele ölçüleri ve derinlikler)",
+        "https://sailingissues.com/greekislands/simi.html (koordinat)"
+      ],
+      "confidence": "medium",
+      "missingNotes": "VHF kanalı hiçbir kaynakta belirtilmiyor → null. Derinlikler litando.gr: iskele -5,00 m; rıhtım 2,00–4,00 m → depthMin 2, depthMax 5."
+    }
+  ]
+}

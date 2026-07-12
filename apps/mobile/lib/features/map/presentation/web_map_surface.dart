@@ -26,12 +26,13 @@ import 'map_surface.dart';
 const Bbox _initialBbox = Bbox(minLon: 25.9, minLat: 36.6, maxLon: 30.2, maxLat: 41.1);
 const int _initialZoom = 7;
 
-/// Harita stili: MAP_TILE_KEY verilirse MapTiler'ın yumuşak stilleri kullanılır
-/// (varsayılan: streets-v2-pastel; MAP_TILE_STYLE ile ör. ocean/dataviz/aquarelle
-/// seçilebilir). Anahtar yoksa OSM'e güvenli düşüş — harita asla boş kalmaz.
+/// Harita stili: MAP_TILE_KEY verilirse MapTiler'ın stilleri kullanılır.
+/// Varsayılan: aquarelle (suluboya — renkli ama "gerçek harita" hissinden uzak,
+/// ürün kararı). MAP_TILE_STYLE ile ör. ocean/dataviz/streets-v2-pastel
+/// seçilebilir. Anahtar yoksa OSM'e güvenli düşüş — harita asla boş kalmaz.
 const String _tileKey = String.fromEnvironment('MAP_TILE_KEY');
 const String _tileStyle =
-    String.fromEnvironment('MAP_TILE_STYLE', defaultValue: 'streets-v2-pastel');
+    String.fromEnvironment('MAP_TILE_STYLE', defaultValue: 'aquarelle');
 final String _baseTileUrl = _tileKey.isEmpty
     ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
     : 'https://api.maptiler.com/maps/$_tileStyle/256/{z}/{x}/{y}.png?key=$_tileKey';

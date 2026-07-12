@@ -70,6 +70,7 @@ GR_PROVINCES = {
     "gr-mesolongi": "Mesolongi", "gr-kalamata": "Kalamata", "gr-atina": "Atina",
     "gr-selanik": "Selanik", "gr-halkidiki": "Halkidiki", "gr-midilli": "Midilli",
     "gr-samos": "Samos", "gr-leros": "Leros", "gr-kos": "Kos", "gr-rodos": "Rodos",
+    "gr-symi": "Symi",
 }
 
 # slug → ülke (validasyon + emit için)
@@ -277,7 +278,8 @@ def emit(records, batch_meta):
 def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
-               "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json"]
+               "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json",
+               "batch10_symi.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b
