@@ -52,20 +52,36 @@ class _SplashGateState extends State<SplashGate> {
 
 /// Marka açılış ekranı: deniz degradesi üstünde yelken ikonu, Moorira yazısı
 /// ve slogan. Öğeler yumuşak biçimde belirir (tek seferlik, sonlu animasyon).
+/// Scaffold + SizedBox.expand: TAM EKRAN kaplar ve Material zemini sağlar
+/// (aksi hâlde metinler sarı alt çizgiyle çizilir, degrade şerit kalır).
 class _SplashScreen extends StatelessWidget {
   const _SplashScreen();
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[DocklyColors.brandPrimary, DocklyColors.brandDeep],
+    return const Scaffold(
+      body: SizedBox.expand(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[DocklyColors.brandPrimary, DocklyColors.brandDeep],
+            ),
+          ),
+          child: _SplashContent(),
         ),
       ),
-      child: TweenAnimationBuilder<double>(
+    );
+  }
+}
+
+class _SplashContent extends StatelessWidget {
+  const _SplashContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
         tween: Tween<double>(begin: 0, end: 1),
         duration: const Duration(milliseconds: 900),
         curve: Curves.easeOutCubic,
@@ -100,7 +116,6 @@ class _SplashScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
