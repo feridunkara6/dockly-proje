@@ -26,11 +26,13 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
-   * zoom < 12 → cluster modu (balonlar); aksi halde (zoom ≥ 12 veya yok) → pin modu.
+   * zoom < 10 → cluster modu (balonlar); aksi halde (zoom ≥ 10 veya yok) → pin modu.
    */
   async map(
     rawBbox: string | undefined,
@@ -91,7 +93,10 @@ export class LocationsService {
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }

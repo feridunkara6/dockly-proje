@@ -13,8 +13,9 @@ import '../../boat/domain/my_boat.dart';
 import '../domain/map_viewport.dart';
 import 'map_surface.dart';
 
-/// Web harita yüzeyi. Mapbox web'de çalışmadığı için tarayıcıda çalışan, jeton
-/// istemeyen gerçek bir harita kullanılır: flutter_map + OpenStreetMap karoları.
+/// Web harita yüzeyi. Mapbox web'de çalışmadığı için tarayıcıda çalışan gerçek
+/// bir harita kullanılır: flutter_map + MapTiler yumuşak stil (anahtar varsa)
+/// ya da OpenStreetMap karoları (anahtarsız güvenli düşüş).
 /// Görsel dil, tasarım sistemi (design/dockly-design-system.html §06 Map
 /// Markers) ile birebir: damla-formlu, beyaz konturlu tip-renkli pinler; cam
 /// görünümlü dairede sayı taşıyan cluster'lar; seçili pin büyür. Cluster'a
@@ -24,6 +25,19 @@ import 'map_surface.dart';
 /// Her kenar ≤ 5° (sunucu bbox sınırı, docs/23 §9.5) → veri hemen gelir.
 const Bbox _initialBbox = Bbox(minLon: 25.9, minLat: 36.6, maxLon: 30.2, maxLat: 41.1);
 const int _initialZoom = 7;
+
+/// Harita stili: MAP_TILE_KEY verilirse MapTiler'ın yumuşak stilleri kullanılır
+/// (varsayılan: streets-v2-pastel; MAP_TILE_STYLE ile ör. ocean/dataviz/aquarelle
+/// seçilebilir). Anahtar yoksa OSM'e güvenli düşüş — harita asla boş kalmaz.
+const String _tileKey = String.fromEnvironment('MAP_TILE_KEY');
+const String _tileStyle =
+    String.fromEnvironment('MAP_TILE_STYLE', defaultValue: 'streets-v2-pastel');
+final String _baseTileUrl = _tileKey.isEmpty
+    ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://api.maptiler.com/maps/$_tileStyle/256/{z}/{x}/{y}.png?key=$_tileKey';
+final String _attributionText = _tileKey.isEmpty
+    ? '© OpenStreetMap katkıcıları · OpenSeaMap'
+    : '© MapTiler · © OpenStreetMap katkıcıları · OpenSeaMap';
 
 Widget webMapSurfaceBuilder(
   BuildContext context,
@@ -99,7 +113,9 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   /// hasGesture=false geldiği için elle emit edilir).
   void _onClusterTap(Cluster c) {
     widget.callbacks.onClusterTap(c);
-    final double targetZoom = math.min(_map.camera.zoom + 2.5, 14.0);
+    // Pin eşiği 10 olduğundan hedef en az 10.5 — baloncuğa dokunuş her zaman
+    // tekil pin bölgesine indirir (bir kez daha dokunma gereği kalmaz).
+    final double targetZoom = math.min(math.max(_map.camera.zoom + 2.5, 10.5), 14.0);
     _map.move(LatLng(c.position.lat, c.position.lon), targetZoom);
     _emit(_map.camera);
   }
@@ -119,7 +135,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
       ),
       children: <Widget>[
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate: _baseTileUrl,
           userAgentPackageName: 'app.moorira.mobile',
           tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 19,
@@ -188,9 +204,9 @@ class _MapAttribution extends StatelessWidget {
           color: const Color(0xB3FFFFFF),
           borderRadius: BorderRadius.circular(4),
         ),
-        child: const Text(
-          '© OpenStreetMap katkıcıları · OpenSeaMap',
-          style: TextStyle(fontSize: 10, color: Color(0xFF0A2540)),
+        child: Text(
+          _attributionText,
+          style: const TextStyle(fontSize: 10, color: Color(0xFF0A2540)),
         ),
       ),
     );

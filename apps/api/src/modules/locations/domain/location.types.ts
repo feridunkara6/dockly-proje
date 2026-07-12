@@ -36,8 +36,8 @@ export interface Cluster {
 }
 
 /**
- * Harita yanıtı (docs/23 §9.5). zoom ≥ 12 → `locations` dolu, `clusters` boş;
- * zoom < 12 → `clusters` dolu, `locations` boş. `truncated` yalnız pin modunda
+ * Harita yanıtı (docs/23 §9.5). zoom ≥ 10 → `locations` dolu, `clusters` boş;
+ * zoom < 10 → `clusters` dolu, `locations` boş. `truncated` yalnız pin modunda
  * anlamlı (tavan aşımı).
  */
 export interface MapResult {
@@ -235,7 +235,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

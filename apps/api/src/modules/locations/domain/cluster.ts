@@ -1,7 +1,8 @@
 import { AppProblem } from '../../../common/problem/problem';
 
-/** Pin/cluster eşiği (docs/23 §9.5): zoom < 12 ⇒ cluster, zoom ≥ 12 ⇒ pin. */
-export const MIN_PIN_ZOOM = 12;
+/** Pin/cluster eşiği: zoom < 10 ⇒ cluster, zoom ≥ 10 ⇒ pin. (docs/23 §9.5
+ * temeli 12 idi; pinler daha uzaktan görünsün diye 10'a çekildi — UX kararı.) */
+export const MIN_PIN_ZOOM = 10;
 
 /** Cluster yanıtı üst sınırı (koruma; en kalabalık balonlar korunur). */
 export const CLUSTER_CAP = 1000;
@@ -10,9 +11,7 @@ export const CLUSTER_CAP = 1000;
 export const MAX_ZOOM = 22;
 
 function fail(field: string, code: string, message: string): never {
-  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [
-    { field, code, message },
-  ]);
+  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [{ field, code, message }]);
 }
 
 /**

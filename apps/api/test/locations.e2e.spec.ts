@@ -98,7 +98,9 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     const e2e = onlyE2E<Pin>(res.body.locations);
     // 2 E2E pini: private_marina + fuel_pier (taslak/silinmiş/kutu-dışı hariç)
     expect(e2e).toHaveLength(2);
-    expect(e2e.map((p) => p.type)).toEqual(expect.arrayContaining(['private_marina', 'fuel_pier']));
+    expect(e2e.map((p) => p.type)).toEqual(
+      expect.arrayContaining(['private_marina', 'fuel_pier']),
+    );
     // Taslak/silinmiş fixture'lar asla sızmaz
     const names = (res.body.locations as Pin[]).map((p) => p.name);
     expect(names).not.toContain('E2E Göcek Taslak');
@@ -173,7 +175,7 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     expect(res.body.errors[0].code).toBe('bbox-invalid');
   });
 
-  // --- 3.1b-iii: cluster modu (zoom < 12) ---
+  // --- 3.1b-iii: cluster modu (zoom < 10) ---
 
   interface ClusterDto {
     position: { lat: number; lon: number };
@@ -181,10 +183,10 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     bbox: [number, number, number, number];
   }
 
-  it('cluster modu (zoom<12): balonlar döner, locations boş, toplam ≥ 2', async () => {
+  it('cluster modu (zoom<10): balonlar döner, locations boş, toplam ≥ 2', async () => {
     // Göcek kutusunda artık gerçek marinalar da var → kesin sayım yerine yapı doğrulanır.
     const res = await request(http)
-      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=10')
+      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=8')
       .expect(200);
     expect(res.body.locations).toEqual([]);
     const clusters: ClusterDto[] = res.body.clusters;
@@ -208,7 +210,7 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     expect(total).toBeGreaterThanOrEqual(501);
   });
 
-  it('zoom ≥ 12 → pin modu (clusters boş)', async () => {
+  it('zoom ≥ 10 → pin modu (clusters boş)', async () => {
     const res = await request(http)
       .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=13')
       .expect(200);
