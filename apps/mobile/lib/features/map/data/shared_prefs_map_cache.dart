@@ -66,6 +66,7 @@ class SharedPrefsMapCache implements MapCache {
               'position': <String, double>{'lat': c.position.lat, 'lon': c.position.lon},
               'count': c.count,
               'bbox': <double>[c.bbox.minLon, c.bbox.minLat, c.bbox.maxLon, c.bbox.maxLat],
+              'countryCode': c.countryCode,
             },
         ],
       });

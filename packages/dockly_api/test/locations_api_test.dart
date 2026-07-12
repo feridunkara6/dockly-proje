@@ -51,13 +51,20 @@ void main() {
     expect(sent.queryParameters['type'], <String>['private_marina', 'fuel_pier']);
   });
 
-  test('mapByBbox cluster modu: balon parse (position, count, bbox)', () async {
+  test('mapByBbox cluster modu: balon parse (position, count, bbox, ülke)', () async {
     adapter.enqueueJson(200, <String, dynamic>{
       'clusters': <dynamic>[
         <String, dynamic>{
           'position': <String, dynamic>{'lat': 40.0, 'lon': 30.0},
           'count': 34,
           'bbox': <dynamic>[29.5, 39.5, 30.5, 40.5],
+          'countryCode': 'TR',
+        },
+        <String, dynamic>{
+          // Eski sunucu countryCode göndermeyebilir → '' (geriye uyumlu).
+          'position': <String, dynamic>{'lat': 37.9, 'lon': 23.7},
+          'count': 5,
+          'bbox': <dynamic>[23.5, 37.7, 23.9, 38.1],
         },
       ],
       'locations': <dynamic>[],
@@ -66,11 +73,13 @@ void main() {
 
     final result = await api.mapByBbox(bbox: bbox, zoom: 6);
     expect(result.locations, isEmpty);
-    expect(result.clusters, hasLength(1));
-    final c = result.clusters.single;
+    expect(result.clusters, hasLength(2));
+    final c = result.clusters.first;
     expect(c.count, 34);
     expect(c.position.lon, 30.0);
     expect(c.bbox.maxLat, 40.5);
+    expect(c.countryCode, 'TR');
+    expect(result.clusters.last.countryCode, '');
     // zoom var, type yok → yalnız bbox + zoom gönderilir
     expect(adapter.received.single.queryParameters.containsKey('type'), isFalse);
   });

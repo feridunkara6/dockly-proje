@@ -25,6 +25,7 @@ const Cluster testCluster = Cluster(
   position: GeoPoint(lat: 40.0, lon: 30.0),
   count: 34,
   bbox: Bbox(minLon: 29.5, minLat: 39.5, maxLon: 30.5, maxLat: 40.5),
+  countryCode: 'TR',
 );
 
 const MapResult pinResult = MapResult(

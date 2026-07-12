@@ -220,7 +220,8 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       final CircleAnnotation ann = await circles.create(
         CircleAnnotationOptions(
           geometry: geometry,
-          circleColor: DocklyMapColors.clusterArgb,
+          // Ülkeye göre renk: TR mavi, GR turkuaz (web ile aynı semantik).
+          circleColor: DocklyMapColors.clusterArgbForCountry(cluster.countryCode),
           circleRadius: 18.0,
           circleStrokeColor: DocklyMapColors.strokeArgb,
           circleStrokeWidth: 2.0,

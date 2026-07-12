@@ -33,6 +33,8 @@ export interface Cluster {
   count: number;
   /** [minLon, minLat, maxLon, maxLat] */
   bbox: [number, number, number, number];
+  /** ISO-3166 alpha-2 (TR/GR…) — balonlar ülkeye göre ayrılır ve renklenir. */
+  countryCode: string;
 }
 
 /**

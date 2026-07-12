@@ -46,7 +46,9 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
         (gen_random_uuid(), 'e2e-gocek-deleted', 1, 'published', 'TR', 'E2E Göcek Silinmiş',
          ST_SetSRID(ST_MakePoint(28.93, 36.75), 4326)::geography, NULL, 0, 'unknown'),
         (gen_random_uuid(), 'e2e-outside', 1, 'published', 'TR', 'E2E Kutu Dışı',
-         ST_SetSRID(ST_MakePoint(33.0, 38.0), 4326)::geography, NULL, 0, 'unknown')
+         ST_SetSRID(ST_MakePoint(33.0, 38.0), 4326)::geography, NULL, 0, 'unknown'),
+        (gen_random_uuid(), 'e2e-gr-marina', 1, 'published', 'GR', 'E2E Atina Marina',
+         ST_SetSRID(ST_MakePoint(23.70, 37.90), 4326)::geography, NULL, 0, 'unknown')
       ON CONFLICT (slug) DO NOTHING;
     `);
     await prisma.$executeRawUnsafe(`
@@ -181,6 +183,7 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     position: { lat: number; lon: number };
     count: number;
     bbox: [number, number, number, number];
+    countryCode: string;
   }
 
   it('cluster modu (zoom<10): balonlar döner, locations boş, toplam ≥ 2', async () => {
@@ -196,7 +199,22 @@ runIf('Locations bbox API (e2e — gerçek PostGIS)', () => {
     for (const c of clusters) {
       expect(c.bbox).toHaveLength(4);
       expect(c.count).toBeGreaterThanOrEqual(1);
+      // Göcek kutusundaki her balon Türkiye'ye ait (ülke renklendirme temeli).
+      expect(c.countryCode).toBe('TR');
     }
+  });
+
+  it('cluster modu: balonlar ülkeye göre ayrılır (Atina kutusu → GR)', async () => {
+    const res = await request(http)
+      .get('/v1/locations?bbox=23.60,37.80,23.80,38.00&zoom=8')
+      .expect(200);
+    expect(res.body.locations).toEqual([]);
+    const clusters: ClusterDto[] = res.body.clusters;
+    expect(clusters.length).toBeGreaterThanOrEqual(1);
+    // Kutu tamamen Yunanistan'da → tüm balonlar GR etiketli.
+    for (const c of clusters) expect(c.countryCode).toBe('GR');
+    const total = clusters.reduce((sum, c) => sum + c.count, 0);
+    expect(total).toBeGreaterThanOrEqual(1); // en az E2E Atina Marina kapsanır
   });
 
   it('cluster modu: 501 sentetik nokta balonlarda toplanır (düşük zoom)', async () => {

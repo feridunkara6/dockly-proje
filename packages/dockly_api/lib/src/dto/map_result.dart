@@ -40,18 +40,29 @@ class LocationPin {
 }
 
 /// Harita balonu (docs/23 §9.5). `bbox` = balonun hücre kapsamı; istemci dokununca
-/// bu kutuyla yeniden sorgular (kamera uçuşu).
+/// bu kutuyla yeniden sorgular (kamera uçuşu). Balonlar ülkeye göre ayrılır;
+/// `countryCode` (TR/GR…) istemcide balon rengini belirler. Geriye uyumlu:
+/// eski sunucu göndermezse boş kalır → varsayılan renk.
 class Cluster {
-  const Cluster({required this.position, required this.count, required this.bbox});
+  const Cluster({
+    required this.position,
+    required this.count,
+    required this.bbox,
+    this.countryCode = '',
+  });
 
   final GeoPoint position;
   final int count;
   final Bbox bbox;
 
+  /// ISO-3166 alpha-2 ülke kodu ('' = bilinmiyor).
+  final String countryCode;
+
   factory Cluster.fromJson(Map<String, dynamic> json) => Cluster(
         position: GeoPoint.fromJson(json['position'] as Map<String, dynamic>),
         count: (json['count'] as num).toInt(),
         bbox: Bbox.fromList(json['bbox'] as List<dynamic>),
+        countryCode: json['countryCode'] as String? ?? '',
       );
 }
 

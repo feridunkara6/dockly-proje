@@ -151,14 +151,18 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         ),
         MarkerLayer(
           markers: <Marker>[
-            // Cluster'lar — marka renkli baloncukta sayı; kalabalık büyür,
-            // dokununca yaklaşır.
+            // Cluster'lar — ÜLKE renkli baloncukta sayı + ülke kodu; kalabalık
+            // büyür, dokununca yaklaşır. (TR mavi, GR turkuaz.)
             for (final Cluster c in widget.data.clusters)
               Marker(
                 point: LatLng(c.position.lat, c.position.lon),
                 width: 64,
                 height: 64,
-                child: _ClusterMarker(count: c.count, onTap: () => _onClusterTap(c)),
+                child: _ClusterMarker(
+                  count: c.count,
+                  countryCode: c.countryCode,
+                  onTap: () => _onClusterTap(c),
+                ),
               ),
             // Tekil pinler — damla form, tip rengi, beyaz kontur + beyaz ikon.
             // Damlanın ucu koordinata basar (alignment: topCenter).
@@ -314,18 +318,29 @@ class _FitDot extends StatelessWidget {
   }
 }
 
-/// Cluster işaretçisi: marka mavisinden derin laciverte geçen RENKLİ baloncuk,
-/// beyaz kontur + beyaz kalın sayı. Kalabalık bölge daha büyük baloncuk
-/// (<10 → 40, <50 → 50, 50+ → 60). Dokununca kamera bölgeye yaklaşır.
+/// Cluster işaretçisi: ÜLKEYE göre renklenen baloncuk — Türkiye marka mavisi,
+/// Yunanistan Ege turkuazı (bilinmeyen ülke: kayrak grisi). Beyaz kontur +
+/// beyaz kalın sayı, altında küçük ülke kodu. Kalabalık bölge daha büyük
+/// baloncuk (<10 → 40, <50 → 50, 50+ → 60). Dokununca kamera bölgeye yaklaşır.
 class _ClusterMarker extends StatelessWidget {
-  const _ClusterMarker({required this.count, required this.onTap});
+  const _ClusterMarker({
+    required this.count,
+    required this.onTap,
+    this.countryCode = '',
+  });
 
   final int count;
   final VoidCallback onTap;
+  final String countryCode;
 
   @override
   Widget build(BuildContext context) {
     final double s = count >= 50 ? 60 : (count >= 10 ? 50 : 40);
+    // Ülke → renk eşlemesi tasarım paketinde (ham hex yasak — docs/09 §0).
+    final List<Color> colors = <Color>[
+      DocklyMapColors.clusterColorForCountry(countryCode),
+      DocklyMapColors.clusterDeepColorForCountry(countryCode),
+    ];
     return GestureDetector(
       onTap: onTap,
       child: Center(
@@ -333,10 +348,10 @@ class _ClusterMarker extends StatelessWidget {
           width: s,
           height: s,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[DocklyColors.brandPrimary, DocklyColors.brandDeep],
+              colors: colors,
             ),
             shape: BoxShape.circle,
             border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
@@ -344,15 +359,30 @@ class _ClusterMarker extends StatelessWidget {
               BoxShadow(color: Color(0x590A2540), blurRadius: 12, offset: Offset(0, 4)),
             ],
           ),
-          child: Center(
-            child: Text(
-              '$count',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: s * 0.34,
-                color: const Color(0xFFFFFFFF),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '$count',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: s * 0.30,
+                  height: 1.05,
+                  color: const Color(0xFFFFFFFF),
+                ),
               ),
-            ),
+              if (countryCode.isNotEmpty)
+                Text(
+                  countryCode,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: s * 0.16,
+                    height: 1.0,
+                    letterSpacing: 0.6,
+                    color: const Color(0xD9FFFFFF),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -28,5 +28,15 @@ void main() {
     test('9 kanonik tip tanımlı', () {
       expect(DocklyMapColors.knownTypes.length, 9);
     });
+
+    test('küme ülke renkleri: TR mavi, GR turkuaz; bilinmeyen → marka birincil', () {
+      expect(DocklyMapColors.clusterArgbForCountry('TR'), 0xFF0C7BDC);
+      expect(DocklyMapColors.clusterArgbForCountry('GR'), 0xFF2EC4B6);
+      expect(DocklyMapColors.clusterArgbForCountry(''), DocklyMapColors.clusterArgb);
+      expect(DocklyMapColors.clusterArgbForCountry('XX'), DocklyMapColors.clusterArgb);
+      expect(DocklyMapColors.clusterColorForCountry('GR'), const Color(0xFF2EC4B6));
+      expect(DocklyMapColors.clusterDeepColorForCountry('TR'), const Color(0xFF0A2540));
+      expect(DocklyMapColors.clusterDeepColorForCountry('GR'), const Color(0xFF0B5D54));
+    });
   });
 }

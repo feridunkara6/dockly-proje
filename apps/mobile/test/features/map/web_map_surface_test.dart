@@ -47,10 +47,19 @@ const MapSurfaceData _data = MapSurfaceData(
     ),
   ],
   clusters: <Cluster>[
+    // Türkiye balonu (mavi) — İstanbul çevresi.
     Cluster(
       position: GeoPoint(lat: 40.9, lon: 29.05),
       count: 33,
       bbox: Bbox(minLon: 28.8, minLat: 40.0, maxLon: 30.2, maxLat: 41.4),
+      countryCode: 'TR',
+    ),
+    // Yunanistan balonu (turkuaz) — Sakız/Chios çevresi.
+    Cluster(
+      position: GeoPoint(lat: 38.5, lon: 26.5),
+      count: 12,
+      bbox: Bbox(minLon: 25.8, minLat: 37.8, maxLon: 27.2, maxLat: 39.2),
+      countryCode: 'GR',
     ),
   ],
   selectedPinId: null,
@@ -86,7 +95,11 @@ void main() {
     await tester.pump(); // postFrame callback çalışsın (açılış görünümü)
 
     expect(find.byType(FlutterMap), findsOneWidget);
+    // Ülke balonları: sayı + ülke kodu (TR mavi, GR turkuaz).
     expect(find.text('33'), findsOneWidget);
+    expect(find.text('TR'), findsOneWidget);
+    expect(find.text('12'), findsOneWidget);
+    expect(find.text('GR'), findsOneWidget);
 
     expect(reported, isNotNull);
     // bbox her kenarı ≤ 5° olmalı (sunucu sınırı — aksi halde 422).

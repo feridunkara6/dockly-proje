@@ -88,6 +88,7 @@ interface ClusterRow {
   lon: number;
   lat: number;
   count: number | bigint;
+  countryCode: string;
 }
 
 @Injectable()
@@ -100,7 +101,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -283,9 +286,12 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
-    // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir, düğüme göre GROUP BY;
+    // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir; hücre + ÜLKE'ye göre
+    // GROUP BY → sınır hücrelerinde TR/GR ayrı balon (istemci ülkeye göre renkler).
     // konum = noktaların ağırlık merkezi (ST_Centroid). En kalabalık balonlar önce.
     const rows = await this.prisma.$queryRaw<ClusterRow[]>(Prisma.sql`
       SELECT
@@ -293,11 +299,13 @@ export class PrismaLocationsRepository implements LocationsRepository {
         ST_Y(cell)                       AS "nodeLat",
         ST_X(ST_Centroid(ST_Collect(g))) AS "lon",
         ST_Y(ST_Centroid(ST_Collect(g))) AS "lat",
-        COUNT(*)::int                    AS "count"
+        COUNT(*)::int                    AS "count",
+        country_code                     AS "countryCode"
       FROM (
         SELECT
           ST_SnapToGrid(l.position::geometry, 0, 0, ${cellDeg}, ${cellDeg}) AS cell,
-          l.position::geometry AS g
+          l.position::geometry AS g,
+          l.country_code
         FROM locations l
         JOIN location_types lt ON lt.id = l.location_type_id
         WHERE l.status = 'published'
@@ -305,7 +313,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
           AND l.position && ST_MakeEnvelope(${bbox.minLon}, ${bbox.minLat}, ${bbox.maxLon}, ${bbox.maxLat}, 4326)::geography
           ${typeFilter}
       ) s
-      GROUP BY cell
+      GROUP BY cell, country_code
       ORDER BY COUNT(*) DESC
       LIMIT ${limit}
     `);
@@ -320,6 +328,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         Number(r.nodeLon) + half,
         Number(r.nodeLat) + half,
       ] as [number, number, number, number],
+      countryCode: r.countryCode,
     }));
   }
 
@@ -430,11 +439,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -481,12 +486,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({

@@ -27,6 +27,32 @@ abstract final class DocklyMapColors {
   /// Küme (cluster) rozeti rengi (docs/09 §1.4: baskın tip; v1'de marka birincil).
   static const int clusterArgb = 0xFF0C7BDC;
 
+  /// Küme baloncuğu ÜLKE renkleri — balonlar ülkeye göre ayrılır ve renklenir:
+  /// Türkiye marka mavisi, Yunanistan Ege turkuazı. Bilinmeyen/eski veri →
+  /// marka birincil (geriye uyumlu). Yeni ülke eklenince buraya satır eklenir.
+  static const Map<String, int> _clusterArgbByCountry = <String, int>{
+    'TR': 0xFF0C7BDC, // marka birincil
+    'GR': 0xFF2EC4B6, // Ege turkuazı (accent)
+  };
+
+  /// Baloncuk degradesinin koyu ucu (ülke başına).
+  static const Map<String, int> _clusterDeepArgbByCountry = <String, int>{
+    'TR': 0xFF0A2540, // marka derin lacivert
+    'GR': 0xFF0B5D54, // derin turkuaz
+  };
+
+  /// Mapbox (native) küme rengi — annotation API tek renk ister (ARGB int).
+  static int clusterArgbForCountry(String countryCode) =>
+      _clusterArgbByCountry[countryCode] ?? clusterArgb;
+
+  /// Küme degradesi açık ucu (web baloncukları).
+  static Color clusterColorForCountry(String countryCode) =>
+      Color(_clusterArgbByCountry[countryCode] ?? clusterArgb);
+
+  /// Küme degradesi koyu ucu (web baloncukları).
+  static Color clusterDeepColorForCountry(String countryCode) =>
+      Color(_clusterDeepArgbByCountry[countryCode] ?? 0xFF0A2540);
+
   /// Pin dolgu ikonu ve halkası (docs/09 §1.4: ikon/halka #FFFFFF).
   static const int strokeArgb = 0xFFFFFFFF;
 
