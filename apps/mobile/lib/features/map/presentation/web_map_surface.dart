@@ -120,7 +120,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
       children: <Widget>[
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'app.dockly.mobile',
+          userAgentPackageName: 'app.moorira.mobile',
           tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 19,
         ),
@@ -129,7 +129,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         // görünür hale gelir. (Navionics/C-MAP ticari lisans ister — v2 adayı.)
         TileLayer(
           urlTemplate: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',
-          userAgentPackageName: 'app.dockly.mobile',
+          userAgentPackageName: 'app.moorira.mobile',
           tileDisplay: const TileDisplay.instantaneous(),
           maxZoom: 18,
         ),

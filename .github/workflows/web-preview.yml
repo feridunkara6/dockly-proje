@@ -42,7 +42,7 @@ jobs:
             --no-tree-shake-icons \
             --pwa-strategy=none \
             --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
-            --base-href="/${{ github.event.repository.name }}/"
+            --base-href="/"  # ozel alan adi (moorira.com) kok dizinde servis eder
       - uses: actions/configure-pages@v5
         with:
           # Pages kapalıysa otomatik aç (Settings'e girmeye gerek yok).

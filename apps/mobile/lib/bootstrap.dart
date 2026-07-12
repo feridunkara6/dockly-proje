@@ -44,7 +44,7 @@ class DocklyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dockly',
+      title: 'Moorira',
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
@@ -100,7 +100,7 @@ class _HomePlaceholder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dockly')),
+      appBar: AppBar(title: const Text('Moorira')),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
