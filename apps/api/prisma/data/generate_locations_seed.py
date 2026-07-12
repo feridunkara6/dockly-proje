@@ -22,9 +22,12 @@ CONTACT_TYPES = {"phone", "whatsapp", "email", "website", "vhf", "instagram", "f
 HOLDING_TYPES = {"sand", "mud", "weed", "rock", "mixed"}  # ck_anchorage_details_holding_type
 TYPE_IDS = {"private_marina": 1, "municipal_marina": 2, "municipal_pier": 3, "guest_mooring": 4,
             "restaurant_pier": 5, "fuel_pier": 6, "boat_club": 7, "mooring_point": 8, "buoy": 9}
-# Türkiye kaba sınır kutusu (deniz alanları dahil)
-LAT_RANGE = (35.5, 42.5)
-LON_RANGE = (25.0, 45.0)
+# Ülke başına kaba sınır kutusu (deniz alanları dahil). Kayıtlar varsayılan TR;
+# "countryCode" alanıyla diğer ülkeler eklenir (v1 genişleme: GR).
+COUNTRY_BOUNDS = {
+    "TR": ((35.5, 42.5), (25.0, 45.0)),
+    "GR": ((34.5, 42.0), (19.0, 30.0)),
+}
 
 PROVINCES = {
     "istanbul": "İstanbul", "yalova": "Yalova", "balikesir": "Balıkesir", "izmir": "İzmir",
@@ -62,6 +65,17 @@ DISTRICTS = {
 }
 
 
+GR_PROVINCES = {
+    "gr-korfu": "Korfu", "gr-preveza": "Preveza", "gr-lefkada": "Lefkada",
+    "gr-mesolongi": "Mesolongi", "gr-kalamata": "Kalamata", "gr-atina": "Atina",
+    "gr-selanik": "Selanik", "gr-halkidiki": "Halkidiki", "gr-midilli": "Midilli",
+    "gr-samos": "Samos", "gr-leros": "Leros", "gr-kos": "Kos", "gr-rodos": "Rodos",
+}
+
+# slug → ülke (validasyon + emit için)
+PROV_COUNTRY = {**{k: "TR" for k in PROVINCES}, **{k: "GR" for k in GR_PROVINCES}}
+
+
 def q(value):
     """SQL string literal (tek tırnak kaçışı); None → NULL."""
     if value is None:
@@ -92,8 +106,13 @@ def validate(records):
         names[key] = r["name"]
         if r["typeCode"] not in TYPE_IDS:
             errors.append(f"{s}: bilinmeyen typeCode {r['typeCode']}")
-        if not (LAT_RANGE[0] <= r["lat"] <= LAT_RANGE[1]) or not (LON_RANGE[0] <= r["lon"] <= LON_RANGE[1]):
-            errors.append(f"{s}: koordinat Türkiye kutusu dışında ({r['lat']}, {r['lon']})")
+        country = r.get("countryCode", "TR")
+        if country not in COUNTRY_BOUNDS:
+            errors.append(f"{s}: bilinmeyen countryCode {country}")
+        else:
+            (lat_lo, lat_hi), (lon_lo, lon_hi) = COUNTRY_BOUNDS[country]
+            if not (lat_lo <= r["lat"] <= lat_hi) or not (lon_lo <= r["lon"] <= lon_hi):
+                errors.append(f"{s}: koordinat {country} kutusu dışında ({r['lat']}, {r['lon']})")
         for a in r.get("amenities", []):
             if a not in AMENITIES:
                 errors.append(f"{s}: geçersiz amenity kodu '{a}'")
@@ -103,7 +122,7 @@ def validate(records):
         for c in r.get("contacts", []):
             if c["type"] not in CONTACT_TYPES:
                 errors.append(f"{s}: geçersiz contact tipi '{c['type']}'")
-            if c["type"] in ("phone", "whatsapp") and not re.fullmatch(r"\+90\d{10}", c["value"]):
+            if c["type"] in ("phone", "whatsapp") and not re.fullmatch(r"\+(90|30)\d{10}", c["value"]):
                 warnings.append(f"{s}: telefon biçimi normalize değil: {c['value']}")
         if r.get("holdingType") is not None and r["holdingType"] not in HOLDING_TYPES:
             errors.append(f"{s}: geçersiz holdingType '{r['holdingType']}' (izinli: {sorted(HOLDING_TYPES)})")
@@ -111,8 +130,11 @@ def validate(records):
             errors.append(f"{s}: geçersiz status {r['status']}")
         if r.get("districtSlug") and r["districtSlug"] not in DISTRICTS:
             errors.append(f"{s}: tanımsız districtSlug {r['districtSlug']}")
-        if r.get("provinceSlug") not in PROVINCES:
-            errors.append(f"{s}: tanımsız provinceSlug {r.get('provinceSlug')}")
+        prov = r.get("provinceSlug")
+        if prov not in PROV_COUNTRY:
+            errors.append(f"{s}: tanımsız provinceSlug {prov}")
+        elif PROV_COUNTRY[prov] != r.get("countryCode", "TR"):
+            errors.append(f"{s}: provinceSlug {prov} ile countryCode uyuşmuyor")
     return errors, warnings
 
 
@@ -126,11 +148,21 @@ def emit(records, batch_meta):
     out.append("-- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).")
     out.append("-- =========================================================================")
     out.append("")
+    out.append("-- --- Ülke aktivasyonu (GR kayıtları varsa) ---")
+    if any(r.get("countryCode", "TR") == "GR" for r in records):
+        out.append("UPDATE countries SET is_active = true WHERE code = 'GR';")
+    out.append("")
     out.append("-- --- İdari alanlar (il/ilçe) ---")
     for slug, name in PROVINCES.items():
         out.append(
             "INSERT INTO admin_areas (id, country_code, level, name, slug)\n"
             f"VALUES (gen_random_uuid(), 'TR', 'province', {q(name)}, {q(slug)})\n"
+            "ON CONFLICT (country_code, level, slug) DO NOTHING;"
+        )
+    for slug, name in GR_PROVINCES.items():
+        out.append(
+            "INSERT INTO admin_areas (id, country_code, level, name, slug)\n"
+            f"VALUES (gen_random_uuid(), 'GR', 'province', {q(name)}, {q(slug)})\n"
             "ON CONFLICT (country_code, level, slug) DO NOTHING;"
         )
     out.append("")
@@ -144,6 +176,7 @@ def emit(records, batch_meta):
     out.append("")
     for r in records:
         s = r["slug"]
+        country = r.get("countryCode", "TR")
         admin_slug = r.get("districtSlug") or r.get("provinceSlug")
         admin_level = "district" if r.get("districtSlug") else "province"
         src = ", ".join(u.split("/")[2] for u in r.get("sourceUrls", [])[:2])
@@ -152,8 +185,8 @@ def emit(records, batch_meta):
             "INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,\n"
             "  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,\n"
             "  capacity, price_tier, source)\n"
-            f"SELECT gen_random_uuid(), {q(s)}, {TYPE_IDS[r['typeCode']]}, {q(r['status'])}, 'TR',\n"
-            f"  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = {q(admin_level)} AND slug = {q(admin_slug)}),\n"
+            f"SELECT gen_random_uuid(), {q(s)}, {TYPE_IDS[r['typeCode']]}, {q(r['status'])}, {q(country)},\n"
+            f"  (SELECT id FROM admin_areas WHERE country_code = {q(country)} AND level = {q(admin_level)} AND slug = {q(admin_slug)}),\n"
             f"  {q(r['name'])}, {q(r.get('descriptionTr'))},\n"
             f"  ST_SetSRID(ST_MakePoint({r['lon']}, {r['lat']}), 4326)::geography,\n"
             f"  {num(r.get('maxLoaM'))}, {num(r.get('maxDraftM'))}, {num(r.get('depthMinM'))}, {num(r.get('depthMaxM'))},\n"
@@ -244,7 +277,7 @@ def emit(records, batch_meta):
 def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
-               "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json"]
+               "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b

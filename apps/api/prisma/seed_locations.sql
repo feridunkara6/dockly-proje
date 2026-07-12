@@ -1,10 +1,13 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
 -- =========================================================================
+
+-- --- Ülke aktivasyonu (GR kayıtları varsa) ---
+UPDATE countries SET is_active = true WHERE code = 'GR';
 
 -- --- İdari alanlar (il/ilçe) ---
 INSERT INTO admin_areas (id, country_code, level, name, slug)
@@ -39,6 +42,45 @@ VALUES (gen_random_uuid(), 'TR', 'province', 'Bursa', 'bursa')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'TR', 'province', 'Tekirdağ', 'tekirdag')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Korfu', 'gr-korfu')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Preveza', 'gr-preveza')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Lefkada', 'gr-lefkada')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Mesolongi', 'gr-mesolongi')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Kalamata', 'gr-kalamata')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Atina', 'gr-atina')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Selanik', 'gr-selanik')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Halkidiki', 'gr-halkidiki')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Midilli', 'gr-midilli')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Samos', 'gr-samos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Leros', 'gr-leros')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Kos', 'gr-kos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Rodos', 'gr-rodos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -4635,5 +4677,501 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+902524444808', NULL, true
 FROM locations l WHERE l.slug = 'aganlar-marina-bodrum'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gouvia Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gouvia-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-korfu'),
+  'Gouvia Marina', 'Korfu''da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m''ye kadar yat kabul eder.',
+  ST_SetSRID(ST_MakePoint(19.8517, 39.6517), 4326)::geography,
+  80, 5.5, NULL, NULL,
+  1235, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gouvia Marina', 'Korfu''da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'gouvia-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 1235, '69', NULL, NULL, NULL
+FROM locations WHERE slug = 'gouvia-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302661091900', NULL, true
+FROM locations l WHERE l.slug = 'gouvia-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kleopatra Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kleopatra-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-preveza'),
+  'Kleopatra Marina', 'Aktion-Preveza''da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.',
+  ST_SetSRID(ST_MakePoint(20.7653, 38.9517), 4326)::geography,
+  30, 8, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kleopatra Marina', 'Aktion-Preveza''da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.' FROM locations WHERE slug = 'kleopatra-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 100, '67', NULL, NULL, NULL
+FROM locations WHERE slug = 'kleopatra-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302682023015', NULL, true
+FROM locations l WHERE l.slug = 'kleopatra-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Lefkas Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lefkas-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-lefkada'),
+  'Lefkas Marina', 'Lefkada''da 620 bağlama ve 280 kara kapasiteli marina.',
+  ST_SetSRID(ST_MakePoint(20.7133, 38.83), 4326)::geography,
+  45, 4, NULL, NULL,
+  620, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lefkas Marina', 'Lefkada''da 620 bağlama ve 280 kara kapasiteli marina.' FROM locations WHERE slug = 'lefkas-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 620, '69', NULL, NULL, NULL
+FROM locations WHERE slug = 'lefkas-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302645026645', NULL, true
+FROM locations l WHERE l.slug = 'lefkas-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Messolonghi Marina · güven: medium · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mesolongi-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-mesolongi'),
+  'Messolonghi Marina', 'Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.',
+  ST_SetSRID(ST_MakePoint(21.4267, 38.3613), 4326)::geography,
+  50, 6, NULL, NULL,
+  180, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Messolonghi Marina', 'Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.' FROM locations WHERE slug = 'mesolongi-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 180, '69', NULL, NULL, NULL
+FROM locations WHERE slug = 'mesolongi-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302631050190', NULL, true
+FROM locations l WHERE l.slug = 'mesolongi-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kalamata Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalamata-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalamata'),
+  'Kalamata Marina', 'Mora''nın güneyinde, Kalamata şehir merkezine bitişik marina.',
+  ST_SetSRID(ST_MakePoint(22.1217, 37.0217), 4326)::geography,
+  25, 3, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalamata Marina', 'Mora''nın güneyinde, Kalamata şehir merkezine bitişik marina.' FROM locations WHERE slug = 'kalamata-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 250, '69', NULL, NULL, NULL
+FROM locations WHERE slug = 'kalamata-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302721021037', NULL, true
+FROM locations l WHERE l.slug = 'kalamata-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Zea Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zea-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Zea Marina', 'Pire''nin tarihi marinası; 670 bağlama, kıçtankara 80 m''ye, aborda 150 m''ye kadar.',
+  ST_SetSRID(ST_MakePoint(23.6483, 37.9367), 4326)::geography,
+  80, 9, NULL, NULL,
+  670, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zea Marina', 'Pire''nin tarihi marinası; 670 bağlama, kıçtankara 80 m''ye, aborda 150 m''ye kadar.' FROM locations WHERE slug = 'zea-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 670, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'zea-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302104559000', NULL, true
+FROM locations l WHERE l.slug = 'zea-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Athens Marina · güven: medium · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'athens-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Athens Marina', 'Neo Faliro''da mega ve süper yatlara özel marina; 130 m''ye kadar.',
+  ST_SetSRID(ST_MakePoint(23.6655, 37.9414), 4326)::geography,
+  130, NULL, NULL, NULL,
+  130, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Athens Marina', 'Neo Faliro''da mega ve süper yatlara özel marina; 130 m''ye kadar.' FROM locations WHERE slug = 'athens-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 130, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'athens-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302104853200', NULL, true
+FROM locations l WHERE l.slug = 'athens-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Flisvos Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'flisvos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Flisvos Marina', 'Paleo Faliro''da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.',
+  ST_SetSRID(ST_MakePoint(23.68, 37.9363), 4326)::geography,
+  90, NULL, NULL, NULL,
+  303, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Flisvos Marina', 'Paleo Faliro''da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.' FROM locations WHERE slug = 'flisvos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 303, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'flisvos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302109871000', NULL, true
+FROM locations l WHERE l.slug = 'flisvos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Alimos Marina · güven: medium · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'alimos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Alimos Marina', 'Atina''nın ve Yunanistan''ın en büyük marinalarından; 1.080 bağlama, 600 kara.',
+  ST_SetSRID(ST_MakePoint(23.7005, 37.9113), 4326)::geography,
+  40, NULL, NULL, 6.5,
+  1080, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Alimos Marina', 'Atina''nın ve Yunanistan''ın en büyük marinalarından; 1.080 bağlama, 600 kara.' FROM locations WHERE slug = 'alimos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 1080, '71', NULL, NULL, NULL
+FROM locations WHERE slug = 'alimos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302109880000', NULL, true
+FROM locations l WHERE l.slug = 'alimos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Agios Kosmas Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agios-kosmas-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Agios Kosmas Marina', 'Elliniko''da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m''ye kadar.',
+  ST_SetSRID(ST_MakePoint(23.7247, 37.8806), 4326)::geography,
+  80, NULL, NULL, NULL,
+  337, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Kosmas Marina', 'Elliniko''da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m''ye kadar.' FROM locations WHERE slug = 'agios-kosmas-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 337, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'agios-kosmas-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302109821787', NULL, true
+FROM locations l WHERE l.slug = 'agios-kosmas-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Vouliagmeni Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'vouliagmeni-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Vouliagmeni Marina', 'Atina Rivierası''nın prestijli koy marinası.',
+  ST_SetSRID(ST_MakePoint(23.775, 37.7217), 4326)::geography,
+  50, NULL, NULL, 8,
+  115, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Vouliagmeni Marina', 'Atina Rivierası''nın prestijli koy marinası.' FROM locations WHERE slug = 'vouliagmeni-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 115, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'vouliagmeni-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302108960012', NULL, true
+FROM locations l WHERE l.slug = 'vouliagmeni-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Olympic Marine · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'olympic-marine', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Olympic Marine', 'Lavrio/Sounio''da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.',
+  ST_SetSRID(ST_MakePoint(24.055, 37.6983), 4326)::geography,
+  40, NULL, NULL, NULL,
+  680, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Olympic Marine', 'Lavrio/Sounio''da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.' FROM locations WHERE slug = 'olympic-marine'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 680, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'olympic-marine'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302292063700', NULL, true
+FROM locations l WHERE l.slug = 'olympic-marine'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Thessaloniki Aretsou Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'selanik-aretsou-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-selanik'),
+  'Thessaloniki Aretsou Marina', 'Selanik Kalamaria''da şehir marinası.',
+  ST_SetSRID(ST_MakePoint(22.9472, 40.5806), 4326)::geography,
+  27, NULL, NULL, NULL,
+  242, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Thessaloniki Aretsou Marina', 'Selanik Kalamaria''da şehir marinası.' FROM locations WHERE slug = 'selanik-aretsou-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 242, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'selanik-aretsou-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302310444595', NULL, true
+FROM locations l WHERE l.slug = 'selanik-aretsou-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Sani Marina · güven: medium · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sani-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-halkidiki'),
+  'Sani Marina', 'Halkidiki Kassandra''da Sani Resort bünyesinde butik marina.',
+  ST_SetSRID(ST_MakePoint(23.3062, 40.0974), 4326)::geography,
+  27, NULL, NULL, NULL,
+  215, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sani Marina', 'Halkidiki Kassandra''da Sani Resort bünyesinde butik marina.' FROM locations WHERE slug = 'sani-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 215, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'sani-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302374099400', NULL, true
+FROM locations l WHERE l.slug = 'sani-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Porto Carras Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'porto-carras-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-halkidiki'),
+  'Porto Carras Marina', 'Sithonia Neos Marmaras''ta resort marinası; 55 m''ye kadar yat kabul eder.',
+  ST_SetSRID(ST_MakePoint(23.7847, 40.0689), 4326)::geography,
+  55, 5.5, NULL, NULL,
+  315, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Porto Carras Marina', 'Sithonia Neos Marmaras''ta resort marinası; 55 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'porto-carras-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 315, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'porto-carras-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302375077000', NULL, true
+FROM locations l WHERE l.slug = 'porto-carras-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mytilene Marina · güven: medium · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'midilli-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-midilli'),
+  'Mytilene Marina', 'Midilli (Lesvos) adasında marina; Ayvalık''ın karşı kıyısı.',
+  ST_SetSRID(ST_MakePoint(26.5578, 39.0987), 4326)::geography,
+  25, NULL, NULL, NULL,
+  222, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mytilene Marina', 'Midilli (Lesvos) adasında marina; Ayvalık''ın karşı kıyısı.' FROM locations WHERE slug = 'midilli-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 222, '71', NULL, NULL, NULL
+FROM locations WHERE slug = 'midilli-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302251054000', NULL, true
+FROM locations l WHERE l.slug = 'midilli-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Samos Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'samos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-samos'),
+  'Samos Marina', 'Pythagorio''da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası''nın karşısı.',
+  ST_SetSRID(ST_MakePoint(26.9583, 37.6956), 4326)::geography,
+  50, 4, NULL, NULL,
+  260, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Samos Marina', 'Pythagorio''da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası''nın karşısı.' FROM locations WHERE slug = 'samos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 260, '9', NULL, NULL, NULL
+FROM locations WHERE slug = 'samos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302273061600', NULL, true
+FROM locations l WHERE l.slug = 'samos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Leros Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'leros-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-leros'),
+  'Leros Marina', 'Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.',
+  ST_SetSRID(ST_MakePoint(26.8567, 37.1293), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  220, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Leros Marina', 'Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.' FROM locations WHERE slug = 'leros-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 220, '10', NULL, NULL, NULL
+FROM locations WHERE slug = 'leros-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302247024733', NULL, true
+FROM locations l WHERE l.slug = 'leros-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kos Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
+  'Kos Marina', 'Kos (İstanköy) adasında tam donanımlı marina; Bodrum''un karşı kıyısı. 100 tonluk travel-lift.',
+  ST_SetSRID(ST_MakePoint(27.301, 36.8932), 4326)::geography,
+  80, 5, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kos Marina', 'Kos (İstanköy) adasında tam donanımlı marina; Bodrum''un karşı kıyısı. 100 tonluk travel-lift.' FROM locations WHERE slug = 'kos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 250, '77', NULL, NULL, NULL
+FROM locations WHERE slug = 'kos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kos-marina' AND a.code IN ('electricity', 'security', 'wifi', 'wc', 'shower', 'laundry', 'restaurant', 'travel_lift')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'kos-marina' AND sv.code IN ('technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242044150', NULL, true
+FROM locations l WHERE l.slug = 'kos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@kosmarina.gr', NULL, false
+FROM locations l WHERE l.slug = 'kos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://kosmarina.gr/', NULL, false
+FROM locations l WHERE l.slug = 'kos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Rhodes Marina · güven: high · kaynak: greek-marinas.gr, sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'rodos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
+  'Rhodes Marina', 'Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.',
+  ST_SetSRID(ST_MakePoint(28.2404, 36.4363), 4326)::geography,
+  61, NULL, NULL, NULL,
+  600, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Rhodes Marina', 'Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.' FROM locations WHERE slug = 'rodos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 600, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'rodos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302241039663', NULL, true
+FROM locations l WHERE l.slug = 'rodos-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
