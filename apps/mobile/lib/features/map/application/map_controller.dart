@@ -23,6 +23,11 @@ final Provider<MapLocationsGateway> mapLocationsGatewayProvider =
 final Provider<MapCache> mapCacheProvider =
     Provider<MapCache>((ref) => const SharedPrefsMapCache());
 
+/// "Teknem sığar" filtresi (ürün kararı): açıkken, tekne profiline SIĞMAYAN
+/// yerler haritadan ve listeden gizlenir. Limiti BİLİNMEYEN yerler gizlenmez —
+/// bilgi yokken yer saklamak yanlış olur (0-uydurma ilkesinin arayüz hali).
+final StateProvider<bool> mapFitFilterProvider = StateProvider<bool>((ref) => false);
+
 /// Keşfet sekmesi görünüm modu: false = harita, true = liste. Kullanıcı sağ
 /// üstteki düğmeyle değiştirir; sekme değişse de korunur (uygulama-ömürlü).
 final StateProvider<bool> mapViewIsListProvider = StateProvider<bool>((ref) => false);

@@ -33,8 +33,8 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
     context: context,
     showDragHandle: true,
     builder: (BuildContext sheetContext) => WelcomeSheetBody(
-      onPickLength: (double m) {
-        ref.read(myBoatProvider.notifier).set(MyBoat(lengthM: m));
+      onPickLength: (double lengthM, String? brand) {
+        ref.read(myBoatProvider.notifier).set(MyBoat(lengthM: lengthM, brand: brand));
         Navigator.of(sheetContext).pop();
       },
       onCustom: () {
@@ -47,8 +47,10 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
   );
 }
 
-/// Karşılama içeriği: tek soru + hızlı boy seçenekleri. Ayrı widget — test edilir.
-class WelcomeSheetBody extends StatelessWidget {
+/// Karşılama içeriği: DENİZCİ DİLİYLE — tekne markası + FEET cinsinden boy
+/// (ürün kararı: "özel hissettirsin"). İç birim metre kalır; feet burada
+/// çevrilir. Ayrı widget — test edilir.
+class WelcomeSheetBody extends StatefulWidget {
   const WelcomeSheetBody({
     required this.onPickLength,
     required this.onCustom,
@@ -56,17 +58,35 @@ class WelcomeSheetBody extends StatelessWidget {
     super.key,
   });
 
-  final void Function(double lengthM) onPickLength;
+  /// Seçilen boy (METRE, çevrilmiş) + opsiyonel marka.
+  final void Function(double lengthM, String? brand) onPickLength;
   final VoidCallback onCustom;
   final VoidCallback onSkip;
 
-  static const List<double> _quickLengths = <double>[8, 10, 12, 15, 18, 24];
+  @override
+  State<WelcomeSheetBody> createState() => _WelcomeSheetBodyState();
+}
+
+class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
+  /// Hızlı boy seçenekleri (feet) — 26ft≈7.9m ... 79ft≈24.1m.
+  static const List<int> _quickFeet = <int>[26, 33, 39, 46, 59, 79];
+
+  final TextEditingController _brand = TextEditingController();
+
+  @override
+  void dispose() {
+    _brand.dispose();
+    super.dispose();
+  }
+
+  String? get _brandOrNull => _brand.text.trim().isEmpty ? null : _brand.text.trim();
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+      padding: EdgeInsets.fromLTRB(
+        20, 4, 20, 24 + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,27 +100,39 @@ class WelcomeSheetBody extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Teknen kaç metre? Söylersen her limanda "teknen sığar mı?" '
-            'işaretini görürsün. Bilgi yalnız cihazında kalır.',
+            'Teknenin markası ve boyu (feet)? Söylersen her limanda '
+            '"teknen sığar mı?" işaretini görürsün. Bilgi yalnız cihazında kalır.',
           ),
           const SizedBox(height: 14),
+          TextField(
+            controller: _brand,
+            textCapitalization: TextCapitalization.words,
+            decoration: const InputDecoration(
+              labelText: 'Teknenin markası (ör. Beneteau)',
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+          const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: <Widget>[
-              for (final double m in _quickLengths)
+              for (final int ft in _quickFeet)
                 ActionChip(
-                  label: Text('${m.toInt()} m'),
-                  onPressed: () => onPickLength(m),
+                  label: Text('$ft ft'),
+                  onPressed: () =>
+                      widget.onPickLength(feetToMeters(ft.toDouble()), _brandOrNull),
                 ),
             ],
           ),
           const SizedBox(height: 8),
           Row(
             children: <Widget>[
-              TextButton(onPressed: onCustom, child: const Text('Farklı bir boy gir')),
+              TextButton(
+                  onPressed: widget.onCustom, child: const Text('Farklı bir boy gir')),
               const Spacer(),
-              TextButton(onPressed: onSkip, child: const Text('Şimdilik geç')),
+              TextButton(onPressed: widget.onSkip, child: const Text('Şimdilik geç')),
             ],
           ),
         ],

@@ -237,4 +237,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(_pinKey), findsOneWidget);
   });
+
+  testWidgets('Teknem sığar filtresi: sığmayan pin gizlenir, bilinmeyen kalır',
+      (WidgetTester tester) async {
+    const LocationPin small = LocationPin(
+      id: 'loc-small',
+      name: 'Küçük İskele',
+      type: 'municipal_pier',
+      position: GeoPoint(lat: 36.76, lon: 28.94),
+      ratingAvg: null,
+      priceTier: 'unknown',
+      maxBoatLengthM: 8, // 15 m tekne SIĞMAZ
+      maxDraftM: 1,
+    );
+    const LocationPin unknownLimits = LocationPin(
+      id: 'loc-unknown',
+      name: 'Bilinmeyen Koy',
+      type: 'mooring_point',
+      position: GeoPoint(lat: 36.77, lon: 28.95),
+      ratingAvg: null,
+      priceTier: 'free',
+      // limit alanları null → BİLİNMEYEN: filtre gizleyemez (0-uydurma UI hali)
+    );
+    const MapResult threePins = MapResult(
+      clusters: <Cluster>[],
+      locations: <LocationPin>[testPin, small, unknownLimits],
+      truncated: false,
+    );
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: threePins),
+      boat: const MyBoat(lengthM: 15, draftM: 2),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('pin-loc-small')), findsOneWidget);
+
+    await tester.tap(find.text('Teknem sığar'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(_pinKey), findsOneWidget); // 40 m limit → sığar, kalır
+    expect(find.byKey(const ValueKey<String>('pin-loc-small')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('pin-loc-unknown')), findsOneWidget);
+
+    // Tekrar dokun → filtre kapanır, pin geri gelir.
+    await tester.tap(find.text('Teknem sığar'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('pin-loc-small')), findsOneWidget);
+  });
+
+  testWidgets('Teknem sığar: tekne tanımlı değilse tekne sayfası açılır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Teknem sığar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Tekneni tanımla'), findsOneWidget); // tekne sayfası
+  });
 }

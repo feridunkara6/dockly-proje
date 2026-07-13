@@ -11,6 +11,7 @@ class SharedPrefsBoatStorage implements BoatStorage {
 
   static const String _lenKey = 'boat.lengthM';
   static const String _draftKey = 'boat.draftM';
+  static const String _brandKey = 'boat.brand';
 
   @override
   Future<MyBoat?> load() async {
@@ -18,7 +19,11 @@ class SharedPrefsBoatStorage implements BoatStorage {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final double? len = prefs.getDouble(_lenKey);
       if (len == null) return null;
-      return MyBoat(lengthM: len, draftM: prefs.getDouble(_draftKey));
+      return MyBoat(
+        lengthM: len,
+        draftM: prefs.getDouble(_draftKey),
+        brand: prefs.getString(_brandKey),
+      );
     } catch (_) {
       return null;
     }
@@ -35,6 +40,12 @@ class SharedPrefsBoatStorage implements BoatStorage {
       } else {
         await prefs.remove(_draftKey);
       }
+      final String? brand = boat.brand;
+      if (brand != null && brand.trim().isNotEmpty) {
+        await prefs.setString(_brandKey, brand.trim());
+      } else {
+        await prefs.remove(_brandKey);
+      }
     } catch (_) {
       // en iyi çaba — sessizce geç
     }
@@ -46,6 +57,7 @@ class SharedPrefsBoatStorage implements BoatStorage {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove(_lenKey);
       await prefs.remove(_draftKey);
+      await prefs.remove(_brandKey);
     } catch (_) {
       // en iyi çaba — sessizce geç
     }

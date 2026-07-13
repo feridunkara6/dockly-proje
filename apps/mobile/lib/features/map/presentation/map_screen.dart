@@ -7,6 +7,7 @@ import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
+import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
@@ -28,17 +29,31 @@ class MapScreen extends ConsumerWidget {
     final MapSurfaceBuilder surfaceBuilder = ref.watch(mapSurfaceBuilderProvider);
     final bool isList = ref.watch(mapViewIsListProvider);
     final selectedPin = state.selectedPin;
+    // "Teknem sığar" filtresi: SIĞMAYANLAR gizlenir; bilinmeyenler kalır.
+    final bool fitOn = ref.watch(mapFitFilterProvider);
+    final MyBoat? boat = ref.watch(myBoatProvider);
+    final List<LocationPin> visiblePins = (fitOn && boat != null)
+        ? state.pins
+            .where((LocationPin p) =>
+                computeBoatFit(
+                  boat: boat,
+                  maxBoatLengthM: p.maxBoatLengthM,
+                  maxDraftM: p.maxDraftM,
+                ) !=
+                BoatFit.tooBig)
+            .toList(growable: false)
+        : state.pins;
 
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Positioned.fill(
             child: isList
-                ? _MapListView(pins: state.pins)
+                ? _MapListView(pins: visiblePins)
                 : surfaceBuilder(
                     context,
                     MapSurfaceData(
-                      pins: state.pins,
+                      pins: visiblePins,
                       clusters: state.clusters,
                       selectedPinId: state.selectedPinId,
                     ),
@@ -268,15 +283,39 @@ class _TypeFilterRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<String> types = DocklyMapColors.knownTypes.toList();
+    final bool fitOn = ref.watch(mapFitFilterProvider);
+    final bool hasBoat = ref.watch(myBoatProvider) != null;
     return SizedBox(
       height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemCount: types.length,
+        itemCount: types.length + 1,
         separatorBuilder: (BuildContext _, int __) => const SizedBox(width: 6),
         itemBuilder: (BuildContext context, int i) {
-          final String type = types[i];
+          // İlk çip: "Teknem sığar" — tekne yoksa dokununca tekne sayfası açılır.
+          if (i == 0) {
+            return Center(
+              child: FilterChip(
+                label: const Text('Teknem sığar'),
+                avatar: const DocklyIcon(
+                  DocklyIcons.checkCircle,
+                  size: 14,
+                  color: DocklyColors.success,
+                ),
+                selected: fitOn,
+                onSelected: (bool _) {
+                  if (!hasBoat) {
+                    showBoatSheet(context);
+                    return;
+                  }
+                  ref.read(mapFitFilterProvider.notifier).state = !fitOn;
+                },
+                visualDensity: VisualDensity.compact,
+              ),
+            );
+          }
+          final String type = types[i - 1];
           return Center(
             child: FilterChip(
               label: Text(locationTypeLabelTr(type)),

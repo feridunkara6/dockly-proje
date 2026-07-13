@@ -1,14 +1,21 @@
 /// Kullanıcının teknesi — hafif, oturum içi model (docs/01-prd §6.2 basitleştirilmiş).
 /// Kalıcılık (cihazda hatırlama) bir sonraki küçük adımda eklenecek.
 class MyBoat {
-  const MyBoat({required this.lengthM, this.draftM});
+  const MyBoat({required this.lengthM, this.draftM, this.brand});
 
-  /// Tekne boyu (m) — zorunlu.
+  /// Tekne boyu (m) — zorunlu. İÇ BİRİM her zaman metredir (uyum hesapları
+  /// metre üzerinden); karşılama ekranı denizci diliyle FEET sorar ve çevirir.
   final double lengthM;
 
   /// Su çekimi (m) — opsiyonel (bilinmiyorsa null).
   final double? draftM;
+
+  /// Tekne markası (ör. Beneteau) — opsiyonel, kişiselleştirme için.
+  final String? brand;
 }
+
+/// Feet → metre (uluslararası sabit: 1 ft = 0.3048 m), 1 ondalığa yuvarlanır.
+double feetToMeters(double feet) => (feet * 0.3048 * 10).roundToDouble() / 10;
 
 /// Bir lokasyona tekne uygunluğu (docs/01-prd §6.5 tekne uyumu).
 enum BoatFit { fits, tooBig, unknown }
