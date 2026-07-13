@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -114,6 +114,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Fourni', 'gr-fourni')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Amorgos', 'gr-amorgos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Naxos', 'gr-naxos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6761,5 +6764,105 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'katapola-guney-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kalantos Marina (Naxos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalantos-marina-naxos', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
+  'Kalantos Marina (Naxos)', 'Naxos''un güney ucunda, meltemiden saklanan Kalantos koyundaki küçük marina; su çekimi ~3 m. Kiklad geçişlerinde güney rotasının sığınağı.',
+  ST_SetSRID(ST_MakePoint(25.473778, 36.935167), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalantos Marina (Naxos)', 'Naxos''un güney ucunda, meltemiden saklanan Kalantos koyundaki küçük marina; su çekimi ~3 m. Kiklad geçişlerinde güney rotasının sığınağı.' FROM locations WHERE slug = 'kalantos-marina-naxos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kalantos-marina-naxos'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306938690826', NULL, true
+FROM locations l WHERE l.slug = 'kalantos-marina-naxos'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kalantos Koyu (Naxos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalantos-koyu-naxos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
+  'Kalantos Koyu (Naxos)', 'Naxos''un güneyindeki geniş Kalantos koyunda demirleme; derinlik 12 m''den 6 m''ye kademeli azalır, dip kum/kaya karışık — kumlu yamaları seçin.',
+  ST_SetSRID(ST_MakePoint(25.468278, 36.934333), 4326)::geography,
+  NULL, NULL, 6, 12,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalantos Koyu (Naxos)', 'Naxos''un güneyindeki geniş Kalantos koyunda demirleme; derinlik 12 m''den 6 m''ye kademeli azalır, dip kum/kaya karışık — kumlu yamaları seçin.' FROM locations WHERE slug = 'kalantos-koyu-naxos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'kalantos-koyu-naxos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Pyrgaki Plajı (Naxos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pyrgaki-plaji-naxos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
+  'Pyrgaki Plajı (Naxos)', 'Naxos''un güneybatısında sakin plaj demirlemesi; ~6,5 m, kum/kaya karışık dip.',
+  ST_SetSRID(ST_MakePoint(25.398972, 36.976361), 4326)::geography,
+  NULL, NULL, NULL, 6.5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pyrgaki Plajı (Naxos)', 'Naxos''un güneybatısında sakin plaj demirlemesi; ~6,5 m, kum/kaya karışık dip.' FROM locations WHERE slug = 'pyrgaki-plaji-naxos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'pyrgaki-plaji-naxos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Agios Prokopios (Naxos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agios-prokopios-naxos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
+  'Agios Prokopios (Naxos)', 'Naxos''un ünlü Agios Prokopios plajı önünde demirleme; ~10 m, kum dip. Naxos kasabasına yakın, yüzme molası için ideal.',
+  ST_SetSRID(ST_MakePoint(25.3465, 37.075139), 4326)::geography,
+  NULL, NULL, NULL, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Prokopios (Naxos)', 'Naxos''un ünlü Agios Prokopios plajı önünde demirleme; ~10 m, kum dip. Naxos kasabasına yakın, yüzme molası için ideal.' FROM locations WHERE slug = 'agios-prokopios-naxos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'agios-prokopios-naxos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Plaka Plajı (Naxos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'plaka-plaji-naxos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
+  'Plaka Plajı (Naxos)', 'Kilometrelerce uzanan Plaka plajının önünde demirleme; ~7,9 m, kum/kaya karışık dip.',
+  ST_SetSRID(ST_MakePoint(25.37775, 37.038222), 4326)::geography,
+  NULL, NULL, NULL, 7.9,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Plaka Plajı (Naxos)', 'Kilometrelerce uzanan Plaka plajının önünde demirleme; ~7,9 m, kum/kaya karışık dip.' FROM locations WHERE slug = 'plaka-plaji-naxos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'plaka-plaji-naxos'
 ON CONFLICT (location_id) DO NOTHING;
 
