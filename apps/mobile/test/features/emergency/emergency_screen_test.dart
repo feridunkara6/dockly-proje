@@ -93,7 +93,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('36°30\'00.0"K 029°15\'00.0"D'), findsOneWidget);
+    // CI dersi: düğme görünür alanın ALTINDA kalabiliyor — kaydır ve kaydırmanın
+    // işlemesi için bir kare çizdir; yoksa tap boşa gider (hit test dışı).
     await tester.ensureVisible(find.text('Koordinatı kopyala'));
+    await tester.pump();
     await tester.tap(find.text('Koordinatı kopyala'));
     await tester.pumpAndSettle();
 
@@ -122,7 +125,11 @@ void main() {
         _app(boat: const MyBoat(lengthM: 12, brand: 'Beneteau')));
     await tester.pumpAndSettle();
 
-    await tester.scrollUntilVisible(find.text('Şablonu kopyala'), 200);
+    // CI dersi: scrollUntilVisible yalnız "ağaçta bulunana" kadar kaydırır —
+    // düğme görünür alana girmeden dokunuş boşa gider. ensureVisible + pump
+    // ile gerçekten ekrana getir.
+    await tester.ensureVisible(find.text('Şablonu kopyala'));
+    await tester.pump();
     expect(find.textContaining('BURASI BENETEAU'), findsOneWidget);
     await tester.tap(find.text('Şablonu kopyala'));
     await tester.pumpAndSettle();
