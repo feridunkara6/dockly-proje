@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
+import '../../emergency/presentation/emergency_screen.dart';
 
 /// Profil sekmesi (misafir). Kalıcı tekne bilgisini gösterir/düzenler ve hesap
 /// özelliklerini tanıtır. Giriş/hesap (favori, yorum yazma) sonraki fazda.
@@ -20,6 +21,13 @@ class ProfileScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: <Widget>[
+          // ACİL DURUM girişi en üstte — panik anında aranacak ilk yer burası.
+          _EmergencyEntryCard(
+            onOpen: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const EmergencyScreen()),
+            ),
+          ),
+          const SizedBox(height: 24),
           Text('Teknem', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           if (boat == null)
@@ -41,6 +49,56 @@ class ProfileScreen extends ConsumerWidget {
                 'gerektirmeden açık.',
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Kırmızı acil durum giriş kartı — tek dokunuşla Acil Durum sayfası.
+class _EmergencyEntryCard extends StatelessWidget {
+  const _EmergencyEntryCard({required this.onOpen});
+
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.errorContainer,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onOpen,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              DocklyIcon(DocklyIcons.errorOutline,
+                  color: theme.colorScheme.onErrorContainer),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Acil Durum',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onErrorContainer)),
+                    const SizedBox(height: 2),
+                    Text(
+                      '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onErrorContainer
+                              .withValues(alpha: 0.85)),
+                    ),
+                  ],
+                ),
+              ),
+              DocklyIcon(DocklyIcons.arrowForward,
+                  size: 18, color: theme.colorScheme.onErrorContainer),
+            ],
+          ),
+        ),
       ),
     );
   }

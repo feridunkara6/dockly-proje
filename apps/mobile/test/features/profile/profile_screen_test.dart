@@ -39,6 +39,19 @@ void main() {
     expect(find.text('Kaldır'), findsOneWidget);
   });
 
+  testWidgets('Acil Durum kartı en üstte; dokununca sayfa açılır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Acil Durum'), findsOneWidget);
+    await tester.tap(find.text('Acil Durum'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tehlikede misin?'), findsOneWidget); // Acil Durum sayfası
+    expect(find.text('158'), findsOneWidget);
+  });
+
   testWidgets('Düzenle → tekne tanımlama sayfası açılır', (WidgetTester tester) async {
     await tester.pumpWidget(_app(boat: const MyBoat(lengthM: 12)));
     await tester.pumpAndSettle();
