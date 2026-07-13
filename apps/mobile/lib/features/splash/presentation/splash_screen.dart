@@ -134,21 +134,30 @@ const _SplashVariant _gece = _SplashVariant(
   end: Offset(0.840, 0.565),
 );
 
-/// Görsel-uzayı normalize noktayı EKRAN noktasına çevirir — BoxFit.cover
-/// kırpması hesaba katılır: görsel, ekranı dolduracak şekilde ölçeklenip
-/// ortalanır; nokta da aynı dönüşümle taşınır. Böylece çizgi HER cihazda
-/// teknenin üzerine oturur (kullanıcı isteği: cihaza uyum).
-Offset _mapCover(Offset norm, Size screen) {
-  final double scale = math.max(
-    screen.width / _splashImageSize.width,
-    screen.height / _splashImageSize.height,
-  );
+/// Fotoğrafın EKRANDAKİ yerleşim dikdörtgeni (cihaza uyum):
+/// - DİKEY ekran (telefon): cover — fotoğraf ekranı doldurur, taşan kırpılır.
+/// - YATAY ekran (bilgisayar/yatay tablet): contain — fotoğraf TAM BOY ortada
+///   görünür (yarım görünme ve dev büyütmeden doğan kalite kaybı biter);
+///   kenarlar aynı fotoğrafın bulanık dolgusuyla kaplanır.
+Rect _splashImageRect(Size screen) {
+  final bool wide = screen.width > screen.height;
+  final double sx = screen.width / _splashImageSize.width;
+  final double sy = screen.height / _splashImageSize.height;
+  final double scale = wide ? math.min(sx, sy) : math.max(sx, sy);
   final double dw = _splashImageSize.width * scale;
   final double dh = _splashImageSize.height * scale;
-  final double ox = (screen.width - dw) / 2;
-  final double oy = (screen.height - dh) / 2;
-  return Offset(ox + norm.dx * dw, oy + norm.dy * dh);
+  return Rect.fromLTWH(
+    (screen.width - dw) / 2,
+    (screen.height - dh) / 2,
+    dw,
+    dh,
+  );
 }
+
+/// Görsel-uzayı normalize noktayı, fotoğrafın ekran dikdörtgenindeki gerçek
+/// konumuna çevirir — çizgi her yerleşimde teknenin üzerine oturur.
+Offset _mapInRect(Offset norm, Rect r) =>
+    Offset(r.left + norm.dx * r.width, r.top + norm.dy * r.height);
 
 /// Tam ekran fotoğraf + animasyonlu rota: kesik çizgi tekneden çapaya doğru
 /// ÇİZİLEREK uzar, sonra kesikler rota boyunca akmaya devam eder; çapa pini
@@ -202,13 +211,47 @@ class _SplashScreenState extends State<_SplashScreen>
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints c) {
           final Size screen = Size(c.maxWidth, c.maxHeight);
-          final Offset pin = _mapCover(v.end, screen);
+          final Rect rect = _splashImageRect(screen);
+          final bool wide = screen.width > screen.height;
+          final Offset pin = _mapInRect(v.end, rect);
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              // Fotoğraf ekranı kaplar; oran ne olursa olsun taşan kenarlar
-              // kırpılır (cover) — telefon/tablet/web hepsinde tam ekran.
-              Image.asset(v.asset, fit: BoxFit.cover, gaplessPlayback: true),
+              if (wide) ...<Widget>[
+                // BİLGİSAYAR/YATAY: zemin, aynı fotoğrafın bulanık dolgusu —
+                // bilinçli bulanık olduğundan büyütme kalitesi göze batmaz.
+                RepaintBoundary(
+                  child: ImageFiltered(
+                    imageFilter: ui.ImageFilter.blur(sigmaX: 28, sigmaY: 28),
+                    child: Image.asset(
+                      v.asset,
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                      filterQuality: FilterQuality.low,
+                    ),
+                  ),
+                ),
+                // Hafif karartma: ortadaki net fotoğraf öne çıksın.
+                const ColoredBox(color: Color(0x2E06141F)),
+                // Fotoğrafın TAMAMI, ekran yüksekliğinde ve NET (küçültme —
+                // büyütme değil → kalite korunur).
+                Positioned.fromRect(
+                  rect: rect,
+                  child: Image.asset(
+                    v.asset,
+                    fit: BoxFit.fill,
+                    gaplessPlayback: true,
+                    filterQuality: FilterQuality.medium,
+                  ),
+                ),
+              ] else
+                // TELEFON (dikey): fotoğraf ekranı kaplar (cover).
+                Image.asset(
+                  v.asset,
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                  filterQuality: FilterQuality.medium,
+                ),
               AnimatedBuilder(
                 animation: Listenable.merge(<Listenable>[_draw, _march]),
                 builder: (BuildContext context, Widget? _) {
@@ -216,6 +259,7 @@ class _SplashScreenState extends State<_SplashScreen>
                     key: const ValueKey<String>('splash-route'),
                     painter: _RoutePainter(
                       variant: v,
+                      rect: rect,
                       progress: Curves.easeInOut.transform(_draw.value),
                       phase: _march.value,
                     ),
@@ -254,11 +298,15 @@ class _SplashScreenState extends State<_SplashScreen>
 class _RoutePainter extends CustomPainter {
   _RoutePainter({
     required this.variant,
+    required this.rect,
     required this.progress,
     required this.phase,
   });
 
   final _SplashVariant variant;
+
+  /// Fotoğrafın ekrandaki yerleşimi — rota noktaları buna göre eşlenir.
+  final Rect rect;
   final double progress;
   final double phase;
 
@@ -268,10 +316,10 @@ class _RoutePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (progress <= 0.02) return;
-    final Offset p0 = _mapCover(variant.start, size);
-    final Offset p1 = _mapCover(variant.c1, size);
-    final Offset p2 = _mapCover(variant.c2, size);
-    final Offset p3 = _mapCover(variant.end, size);
+    final Offset p0 = _mapInRect(variant.start, rect);
+    final Offset p1 = _mapInRect(variant.c1, rect);
+    final Offset p2 = _mapInRect(variant.c2, rect);
+    final Offset p3 = _mapInRect(variant.end, rect);
     final Path path = Path()
       ..moveTo(p0.dx, p0.dy)
       ..cubicTo(p1.dx, p1.dy, p2.dx, p2.dy, p3.dx, p3.dy);
@@ -303,7 +351,10 @@ class _RoutePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RoutePainter old) =>
-      old.progress != progress || old.phase != phase || old.variant != variant;
+      old.progress != progress ||
+      old.phase != phase ||
+      old.variant != variant ||
+      old.rect != rect;
 }
 
 /// Çapa pini — görsellerdeki dille: beyaz konturlu daire içinde çapa, altında

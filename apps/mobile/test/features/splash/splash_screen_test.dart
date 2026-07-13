@@ -36,7 +36,9 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    expect(_asset('splash_gunduz'), findsOneWidget);
+    // Test yüzeyi YATAY (800x600) → masaüstü modu: bulanık zemin + net
+    // tam-boy fotoğraf = aynı görseli taşıyan İKİ katman.
+    expect(_asset('splash_gunduz'), findsNWidgets(2));
     expect(_asset('splash_gece'), findsNothing);
     expect(find.byKey(const ValueKey<String>('splash-route')), findsOneWidget);
     // PERF sözleşmesi: içerik açılış ekranı görünürken de KURULUDUR (arkada
@@ -55,7 +57,7 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 22)));
     await tester.pump();
 
-    expect(_asset('splash_gece'), findsOneWidget);
+    expect(_asset('splash_gece'), findsNWidgets(2));
     expect(_asset('splash_gunduz'), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 250));
@@ -64,11 +66,27 @@ void main() {
     expect(find.text('HARITA'), findsOneWidget);
   });
 
+  testWidgets('DİKEY (telefon) ekranda tek katman: fotoğraf ekranı kaplar',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
+    await tester.pump();
+
+    expect(_asset('splash_gunduz'), findsOneWidget); // bulanık zemin YOK
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pump(const Duration(milliseconds: 700));
+    expect(find.text('HARITA'), findsOneWidget);
+  });
+
   testWidgets('sabaha karşı (05:00) da koyu görsel kullanılır',
       (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 5)));
     await tester.pump();
-    expect(_asset('splash_gece'), findsOneWidget);
+    expect(_asset('splash_gece'), findsWidgets);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);

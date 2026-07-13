@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html style="background:#0B1B2B">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Moorira — marina, koy ve bağlama noktalarını keşfet. Denizde yerini bul.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1B2B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Moorira">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Moorira — Denizde yerini bul</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    /* HTML ön-açılış katmanı: Flutter motoru inerken BEYAZ EKRAN yerine
+       anında marka zemini + aynı açılış fotoğrafı gösterilir. Flutter ilk
+       karesini çizince yumuşakça silinir (flutter-first-frame). */
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #moorira-splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background-color: #0B1B2B;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity .45s ease;
+    }
+    #moorira-splash.gunduz { background-color: #CFE3F2; }
+  </style>
+</head>
+<body>
+  <div id="moorira-splash"></div>
+  <script>
+    (function () {
+      var s = document.getElementById('moorira-splash');
+      var h = new Date().getHours();
+      var gece = (h >= 19 || h < 7);
+      if (!gece) s.className = 'gunduz';
+      // Uygulamadaki yerleşimin aynısı: dikey ekranda kapla (cover),
+      // yatay/geniş ekranda tam boy ortada (auto 100%).
+      function uydur() {
+        s.style.backgroundSize =
+          (window.innerWidth > window.innerHeight) ? 'auto 100%' : 'cover';
+      }
+      uydur();
+      window.addEventListener('resize', uydur);
+      s.style.backgroundImage = 'url(assets/assets/splash/' +
+        (gece ? 'splash_gece.jpg' : 'splash_gunduz.jpg') + ')';
+      // Flutter ilk karesini çizince katmanı yumuşakça kaldır.
+      window.addEventListener('flutter-first-frame', function () {
+        s.style.opacity = '0';
+        setTimeout(function () { s.remove(); }, 500);
+      });
+    })();
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
