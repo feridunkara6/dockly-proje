@@ -26,9 +26,7 @@ interface CacheEntry {
 export class WeatherService {
   private readonly cache = new Map<string, CacheEntry>();
 
-  constructor(
-    @Inject(WEATHER_PROVIDER) private readonly provider: WeatherProvider,
-  ) {}
+  constructor(@Inject(WEATHER_PROVIDER) private readonly provider: WeatherProvider) {}
 
   async forecast(lat: number, lon: number): Promise<WeatherForecast> {
     const rLat = Math.round(lat * 100) / 100;

@@ -60,15 +60,15 @@ describe('met-transform (birim)', () => {
   });
 
   it('48 saat ufku aşan dilimler alınmaz', () => {
-    const pts = transformMetForecast(
-      metFixture(['2026-07-13T00:00:00Z', '2026-07-16T00:00:00Z']),
-    );
+    const pts = transformMetForecast(metFixture(['2026-07-13T00:00:00Z', '2026-07-16T00:00:00Z']));
     expect(pts).toHaveLength(1);
   });
 
   it('eksik sayısal alanlı dilim DAHİL EDİLMEZ (uydurma yok)', () => {
     const raw = metFixture(['2026-07-13T09:00:00Z']) as {
-      properties: { timeseries: Array<{ data: { instant: { details: Record<string, unknown> } } }> };
+      properties: {
+        timeseries: Array<{ data: { instant: { details: Record<string, unknown> } } }>;
+      };
     };
     delete raw.properties.timeseries[0].data.instant.details.wind_speed;
     expect(() => transformMetForecast(raw)).toThrow(AppProblem); // tek dilim vardı → boş → hata
