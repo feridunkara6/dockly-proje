@@ -10,18 +10,20 @@ import '../../../core/origin_provider.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
 
-/// Alt-sayfanın katlanma durumu (oturum boyunca korunur): true → yalnız
-/// tutamaç + başlık şeridi görünür (kullanıcı aşağı kaydırıp gizledi).
+/// Alt-sayfanın katlanma durumu (oturum boyunca korunur). VARSAYILAN: katlı —
+/// harita açıldığında yalnız ince başlık şeridi görünür; kullanıcı dokununca
+/// kartlar açılır (ürün kararı: harita ilk bakışta ferah kalsın).
 final StateProvider<bool> nearbySheetCollapsedProvider =
-    StateProvider<bool>((ref) => false);
+    StateProvider<bool>((ref) => true);
 
 /// Harita altındaki "Yakınımdaki Bağlanma Noktaları" alt-sayfası (tasarım §07 phone
 /// mockup'ı: Apple Maps tarzı peek durumu). Cam zemin + tutamaç + başlık ve
 /// yatay mini-kart rayı (tasarım .mini-card: 132 px, kapak degradesi, ad,
 /// "tip · ★puan · mesafe"). Haritada bakılan noktaya göre en yakın limanlar;
 /// karta dokununca detay açılır. Boş/yükleniyor/hata → sessizce gizlenir.
-/// AŞAĞI kaydırınca katlanır (yalnız başlık şeridi kalır); şeride dokununca
-/// veya YUKARI kaydırınca yeniden açılır.
+/// VARSAYILAN KATLI: yalnız başlık şeridi görünür; şeride DOKUNUNCA kartlar
+/// açılır, tekrar dokununca kapanır (ok işareti yönü gösterir). Dokunuş esas
+/// alınır — kaydırma jesti web'de haritayla yarıştığı için güvenilmezdi.
 class NearbySheet extends ConsumerWidget {
   const NearbySheet({super.key});
 
@@ -51,73 +53,82 @@ class NearbySheet extends ConsumerWidget {
               top: BorderSide(color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
           ),
-          // Kaydırma/dokunma davranışı: aşağı sürükle → katla; yukarı sürükle
-          // veya (katlıyken) dokun → aç. Hız eşiği yanlışlıkla tetiklenmeyi önler.
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: collapsed
-                ? () => ref.read(nearbySheetCollapsedProvider.notifier).state = false
-                : null,
-            onVerticalDragEnd: (DragEndDetails d) {
-              final double v = d.primaryVelocity ?? 0;
-              if (v > 250) {
-                ref.read(nearbySheetCollapsedProvider.notifier).state = true;
-              } else if (v < -250) {
-                ref.read(nearbySheetCollapsedProvider.notifier).state = false;
-              }
-            },
-            child: SafeArea(
-              top: false,
-              child: AnimatedSize(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeOutCubic,
-                alignment: Alignment.topCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // Tutamaç (tasarım .handle: 36×4, yumuşak).
-                    Center(
-                      child: Container(
-                        width: 36,
-                        height: 4,
-                        margin: const EdgeInsets.only(top: 8, bottom: 10),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
-                          borderRadius: BorderRadius.circular(999),
+          child: SafeArea(
+            top: false,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Başlık şeridi = aç/kapa düğmesi (dokunuş tabanlı — güvenilir).
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => ref
+                        .read(nearbySheetCollapsedProvider.notifier)
+                        .state = !collapsed,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Tutamaç (tasarım .handle: 36×4, yumuşak).
+                        Center(
+                          child: Container(
+                            width: 36,
+                            height: 4,
+                            margin: const EdgeInsets.only(top: 8, bottom: 10),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, collapsed ? 12 : 0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  'Yakınımdaki Bağlanma Noktaları',
+                                  style: theme.textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              // Yön oku: katlıyken yukarı (aç), açıkken aşağı (kapa).
+                              AnimatedRotation(
+                                turns: collapsed ? -0.25 : 0.25,
+                                duration: const Duration(milliseconds: 250),
+                                child: DocklyIcon(
+                                  DocklyIcons.arrowForward,
+                                  size: 18,
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (!collapsed) ...<Widget>[
+                    SizedBox(
+                      // Kart içeriği (64 kapak + metinler) + pay: taşma testte
+                      // hata sayılır, yazı ölçeklerine karşı bolluk bırakılır.
+                      height: 134,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+                        itemCount: items.length,
+                        separatorBuilder: (BuildContext _, int __) =>
+                            const SizedBox(width: 10),
+                        itemBuilder: (BuildContext context, int i) =>
+                            _NearbyMiniCard(item: items[i]),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'Yakınımdaki Bağlanma Noktaları',
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    if (collapsed)
-                      // Katlı durum: yalnız başlık şeridi (alt boşluk payı).
-                      const SizedBox(height: 12)
-                    else ...<Widget>[
-                      SizedBox(
-                        // Kart içeriği (64 kapak + metinler) + pay: taşma testte
-                        // hata sayılır, yazı ölçeklerine karşı bolluk bırakılır.
-                        height: 134,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
-                          itemCount: items.length,
-                          separatorBuilder: (BuildContext _, int __) =>
-                              const SizedBox(width: 10),
-                          itemBuilder: (BuildContext context, int i) =>
-                              _NearbyMiniCard(item: items[i]),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+                    const SizedBox(height: 10),
                   ],
-                ),
+                ],
               ),
             ),
           ),

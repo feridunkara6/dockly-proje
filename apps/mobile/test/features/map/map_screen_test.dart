@@ -183,7 +183,7 @@ void main() {
     expect(find.text('Tekrar dene'), findsNothing); // tam-ekran hata YOK
   });
 
-  testWidgets('yakınındaki limanlar rayı: mini kartlar görünür (ad + mesafe)', (WidgetTester tester) async {
+  testWidgets('yakın rayı VARSAYILAN GİZLİ: şerit var, kartlar yok; dokununca açılır', (WidgetTester tester) async {
     final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
       sampleSummary('n1', 'Marina Symi', ratingAvg: 4.7, distanceNm: 2.1),
       sampleSummary('n2', 'Gökkaya Koyu', type: 'mooring_point', distanceNm: 5.4),
@@ -191,33 +191,23 @@ void main() {
     await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
     await tester.pumpAndSettle();
 
+    // Varsayılan: yalnız başlık şeridi görünür, kartlar GİZLİ.
     expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
-    expect(find.text('Marina Symi'), findsOneWidget);
-    expect(find.text('Gökkaya Koyu'), findsOneWidget);
-    // Alt satır: tip · ★puan · mesafe (tasarım mini-card formatı).
-    expect(find.textContaining('★ 4.7'), findsOneWidget);
-    expect(find.textContaining('2.1 nm'), findsOneWidget);
-  });
-
-  testWidgets('yakın rayı aşağı kaydırınca katlanır; şeride dokununca açılır', (WidgetTester tester) async {
-    final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
-      sampleSummary('n1', 'Marina Symi', distanceNm: 2.1),
-    ]);
-    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
-    await tester.pumpAndSettle();
-    expect(find.text('Marina Symi'), findsOneWidget);
-
-    // Aşağı hızlı kaydır → katlanır: kartlar gider, başlık şeridi kalır.
-    await tester.fling(
-        find.text('Yakınımdaki Bağlanma Noktaları'), const Offset(0, 80), 1200);
-    await tester.pumpAndSettle();
     expect(find.text('Marina Symi'), findsNothing);
-    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
 
-    // Şeride dokun → yeniden açılır.
+    // Şeride dokun → kartlar açılır (ad + tip · ★puan · mesafe formatı).
     await tester.tap(find.text('Yakınımdaki Bağlanma Noktaları'));
     await tester.pumpAndSettle();
     expect(find.text('Marina Symi'), findsOneWidget);
+    expect(find.text('Gökkaya Koyu'), findsOneWidget);
+    expect(find.textContaining('★ 4.7'), findsOneWidget);
+    expect(find.textContaining('2.1 nm'), findsOneWidget);
+
+    // Tekrar dokun → yeniden gizlenir.
+    await tester.tap(find.text('Yakınımdaki Bağlanma Noktaları'));
+    await tester.pumpAndSettle();
+    expect(find.text('Marina Symi'), findsNothing);
+    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
   });
 
   testWidgets('pin seçilince yakın rayı gizlenir (yerini detay kartı alır)', (WidgetTester tester) async {
