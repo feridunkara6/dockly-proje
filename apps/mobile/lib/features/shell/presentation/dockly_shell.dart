@@ -7,6 +7,7 @@ import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
+import '../../splash/presentation/splash_screen.dart';
 import '../../welcome/presentation/welcome_prompt.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
@@ -25,13 +26,39 @@ class DocklyShell extends ConsumerStatefulWidget {
 class _DocklyShellState extends ConsumerState<DocklyShell> {
   int _index = 0;
 
+  /// PERF (tembel sekmeler): açılışta yalnız Keşfet kurulur; diğer sekmeler
+  /// İLK ziyarette kurulur ve sonra durumunu korur (IndexedStack canlı tutar).
+  /// Açılışta 5 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
+  final List<bool> _built = <bool>[true, false, false, false, false];
+
+  ProviderSubscription<bool>? _splashSub;
+
   @override
   void initState() {
     super.initState();
-    // İlk açılış karşılaması: "Teknen kaç metre?" (bir kez; wow kişiselleştirme).
+    // İlk açılış karşılaması: "Teknenin markası/boyu?" (bir kez). Uygulama
+    // artık açılış ekranının ARKASINDA kurulduğundan, soru açılış görseli
+    // kaybolduktan SONRA sorulur (splashDoneProvider) — fotoğrafın üstüne
+    // sayfa fırlamasın.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) maybeShowWelcomePrompt(context, ref);
+      if (!mounted) return;
+      if (ref.read(splashDoneProvider)) {
+        maybeShowWelcomePrompt(context, ref);
+        return;
+      }
+      _splashSub = ref.listenManual<bool>(splashDoneProvider, (bool? prev, bool next) {
+        if (!next) return;
+        _splashSub?.close();
+        _splashSub = null;
+        if (mounted) maybeShowWelcomePrompt(context, ref);
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _splashSub?.close();
+    super.dispose();
   }
 
   @override
@@ -46,12 +73,12 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
     return Scaffold(
       body: IndexedStack(
         index: _index,
-        children: const <Widget>[
-          MapScreen(),
-          SearchScreen(),
-          FavoritesScreen(),
-          ReservationsPlaceholderScreen(),
-          ProfileScreen(),
+        children: <Widget>[
+          const MapScreen(), // her zaman canlı (harita durumu korunur)
+          _built[1] ? const SearchScreen() : const SizedBox.shrink(),
+          _built[2] ? const FavoritesScreen() : const SizedBox.shrink(),
+          _built[3] ? const ReservationsPlaceholderScreen() : const SizedBox.shrink(),
+          _built[4] ? const ProfileScreen() : const SizedBox.shrink(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -93,7 +120,10 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
           ),
           child: NavigationBar(
             selectedIndex: _index,
-            onDestinationSelected: (int i) => setState(() => _index = i),
+            onDestinationSelected: (int i) => setState(() {
+              _built[i] = true; // ilk ziyarette kur, sonra canlı tut
+              _index = i;
+            }),
             destinations: const <NavigationDestination>[
               NavigationDestination(
                 icon: DocklyIcon(DocklyIcons.exploreOutlined),

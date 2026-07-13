@@ -1,5 +1,6 @@
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:dockly_mobile/features/search/presentation/search_screen.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
 import 'package:dockly_mobile/features/welcome/presentation/welcome_prompt.dart';
 import 'package:flutter/material.dart';
@@ -45,5 +46,27 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 2);
+  });
+
+  testWidgets('PERF: sekmeler ilk ziyarete kadar KURULMAZ; ziyaretten sonra canlı kalır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    // Açılışta yalnız Keşfet kurulu — Arama ekranı ağaçta yok.
+    expect(find.byType(SearchScreen, skipOffstage: false), findsNothing);
+
+    await tester.tap(
+      find.descendant(of: find.byType(NavigationBar), matching: find.text('Arama')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(SearchScreen, skipOffstage: false), findsOneWidget);
+
+    // Keşfet'e dönünce Arama KURULU kalır (durumu korunur).
+    await tester.tap(
+      find.descendant(of: find.byType(NavigationBar), matching: find.text('Keşfet')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(SearchScreen, skipOffstage: false), findsOneWidget);
   });
 }

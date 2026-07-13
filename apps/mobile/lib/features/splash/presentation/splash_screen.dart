@@ -4,12 +4,19 @@ import 'dart:ui' as ui;
 
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Açılış (splash) kapısı: uygulama her açılışta önce markalı açılış ekranını
 /// gösterir, ardından yumuşak geçişle asıl içeriğe döner. GÜNDÜZ/GECE duyarlı:
 /// 07:00-19:00 arası aydınlık deniz fotoğrafı, hava karardıktan sonra koyu
 /// gece fotoğrafı kullanılır (ürün kararı — profesyonel marka açılışı).
-class SplashGate extends StatefulWidget {
+/// Açılış ekranı hâlâ görünürken alttaki uygulamanın "beklemesi" gereken
+/// işler (karşılama sorusu gibi) bu sağlayıcıyı dinler. Varsayılan TRUE:
+/// SplashGate KULLANILMADAN kurulan ağaçlarda (testler) hiçbir şey beklemez;
+/// SplashGate açılışta false yapar, bitince true'ya çevirir.
+final StateProvider<bool> splashDoneProvider = StateProvider<bool>((ref) => true);
+
+class SplashGate extends ConsumerStatefulWidget {
   const SplashGate({
     required this.child,
     // 2400ms: rota çizgisi animasyonu nefes alsın (çizim ~1.5sn + akış).
@@ -27,38 +34,63 @@ class SplashGate extends StatefulWidget {
   final DateTime Function()? now;
 
   @override
-  State<SplashGate> createState() => _SplashGateState();
+  ConsumerState<SplashGate> createState() => _SplashGateState();
 }
 
 /// Gece kabulü: 19:00 dahil sonrası ya da 07:00 öncesi ("hava kararınca").
 bool splashIsNight(DateTime t) => t.hour >= 19 || t.hour < 7;
 
-class _SplashGateState extends State<SplashGate> {
+class _SplashGateState extends ConsumerState<SplashGate> {
   Timer? _timer;
-  bool _done = false;
+  Timer? _removeTimer;
+  bool _done = false; // süre doldu → kararma başlar
+  bool _gone = false; // kararma bitti → açılış ağaçtan kalkar
 
   @override
   void initState() {
     super.initState();
+    // PERF (algılanan hız): uygulama açılış ekranının ARKASINDA hemen kurulur;
+    // harita, karolar ve veri splash oynarken yüklenir — kararma bittiğinde
+    // kullanıcı HAZIR bir haritayla karşılaşır (soğuk başlangıç kasması biter).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ref.read(splashDoneProvider.notifier).state = false;
+    });
     _timer = Timer(widget.duration, () {
-      if (mounted) setState(() => _done = true);
+      if (!mounted) return;
+      setState(() => _done = true);
+      ref.read(splashDoneProvider.notifier).state = true;
+      // Kararma animasyonu bitince açılış katmanı tamamen kaldırılır
+      // (animasyon denetleyicileri dursun — arka planda boşa iş yapmasın).
+      _removeTimer = Timer(const Duration(milliseconds: 600), () {
+        if (mounted) setState(() => _gone = true);
+      });
     });
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _removeTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final DateTime t = (widget.now ?? DateTime.now)();
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 550),
-      child: _done
-          ? widget.child
-          : _SplashScreen(variant: splashIsNight(t) ? _gece : _gunduz),
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        widget.child,
+        if (!_gone)
+          IgnorePointer(
+            ignoring: _done,
+            child: AnimatedOpacity(
+              opacity: _done ? 0 : 1,
+              duration: const Duration(milliseconds: 550),
+              child: _SplashScreen(variant: splashIsNight(t) ? _gece : _gunduz),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -132,6 +164,8 @@ class _SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<_SplashScreen>
     with TickerProviderStateMixin {
+  bool _precached = false;
+
   /// Tek seferlik: çizginin tekneden çapaya uzaması.
   late final AnimationController _draw = AnimationController(
     vsync: this,
@@ -143,6 +177,16 @@ class _SplashScreenState extends State<_SplashScreen>
     vsync: this,
     duration: const Duration(milliseconds: 900),
   )..repeat();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_precached) {
+      _precached = true;
+      // PERF: fotoğraf ilk karede hazır olsun (beyaz parlamayı önler).
+      precacheImage(AssetImage(widget.variant.asset), context);
+    }
+  }
 
   @override
   void dispose() {
