@@ -35,12 +35,30 @@ class WeatherCard extends ConsumerWidget {
         final ThemeData theme = Theme.of(context);
         final ForecastPoint now = f.points.first;
         final List<ForecastPoint> slices = _sixHourSlices(f.points);
-        return Column(
+        // KART görünümü (ürün kararı): bölüm kendi kutusunda — Demirleme
+        // Notları ile aynı dil: yumuşak zemin, 16 px köşe, ince çerçeve.
+        return Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+            ),
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 20),
-            Text('Rüzgâr & Hava', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 10),
+            Row(
+              children: <Widget>[
+                DocklyIcon(DocklyIcons.explore, size: 18, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Text('Rüzgâr & Hava',
+                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              ],
+            ),
+            const SizedBox(height: 12),
             // ŞİMDİKİ durum: büyük satır — ok + hız + yön + hamle + sıcaklık.
             Row(
               children: <Widget>[
@@ -110,6 +128,8 @@ class WeatherCard extends ConsumerWidget {
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
           ],
+            ),
+          ),
         );
       },
     );
