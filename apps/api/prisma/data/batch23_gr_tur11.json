@@ -1,0 +1,215 @@
+{
+ "batch": "23-gr-tur11-syros-mykonos",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 11. tur — grecosailor.com Syros ve Mykonos rehberleri (önceki turlarla aynı yöntem). DMS→ondalık; tahmin/uydurma YOK.",
+ "notes": [
+  "Syros 5 kayıtla girdi; Lazaretta veri setindeki İLK guest_mooring (misafir tonozu) tipi kaydı.",
+  "Mykonos Ornos ile başladı; Tourlos yeni limanı koordinatsız → bekleme listesinde."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "10",
+   "amenities": [
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306932644072",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+306951892075"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "ermoupoli-limani-syros",
+   "name": "Ermoupoli Limanı (Syros)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-syros",
+   "lat": 37.440528,
+   "lon": 24.942389,
+   "coordSource": "grecosailor.com Syros rehberi (37°26'25.9\"N 24°56'32.6\"E)",
+   "descriptionTr": "Kiklad'ın başkenti, neoklasik Ermoupoli'nin ana limanı; VHF 10. Elektrik bağlamaya DAHİL (ücretsiz). Liman reisi yardımseverdir; rehber 30 knot lodosta bile kalındığını, feribot netasının yalpa yaptırabildiğini aktarıyor.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/syros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 6.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "shower"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306937147248",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "finikas-marina-syros",
+   "name": "Finikas Marina (Syros)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-syros",
+   "lat": 37.397306,
+   "lon": 24.87625,
+   "coordSource": "grecosailor.com Syros rehberi (37°23'50.3\"N 24°52'34.5\"E)",
+   "descriptionTr": "Syros'un güneybatısındaki sakin Finikas koyunda marina; su çekimi ~6,5 m. Gündüz su, çağrıyla motorin, akşam 8'e dek duş. Ücret örneği: 45 ft yat için ~20€. Rehber 'gerçekten hoş ve sakin bir nokta' diyor.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/syros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+31621266573",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Telefon yabancı (Hollanda) numara — kaynakta böyle veriliyor, aynen aktarıldı. Veri setindeki İLK guest_mooring (misafir tonozu) kaydı.",
+   "slug": "lazaretta-tonozlari-syros",
+   "name": "Lazaretta Tonozları (Ermoupoli)",
+   "typeCode": "guest_mooring",
+   "provinceSlug": "gr-syros",
+   "lat": 37.430167,
+   "lon": 24.941306,
+   "coordSource": "grecosailor.com Syros rehberi (37°25'48.6\"N 24°56'28.7\"E)",
+   "descriptionTr": "Ermoupoli koyunun rüzgârüstü yakasındaki Lazaretta'da misafir tonozları; su çekimi ~3 m. Rehber 'rüzgârüstü tarafın en iyi noktası' diyor; meltemide bir miktar neta girebilir.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/syros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "galissas-koyu-syros",
+   "name": "Galissas Koyu (Syros)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-syros",
+   "lat": 37.421333,
+   "lon": 24.875861,
+   "coordSource": "grecosailor.com Syros rehberi (37°25'16.8\"N 24°52'33.1\"E)",
+   "descriptionTr": "Syros'un batısında kristal berraklıkta koy; kum dip, rehber 'mükemmel tutuş' diyor.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/syros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "azolimnos-koyu-syros",
+   "name": "Azolimnos Koyu (Syros)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-syros",
+   "lat": 37.410528,
+   "lon": 24.966028,
+   "coordSource": "grecosailor.com Syros rehberi (37°24'37.9\"N 24°57'57.7\"E)",
+   "descriptionTr": "Ermoupoli'nin güneyinde, limanın kalabalığından uzak sessiz koy; kum dipte mükemmel tutuş.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/syros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 14,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Tourlos (yeni liman) kaynakta koordinatsız → bekliyor.",
+   "slug": "ornos-koyu-mykonos",
+   "name": "Ornos Koyu (Mykonos)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-mykonos",
+   "lat": 37.420028,
+   "lon": 25.324472,
+   "coordSource": "grecosailor.com Mykonos rehberi (37°25'12.1\"N 25°19'28.1\"E; ikinci nokta 37°24'54.8\"N 25°19'09.6\"E ayrıca belgelendi)",
+   "descriptionTr": "Mykonos'un güneyindeki gözde Ornos koyu; ~14 m, kum/çamur dip — rehber 30 knot üzeri rüzgârda bile tuttuğunu aktarıyor. Kıyıda restoran ve dükkânlara rahat erişim. Tonoz şamandıralarının hemen dışına demirlenir.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/mykonos/anchorages/"
+   ]
+  }
+ ]
+}
