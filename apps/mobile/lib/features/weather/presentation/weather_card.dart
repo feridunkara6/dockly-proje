@@ -93,7 +93,7 @@ class WeatherCard extends ConsumerWidget {
                       const SizedBox(height: 6),
                       _WindArrow(dirDeg: p.windDirDeg, size: 16, color: c),
                       const SizedBox(height: 6),
-                      Text('${_fmtKn(p.windKn)}',
+                      Text(_fmtKn(p.windKn),
                           style: theme.textTheme.bodySmall
                               ?.copyWith(fontWeight: FontWeight.w700, color: c)),
                     ],
