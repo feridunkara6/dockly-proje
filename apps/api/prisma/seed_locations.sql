@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -126,6 +126,12 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Syros', 'gr-syros')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Mykonos', 'gr-mykonos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Kefalonya', 'gr-kefalonya')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Zakynthos', 'gr-zakinthos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -7084,5 +7090,177 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'ornos-koyu-mykonos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Argostoli Marina (Kefalonya) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'argostoli-marina-kefalonya', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
+  'Argostoli Marina (Kefalonya)', 'Kefalonya''nın başkenti Argostoli''nin marinası; su çekimi ~3,5 m. DİKKAT: limana neta girer ve geri yıkama yapar — bol usturmaça ile bağlanın.',
+  ST_SetSRID(ST_MakePoint(20.4955, 38.180833), 4326)::geography,
+  NULL, 3.5, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Argostoli Marina (Kefalonya)', 'Kefalonya''nın başkenti Argostoli''nin marinası; su çekimi ~3,5 m. DİKKAT: limana neta girer ve geri yıkama yapar — bol usturmaça ile bağlanın.' FROM locations WHERE slug = 'argostoli-marina-kefalonya'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'argostoli-marina-kefalonya'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306944730789', NULL, true
+FROM locations l WHERE l.slug = 'argostoli-marina-kefalonya'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Agia Pelagia Marina (Kefalonya) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agia-pelagia-marina-kefalonya', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
+  'Agia Pelagia Marina (Kefalonya)', 'Kefalonya''nın güneyinde küçük marina; su çekimi ~3 m, VHF 73. Gecelik ücret örneği ~20€ (elektrik hariç).',
+  ST_SetSRID(ST_MakePoint(20.5145, 38.102), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agia Pelagia Marina (Kefalonya)', 'Kefalonya''nın güneyinde küçük marina; su çekimi ~3 m, VHF 73. Gecelik ücret örneği ~20€ (elektrik hariç).' FROM locations WHERE slug = 'agia-pelagia-marina-kefalonya'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'agia-pelagia-marina-kefalonya'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306980805000', NULL, true
+FROM locations l WHERE l.slug = 'agia-pelagia-marina-kefalonya'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Poros Marina (Kefalonya) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'poros-marina-kefalonya', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
+  'Poros Marina (Kefalonya)', 'Kefalonya''nın doğu kıyısında Poros marinası; su çekimi ~2,8 m, VHF 12.',
+  ST_SetSRID(ST_MakePoint(20.781167, 38.147167), 4326)::geography,
+  NULL, 2.8, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Poros Marina (Kefalonya)', 'Kefalonya''nın doğu kıyısında Poros marinası; su çekimi ~2,8 m, VHF 12.' FROM locations WHERE slug = 'poros-marina-kefalonya'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '12', NULL, NULL, NULL
+FROM locations WHERE slug = 'poros-marina-kefalonya'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306982947289', NULL, true
+FROM locations l WHERE l.slug = 'poros-marina-kefalonya'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Assos Limanı (Kefalonya) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'assos-limani-kefalonya', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
+  'Assos Limanı (Kefalonya)', 'Venedik kalesinin eteğindeki kartpostal köyü Assos''un küçük limanı; su çekimi ~3 m.',
+  ST_SetSRID(ST_MakePoint(20.538833, 38.378833), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Assos Limanı (Kefalonya)', 'Venedik kalesinin eteğindeki kartpostal köyü Assos''un küçük limanı; su çekimi ~3 m.' FROM locations WHERE slug = 'assos-limani-kefalonya'
+ON CONFLICT (location_id, locale) DO NOTHING;
+
+-- --- Zakynthos Marina · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zakinthos-marina', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-zakinthos'),
+  'Zakynthos Marina', 'Zakynthos kentinin marinası; su çekimi ~7 m — derin tekneler için rahat. Rehber ''olağanüstü misafirperverlik, netadan ve rüzgârdan mükemmel korunma'' diye aktarıyor.',
+  ST_SetSRID(ST_MakePoint(20.902194, 37.783944), 4326)::geography,
+  NULL, 7, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zakynthos Marina', 'Zakynthos kentinin marinası; su çekimi ~7 m — derin tekneler için rahat. Rehber ''olağanüstü misafirperverlik, netadan ve rüzgârdan mükemmel korunma'' diye aktarıyor.' FROM locations WHERE slug = 'zakinthos-marina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'zakinthos-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306993779646', NULL, true
+FROM locations l WHERE l.slug = 'zakinthos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302695028117', NULL, false
+FROM locations l WHERE l.slug = 'zakinthos-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Agios Nikolaos Limanı (Zakynthos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agios-nikolaos-limani-zakinthos', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-zakinthos'),
+  'Agios Nikolaos Limanı (Zakynthos)', 'Zakynthos''un kuzeyinde, Mavi Mağaralar rotasının limanı; su çekimi ~5 m, VHF 72. Kıçtankara, aborda veya TONOZ ŞAMANDIRASI seçenekleri var — şamandırayı önceden ayırtın.',
+  ST_SetSRID(ST_MakePoint(20.70675, 37.905972), 4326)::geography,
+  NULL, 5, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Nikolaos Limanı (Zakynthos)', 'Zakynthos''un kuzeyinde, Mavi Mağaralar rotasının limanı; su çekimi ~5 m, VHF 72. Kıçtankara, aborda veya TONOZ ŞAMANDIRASI seçenekleri var — şamandırayı önceden ayırtın.' FROM locations WHERE slug = 'agios-nikolaos-limani-zakinthos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306947329835', NULL, true
+FROM locations l WHERE l.slug = 'agios-nikolaos-limani-zakinthos'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mavi Mağaralar Demirleme (Zakynthos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mavi-magaralar-zakinthos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-zakinthos'),
+  'Mavi Mağaralar Demirleme (Zakynthos)', 'Zakynthos''un ünlü Mavi Mağaraları önünde kısa mola demirlemesi; 8-15 m, kum/deniz çayırı. DİKKAT: tutuş ZAYIF — yalnız sakin havada, teknede gözcü bırakarak durun.',
+  ST_SetSRID(ST_MakePoint(20.705472, 37.930083), 4326)::geography,
+  NULL, NULL, 8, 15,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mavi Mağaralar Demirleme (Zakynthos)', 'Zakynthos''un ünlü Mavi Mağaraları önünde kısa mola demirlemesi; 8-15 m, kum/deniz çayırı. DİKKAT: tutuş ZAYIF — yalnız sakin havada, teknede gözcü bırakarak durun.' FROM locations WHERE slug = 'mavi-magaralar-zakinthos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'mavi-magaralar-zakinthos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Filippoi Plajı (Zakynthos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'filippoi-plaji-zakinthos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-zakinthos'),
+  'Filippoi Plajı (Zakynthos)', 'Zakynthos''un kuzeybatı kıyısında sakin plaj demirlemesi; kum/deniz çayırı dip, tutuş iyi.',
+  ST_SetSRID(ST_MakePoint(20.652472, 37.901556), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Filippoi Plajı (Zakynthos)', 'Zakynthos''un kuzeybatı kıyısında sakin plaj demirlemesi; kum/deniz çayırı dip, tutuş iyi.' FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
 ON CONFLICT (location_id) DO NOTHING;
 

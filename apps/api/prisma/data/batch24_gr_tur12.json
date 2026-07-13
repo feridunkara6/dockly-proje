@@ -1,0 +1,276 @@
+{
+ "batch": "24-gr-tur12-kefalonya-zakinthos",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 12. tur (İyon) — grecosailor.com Kefalonya ve Zakynthos rehberleri (önceki turlarla aynı yöntem). DMS→ondalık; tahmin/uydurma YOK.",
+ "notes": [
+  "İyon Denizi derinleşti: Korfu'nun (batch9) yanına Kefalonya (4) ve Zakynthos (4) geldi.",
+  "Assos'un telefonu kaynakta eksik basamaklı → alınmadı. Fiskardo/Agia Efimia/Sami bu kaynakta detaysız → bekliyor.",
+  "Mavi Mağaralar'ın ZAYIF tutuş uyarısı aynen taşındı."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306944730789",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "argostoli-marina-kefalonya",
+   "name": "Argostoli Marina (Kefalonya)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-kefalonya",
+   "lat": 38.180833,
+   "lon": 20.4955,
+   "coordSource": "grecosailor.com Kefalonya rehberi (38°10'51.0\"N 20°29'43.8\"E)",
+   "descriptionTr": "Kefalonya'nın başkenti Argostoli'nin marinası; su çekimi ~3,5 m. DİKKAT: limana neta girer ve geri yıkama yapar — bol usturmaça ile bağlanın.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/kefalonia/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306980805000",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "agia-pelagia-marina-kefalonya",
+   "name": "Agia Pelagia Marina (Kefalonya)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-kefalonya",
+   "lat": 38.102,
+   "lon": 20.5145,
+   "coordSource": "grecosailor.com Kefalonya rehberi (38°06'07.2\"N 20°30'52.2\"E)",
+   "descriptionTr": "Kefalonya'nın güneyinde küçük marina; su çekimi ~3 m, VHF 73. Gecelik ücret örneği ~20€ (elektrik hariç).",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/kefalonia/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 2.8,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306982947289",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "poros-marina-kefalonya",
+   "name": "Poros Marina (Kefalonya)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-kefalonya",
+   "lat": 38.147167,
+   "lon": 20.781167,
+   "coordSource": "grecosailor.com Kefalonya rehberi (38°08'49.8\"N 20°46'52.2\"E)",
+   "descriptionTr": "Kefalonya'nın doğu kıyısında Poros marinası; su çekimi ~2,8 m, VHF 12.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/kefalonia/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Kaynaktaki telefon numarası eksik basamaklı görünüyor → alınmadı (uydurma tamamlama yapılmaz).",
+   "slug": "assos-limani-kefalonya",
+   "name": "Assos Limanı (Kefalonya)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-kefalonya",
+   "lat": 38.378833,
+   "lon": 20.538833,
+   "coordSource": "grecosailor.com Kefalonya rehberi (38°22'43.8\"N 20°32'19.8\"E)",
+   "descriptionTr": "Venedik kalesinin eteğindeki kartpostal köyü Assos'un küçük limanı; su çekimi ~3 m.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/kefalonia/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 7,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306993779646",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+302695028117"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "zakinthos-marina",
+   "name": "Zakynthos Marina",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-zakinthos",
+   "lat": 37.783944,
+   "lon": 20.902194,
+   "coordSource": "grecosailor.com Zakynthos rehberi (37°47'02.2\"N 20°54'07.9\"E)",
+   "descriptionTr": "Zakynthos kentinin marinası; su çekimi ~7 m — derin tekneler için rahat. Rehber 'olağanüstü misafirperverlik, netadan ve rüzgârdan mükemmel korunma' diye aktarıyor.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/zakynthos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "72",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306947329835",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "agios-nikolaos-limani-zakinthos",
+   "name": "Agios Nikolaos Limanı (Zakynthos)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-zakinthos",
+   "lat": 37.905972,
+   "lon": 20.70675,
+   "coordSource": "grecosailor.com Zakynthos rehberi (37°54'21.5\"N 20°42'24.3\"E)",
+   "descriptionTr": "Zakynthos'un kuzeyinde, Mavi Mağaralar rotasının limanı; su çekimi ~5 m, VHF 72. Kıçtankara, aborda veya TONOZ ŞAMANDIRASI seçenekleri var — şamandırayı önceden ayırtın.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/zakynthos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 8,
+   "depthMaxM": 15,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Zayıf tutuş uyarısı kaynaktan aynen aktarıldı (güvenlik verisi).",
+   "slug": "mavi-magaralar-zakinthos",
+   "name": "Mavi Mağaralar Demirleme (Zakynthos)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-zakinthos",
+   "lat": 37.930083,
+   "lon": 20.705472,
+   "coordSource": "grecosailor.com Zakynthos rehberi (37°55'48.3\"N 20°42'19.7\"E)",
+   "descriptionTr": "Zakynthos'un ünlü Mavi Mağaraları önünde kısa mola demirlemesi; 8-15 m, kum/deniz çayırı. DİKKAT: tutuş ZAYIF — yalnız sakin havada, teknede gözcü bırakarak durun.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/zakynthos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "filippoi-plaji-zakinthos",
+   "name": "Filippoi Plajı (Zakynthos)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-zakinthos",
+   "lat": 37.901556,
+   "lon": 20.652472,
+   "coordSource": "grecosailor.com Zakynthos rehberi (37°54'05.6\"N 20°39'08.9\"E)",
+   "descriptionTr": "Zakynthos'un kuzeybatı kıyısında sakin plaj demirlemesi; kum/deniz çayırı dip, tutuş iyi.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/ionian-islands/zakynthos/"
+   ]
+  }
+ ]
+}
