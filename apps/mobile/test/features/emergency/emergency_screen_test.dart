@@ -102,6 +102,10 @@ void main() {
     expect((copy.arguments as Map<Object?, Object?>)['text'],
         contains('36°30\'00.0"K'));
     expect(find.text('Kopyalandı.'), findsOneWidget);
+    // SnackBar'ın kendini kapatma zamanlayıcısını akıt (CI dersi: test sonunda
+    // bekleyen Timer kalırsa çerçeve testi kırmızıya çevirir).
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('MAYDAY şablonu tekne markasıyla kişiselleşir ve kopyalanır',
@@ -126,6 +130,9 @@ void main() {
         calls.lastWhere((MethodCall c) => c.method == 'Clipboard.setData');
     expect((copy.arguments as Map<Object?, Object?>)['text'],
         contains('MAYDAY, MAYDAY, MAYDAY'));
+    // SnackBar zamanlayıcısını akıt (bekleyen Timer testi kırmızıya çevirir).
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('denizci alfabesi ve telsiz kuralları sayfada yer alır',
