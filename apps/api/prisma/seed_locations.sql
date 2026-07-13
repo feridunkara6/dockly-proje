@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman + 34-ege-akdeniz-tur21-restoran-baglama · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -377,6 +377,10 @@ FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.sl
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Anamur', 'mersin-anamur'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gülnar', 'mersin-gulnar'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -9380,5 +9384,220 @@ ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, descriptio
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'gunluklu-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kayabaşı Restaurant (Mazı) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kayabasi-restaurant-mazi', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Kayabaşı Restaurant (Mazı)', 'Gökova''nın kuzey kıyısında, Mazı koyunda 1959''dan beri hizmet veren balık restoranı; turizm öncesinde köyün balıkçı iskelesiydi. Kırsal kahvaltı, günlük balık ve yerel zeytinyağlı yemekler sunar. Gökova turlarının bilinen yemek durağıdır.',
+  ST_SetSRID(ST_MakePoint(27.745775, 36.998075), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kayabaşı Restaurant (Mazı)', 'Gökova''nın kuzey kıyısında, Mazı koyunda 1959''dan beri hizmet veren balık restoranı; turizm öncesinde köyün balıkçı iskelesiydi. Kırsal kahvaltı, günlük balık ve yerel zeytinyağlı yemekler sunar. Gökova turlarının bilinen yemek durağıdır.' FROM locations WHERE slug = 'kayabasi-restaurant-mazi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kayabasi-restaurant-mazi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kayabasi-restaurant-mazi' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902523392050', NULL, true
+FROM locations l WHERE l.slug = 'kayabasi-restaurant-mazi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://kayabasirestaurant.com/', NULL, false
+FROM locations l WHERE l.slug = 'kayabasi-restaurant-mazi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Cennet Marine Yacht Club (Turgutköy) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cennet-marine-yacht-club', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Cennet Marine Yacht Club (Turgutköy)', 'Hisarönü Körfezi''nde Turgutköy kıyısında otel-restoran iskelesi; iskeleye bağlanan tekne misafirleri otel olanaklarını kullanır. 14 odalı tesiste restoran (Türk-Akdeniz mutfağı, balık), havuz ve plaj vardır. Marmaris''e denizden 50 mil karadan 25 km; Symi''ye 15, Datça''ya 20 mildir.',
+  ST_SetSRID(ST_MakePoint(28.129472, 36.753066), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Cennet Marine Yacht Club (Turgutköy)', 'Hisarönü Körfezi''nde Turgutköy kıyısında otel-restoran iskelesi; iskeleye bağlanan tekne misafirleri otel olanaklarını kullanır. 14 odalı tesiste restoran (Türk-Akdeniz mutfağı, balık), havuz ve plaj vardır. Marmaris''e denizden 50 mil karadan 25 km; Symi''ye 15, Datça''ya 20 mildir.' FROM locations WHERE slug = 'cennet-marine-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'cennet-marine-yacht-club'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cennet-marine-yacht-club' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905322517107', NULL, true
+FROM locations l WHERE l.slug = 'cennet-marine-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@cennetyachtclub.com', NULL, false
+FROM locations l WHERE l.slug = 'cennet-marine-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://cennetyachtclub.com/', NULL, false
+FROM locations l WHERE l.slug = 'cennet-marine-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kuzbükü Yacht Club · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kuzbuku-yacht-club', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kuzbükü Yacht Club', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.',
+  ST_SetSRID(ST_MakePoint(28.024444, 36.706111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kuzbükü Yacht Club', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.' FROM locations WHERE slug = 'kuzbuku-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kuzbuku-yacht-club'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kuzbuku-yacht-club' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905365017230', NULL, true
+FROM locations l WHERE l.slug = 'kuzbuku-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'kaptan@kuzbuku.com', NULL, false
+FROM locations l WHERE l.slug = 'kuzbuku-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://kuzbuku.com/', NULL, false
+FROM locations l WHERE l.slug = 'kuzbuku-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Boncuk Koyu (Gökova) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'boncuk-koyu-camli', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Boncuk Koyu (Gökova)', 'Gökova''nın güneydoğusunda, Sedir Adası yakınında korunaklı koy. ÖNEMLİ — KORUMA ALANI: koy, Akdeniz''in nadir kum köpekbalığı (Carcharhinus plumbeus) üreme alanıdır; 2010''dan beri balık avına kapalıdır ve üreme dönemi NİSAN-MAYIS-HAZİRAN aylarında ziyarete KAPATILIR. Köpekbalıkları insana zararsız ve ürkektir. Sezon dışında girişte ücret alınabilir (özel işletme kıyısı).',
+  ST_SetSRID(ST_MakePoint(28.212655, 36.97682), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Boncuk Koyu (Gökova)', 'Gökova''nın güneydoğusunda, Sedir Adası yakınında korunaklı koy. ÖNEMLİ — KORUMA ALANI: koy, Akdeniz''in nadir kum köpekbalığı (Carcharhinus plumbeus) üreme alanıdır; 2010''dan beri balık avına kapalıdır ve üreme dönemi NİSAN-MAYIS-HAZİRAN aylarında ziyarete KAPATILIR. Köpekbalıkları insana zararsız ve ürkektir. Sezon dışında girişte ücret alınabilir (özel işletme kıyısı).' FROM locations WHERE slug = 'boncuk-koyu-camli'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'boncuk-koyu-camli'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kameriye Adası · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kameriye-adasi-selimiye', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kameriye Adası', 'Selimiye açıklarında, 1.800 yıllık Ortodoks kilisesi ve manastır kalıntılarıyla ünlü adacık; Bozburun''a 20 dk. İyi havada güney yakasında ÖĞLE MOLASI demirlemesi ve şnorkelle yüzme için uygundur; gece için uygun değildir — Dirsek koyu önerilir. Yoğunluk (kaynaklı): sezonda günde ~1.000 ziyaretçi gelir; dilek ağacı ve mozaikler kalabalık çeker.',
+  ST_SetSRID(ST_MakePoint(28.053117, 36.7301), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kameriye Adası', 'Selimiye açıklarında, 1.800 yıllık Ortodoks kilisesi ve manastır kalıntılarıyla ünlü adacık; Bozburun''a 20 dk. İyi havada güney yakasında ÖĞLE MOLASI demirlemesi ve şnorkelle yüzme için uygundur; gece için uygun değildir — Dirsek koyu önerilir. Yoğunluk (kaynaklı): sezonda günde ~1.000 ziyaretçi gelir; dilek ağacı ve mozaikler kalabalık çeker.' FROM locations WHERE slug = 'kameriye-adasi-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'kameriye-adasi-selimiye'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Yakacık Koyu (Gazipaşa) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yakacik-koyu-gazipasa', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-gazipasa'),
+  'Yakacık Koyu (Gazipaşa)', 'Gazipaşa''nın doğusunda, Kaledran deresinin batısındaki koy; muz bahçeleriyle çevrili köyün önünde doğal plajlar vardır. Alanya-Anamur hattında ara mola noktasıdır.',
+  ST_SetSRID(ST_MakePoint(32.560166, 36.096114), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yakacık Koyu (Gazipaşa)', 'Gazipaşa''nın doğusunda, Kaledran deresinin batısındaki koy; muz bahçeleriyle çevrili köyün önünde doğal plajlar vardır. Alanya-Anamur hattında ara mola noktasıdır.' FROM locations WHERE slug = 'yakacik-koyu-gazipasa'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'yakacik-koyu-gazipasa'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Soğuksu Koyu (Aydıncık) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'soguksu-koyu-aydincik', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-aydincik'),
+  'Soğuksu Koyu (Aydıncık)', 'Aydıncık''ın hemen batısında, Soğuksu deresinin denize döküldüğü küçük koy. Aydıncık balıkçı limanı (ayrı kayıt) ~2 mil doğudadır.',
+  ST_SetSRID(ST_MakePoint(33.289661, 36.13235), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Soğuksu Koyu (Aydıncık)', 'Aydıncık''ın hemen batısında, Soğuksu deresinin denize döküldüğü küçük koy. Aydıncık balıkçı limanı (ayrı kayıt) ~2 mil doğudadır.' FROM locations WHERE slug = 'soguksu-koyu-aydincik'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'soguksu-koyu-aydincik'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Sipahili Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sipahili-koyu-gulnar', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-gulnar'),
+  'Sipahili Koyu', 'Gülnar kıyısında, dere ağzının doğu yakasındaki koy; D-400 sahil yolu hemen ardından geçer. Aydıncık-Taşucu arasında ara mola noktasıdır.',
+  ST_SetSRID(ST_MakePoint(33.461762, 36.159085), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sipahili Koyu', 'Gülnar kıyısında, dere ağzının doğu yakasındaki koy; D-400 sahil yolu hemen ardından geçer. Aydıncık-Taşucu arasında ara mola noktasıdır.' FROM locations WHERE slug = 'sipahili-koyu-gulnar'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'sipahili-koyu-gulnar'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Büyükeceli Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'buyukeceli-koyu-gulnar', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-gulnar'),
+  'Büyükeceli Koyu', 'Gülnar Büyükeceli köyünün koyu; kıyıya 3 km''lik vadiyle bağlanır. Doğusunda Bölükada feneri (iki beyaz çakar/5 sn, 18 mil) seyir referansıdır.',
+  ST_SetSRID(ST_MakePoint(33.575833, 36.156028), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Büyükeceli Koyu', 'Gülnar Büyükeceli köyünün koyu; kıyıya 3 km''lik vadiyle bağlanır. Doğusunda Bölükada feneri (iki beyaz çakar/5 sn, 18 mil) seyir referansıdır.' FROM locations WHERE slug = 'buyukeceli-koyu-gulnar'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'buyukeceli-koyu-gulnar'
 ON CONFLICT (location_id) DO NOTHING;
 
