@@ -33,14 +33,23 @@ void main() {
     await tester.pumpWidget(_app(store: store));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Teknenin markası'), findsOneWidget);
+    // TEKİL metinle doğrula (CI dersi: 'Teknenin markası' hem açıklamada hem
+    // alan etiketinde geçer → textContaining 2 widget bulur ve test patlar).
+    expect(find.text('Hoş geldin, kaptan'), findsOneWidget);
 
     // Denizci dili: marka yaz + FEET çipi seç → metreye çevrilip saklanır.
-    await tester.enterText(find.byType(TextField), 'Beneteau');
+    // TextField karşılama sayfasına DARALTILIR (arama sekmesindekiyle karışmasın).
+    await tester.enterText(
+      find.descendant(
+        of: find.byType(WelcomeSheetBody),
+        matching: find.byType(TextField),
+      ),
+      'Beneteau',
+    );
     await tester.tap(find.widgetWithText(ActionChip, '39 ft'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Teknenin markası'), findsNothing); // kapandı
+    expect(find.text('Hoş geldin, kaptan'), findsNothing); // kapandı
     final ProviderContainer container =
         ProviderScope.containerOf(tester.element(find.byType(DocklyShell)));
     expect(container.read(myBoatProvider)?.lengthM, 11.9); // 39 ft → 11.9 m
@@ -57,7 +66,7 @@ void main() {
   testWidgets('daha önce soruldu → karşılama çıkmaz', (WidgetTester tester) async {
     await tester.pumpWidget(_app(store: FakeWelcomeStore(shown: true)));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Teknenin markası'), findsNothing);
+    expect(find.text('Hoş geldin, kaptan'), findsNothing);
   });
 
   testWidgets('cihazda tekne zaten kayıtlı → soru çıkmaz, soruldu işaretlenir',
@@ -68,7 +77,7 @@ void main() {
       boatStorage: FakeBoatStorage(boat: const MyBoat(lengthM: 15)),
     ));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Teknenin markası'), findsNothing);
+    expect(find.text('Hoş geldin, kaptan'), findsNothing);
     expect(store.shown, isTrue);
   });
 
@@ -81,7 +90,7 @@ void main() {
     await tester.tap(find.text('Şimdilik geç'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Teknenin markası'), findsNothing);
+    expect(find.text('Hoş geldin, kaptan'), findsNothing);
     final ProviderContainer container =
         ProviderScope.containerOf(tester.element(find.byType(DocklyShell)));
     expect(container.read(myBoatProvider), isNull);

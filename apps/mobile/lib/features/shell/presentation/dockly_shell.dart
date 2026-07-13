@@ -36,6 +36,13 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
 
   @override
   Widget build(BuildContext context) {
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
+    // Tasarım sistemi §5 (glass tab bar) + mockup: açık cam zemin (0.72 beyaz),
+    // ince üst çizgi, PILL GÖSTERGESİZ sekmeler — seçili sekme marka mavisi
+    // ikon + etiket, seçili olmayanlar ikincil gri. Dark modda cam koyu yüzey.
+    final Color selected =
+        dark ? DocklyColors.brandPrimaryDark : DocklyColors.brandPrimary;
+    final Color unselected = dark ? DocklyColors.text2Dark : DocklyColors.text2;
     return Scaffold(
       body: IndexedStack(
         index: _index,
@@ -47,36 +54,75 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
           ProfileScreen(),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (int i) => setState(() => _index = i),
-        destinations: const <NavigationDestination>[
-          NavigationDestination(
-            icon: DocklyIcon(DocklyIcons.exploreOutlined),
-            selectedIcon: DocklyIcon(DocklyIcons.explore),
-            label: 'Keşfet',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          // bg.glass: light rgba(255,255,255,0.72) / dark rgba(20,28,43,0.72).
+          color: dark ? const Color(0xB8141C2B) : const Color(0xB8FFFFFF),
+          border: Border(
+            top: BorderSide(
+              color: dark ? DocklyColors.hairlineDark : DocklyColors.hairline,
+            ),
           ),
-          NavigationDestination(
-            icon: DocklyIcon(DocklyIcons.search),
-            selectedIcon: DocklyIcon(DocklyIcons.search),
-            label: 'Arama',
+        ),
+        child: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            height: 64,
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            // Mockup'ta seçim pill'i YOK — renk değişimi yeterli.
+            indicatorColor: Colors.transparent,
+            overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            iconTheme: WidgetStateProperty.resolveWith(
+              (Set<WidgetState> states) => IconThemeData(
+                size: 24,
+                color: states.contains(WidgetState.selected) ? selected : unselected,
+              ),
+            ),
+            labelTextStyle: WidgetStateProperty.resolveWith(
+              (Set<WidgetState> states) => TextStyle(
+                fontSize: 11,
+                height: 1.2,
+                fontWeight: states.contains(WidgetState.selected)
+                    ? FontWeight.w700
+                    : FontWeight.w500,
+                color: states.contains(WidgetState.selected) ? selected : unselected,
+              ),
+            ),
           ),
-          NavigationDestination(
-            icon: DocklyIcon(DocklyIcons.favoriteBorder),
-            selectedIcon: DocklyIcon(DocklyIcons.favorite),
-            label: 'Favoriler',
+          child: NavigationBar(
+            selectedIndex: _index,
+            onDestinationSelected: (int i) => setState(() => _index = i),
+            destinations: const <NavigationDestination>[
+              NavigationDestination(
+                icon: DocklyIcon(DocklyIcons.exploreOutlined),
+                selectedIcon: DocklyIcon(DocklyIcons.explore),
+                label: 'Keşfet',
+              ),
+              NavigationDestination(
+                icon: DocklyIcon(DocklyIcons.search),
+                selectedIcon: DocklyIcon(DocklyIcons.search),
+                label: 'Arama',
+              ),
+              NavigationDestination(
+                icon: DocklyIcon(DocklyIcons.favoriteBorder),
+                selectedIcon: DocklyIcon(DocklyIcons.favorite),
+                label: 'Favoriler',
+              ),
+              NavigationDestination(
+                icon: DocklyIcon(DocklyIcons.eventNoteOutlined),
+                selectedIcon: DocklyIcon(DocklyIcons.eventNote),
+                label: 'Taleplerim',
+              ),
+              NavigationDestination(
+                icon: DocklyIcon(DocklyIcons.personOutline),
+                selectedIcon: DocklyIcon(DocklyIcons.person),
+                label: 'Profil',
+              ),
+            ],
           ),
-          NavigationDestination(
-            icon: DocklyIcon(DocklyIcons.eventNoteOutlined),
-            selectedIcon: DocklyIcon(DocklyIcons.eventNote),
-            label: 'Taleplerim',
-          ),
-          NavigationDestination(
-            icon: DocklyIcon(DocklyIcons.personOutline),
-            selectedIcon: DocklyIcon(DocklyIcons.person),
-            label: 'Profil',
-          ),
-        ],
+        ),
       ),
     );
   }
