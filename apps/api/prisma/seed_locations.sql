@@ -359,7 +359,7 @@ SELECT gen_random_uuid(), 'setur-kalamis-fenerbahce-marina', 1, 'published', 'TR
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Kalamış & Fenerbahçe Marina', 'İstanbul Kadıköy''de yer alan marina 1.278 deniz ve 220 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-kalamis-fenerbahce-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 1278, '72/16', NULL, NULL, NULL
@@ -399,7 +399,7 @@ SELECT gen_random_uuid(), 'setur-yalova-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Yalova Marina', 'Yalova merkez sahilinde yer alan marina 225 deniz ve 70 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-yalova-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 225, '73', NULL, NULL, NULL
@@ -439,7 +439,7 @@ SELECT gen_random_uuid(), 'setur-ayvalik-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Ayvalık Marina', 'Ayvalık ilçe merkezinde yer alan marina 200 deniz ve 30 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-ayvalik-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 200, '73/16', NULL, NULL, NULL
@@ -479,7 +479,7 @@ SELECT gen_random_uuid(), 'setur-cesme-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Çeşme Marina', 'Çeşme Altınyunus mevkiinde yer alan marina 186 deniz ve 60 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-cesme-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 186, '73/16', NULL, NULL, NULL
@@ -519,7 +519,7 @@ SELECT gen_random_uuid(), 'setur-kusadasi-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Kuşadası Marina', 'Kuşadası ilçe merkezinde yer alan marina 557 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-kusadasi-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 557, '73/16', NULL, NULL, NULL
@@ -559,7 +559,7 @@ SELECT gen_random_uuid(), 'netsel-marmaris-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Netsel Marmaris Marina', 'Marmaris ilçe merkezinde yer alan marina 701 tekne kapasiteli deniz bağlama alanına sahiptir. Setur Marinas bünyesinde işletilmektedir.' FROM locations WHERE slug = 'netsel-marmaris-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 701, '72', NULL, NULL, NULL
@@ -599,7 +599,7 @@ SELECT gen_random_uuid(), 'setur-finike-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Finike Marina', 'Finike ilçe merkezinde yer alan marina 284 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-finike-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 284, '73', NULL, NULL, NULL
@@ -639,7 +639,7 @@ SELECT gen_random_uuid(), 'setur-antalya-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Antalya Marina', 'Antalya Konyaaltı''nda Büyük Liman mevkiinde yer alan marina 198 deniz ve 150 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.' FROM locations WHERE slug = 'setur-antalya-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 198, '72', NULL, NULL, NULL
@@ -679,7 +679,7 @@ SELECT gen_random_uuid(), 'setur-kas-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Kaş Marina', 'Kaş Bucak Denizi''nde yer alan marina 447 deniz ve 120 kara kapasitesine sahiptir. Setur Marinas bünyesinde Makmarin Kaş Marina adıyla işletilmektedir.' FROM locations WHERE slug = 'setur-kas-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 447, '73', NULL, NULL, NULL
@@ -719,7 +719,7 @@ SELECT gen_random_uuid(), 'mersin-marina', 1, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mersin Marina', 'Mersin Yenişehir''de yer alan marina, Mersin Yat Limanı İşletmeleri A.Ş. tarafından işletilmektedir.' FROM locations WHERE slug = 'mersin-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 500, '72', NULL, NULL, NULL
@@ -759,7 +759,7 @@ SELECT gen_random_uuid(), 'd-marin-gocek', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'D-Marin Göcek', 'Fethiye''nin Göcek mahallesinde yer alan marina 380 deniz bağlama ve 150 tekne kara park kapasitesine sahiptir. D-Marin tarafından işletilmektedir.' FROM locations WHERE slug = 'd-marin-gocek'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 380, '73', NULL, NULL, true
@@ -791,7 +791,7 @@ SELECT gen_random_uuid(), 'd-marin-turgutreis', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'D-Marin Turgutreis', 'Bodrum Turgutreis''te yer alan marina 532 deniz bağlama ve 150 çekek (kara) kapasitesine sahiptir. D-Marin tarafından işletilmektedir.' FROM locations WHERE slug = 'd-marin-turgutreis'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 532, '72', NULL, NULL, true
@@ -823,7 +823,7 @@ SELECT gen_random_uuid(), 'd-marin-didim', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'D-Marin Didim', 'Didim''de yer alan marina, 90''ı süperyat olmak üzere 591 deniz bağlama kapasitesine sahiptir. D-Marin tarafından işletilmektedir.' FROM locations WHERE slug = 'd-marin-didim'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 591, '16/72', NULL, NULL, true
@@ -855,7 +855,7 @@ SELECT gen_random_uuid(), 'yalikavak-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yalıkavak Marina', 'Bodrum Yalıkavak''ta yer alan 620 yat kapasiteli marina; daha önce Palmarina adıyla hizmet veren tesis Yalıkavak Marina adını almıştır.' FROM locations WHERE slug = 'yalikavak-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 620, '72', NULL, 260, NULL
@@ -903,7 +903,7 @@ SELECT gen_random_uuid(), 'milta-bodrum-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Milta Bodrum Marina', 'Bodrum kent merkezinde yer alan marina Doğan Holding bünyesinde işletilmektedir. Mavi Bayrak ve 5 Altın Çıpa ödüllerine sahiptir.' FROM locations WHERE slug = 'milta-bodrum-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 425, '73', true, 70, NULL
@@ -943,7 +943,7 @@ SELECT gen_random_uuid(), 'ece-saray-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ece Saray Marina & Resort', 'Fethiye Karagözler mevkiinde yer alan marina, 50 metreye kadar tekneler için 350 bağlama kapasitesi sunmaktadır. Mavi Bayrak ve 5 Altın Çıpa sahibidir.' FROM locations WHERE slug = 'ece-saray-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 350, '73', true, NULL, NULL
@@ -987,7 +987,7 @@ SELECT gen_random_uuid(), 'gocek-village-port-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göcek Village Port Marina', 'Göcek''te yer alan marina (eski adıyla Marintürk Göcek Village Port) Setur Marinas tarafından işletilmektedir. Denizde 220, karada 200 tekne kapasitesi ve çekek alanı bulunmaktadır.' FROM locations WHERE slug = 'gocek-village-port-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 220, '69', NULL, 200, NULL
@@ -1027,7 +1027,7 @@ SELECT gen_random_uuid(), 'club-marina-gocek', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Club Marina', '1990 yılında kurulan Club Marina, Göcek Büngüş Koyu''nda yer alan doğal korunaklı bir marinadır ve mega yatlara hizmet verebilmektedir.' FROM locations WHERE slug = 'club-marina-gocek'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 100, '72', NULL, NULL, NULL
@@ -1071,7 +1071,7 @@ SELECT gen_random_uuid(), 'skopea-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Skopea Marina', '1989 yılında kurulan Skopea Marina, Göcek merkez sahil şeridinde yer almaktadır ve 110 metreye kadar teknelere hizmet verebilmektedir.' FROM locations WHERE slug = 'skopea-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 80, '72', NULL, NULL, NULL
@@ -1111,7 +1111,7 @@ SELECT gen_random_uuid(), 'marti-marina-orhaniye', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Martı Marina', 'Marmaris''in Orhaniye mevkiinde yer alan marina Martı Hotels & Marinas tarafından işletilmektedir. Yakıt istasyonu ve teknik servis hizmetleri bulunmaktadır.' FROM locations WHERE slug = 'marti-marina-orhaniye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 380, '73/16', NULL, 60, NULL
@@ -1155,7 +1155,7 @@ SELECT gen_random_uuid(), 'my-marina-ekincik', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'My Marina Yacht Club', 'Köyceğiz''e bağlı Ekincik Koyu''nda restoran ve yat bağlama iskelesi hizmeti veren küçük bir tesistir. Nisan-Ekim döneminde sezonluk olarak faaliyet göstermektedir.' FROM locations WHERE slug = 'my-marina-ekincik'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -1196,7 +1196,7 @@ SELECT gen_random_uuid(), 'yacht-marin-marmaris', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yacht Marin Marmaris', 'Marmaris Adaköy Yalancı Boğaz mevkiinde yer alan büyük bir marinadır; Marmaris Yacht Marina adıyla da bilinir. Denizde 750 tekne kapasitesi ve büyük bir çekek sahası bulunmaktadır.' FROM locations WHERE slug = 'yacht-marin-marmaris'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 750, '72', NULL, NULL, NULL
@@ -1236,7 +1236,7 @@ SELECT gen_random_uuid(), 'albatros-marina-marmaris', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Albatros Marina', 'Marmaris merkezinin yaklaşık 3 km doğusunda 1982''de kurulan marina, denizde 44 tekne bağlama kapasitesi ve karada 150 tekne için çekek alanı sunmaktadır.' FROM locations WHERE slug = 'albatros-marina-marmaris'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 44, '73', NULL, NULL, true
@@ -1280,7 +1280,7 @@ SELECT gen_random_uuid(), 'port-iasos-marina', 1, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Port Iasos Marina', 'Milas Kıyıkışlacık köyü Gökliman mevkiinde, antik Iasos kenti yakınında yer alan küçük bir marinadır.' FROM locations WHERE slug = 'port-iasos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 150, NULL, NULL, NULL, NULL
@@ -1316,7 +1316,7 @@ SELECT gen_random_uuid(), 'atakoy-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ataköy Marina', 'İstanbul Bakırköy''de yer alan marina denizde 1000 tekneye bağlama imkânı sunmaktadır. Akaryakıt istasyonu ve teknik bakım-onarım hizmetleri bulunmaktadır.' FROM locations WHERE slug = 'atakoy-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 1000, '73', NULL, 63, NULL
@@ -1364,7 +1364,7 @@ SELECT gen_random_uuid(), 'viaport-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Viaport Marina', 'İstanbul Tuzla''da Viaport alışveriş ve eğlence kompleksi içinde 2015 yılında açılan marinadır.' FROM locations WHERE slug = 'viaport-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 750, '72', NULL, NULL, NULL
@@ -1404,7 +1404,7 @@ SELECT gen_random_uuid(), 'west-istanbul-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'West Istanbul Marina', 'İstanbul Beylikdüzü''nde denizde 600 tekne bağlama, karada 300 tekne kapasitesine sahip marinadır. 75 ve 700 ton kapasiteli travel liftleri ile bakım-onarım ve refit hizmetleri sunar; gümrük kapısı bulunan giriş limanıdır.' FROM locations WHERE slug = 'west-istanbul-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 600, '72', NULL, 700, NULL
@@ -1452,7 +1452,7 @@ SELECT gen_random_uuid(), 'marinturk-istanbul-city-port', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marinturk İstanbul City Port', 'İstanbul Pendik''te yer alan marina yüzer pontonlarla 785 bağlama kapasitesine sahiptir. 200 tona kadar tekne çekme-indirme imkânı ve bakım-onarım hizmetleri bulunmaktadır.' FROM locations WHERE slug = 'marinturk-istanbul-city-port'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 785, '73', NULL, 200, true
@@ -1500,7 +1500,7 @@ SELECT gen_random_uuid(), 'teos-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Teos Marina', 'İzmir''in Seferihisar ilçesi Sığacık''ta 2010 yılından beri hizmet veren yat limanıdır. Denizde yaklaşık 480, karada 80 tekne kapasitesine sahiptir.' FROM locations WHERE slug = 'teos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 480, '72/16', NULL, NULL, NULL
@@ -1536,7 +1536,7 @@ SELECT gen_random_uuid(), 'port-alacati-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Port Alaçatı Marina', 'İzmir''in Çeşme ilçesi Alaçatı''da yat limanı ile konut ve otel alanlarını birleştiren bir deniz yerleşimidir.' FROM locations WHERE slug = 'port-alacati-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 260, '72', NULL, NULL, NULL
@@ -1572,7 +1572,7 @@ SELECT gen_random_uuid(), 'levent-marina-izmir', 1, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Levent Marina', 'İzmir Üçkuyular''da yer alan marina; İzmir Büyükşehir Belediyesi''ne devredilerek İzmir Marina adıyla yenilendiği yönünde yayınlar bulunmaktadır.' FROM locations WHERE slug = 'levent-marina-izmir'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '73', NULL, NULL, NULL
@@ -1608,7 +1608,7 @@ SELECT gen_random_uuid(), 'ic-cesme-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çeşme Marina', 'Çeşme ilçe merkezinde IC Holding ve Camper & Nicholsons ortaklığında işletilen, 60 metreye kadar teknelere hizmet veren yat limanıdır. Gümrük ve pasaport işlemlerinin yapılabildiği bir giriş limanıdır.' FROM locations WHERE slug = 'ic-cesme-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 400, '72', NULL, 80, NULL
@@ -1644,7 +1644,7 @@ SELECT gen_random_uuid(), 'g-marina-kemer', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'G-Marina Kemer', 'Kemer ilçe merkezinde yer alan marina (eski adıyla Kemer Türkiz Marina) denizde 230 ve karada 140 tekne kapasitesine sahiptir. 2016''dan bu yana Mavi Yeşil International Tourism Ltd. tarafından işletilmektedir.' FROM locations WHERE slug = 'g-marina-kemer'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 230, '73', NULL, NULL, true
@@ -1692,7 +1692,7 @@ SELECT gen_random_uuid(), 'alanya-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Alanya Marina', '10 Şubat 2011''de açılan Alanya Marina, denizde 287 ve karada 150 tekne kapasitesine sahiptir. 100 ton kapasiteli travel lift bulunmaktadır.' FROM locations WHERE slug = 'alanya-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 287, '16/73', NULL, 100, true
@@ -1748,7 +1748,7 @@ SELECT gen_random_uuid(), 'izmir-marina', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İzmir Marina', 'Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova''daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.' FROM locations WHERE slug = 'izmir-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 71, NULL, NULL, NULL, true
@@ -1796,7 +1796,7 @@ SELECT gen_random_uuid(), 'foca-buyukdeniz-rihtimi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Foça Büyükdeniz Rıhtımı', 'Foça Belediyesi tarafından 1994''ten bu yana işletilen Büyükdeniz Rıhtımı''nda özel ve ticari yatlar sözleşmeyle bağlanmakta, misafir teknelere günlük konaklama ile elektrik ve su bağlantısı sağlanmaktadır.' FROM locations WHERE slug = 'foca-buyukdeniz-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'foca-buyukdeniz-rihtimi' AND a.code IN ('electricity', 'water')
@@ -1819,7 +1819,7 @@ SELECT gen_random_uuid(), 'bozburun-yat-yanasma-yeri', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bozburun Yat Yanaşma Yeri', 'Marmaris Belediyesi''nin ücret tarifesinde yer alan Bozburun Yat Yanaşma Yeri''nde sezonluk ve günlük bağlama hizmeti verilmektedir. 80 tekne kapasiteli tesiste elektrik ve su, ön ödemeli kartlı sistemle sağlanmakta, servis botu bulunmaktadır.' FROM locations WHERE slug = 'bozburun-yat-yanasma-yeri'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'bozburun-yat-yanasma-yeri' AND a.code IN ('electricity', 'water')
@@ -1842,7 +1842,7 @@ SELECT gen_random_uuid(), 'marmaris-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marmaris Limanı', 'Muğla Büyükşehir Belediyesi iştiraki MUTTAŞ''ın işlettiği Marmaris Limanı''nda yaklaşık 1.700 metrelik rıhtımda 200 tekneye yanaşma hizmeti verilmektedir. Yatlara su, elektrik, atık alımı, güvenlik ve palamar hizmetleri sunulur; kruvaziyer trafiğiyle karma kullanımlıdır.' FROM locations WHERE slug = 'marmaris-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'marmaris-limani' AND a.code IN ('electricity', 'water', 'security', 'pump_out')
@@ -1877,7 +1877,7 @@ SELECT gen_random_uuid(), 'icmeler-iskelesi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İçmeler İskelesi', 'Marmaris İçmeler''de MUTTAŞ tarafından işletilen iskelede 220 metrelik rıhtım ve 142 metrelik iskelede yaklaşık 40 tekneye yanaşma hizmeti verilmektedir. Atık su alım hizmeti bulunmaktadır.' FROM locations WHERE slug = 'icmeler-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'icmeler-iskelesi' AND a.code IN ('pump_out')
@@ -1912,7 +1912,7 @@ SELECT gen_random_uuid(), 'turunc-iskelesi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Turunç İskelesi', 'Marmaris Turunç Cumhuriyet Meydanı''ndaki 183 metrelik iskelede MUTTAŞ tarafından yaklaşık 30 tekneye yanaşma hizmeti verilmektedir. Su, atık alımı, güvenlik ve palamar hizmeti sunulmaktadır.' FROM locations WHERE slug = 'turunc-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'turunc-iskelesi' AND a.code IN ('water', 'security', 'pump_out')
@@ -1951,7 +1951,7 @@ SELECT gen_random_uuid(), 'bodrum-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bodrum Limanı', 'Bodrum Barış Meydanı''ndaki liman MUTTAŞ tarafından işletilmekte olup 960 metrelik rıhtım ve 140 metrelik yüzer iskelede yaklaşık 230 tekneye yanaşma hizmeti verilmektedir. Kos''a uluslararası feribot kapısıdır.' FROM locations WHERE slug = 'bodrum-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'bodrum-limani' AND a.code IN ('water', 'security')
@@ -1990,7 +1990,7 @@ SELECT gen_random_uuid(), 'gumbet-iskelesi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gümbet İskelesi', 'Bodrum Gümbet''te MUTTAŞ tarafından işletilen, toplam 595 metre uzunluğunda üç iskeleden oluşan tesiste yaklaşık 200 tekneye bağlama hizmeti verilmektedir. Su, güvenlik ve palamar hizmeti sunulmaktadır.' FROM locations WHERE slug = 'gumbet-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'gumbet-iskelesi' AND a.code IN ('water', 'security')
@@ -2029,7 +2029,7 @@ SELECT gen_random_uuid(), 'fethiye-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Fethiye Limanı', 'Fethiye Karagözler''de MUTTAŞ tarafından işletilen limanda yaklaşık 50 tekneye yanaşma hizmeti verilmekte; su, atık alımı, güvenlik ve palamar hizmetleri sunulmaktadır. Rodos''a uluslararası feribot kapısıdır.' FROM locations WHERE slug = 'fethiye-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'fethiye-limani' AND a.code IN ('water', 'security', 'pump_out')
@@ -2068,7 +2068,7 @@ SELECT gen_random_uuid(), 'gocek-belediye-iskelesi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göcek Belediye İskelesi', 'Göcek köyiçindeki belediye iskelesi 1989''da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.fethiye.bel.tr/', NULL, false
 FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
@@ -2087,7 +2087,7 @@ SELECT gen_random_uuid(), 'canakkale-yat-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çanakkale Yat Limanı', 'Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.' FROM locations WHERE slug = 'canakkale-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 120, '73/16', NULL, NULL, NULL
@@ -2123,7 +2123,7 @@ SELECT gen_random_uuid(), 'gelibolu-yat-limani', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gelibolu Yat Limanı', 'Gelibolu''da kuzey rüzgarlarına kapalı doğal limanın iç kısmı yatların bağlanmasına uygundur; barınakta akaryakıt pompası bulunmaktadır.' FROM locations WHERE slug = 'gelibolu-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'gelibolu-yat-limani' AND a.code IN ('fuel')
@@ -2142,7 +2142,7 @@ SELECT gen_random_uuid(), 'erdek-yat-limani', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Erdek Yat Limanı', 'Erdek merkezdeki iskele ve liman yerel tekneler ile kotra ve yatların bağlanmasında kullanılmaktadır; Balıkesir Büyükşehir Belediyesi iskelenin yat limanına dönüştürülmesini planladığını açıklamıştır.' FROM locations WHERE slug = 'erdek-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Güzelyalı Yat Limanı · güven: high · kaynak: www.burulas.com.tr, www.burulas.com.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -2157,7 +2157,7 @@ SELECT gen_random_uuid(), 'guzelyali-yat-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Güzelyalı Yat Limanı', 'Mudanya Güzelyalı''daki liman 2020''den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.' FROM locations WHERE slug = 'guzelyali-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 58, NULL, NULL, NULL, NULL
@@ -2193,7 +2193,7 @@ SELECT gen_random_uuid(), 'ispark-istinye-tekne-park', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İSPARK İstinye Tekne Park', 'İstinye Koyu''nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.' FROM locations WHERE slug = 'ispark-istinye-tekne-park'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 180, '73', NULL, NULL, NULL
@@ -2229,7 +2229,7 @@ SELECT gen_random_uuid(), 'ispark-tarabya-tekne-park', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İSPARK Tarabya Tekne Park', 'Tarabya Koyu''nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.' FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 265, '73', NULL, NULL, NULL
@@ -2265,7 +2265,7 @@ SELECT gen_random_uuid(), 'antalya-kaleici-yat-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Antalya Kaleiçi Yat Limanı', 'Antalya''nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.' FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 65, '16/73', NULL, NULL, NULL
@@ -2301,7 +2301,7 @@ SELECT gen_random_uuid(), 'kas-belediye-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kaş Belediye Limanı', 'Kaş ilçe merkezinin yanındaki eski liman yaklaşık 100 tekne kapasitelidir; yerel gezi-dalış tekneleri ile uğrak yatlar kullanmaktadır. Bağlama tonoz zinciriyle yapılmakta, çevrede ücretli duş-WC ve çamaşırhane bulunmaktadır.' FROM locations WHERE slug = 'kas-belediye-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kas-belediye-limani' AND a.code IN ('shower', 'wc', 'laundry')
@@ -2328,7 +2328,7 @@ SELECT gen_random_uuid(), 'kalkan-belediye-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kalkan Belediye Limanı', 'Kalkan''daki yaklaşık 50 tekne kapasiteli liman ve balıkçı barınağı yerel tekneler ile uğrak yatlara hizmet vermektedir. 2023''te zemin yenileme, çekek yeri ve bağlama halkaları yenileme çalışmaları tamamlanmıştır.' FROM locations WHERE slug = 'kalkan-belediye-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+902428443131', NULL, true
 FROM locations l WHERE l.slug = 'kalkan-belediye-limani'
@@ -2347,7 +2347,7 @@ SELECT gen_random_uuid(), 'ucagiz-iskelesi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Üçağız İskelesi', 'Kekova bölgesindeki Üçağız köy iskelesi yıllarca Demre Belediyesi tarafından işletilmiş, Haziran 2024''te bakanlık ihalesiyle 10 yıllığına özel bir gruba kiralanmıştır. Demre Belediyesi ihalenin iptali için hukuki süreç başlatmıştır.' FROM locations WHERE slug = 'ucagiz-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Demre Yat Limanı · güven: medium · kaynak: www.uab.gov.tr, www.navily.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -2362,7 +2362,7 @@ SELECT gen_random_uuid(), 'demre-yat-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Demre Yat Limanı', 'Ulaştırma ve Altyapı Bakanlığı''nca Çayağzı mevkiinde yaptırılan Demre Yat Limanı 26 Temmuz 2025''te hizmete açılmıştır. 64.000 m² kara ve 120.000 m² korunaklı su alanına sahip tesisin 12 ay hizmet vermesi planlanmaktadır.' FROM locations WHERE slug = 'demre-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, true
@@ -2386,7 +2386,7 @@ SELECT gen_random_uuid(), 'tasucu-limani', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Taşucu Limanı', 'Taşucu''nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.' FROM locations WHERE slug = 'tasucu-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Kapı Creek Restaurant · güven: high · kaynak: www.navily.com, sunseayachting.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -2401,7 +2401,7 @@ SELECT gen_random_uuid(), 'kapi-creek-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kapı Creek Restaurant', 'Skopea Körfezi girişindeki korunaklı Kapı Koyu''nda, iskelesinde yaklaşık 20 tekneye tonozlu bağlama imkânı sunan klasik koy restoranı. Personel bağlamada yardımcı olur.' FROM locations WHERE slug = 'kapi-creek-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, Türk mutfağı', 20, NULL, NULL
 FROM locations WHERE slug = 'kapi-creek-restaurant'
@@ -2428,7 +2428,7 @@ SELECT gen_random_uuid(), 'gobun-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göbün Restaurant', '1979''dan beri işletilen Göbün Koyu restoranı; iki iskelesinde 40 tekneye kadar bağlama kapasitesi vardır. Güneş enerjisiyle elektrik, su, duş/WC ve Wi-Fi sağlanır.' FROM locations WHERE slug = 'gobun-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, mezeler, kuzu tandır', 40, 'yemek yiyene bağlama ücretsiz', true
 FROM locations WHERE slug = 'gobun-restaurant'
@@ -2467,7 +2467,7 @@ SELECT gen_random_uuid(), 'adaia-gocek-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Adaia Göcek Restaurant', 'Wall Bay / Hamam (Kleopatra) Koyu''nda kendi iskelesi olan restoran; eski Wall Bay Restaurant''ın yerinde hizmet verir. İskelede su, duş ve WC mevcuttur.' FROM locations WHERE slug = 'adaia-gocek-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'Akdeniz mutfağı', 30, 'yemek yiyene bağlama ücretsiz', NULL
 FROM locations WHERE slug = 'adaia-gocek-restaurant'
@@ -2494,7 +2494,7 @@ SELECT gen_random_uuid(), 'sarsala-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sarsala Restaurant', 'Küçük Sarsala Koyu''ndaki restoran iskelesi yaklaşık 35 tekne kapasitelidir; su, duş ve WC imkânı bulunur.' FROM locations WHERE slug = 'sarsala-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'Türk mutfağı, deniz ürünleri', 35, 'yemek yiyene bağlama ücretsiz', NULL
 FROM locations WHERE slug = 'sarsala-restaurant'
@@ -2521,7 +2521,7 @@ SELECT gen_random_uuid(), 'boynuzbuku-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Boynuzbükü Restaurant', 'Skopea Körfezi''nin kuzeyindeki Boynuzbükü Koyu''nda iskeleli koy restoranı; iskelede yaklaşık 18 tekneye yer vardır ve su temini mümkündür.' FROM locations WHERE slug = 'boynuzbuku-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, 18, NULL, NULL
 FROM locations WHERE slug = 'boynuzbuku-restaurant'
@@ -2544,7 +2544,7 @@ SELECT gen_random_uuid(), 'miori-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Miori Restaurant', 'Bedri Rahmi (Taşyaka / Tomb Bay) Koyu''nda kendi iskelesi olan modern Akdeniz restoranı.' FROM locations WHERE slug = 'miori-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'modern Akdeniz mutfağı', NULL, 'yemek yiyene bağlama ücretsiz', true
 FROM locations WHERE slug = 'miori-restaurant'
@@ -2571,7 +2571,7 @@ SELECT gen_random_uuid(), 'ersoy-restaurant-orhaniye', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ersoy Restaurant', 'Orhaniye Keçibükü''nde kendi iskelesi olan aile restoranı; iskelede elektrik, su, duş, WC ve Wi-Fi imkânı bulunur.' FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
@@ -2594,7 +2594,7 @@ SELECT gen_random_uuid(), 'aurora-restaurant-selimiye', 5, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Aurora Restaurant', 'Selimiye kıyısında kendi iskelesi olan restoran; yemek yiyen teknelere bağlama, su, elektrik ve Wi-Fi sunulur.' FROM locations WHERE slug = 'aurora-restaurant-selimiye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'Türk mutfağı, deniz ürünleri', NULL, 'yemek yiyene bağlama ücretsiz', NULL
 FROM locations WHERE slug = 'aurora-restaurant-selimiye'
@@ -2621,7 +2621,7 @@ SELECT gen_random_uuid(), 'poseidon-selimiye', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Poseidon Boutique Hotel & Yacht Club', 'Selimiye''de iskeleli butik otel ve restoran; misafir teknelere kendi iskelesinde bağlama imkânı sunar.' FROM locations WHERE slug = 'poseidon-selimiye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'poseidon-selimiye'
@@ -2656,7 +2656,7 @@ SELECT gen_random_uuid(), 'dirsek-buku-restaurant', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dirsek Bükü Restaurant', 'Karayolu bağlantısı olmayan Dirsek Bükü''ndeki tek restoran; taş iskelesine kıçtankara bağlanılır. Nisan-Ekim arası açıktır ve akşamları meze büfesiyle bilinir.' FROM locations WHERE slug = 'dirsek-buku-restaurant'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, mezeler, ev yemekleri, ızgara', NULL, NULL, NULL
 FROM locations WHERE slug = 'dirsek-buku-restaurant'
@@ -2688,7 +2688,7 @@ SELECT gen_random_uuid(), 'bozburun-yacht-club', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bozburun Yacht Club', 'Bozburun Koyu kıyısında iskelesi ve restoranı olan yat kulübü ve butik otel; misafir teknelere rıhtım bağlaması sunar.' FROM locations WHERE slug = 'bozburun-yacht-club'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'bozburun-yacht-club'
@@ -2711,7 +2711,7 @@ SELECT gen_random_uuid(), 'octopus-restaurant-sogut', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Octopus Restaurant', 'Söğüt Koyu''ndaki köklü restoran; teknelere kendi iskelesinde bağlama imkânı verir. Duş, WC ve Wi-Fi mevcuttur.' FROM locations WHERE slug = 'octopus-restaurant-sogut'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri', NULL, NULL, NULL
 FROM locations WHERE slug = 'octopus-restaurant-sogut'
@@ -2734,7 +2734,7 @@ SELECT gen_random_uuid(), 'loryma-restaurant-bozukkale', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Loryma Restaurant', 'Bozukkale (Loryma) Koyu''nda 20''den fazla yat kapasiteli iskelesi ve tonozları olan restoran; personel yanaşmada yardım eder. İskele önü derinliği 8-10 m''dir.' FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, Türk mutfağı', 20, 'restoran misafirlerine bağlama ücretsiz', NULL
 FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
@@ -2777,7 +2777,7 @@ SELECT gen_random_uuid(), 'rosemary-cokertme', 5, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Rosemary Yacht Harbour & Restaurant', 'Çökertme Koyu''nda restoran iskelesi ve tonozlarıyla hizmet veren işletme; VHF 16''dan ''Rosemary Yacht Harbour'' çağrısıyla ulaşılır. İskelede su, elektrik, Wi-Fi ve duş/WC mevcuttur.' FROM locations WHERE slug = 'rosemary-cokertme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, Türk mutfağı', NULL, NULL, NULL
 FROM locations WHERE slug = 'rosemary-cokertme'
@@ -2820,7 +2820,7 @@ SELECT gen_random_uuid(), 'denizkizi-kaptan-okluk', 5, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Denizkızı Kaptan Restaurant', 'Gökova''nın Okluk (Değirmen Bükü) Koyu''nda yaklaşık 20 tekne kapasiteli iskelesi olan restoran ve market; iskelede elektrik ve su sağlanır.' FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, 'deniz ürünleri, et yemekleri', 20, NULL, NULL
 FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
@@ -2863,7 +2863,7 @@ SELECT gen_random_uuid(), 'gocek-yakit-iskelesi-po', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göcek Yakıt İskelesi (Petrol Ofisi)', 'Göcek köy rıhtımının kuzeydoğu başında yer alan Petrol Ofisi yakıt iskelesi. Pompa hortumu iskelenin tamamına yetişir; tekneler aborda olarak ikmal yapar.' FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, 'Nakit ve kredi kartı'
 FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
@@ -2886,7 +2886,7 @@ SELECT gen_random_uuid(), 'gocek-lukoil-yakit-iskelesi', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göcek Lukoil Yakıt İskelesi', 'Göcek koyunun batı kıyısında yüzer pontonlu Lukoil yakıt istasyonu. Tekneler pontona aborda olur; derinlik 4 m ve üzeridir, büyük yatlar için mobil tanker çağrılabilir.' FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, 4, 'Nakit ve kredi kartı'
 FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
@@ -2913,7 +2913,7 @@ SELECT gen_random_uuid(), 'datca-yakit-iskelesi', 6, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Datça Limanı Yakıt İkmal Noktası', 'Datça yat limanındaki yakıt ikmal noktası; kaynaklar sabit iskele ile mini-tanker servisi konusunda çelişmektedir.' FROM locations WHERE slug = 'datca-yakit-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'datca-yakit-iskelesi'
@@ -2936,7 +2936,7 @@ SELECT gen_random_uuid(), 'palmiye-yakit-kecibuku', 6, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Palmiye Yakıt İskelesi', 'Keçi Bükü''nde (Orhaniye) kıyıda yakıt tankı ve iskeleye uzanan ikmal hortumu bulunan küçük tesis; yakıt için VHF 73 kanalından çağrı yapılır.' FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
@@ -2959,7 +2959,7 @@ SELECT gen_random_uuid(), 'degirmen-buku-ingiliz-limani', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Değirmen Bükü (İngiliz Limanı)', 'Gökova Körfezi''nin en büyük koyu olan Değirmen Bükü yaklaşık 3 km uzunluğunda olup çevresinde çok sayıda güvenli demirleme yeri barındırır; batı kolu İngiliz Limanı olarak bilinir. 6-7 m derinliğe demirlenir; dip çamurdur, tutuş iyidir ve koy iyi korunaklıdır.' FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
@@ -2978,7 +2978,7 @@ SELECT gen_random_uuid(), 'okluk-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Okluk Koyu', 'Değirmen Bükü''nün güneydoğusundaki Okluk Koyu her yönden korunaklı bir demirleme alanıdır ve kayalıklardaki deniz kızı heykeliyle bilinir. Derinlik iç kesimde 12 m''den kıyıya doğru 7-8 m''ye düşer; dip çamurdur ve tutuş mükemmeldir.' FROM locations WHERE slug = 'okluk-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'okluk-koyu'
@@ -2997,26 +2997,26 @@ SELECT gen_random_uuid(), 'longoz-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Löngöz Koyu (Kargılı)', 'Gökova Körfezi''nin güney kıyısında, Değirmen Bükü''nün batısında yer alan dar ve derin bir koydur. Dip kum, kaya ve çamur karışımıdır; demirlemeye izin verilir ve koyda küçük bir iskele bulunur.' FROM locations WHERE slug = 'longoz-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'longoz-koyu'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Sedir Adası Demirleme Alanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Sedir Adası Demirleme Alanı · güven: high · kaynak: turkeymarinas.blogspot.com, turkeymarinas.blogspot.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'sedir-adasi-demirleme', 8, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-ula'),
-  'Sedir Adası Demirleme Alanı', 'Antik Kedrai kentine ve Kleopatra Plajı''na ev sahipliği yapan Sedir Adası çevresinde doğu koyunda 8-12 m, güney koyunda 6-9 m derinliğe demirlenir. Ana demir yeri kuzey rüzgarlarına açıktır; güney koyu kuzey rüzgarlarına karşı daha korunaklıdır.',
+  'Sedir Adası Demirleme Alanı', 'Antik Kedrai kentine ve Kleopatra Plajı''na ev sahipliği yapan Sedir Adası çevresinde doğu koyunda 8-12 m, güney koyunda 6-9 m derinliğe demirlenir. Ana demir yeri kuzey rüzgarlarına açıktır; güney koyu kuzey rüzgarlarına karşı daha korunaklıdır. YOĞUNLUK (kaynaklı): Kleopatra plajı yüksek sezonda özellikle 13:00''ten sonra aşırı kalabalıklaşır — mümkün olduğunca sabah erken gelin; plaj 19:00''da kapanır. İskele günübirlik teknelerce tutulur ve yazın çok kalabalıktır. Adaya çıkış biletli/ücretlidir; gece adaya çıkmak yasaktır (demirde gecelemek serbest).',
   ST_SetSRID(ST_MakePoint(28.207395, 36.994373), 4326)::geography,
   NULL, NULL, 6, 12,
   NULL, 'free', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Sedir Adası Demirleme Alanı', 'Antik Kedrai kentine ve Kleopatra Plajı''na ev sahipliği yapan Sedir Adası çevresinde doğu koyunda 8-12 m, güney koyunda 6-9 m derinliğe demirlenir. Ana demir yeri kuzey rüzgarlarına açıktır; güney koyu kuzey rüzgarlarına karşı daha korunaklıdır.' FROM locations WHERE slug = 'sedir-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+SELECT id, 'tr', 'Sedir Adası Demirleme Alanı', 'Antik Kedrai kentine ve Kleopatra Plajı''na ev sahipliği yapan Sedir Adası çevresinde doğu koyunda 8-12 m, güney koyunda 6-9 m derinliğe demirlenir. Ana demir yeri kuzey rüzgarlarına açıktır; güney koyu kuzey rüzgarlarına karşı daha korunaklıdır. YOĞUNLUK (kaynaklı): Kleopatra plajı yüksek sezonda özellikle 13:00''ten sonra aşırı kalabalıklaşır — mümkün olduğunca sabah erken gelin; plaj 19:00''da kapanır. İskele günübirlik teknelerce tutulur ve yazın çok kalabalıktır. Adaya çıkış biletli/ücretlidir; gece adaya çıkmak yasaktır (demirde gecelemek serbest).' FROM locations WHERE slug = 'sedir-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'kuzey rüzgarlarına açıktır; kuvvetli rüzgarda belirgin dalga girer', true
 FROM locations WHERE slug = 'sedir-adasi-demirleme'
@@ -3035,7 +3035,7 @@ SELECT gen_random_uuid(), 'akbuk-koyu-gokova', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Akbük Koyu (Gökova)', 'Gökova Körfezi''nin kuzey kıyısında, çam ormanlarıyla çevrili bir demirleme koyudur. Dip kumdur; demirlemeye izin verilir ve kıyıda plaj ile küçük işletmeler bulunur.' FROM locations WHERE slug = 'akbuk-koyu-gokova'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'akbuk-koyu-gokova'
@@ -3054,7 +3054,7 @@ SELECT gen_random_uuid(), 'tuzla-koyu-gokova', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tuzla (Çanak) Koyu', 'Gökova Körfezi''nin güney kıyısında, Löngöz''ün batısında yer alan bir demirleme koyudur. Dip kumdur; demirlemeye izin verilir ve koyda iskele imkânı bulunur.' FROM locations WHERE slug = 'tuzla-koyu-gokova'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'tuzla-koyu-gokova'
@@ -3073,7 +3073,7 @@ SELECT gen_random_uuid(), 'bencik-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bencik Koyu', 'Hisarönü Körfezi''nin iç ucunda, Datça Yarımadası''nın en dar noktasında yer alan derin ve dar, fiyort görünümlü bir koydur. Dip çamurdur; demirleyip kıçtan karaya halat verilebilir.' FROM locations WHERE slug = 'bencik-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'bencik-koyu'
@@ -3092,7 +3092,7 @@ SELECT gen_random_uuid(), 'selimiye-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Selimiye Koyu Demirleme Alanı', 'Bozburun Yarımadası''ndaki Selimiye köyünün önünde yer alan geniş bir demirleme alanıdır. Dip kum ve yosundur; demirlemeye ve kıçtan karaya bağlanmaya izin verilir.' FROM locations WHERE slug = 'selimiye-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'selimiye-koyu-demirleme'
@@ -3111,7 +3111,7 @@ SELECT gen_random_uuid(), 'keci-buku-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Keçi Bükü (Orhaniye) Demirleme Alanı', 'Hisarönü Körfezi''nin ağzında yer alan Keçi Bükü, ortasındaki kale kalıntılı adacık ve Kızkumu kum setiyle bilinir. Koy tüm rüzgarlara karşı iyi korunaklıdır; girişin doğu geçidinden seyredilmesi önerilir.' FROM locations WHERE slug = 'keci-buku-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'keci-buku-demirleme'
@@ -3130,7 +3130,7 @@ SELECT gen_random_uuid(), 'dirsek-buku-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dirsek Bükü Demirleme Alanı', 'Hisarönü Körfezi''nin güneybatı kıyısında, karayolu bağlantısı olmayan L şeklinde ıssız bir koydur ve bölge koyları arasında en iyi korunmayı sağlar. Dip kumdur ve tutuş iyidir.' FROM locations WHERE slug = 'dirsek-buku-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'kuvvetli kuzey rüzgarlarında koya dalga girer', true
 FROM locations WHERE slug = 'dirsek-buku-koyu'
@@ -3149,7 +3149,7 @@ SELECT gen_random_uuid(), 'serce-limani', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Serçe Limanı', 'Bozburun Yarımadası''nın güney kıyısında, yaklaşık 135 m genişliğinde dar bir girişle girilen fiyort benzeri bu doğal liman her havada korunma sağlar. Kuzey bölümde 10 m, güney bölümde 5-8 m derinlikte kıçtan karaya demirlenir; dip iyi tutar.' FROM locations WHERE slug = 'serce-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'hakim rüzgar sert estiğinde bir miktar dalga girebilir', true
 FROM locations WHERE slug = 'serce-limani'
@@ -3168,7 +3168,7 @@ SELECT gen_random_uuid(), 'gerbekse-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gerbekse Koyu', 'Marmaris ile Bozburun arasında, kıyısından Bizans dönemi kilise kalıntıları görülen küçük bir koydur. Plaj önünde 5-7 m derinliğe demirlenir; koy meltemiye karşı iyi korunaklıdır.' FROM locations WHERE slug = 'gerbekse-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'gerbekse-koyu'
@@ -3187,7 +3187,7 @@ SELECT gen_random_uuid(), 'sogut-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Söğüt Koyu Demirleme Alanı', 'Bozburun Yarımadası''nın güneyindeki Söğüt köyünün önünde yer alan bir demirleme alanıdır. Dip kum, yosun ve çamur karışımıdır; demirlemeye izin verilir.' FROM locations WHERE slug = 'sogut-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'sogut-koyu-demirleme'
@@ -3206,7 +3206,7 @@ SELECT gen_random_uuid(), 'kumlubuk-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kumlubük Koyu', 'Marmaris yakınında, Amos antik kentinin eteklerinde yer alan geniş kumlu bir koydur. Yat kulübü iskelesi önünde 3,5-4,5 m derinlik bulunur ve 15 m derinlikte 18 bağlama şamandırası mevcuttur.' FROM locations WHERE slug = 'kumlubuk-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'kumlubuk-koyu'
@@ -3225,7 +3225,7 @@ SELECT gen_random_uuid(), 'ciftlik-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çiftlik Koyu', 'Marmaris''in yaklaşık 14 deniz mili güneybatısında yer alan koy, önündeki Çiftlik Adası sayesinde meltemiye karşı korunur. Kuzeybatıda 7-10 m, ada tarafında 5-9 m derinliğe demirlenir; kıyı açığındaki sığ resiflere dikkat edilmelidir.' FROM locations WHERE slug = 'ciftlik-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'güneye açıktır; koyda sağanak rüzgarlar görülür', true
 FROM locations WHERE slug = 'ciftlik-koyu'
@@ -3244,7 +3244,7 @@ SELECT gen_random_uuid(), 'kuruca-buku', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kuruca Bükü', 'Datça Yarımadası''nın güney kıyısında, çam ormanlarıyla çevrili kuzeybatıya girintili bir koydur. Kamp alanı önünde 6-10 m derinliğe demirlenir; güneydoğu rüzgarları dışında her yönden korunma sağlar.' FROM locations WHERE slug = 'kuruca-buku'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'girişte hakim rüzgar dalgası hissedilir; güneydoğu rüzgarlarına açıktır', true
 FROM locations WHERE slug = 'kuruca-buku'
@@ -3263,7 +3263,7 @@ SELECT gen_random_uuid(), 'knidos-antik-limani', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Knidos Antik Limanı', 'Datça Yarımadası''nın batı ucunda, antik Knidos kentinin kalıntılarının önündeki tarihi limanda demirlenir. Dip kum, kaya ve yosun karışımıdır; demirlemeye izin verilir.' FROM locations WHERE slug = 'knidos-antik-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'knidos-antik-limani'
@@ -3282,7 +3282,7 @@ SELECT gen_random_uuid(), 'mersincik-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mersincik Koyu', 'Datça Yarımadası''nın kuzeybatı ucunda yer alan ıssız bir demirleme koyudur. Dip kum ve yosundur; demirlemeye izin verilir ve kıyıda hizmet bulunmaz.' FROM locations WHERE slug = 'mersincik-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'mersincik-koyu'
@@ -3301,7 +3301,7 @@ SELECT gen_random_uuid(), 'siralibuk-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sıralıbük Koyu', 'Göcek Körfezi''nin batı kıyısında, Sarsala ile Taşyaka arasında yer alan doğal bir demirleme koyudur. Zemin kum, çamur, kaya ve yosun karışımıdır; demirleme ve kıçtan karaya halat verme uygulanır.' FROM locations WHERE slug = 'siralibuk-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, false
 FROM locations WHERE slug = 'siralibuk-koyu'
@@ -3320,7 +3320,7 @@ SELECT gen_random_uuid(), 'kille-buku', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kille Bükü', 'Göcek Körfezi''nin batı kıyısında, Boynuzbükü''nün güneyinde yer alan sakin bir demirleme koyudur. Zemin kumdur; demirleme ve kıçtan karaya bağlama yapılır, koyda tesis bulunmaz.' FROM locations WHERE slug = 'kille-buku'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, false
 FROM locations WHERE slug = 'kille-buku'
@@ -3339,7 +3339,7 @@ SELECT gen_random_uuid(), 'yassica-adalari', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yassıca Adaları Demirleme Alanı', 'Göcek önünde yer alan alçak ada grubudur; tekneler adalar arasındaki sığ kumluk alanda demirler veya kıçtan karaya bağlanır. Zemin kum ve kayadır; bölgede az sayıda misafir şamandırası bildirilmiştir.' FROM locations WHERE slug = 'yassica-adalari'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, false
 FROM locations WHERE slug = 'yassica-adalari'
@@ -3358,7 +3358,7 @@ SELECT gen_random_uuid(), 'tersane-adasi-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tersane Adası Koyu', 'Tersane Adası''nın koyunda, girişinde Bizans-Osmanlı dönemi tersane kalıntıları bulunan tarihi bir demirleme yeri vardır. Yaklaşık 14 m derinlikte demirlenip kıçtan karaya bağlanılır, tutuş iyidir; koyun dibindeki iki küçük ağız sığdır.' FROM locations WHERE slug = 'tersane-adasi-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'kuzey-kuzeybatı rüzgarlarına açık', false
 FROM locations WHERE slug = 'tersane-adasi-koyu'
@@ -3377,7 +3377,7 @@ SELECT gen_random_uuid(), 'hamam-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Hamam Koyu (Manastır Koyu) Demirleme Alanı', 'Manastır Koyu olarak da bilinen koy, kıyısındaki ''Kleopatra Hamamı'' kalıntılarıyla ünlü bir demirleme alanıdır. Güney/batı kesiminde 10-12 m derinlikte kumlu zemine demirlenir; koy kuzeye açıktır ve güneydoğu adacığından uzanan resif tehlike oluşturur.' FROM locations WHERE slug = 'hamam-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'kuzeye açık', false
 FROM locations WHERE slug = 'hamam-koyu-demirleme'
@@ -3396,7 +3396,7 @@ SELECT gen_random_uuid(), 'katranci-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Katrancı Koyu', 'Fethiye Körfezi''nin doğu kıyısında, ormanlık tabiat parkı içinde yer alan bir koydur. Zemin çamurdur ve demirlemeye izin verilir; kıyıda plaj ve mevsimlik büfe bulunur.' FROM locations WHERE slug = 'katranci-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'katranci-koyu'
@@ -3415,7 +3415,7 @@ SELECT gen_random_uuid(), 'kucuk-kargi-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Küçük Kargı Koyu', 'Fethiye Körfezi''nin doğu kıyısında, Katrancı yakınında çam ormanlarıyla çevrili bir demirleme koyudur. Zemin çamurdur ve demirlemeye izin verilir; kıyıda plaj vardır.' FROM locations WHERE slug = 'kucuk-kargi-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'kucuk-kargi-koyu'
@@ -3434,7 +3434,7 @@ SELECT gen_random_uuid(), 'turunc-pinari-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Turunç Pınarı Koyu', 'Fethiye liman girişinin yaklaşık 2 mil batısında, körfezin kuzey kıyısında restoranıyla bilinen bir koydur. Yaz aylarında genellikle sakindir ve demirlemeye uygundur; koy dışında zemin 45-50 m''ye dik iner.' FROM locations WHERE slug = 'turunc-pinari-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'yaz döneminde genellikle sakin', true
 FROM locations WHERE slug = 'turunc-pinari-koyu'
@@ -3453,7 +3453,7 @@ SELECT gen_random_uuid(), 'gobun-samandira-sahasi', 9, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, false
 FROM locations WHERE slug = 'gobun-samandira-sahasi'
@@ -3472,7 +3472,7 @@ SELECT gen_random_uuid(), 'sarsala-samandira-sahasi', 9, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'kuzeydoğuya açık', false
 FROM locations WHERE slug = 'sarsala-samandira-sahasi'
@@ -3491,7 +3491,7 @@ SELECT gen_random_uuid(), 'boynuzbuku-samandira-sahasi', 9, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, false
 FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
@@ -3510,7 +3510,7 @@ SELECT gen_random_uuid(), 'bedri-rahmi-samandira-sahasi', 9, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, false
 FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
@@ -3529,7 +3529,7 @@ SELECT gen_random_uuid(), 'poyrazkoy-balikci-barinagi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Poyrazköy Balıkçı Barınağı ve Koyu', 'İstanbul Boğazı''nın Karadeniz çıkışına 1,5 mil mesafede, 470 m ana mendirekle korunan barınak; tekneler mendirek gerisinde demirler veya rıhtıma bağlanır. Tutuş iyi, her yönden korunaklıdır. Talep üzerine yakıt getirtilebildiği ve küçük onarım imkânı bildirilmektedir.' FROM locations WHERE slug = 'poyrazkoy-balikci-barinagi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'poyrazkoy-balikci-barinagi' AND a.code IN ('electricity', 'water')
@@ -3556,7 +3556,7 @@ SELECT gen_random_uuid(), 'cam-limani-koyu-heybeliada', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çam Limanı Koyu (Heybeliada)', 'Heybeliada''nın güneybatısında, Adalar''ın hâkim kuzey/kuzeydoğu rüzgârlarına karşı gerçek anlamda korunaklı tek doğal demir yeri. Kum ve yosun zeminde tutuş iyidir; hafta sonları İstanbul''dan gelen 50-60 tekneyi ağırlar.' FROM locations WHERE slug = 'cam-limani-koyu-heybeliada'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'K/KD rüzgârlarında korunaklı, G rüzgârlarına açık', true
 FROM locations WHERE slug = 'cam-limani-koyu-heybeliada'
@@ -3575,7 +3575,7 @@ SELECT gen_random_uuid(), 'buyukada-kuzey-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Büyükada Kuzey Kıyısı Demirleme', 'Büyükada''nın kuzey kıyısında, vapur iskelesinin batısında 3-5 m derinlikte, kum-yosun zeminli demirleme alanı. Hâkim kuzey/kuzeydoğu rüzgârlarına açık olduğundan yalnızca durgun havada uygundur; gece kalış tavsiye edilmez.' FROM locations WHERE slug = 'buyukada-kuzey-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'K/KD rüzgârlarına açık', true
 FROM locations WHERE slug = 'buyukada-kuzey-demirleme'
@@ -3594,7 +3594,7 @@ SELECT gen_random_uuid(), 'burgazada-restoran-samandiralari', 5, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Burgazada Restoran Bağlama Şamandıraları', 'Burgazada''da doğu iskelesinin güneyinde kıyı restoranlarının döşediği yaklaşık 15 bağlama şamandırası bulunur; iskele rüzgâraltında makul korunma sağlar. Çok durgun hava dışında gece kalışa uygun değildir, ağırlıkla öğle yemeği durağıdır.' FROM locations WHERE slug = 'burgazada-restoran-samandiralari'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, 15, NULL, NULL
 FROM locations WHERE slug = 'burgazada-restoran-samandiralari'
@@ -3617,7 +3617,7 @@ SELECT gen_random_uuid(), 'buyukada-balikci-barinagi', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Büyükada Balıkçı Barınağı', 'Büyükada''da yaklaşık 80 tekne kapasiteli, 115 m mendirekli barınak; elektrik, su ve yakıt imkânı bildirilmektedir. Ağırlıklı olarak yerel ve balıkçı tekneleri kullanır.' FROM locations WHERE slug = 'buyukada-balikci-barinagi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'buyukada-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
@@ -3648,7 +3648,7 @@ SELECT gen_random_uuid(), 'marmara-adasi-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marmara Adası Limanı', 'Marmara Adası merkez yerleşimindeki belediye limanı; yaklaşık 125 tekne kapasitelidir ve kuzey rıhtımda 6-8 misafir yat baştan/kıçtan kara bağlanabilir. Hâkim kuzey/kuzeydoğu rüzgârlarında korunma iyidir, dağdan sağanak rüzgâr inebilir. Rıhtım dibi 1,5-2,5 m; su çekimi büyük tekneler rıhtım açığında demirlemelidir.' FROM locations WHERE slug = 'marmara-adasi-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 125, NULL, NULL, NULL, NULL
@@ -3684,7 +3684,7 @@ SELECT gen_random_uuid(), 'saraylar-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Saraylar Limanı (Marmara Adası)', 'Marmara Adası''nın kuzeyindeki mermer bloklarla inşa edilmiş belediye barınağı; yaklaşık 50 yat (azami 15 m) doğu mendireğine aborda veya kıçtan kara bağlanabilir. Çamur zeminde tutuş iyi, korunma çok iyidir. Batı rıhtımı sığdır (~1,5 m).' FROM locations WHERE slug = 'saraylar-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'saraylar-limani' AND a.code IN ('water', 'electricity', 'fuel', 'restaurant', 'market')
@@ -3711,7 +3711,7 @@ SELECT gen_random_uuid(), 'yigitler-limani-avsa', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yiğitler Limanı (Avşa Adası)', 'Avşa Adası''nın doğu kıyısındaki Yiğitler köyü limanı; misafir tekneler doğu havuzunun batı duvarına kıçtan kara bağlanır veya çift demirle yanaşır, belediye görevlisi bağlama ücreti toplar. Kum zeminde tutuş iyi, doğu havuzunda korunma iyidir.' FROM locations WHERE slug = 'yigitler-limani-avsa'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'yigitler-limani-avsa' AND a.code IN ('water', 'electricity', 'restaurant', 'market')
@@ -3730,7 +3730,7 @@ SELECT gen_random_uuid(), 'avsa-turkeli-demirleme', 8, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Avşa Türkeli Önü Demirleme', 'Avşa Adası''nın batı kıyısındaki Türkeli merkez yerleşimi önünde demirleme alanı; kasabada market, restoran ve pansiyon imkânları geniştir. İstanbul''a deniz otobüsü/feribot bağlantısı vardır. Batı sektör rüzgârlarına açıktır.' FROM locations WHERE slug = 'avsa-turkeli-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'batı sektör rüzgârlarına açık', true
 FROM locations WHERE slug = 'avsa-turkeli-demirleme'
@@ -3753,7 +3753,7 @@ SELECT gen_random_uuid(), 'ekinlik-adasi-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ekinlik Adası Demirleme', 'Avşa''nın kuzeybatısındaki Ekinlik (Koutali) Adası önünde kum zeminli demirleme alanı; demirleme serbesttir. Kıyıda küçük büfe ve plaj imkânı vardır, su ve iskele hizmeti yoktur.' FROM locations WHERE slug = 'ekinlik-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'ekinlik-adasi-demirleme'
@@ -3772,7 +3772,7 @@ SELECT gen_random_uuid(), 'pasalimani-adasi-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Paşalimanı Adası Demirleme', 'Paşalimanı Adası önünde 5-10 m derinlikte, kum-yosun zeminli açık demirleme; demir zemine oturduğunda tutuş iyidir. Kıyıda restoran ve fırın bulunur.' FROM locations WHERE slug = 'pasalimani-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'pasalimani-adasi-demirleme'
@@ -3795,7 +3795,7 @@ SELECT gen_random_uuid(), 'karabiga-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Karabiga Limanı', 'Biga''ya bağlı Karabiga''da balıkçı ve kuruyük iskelesi olarak çalışan liman; yatlar genellikle balıkçı rıhtımının dış yüzüne kıçtan kara bağlanır, gerekirse kuzeydeki ticari rıhtım kullanılır. Doğu/kuzeydoğu rüzgârlarında rahatsız edici soluğan girer, demir tutuşu zayıf bildirilmiştir. Su ve elektrik yoktur.' FROM locations WHERE slug = 'karabiga-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Çakılköy Balıkçı Barınağı (Kapıdağ) · güven: low · kaynak: turkeymarinas.blogspot.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3810,7 +3810,7 @@ SELECT gen_random_uuid(), 'cakilkoy-balikci-barinagi', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çakılköy Balıkçı Barınağı (Kapıdağ)', 'Kapıdağ Yarımadası''nın doğu kıyısında, Bandırma''nın 6 mil kuzeydoğusunda 695 m mendirekli büyük barınak; rıhtım trol tekneleriyle dolu olduğundan misafir tekneler barınağın kuzey ucunda demirler. Tutuş iyidir ve korunaklı bir mola noktasıdır.' FROM locations WHERE slug = 'cakilkoy-balikci-barinagi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'cakilkoy-balikci-barinagi' AND a.code IN ('fuel', 'water', 'electricity', 'market', 'restaurant')
@@ -3829,7 +3829,7 @@ SELECT gen_random_uuid(), 'sarkoy-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Şarköy Limanı', 'Şarköy ilçe merkezindeki liman; misafir tekneler kıçtan kara veya aborda bağlanabilir. Elektrik, su, duş, WC ve yakıt (dizel/benzin) imkânı bildirilmektedir.' FROM locations WHERE slug = 'sarkoy-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'sarkoy-limani' AND a.code IN ('electricity', 'water', 'shower', 'wc', 'fuel')
@@ -3848,7 +3848,7 @@ SELECT gen_random_uuid(), 'bozcaada-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bozcaada Limanı', 'Bozcaada''nın kuzeydoğusunda, kalenin dibindeki ana liman. Ziyaretçi tekneler dalgakıran boyunca kıçtan kara veya aborda bağlanır; kıyıdan ~40 m açıkta zincir donanımı vardır. Doğu-güneydoğu rüzgârları dışında her yönden yeterli korunak sağlar. Rıhtımda 13 su/elektrik noktası bulunur. Resmî yat kapasitesi 30 (TKYGM listesi); balıkçı tekneleriyle birlikte toplam ~125 tekne barındırır. Azami su çekimi ~3 m. Tankerle yakıt ikmali, kızak/çekek, buz ve halat temini bildirilmektedir.' FROM locations WHERE slug = 'bozcaada-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 30, '16', NULL, NULL, NULL
@@ -3884,7 +3884,7 @@ SELECT gen_random_uuid(), 'gokceada-kalekoy-limani', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gökçeada Kaleköy Limanı', 'Gökçeada''nın kuzey kıyısındaki yeni liman; adada yatlara en uygun bağlama yeri. Kuzey dalgakıranı boyunca aborda bağlanılır, doluysa balıkçı teknelerine aborda gerekebilir. Girişte 5,0-5,5 m, kuzey rıhtımda 3,0-3,5 m derinlik; girişte kuzey dalgakıran ucundaki kum sığlığına dikkat. Her yönden mükemmel korunak. Rıhtım boyunca su ve elektrik noktaları, kıyıda balık restoranları vardır; yakıt yoktur. Merkeze saat başı minibüs kalkar.' FROM locations WHERE slug = 'gokceada-kalekoy-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'gokceada-kalekoy-limani' AND a.code IN ('electricity', 'water', 'wc', 'restaurant', 'wifi')
@@ -3903,7 +3903,7 @@ SELECT gen_random_uuid(), 'gokceada-kuzu-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gökçeada Kuzu Limanı', 'Adanın kuzeydoğu ucundaki eski ana liman ve feribot iskelesi; TDİ işletmesindedir. Yatlar için imkânları kısıtlı, sıkışık bir liman olup özellikle kuzey-kuzeydoğu rüzgârlarında iyi korunak sağlar; kötü havada sığınma limanı olarak kullanılır. Yerel teknelerle dolu olabilir. Su temini sınırlı, yakıt istasyonu yoktur. Kaleköy 3 mil mesafede daha iyi alternatiftir.' FROM locations WHERE slug = 'gokceada-kuzu-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.tdi.gov.tr/gokceada-kuzu-limani/', NULL, false
 FROM locations l WHERE l.slug = 'gokceada-kuzu-limani'
@@ -3922,7 +3922,7 @@ SELECT gen_random_uuid(), 'behramkale-assos-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Behramkale (Assos) Antik Limanı', 'Assos antik kentinin altındaki küçük tarihi taş liman; rıhtım boyunca balık restoranları sıralanır ve ziyaretçi tekneler restoran önlerine bağlanır. Kapasite ~50 tekne (çoğu yerel/gezi teknesi). Dalgakıranlar kuzey rüzgârlarına kapalıdır; giriş dar olduğundan gece yaklaşımda dikkat gerekir. Güneybatı sektör rüzgârlarında rahatsız olabilir. Elektrik, içme suyu ve WC mevcuttur.' FROM locations WHERE slug = 'behramkale-assos-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'behramkale-assos-limani' AND a.code IN ('electricity', 'water', 'wc', 'restaurant')
@@ -3941,7 +3941,7 @@ SELECT gen_random_uuid(), 'kucukkuyu-limani', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Küçükkuyu Limanı', 'Edremit Körfezi''nin kuzey kıyısında, Kazdağı eteklerindeki Küçükkuyu beldesinin dalgakıranlı limanı. Ağırlıklı balıkçı ve gezi teknesi barınağı olmakla birlikte iskeleye/rıhtıma bağlanma mümkündür. Kuzey sektör rüzgârlarında korunaklıdır. Kasabada market ve restoranlar yürüme mesafesindedir.' FROM locations WHERE slug = 'kucukkuyu-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Burhaniye (Ören) Yat Limanı · güven: high · kaynak: turkeymarinas.blogspot.com, www.wikiderya.org ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3956,7 +3956,7 @@ SELECT gen_random_uuid(), 'burhaniye-oren-yat-limani', 2, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Burhaniye (Ören) Yat Limanı', 'Edremit Körfezi''nin güneydoğusunda, Burhaniye İskele/Ören mevkiindeki belediye işletmeli yat limanı ve bitişik balıkçı barınağı. Kapasite ~250 tekne; giriş sorunsuz, liman içinde 3-4 m derinlik. Ana dalgakıran 537 m; kızak mevcuttur. Bölgede kuzey sektör rüzgârları hâkimdir, bağlanırken yardım alınması tavsiye edilir. 2023-24''te yenileme çalışmaları yapılmış ve kıyı tesisi işletme belgesi alınmıştır. Tankerle yakıt ikmali yapılabilir, çevrede yat malzemecisi vardır.' FROM locations WHERE slug = 'burhaniye-oren-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 250, '73', NULL, NULL, NULL
@@ -3992,7 +3992,7 @@ SELECT gen_random_uuid(), 'alibey-cunda-adasi-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Alibey (Cunda) Adası Limanı', 'Ayvalık iç denizinin kuzeybatısında, Cunda (Alibey) adası kasaba rıhtımı. Ziyaretçi yatlar için rıhtıma bağlı 15 hazır tonoz ve ilave şamandıralar vardır; rıhtım önü restoranlarla çevrilidir. Liman içi derinlik 2-3 m, iskelenin güneyindeki demirleme alanı ~5 m ve tutuş iyidir. Kapasite ~145 tekne. İç denizde olduğundan her yönden iyi korunaklıdır. 25 m''ye kadar çekek imkânı ve tankerle yakıt ikmali bildirilmektedir.' FROM locations WHERE slug = 'alibey-cunda-adasi-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'alibey-cunda-adasi-limani' AND a.code IN ('electricity', 'water', 'shower', 'fuel', 'restaurant', 'pump_out')
@@ -4023,7 +4023,7 @@ SELECT gen_random_uuid(), 'patrica-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Patriça (Gökçeliman) Koyu', 'Cunda (Alibey) adasının kuzeyindeki geniş, iyi korunaklı demirleme koyu; pilot kaynaklarda Patricia Liman / Gökçeliman olarak geçer, yerelde Patriça koyu olarak bilinir. Doğal sit alanı içindedir; kıyıda tesis yoktur, günübirlik tekneler ve yatlar demirler. Ayvalık iç denizi girişine yakındır.' FROM locations WHERE slug = 'patrica-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'geniş koy, iyi korunaklı', true
 FROM locations WHERE slug = 'patrica-koyu'
@@ -4042,7 +4042,7 @@ SELECT gen_random_uuid(), 'maden-adasi-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Maden Adası (Gümüş Koyu) Demirleme', 'Ayvalık''ın kuzeybatısındaki Maden Adası''nda, meltemiye karşı iyi korunak veren demirleme koyu. Yaklaşık 5 m derinlikte kum zemine demirlenir, tutuş iyidir. Koy girişinde sığlık bulunduğundan yaklaşırken dikkat edilmelidir. Kıyıda tesis yoktur.' FROM locations WHERE slug = 'maden-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'meltemiye karşı iyi korunaklı', true
 FROM locations WHERE slug = 'maden-adasi-demirleme'
@@ -4061,7 +4061,7 @@ SELECT gen_random_uuid(), 'moska-adasi-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Moska Adası Demirleme', 'Ayvalık iç denizinde, Moska adası ile Alibey adası arasındaki kanalın güney ucunda demirleme yeri. Güney sektör rüzgârlarında iyi korunak sağlar. Kıyıda tesis yoktur; günübirlik ve gecelik demirleme için kullanılır.' FROM locations WHERE slug = 'moska-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'G rüzgârlarında korunaklı', true
 FROM locations WHERE slug = 'moska-adasi-demirleme'
@@ -4080,7 +4080,7 @@ SELECT gen_random_uuid(), 'kumru-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kumru Koyu Demirleme', 'Ayvalık iç denizinin güneyinde, kara ile tamamen çevrili ve çok cazip bir demirleme koyu. Her yönden korunak sağlar. Kıyıda tesis yoktur.' FROM locations WHERE slug = 'kumru-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'her yönden korunaklı', true
 FROM locations WHERE slug = 'kumru-koyu-demirleme'
@@ -4099,7 +4099,7 @@ SELECT gen_random_uuid(), 'camlik-koyu-demirleme-ayvalik', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çamlık Koyu Demirleme (Ayvalık)', 'Ayvalık''ın güneyinde, Çamlık mevkiinde demirleme koyu; Çanak Tepe manzaralıdır. Güneyden esen rüzgâr dışında iyi korunak sağlar. Kıyıda restoran bulunur; kendi iskelesi teyit edilemediğinden demirleyip botla çıkılır.' FROM locations WHERE slug = 'camlik-koyu-demirleme-ayvalik'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'güneye açık', true
 FROM locations WHERE slug = 'camlik-koyu-demirleme-ayvalik'
@@ -4122,7 +4122,7 @@ SELECT gen_random_uuid(), 'dikili-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dikili Limanı', 'Midilli adasının karşısındaki Dikili ilçe limanı; ticari iskelenin yanındaki barınak bölümünde ziyaretçi yatlara 6-7 teknelik yer bulunur. Demir atıp rıhtıma kıçtan/baştan kara bağlanılır; hazır tonoz yoktur. Liman içi derinlik 4-5 m; yaklaşma engelsiz ve kolaydır. Rıhtımda elektrik, içme suyu ve yakıt alınabilir; kordonda balık restoranları vardır. Toplam kapasite ~160 tekne.' FROM locations WHERE slug = 'dikili-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'dikili-limani' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant', 'wc')
@@ -4149,7 +4149,7 @@ SELECT gen_random_uuid(), 'bademli-deniz-ilicasi-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bademli Deniz Ilıcası Koyu', 'Dikili Bademli kıyısında, Kalem Adası''nın hemen kuzeyindeki demirleme koyu. Kum ve kaya karışımı zemine demirlenir; kıyıya halat verilebilir. Botla çıkılabilen plajı vardır; kıyıda tesis, su veya iskele yoktur. Sığ ılıca kaynaklarıyla bilinir.' FROM locations WHERE slug = 'bademli-deniz-ilicasi-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'bademli-deniz-ilicasi-koyu'
@@ -4168,7 +4168,7 @@ SELECT gen_random_uuid(), 'kalem-adasi-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kalem Adası Koyu', 'Dikili Bademli açığında, karadan ~450 m mesafedeki özel işletmeli Kalem Adası''nın demirleme koyu; ''Ege''nin Maldivleri'' olarak anılır. Adanın farklı yüzleri farklı korunma sunar; batı yüzü açık denize bakar. Adada otel, plaj kulübü ve restoran vardır (karaya çıkış işletme iznine tabidir). Bademli köyünde market ve restoranlara ulaşılabilir.' FROM locations WHERE slug = 'kalem-adasi-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'yüzüne göre değişken; batı yüzü açık', true
 FROM locations WHERE slug = 'kalem-adasi-koyu'
@@ -4191,7 +4191,7 @@ SELECT gen_random_uuid(), 'candarli-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çandarlı Limanı', 'Çandarlı Körfezi''nde, ünlü Ceneviz kalesinin dibindeki kasaba limanı. Kale önündeki demirleme alanında 4-8 m derinlikte çamur zemine demirlenir; tutuş çok iyidir ancak yumuşak çamurda pulluk tipi çapalar kayabilir. Güney sektör dışında her yönden korunak sağlar; hâkim kuzeyliler deniz kabartmaz. Rıhtımda elektrik, basınçlı su, içme suyu ve yakıt vardır; kasabada restoran, market, tamir atölyeleri, dalış merkezi ve yelken kulübü bulunur.' FROM locations WHERE slug = 'candarli-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'candarli-limani' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant', 'market', 'laundry')
@@ -4222,7 +4222,7 @@ SELECT gen_random_uuid(), 'mordogan-yeni-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mordoğan Yeni Limanı', 'Mordoğan''ın 2003''te inşa edilen yeni barınağı; eski liman balıkçı tekneleri içindir, yeni liman tamamlanmamış olsa da barınmak için kullanılabilir. Mendirek gerisinde korunma sağlar. Liman ile Mordoğan kasabası arasındaki yaklaşımda çok sayıda resif bulunur, dikkatli yaklaşılmalıdır. Elektrik ve su hizmeti bildirilmemektedir.' FROM locations WHERE slug = 'mordogan-yeni-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Eğri Liman Demirleme Koyu · güven: low · kaynak: my-sea.com, turkeymarinas.blogspot.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -4237,7 +4237,7 @@ SELECT gen_random_uuid(), 'egri-liman-demirleme', 8, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Eğri Liman Demirleme Koyu', 'Karaburun yarımadasının batı kıyısında, Gerence Körfezi ağzında doğal demirleme koyu. Meltem dahil hemen her yönden korunma sağlar; ancak kuvvetli kuzey ve güney rüzgârlarında koya soluğan girebilir. Giriş yaklaşık 300 m genişliğinde, girişte 20 m derinlik; çevrede resifler ve açıkta üç kayalık adacık vardır, gece girişi önerilmez. Dip çamur ve yosun; dip eğimi dik, ani derinleşmeye dikkat.' FROM locations WHERE slug = 'egri-liman-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', 'kuvvetli K/G rüzgârlarında soluğan girer', true
 FROM locations WHERE slug = 'egri-liman-demirleme'
@@ -4256,7 +4256,7 @@ SELECT gen_random_uuid(), 'oasis-marina-yeni-foca', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Oasis Marina Yeni Foça', 'Yeni Foça''daki eski yat limanında hizmete giren özel marina; 8-30 m arası teknelere hizmet verir. 7/24 palamar, elektrik-su, güvenlik/kamera, duş-WC, çamaşırhane, yakıt ve atık su istasyonu, çekek ve bakım hizmetleri mevcuttur. Deniz hudut kapısı (Port of Entry) statüsündedir. Koy batıya açıktır; marina mendirek içinde korunaklıdır.' FROM locations WHERE slug = 'oasis-marina-yeni-foca'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '73', NULL, NULL, NULL
@@ -4304,7 +4304,7 @@ SELECT gen_random_uuid(), 'yeni-foca-halk-plaji-demirleme', 8, 'published', 'TR'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yeni Foça Halk Plajı Demirleme', 'Yeni Foça koyunda, halk plajı önünde demirleme alanı. Dip kum ve deniz çayırı karışıktır; çayır bantlarından kaçınıp kum yamalarına demirlenmelidir. Kasaba merkezine ve büfelere botla ulaşılabilir. Koy batı-güneybatı yönüne açıktır; meltemde kıyıya yakın kesim nispeten sakindir.' FROM locations WHERE slug = 'yeni-foca-halk-plaji-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'batı-güneybatıya açık', true
 FROM locations WHERE slug = 'yeni-foca-halk-plaji-demirleme'
@@ -4323,7 +4323,7 @@ SELECT gen_random_uuid(), 'urla-iskele-limani', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Urla İskele Limanı (Çeşmealtı)', 'Urla İskele mahallesinde, Karantina Adası ve Çiçek Adaları''nın güneyindeki liman. Balıkçı tekneleri ve yerel tekne sahipleri tarafından kullanılır; her sezon genellikle doludur, boş yer bulmak zordur. Adalar ile ana kara arasındaki geçişte sığlıklara dikkat edilmelidir. Çevresinde restoranlar ve kafeler vardır.' FROM locations WHERE slug = 'urla-iskele-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'urla-iskele-limani' AND a.code IN ('restaurant')
@@ -4342,7 +4342,7 @@ SELECT gen_random_uuid(), 'dalyankoy-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dalyanköy Koyu Demirleme', 'Çeşme''nin kuzeyinde, Dalyanköy koyunda kum zeminli demirleme alanı; Alev Adası yakınındadır. Plaja ve büfelere botla çıkılabilir. Koy kuzey-kuzeybatı sektöre açıktır; iç kesimi meltemde makul korunma sağlar. Dalyanköy''ün balık restoranları kıyıdadır.' FROM locations WHERE slug = 'dalyankoy-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'kuzey-kuzeybatı sektöre açık', true
 FROM locations WHERE slug = 'dalyankoy-koyu-demirleme'
@@ -4361,7 +4361,7 @@ SELECT gen_random_uuid(), 'dalyankoy-yat-limani', 2, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Dalyanköy Yat Limanı (Dalyan Marina)', 'Dalyanköy''deki küçük yat limanı; rıhtım/iskeleye bağlanılır, liman içinde demirleme yasaktır. Su ve iskele hizmeti mevcuttur; kıyıda restoranlar vardır. Dar dalyan girişinden girilir; liman içi korunaklıdır.' FROM locations WHERE slug = 'dalyankoy-yat-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -4385,7 +4385,7 @@ SELECT gen_random_uuid(), 'mersin-korfezi-demirleme-cesme', 8, 'published', 'TR'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mersin Körfezi Demirleme (Çeşme)', 'Çeşme yarımadasının güney kıyısında, Alaçatı koyu girişinin doğusundaki Mersin Körfezi. Her yönden iyi korunma sağlayan doğal demirleme alanıdır; meltemde güvenlidir. Kıyıda tesis yoktur.' FROM locations WHERE slug = 'mersin-korfezi-demirleme-cesme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'her yönden iyi korunaklı', true
 FROM locations WHERE slug = 'mersin-korfezi-demirleme-cesme'
@@ -4404,7 +4404,7 @@ SELECT gen_random_uuid(), 'sarpdere-limani-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sarpdere Limanı Demirleme', 'Urla Zeytineli kıyısında, üç koldan oluşan doğal liman (batı koyu, doğu koyu ve Nergis). Dip kum, yer yer yosun yamalı; tutuş iyidir, yaklaşık 4 m derinlik. Meltemde iyi korunma sağlar; kuvvetli kuzey rüzgârlarında Nergis kolunda rahatsız edici kısa dalga oluşabilir. Kıyıda tesis yoktur.' FROM locations WHERE slug = 'sarpdere-limani-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'kuvvetli kuzeylilerde kısa dalga (Nergis kolu)', true
 FROM locations WHERE slug = 'sarpdere-limani-demirleme'
@@ -4423,7 +4423,7 @@ SELECT gen_random_uuid(), 'kirkdilim-limani-demirleme', 8, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kırkdilim Limanı Demirleme', 'Çeşme-Sığacık arasındaki güney kıyıda (Zeytineli sahili) derin girintili doğal liman. Yaklaşık 7 m derinlikte demirlenir, tutuş iyidir. Meltemden çok iyi korunma sağlar. Kıyıda tesis yoktur.' FROM locations WHERE slug = 'kirkdilim-limani-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'meltemde çok iyi korunaklı', true
 FROM locations WHERE slug = 'kirkdilim-limani-demirleme'
@@ -4442,7 +4442,7 @@ SELECT gen_random_uuid(), 'teos-limani-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Teos Limanı Demirleme (Sığacık)', 'Sığacık''ın güneyinde, Teos antik kentinin doğal limanı. Meltemden mükemmel korunma sağlar ancak güneye açıktır. Dip yoğun posidonya çayırıdır; kum yamalarına demirlendiğinde tutuş iyidir. Koyun doğusu sığlaşır. Teos Marina''ya 1-2 mil mesafededir.' FROM locations WHERE slug = 'teos-limani-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'güneye açık', true
 FROM locations WHERE slug = 'teos-limani-demirleme'
@@ -4461,7 +4461,7 @@ SELECT gen_random_uuid(), 'ahmetbeyli-claros-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ahmetbeyli (Claros) Demirleme', 'Kuşadası''nın yaklaşık 5 mil kuzeybatısında, Ahmetbeyli koyu (Claros antik kenti sahili). Kuzey meltemden ve batı dalgasından korunma sağlar, güneye açıktır. Yaklaşık 5 m derinlikte kum zemin; kum serttir, çapanın tutması için birkaç deneme gerekebilir. Gümüldür-Özdere sahil şeridinin tekneyle kullanılabilen başlıca demirleme noktasıdır.' FROM locations WHERE slug = 'ahmetbeyli-claros-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', 'güneye açık', true
 FROM locations WHERE slug = 'ahmetbeyli-claros-demirleme'
@@ -4480,7 +4480,7 @@ SELECT gen_random_uuid(), 'kusadasi-sahil-demirleme', 8, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kuşadası Sahil Demirleme', 'Kuşadası kent önü sahilinde, Güvercinada''nın kuzeyindeki doğal demirleme alanı; iskele bağlaması olmayan, yalnızca demirlenen doğal liman olarak kayıtlıdır. Batı-güneybatı yönüne açıktır. Ana liman kruvaziyer ve balıkçı tekneleri içindir, yatlara kapalıdır; yatlar Setur Marina''yı kullanır. Güneyden yaklaşırken Yılancı Burnu açığındaki resiflere dikkat edilmelidir.' FROM locations WHERE slug = 'kusadasi-sahil-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, 'batı-güneybatıya açık', true
 FROM locations WHERE slug = 'kusadasi-sahil-demirleme'
@@ -4499,7 +4499,7 @@ SELECT gen_random_uuid(), 'port-saint-paul-saint-nikolo', 8, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Port Saint Paul / Saint Nikolo (Dilek Yarımadası)', 'Dilek Yarımadası''nın (Samsun Dağı) batı ucu güney kıyısındaki iki tarihi doğal demirleme alanı; ikisinden Saint Nikolo daha iyi korunma sağlar. Bölge Dilek Yarımadası-Büyük Menderes Deltası Millî Parkı deniz alanı içindedir; özel teknelerin demirleme/giriş koşulları (ücret, izin, şamandıra düzeni) resmî kaynaktan doğrulanamamıştır — kullanmadan önce Millî Park müdürlüğü ile teyit edilmelidir.' FROM locations WHERE slug = 'port-saint-paul-saint-nikolo'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Didim Akbük Marina · güven: low · kaynak: www.navily.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -4514,7 +4514,7 @@ SELECT gen_random_uuid(), 'didim-akbuk-marina', 1, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Didim Akbük Marina', 'Akbük koyunun (Mandalya/Güllük Körfezi kuzeyi) içindeki küçük marina ve bağlama tesisi; demir + kıçtan kara rıhtım bağlaması sunar, yer rezervasyonu yapılabilmektedir. Akbük koyu kuzey rüzgârlarında korunaklıdır, güney sektöre açıktır.' FROM locations WHERE slug = 'didim-akbuk-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -4534,7 +4534,7 @@ SELECT gen_random_uuid(), 'guzelce-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Güzelce Marina', 'Büyükçekmece''de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'guzelce-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 250, '72/16', NULL, NULL, NULL
@@ -4570,7 +4570,7 @@ SELECT gen_random_uuid(), 'kiyi-istanbul-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kıyı İstanbul Marina', 'Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.' FROM locations WHERE slug = 'kiyi-istanbul-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '73', NULL, NULL, NULL
@@ -4602,7 +4602,7 @@ SELECT gen_random_uuid(), 'kumkuyu-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kumkuyu Marina', 'Erdemli Kumkuyu''da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.' FROM locations WHERE slug = 'kumkuyu-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 200, '72', NULL, 80, NULL
@@ -4642,7 +4642,7 @@ SELECT gen_random_uuid(), 'gazipasa-gold-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gazipaşa Gold Marina', 'Gazipaşa''da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.' FROM locations WHERE slug = 'gazipasa-gold-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '72', NULL, NULL, NULL
@@ -4674,7 +4674,7 @@ SELECT gen_random_uuid(), 'kairos-marina', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kairos Marina', 'Datça''da 246 deniz ve 256 kara kapasiteli özel marina.' FROM locations WHERE slug = 'kairos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 246, '73', NULL, NULL, NULL
@@ -4698,7 +4698,7 @@ SELECT gen_random_uuid(), 'marinturk-gocek-exclusive', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marintürk Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Marintürk tarafından işletilen özel marina.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '69/73', NULL, NULL, NULL
@@ -4722,7 +4722,7 @@ SELECT gen_random_uuid(), 'aganlar-marina-bodrum', 1, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Aganlar Marina', 'Bodrum''da marina ve yat çekek yeri.' FROM locations WHERE slug = 'aganlar-marina-bodrum'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '72/16', NULL, NULL, NULL
@@ -4746,7 +4746,7 @@ SELECT gen_random_uuid(), 'gouvia-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gouvia Marina', 'Korfu''da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'gouvia-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 1235, '69', NULL, NULL, NULL
@@ -4770,7 +4770,7 @@ SELECT gen_random_uuid(), 'kleopatra-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kleopatra Marina', 'Aktion-Preveza''da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.' FROM locations WHERE slug = 'kleopatra-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 100, '67', NULL, NULL, NULL
@@ -4794,7 +4794,7 @@ SELECT gen_random_uuid(), 'lefkas-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lefkas Marina', 'Lefkada''da 620 bağlama ve 280 kara kapasiteli marina.' FROM locations WHERE slug = 'lefkas-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 620, '69', NULL, NULL, NULL
@@ -4818,7 +4818,7 @@ SELECT gen_random_uuid(), 'mesolongi-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Messolonghi Marina', 'Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.' FROM locations WHERE slug = 'mesolongi-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 180, '69', NULL, NULL, NULL
@@ -4842,7 +4842,7 @@ SELECT gen_random_uuid(), 'kalamata-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kalamata Marina', 'Mora''nın güneyinde, Kalamata şehir merkezine bitişik marina.' FROM locations WHERE slug = 'kalamata-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 250, '69', NULL, NULL, NULL
@@ -4866,7 +4866,7 @@ SELECT gen_random_uuid(), 'zea-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Zea Marina', 'Pire''nin tarihi marinası; 670 bağlama, kıçtankara 80 m''ye, aborda 150 m''ye kadar.' FROM locations WHERE slug = 'zea-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 670, '9', NULL, NULL, NULL
@@ -4890,7 +4890,7 @@ SELECT gen_random_uuid(), 'athens-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Athens Marina', 'Neo Faliro''da mega ve süper yatlara özel marina; 130 m''ye kadar.' FROM locations WHERE slug = 'athens-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 130, '9', NULL, NULL, NULL
@@ -4914,7 +4914,7 @@ SELECT gen_random_uuid(), 'flisvos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Flisvos Marina', 'Paleo Faliro''da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.' FROM locations WHERE slug = 'flisvos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 303, '9', NULL, NULL, NULL
@@ -4938,7 +4938,7 @@ SELECT gen_random_uuid(), 'alimos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Alimos Marina', 'Atina''nın ve Yunanistan''ın en büyük marinalarından; 1.080 bağlama, 600 kara.' FROM locations WHERE slug = 'alimos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 1080, '71', NULL, NULL, NULL
@@ -4962,7 +4962,7 @@ SELECT gen_random_uuid(), 'agios-kosmas-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agios Kosmas Marina', 'Elliniko''da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m''ye kadar.' FROM locations WHERE slug = 'agios-kosmas-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 337, '9', NULL, NULL, NULL
@@ -4986,7 +4986,7 @@ SELECT gen_random_uuid(), 'vouliagmeni-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Vouliagmeni Marina', 'Atina Rivierası''nın prestijli koy marinası.' FROM locations WHERE slug = 'vouliagmeni-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 115, '9', NULL, NULL, NULL
@@ -5010,7 +5010,7 @@ SELECT gen_random_uuid(), 'olympic-marine', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Olympic Marine', 'Lavrio/Sounio''da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.' FROM locations WHERE slug = 'olympic-marine'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 680, '9', NULL, NULL, NULL
@@ -5034,7 +5034,7 @@ SELECT gen_random_uuid(), 'selanik-aretsou-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Thessaloniki Aretsou Marina', 'Selanik Kalamaria''da şehir marinası.' FROM locations WHERE slug = 'selanik-aretsou-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 242, NULL, NULL, NULL, NULL
@@ -5058,7 +5058,7 @@ SELECT gen_random_uuid(), 'sani-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sani Marina', 'Halkidiki Kassandra''da Sani Resort bünyesinde butik marina.' FROM locations WHERE slug = 'sani-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 215, '9', NULL, NULL, NULL
@@ -5082,7 +5082,7 @@ SELECT gen_random_uuid(), 'porto-carras-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Porto Carras Marina', 'Sithonia Neos Marmaras''ta resort marinası; 55 m''ye kadar yat kabul eder.' FROM locations WHERE slug = 'porto-carras-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 315, '9', NULL, NULL, NULL
@@ -5106,7 +5106,7 @@ SELECT gen_random_uuid(), 'midilli-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mytilene Marina', 'Midilli (Lesvos) adasında marina; Ayvalık''ın karşı kıyısı.' FROM locations WHERE slug = 'midilli-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 222, '71', NULL, NULL, NULL
@@ -5130,7 +5130,7 @@ SELECT gen_random_uuid(), 'samos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Samos Marina', 'Pythagorio''da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası''nın karşısı.' FROM locations WHERE slug = 'samos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 260, '9', NULL, NULL, NULL
@@ -5154,7 +5154,7 @@ SELECT gen_random_uuid(), 'leros-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Leros Marina', 'Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.' FROM locations WHERE slug = 'leros-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 220, '10', NULL, NULL, NULL
@@ -5178,7 +5178,7 @@ SELECT gen_random_uuid(), 'kos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kos Marina', 'Kos (İstanköy) adasında tam donanımlı marina; Bodrum''un karşı kıyısı. 100 tonluk travel-lift.' FROM locations WHERE slug = 'kos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 250, '77', NULL, NULL, NULL
@@ -5218,7 +5218,7 @@ SELECT gen_random_uuid(), 'rodos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Rhodes Marina', 'Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.' FROM locations WHERE slug = 'rodos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 600, NULL, NULL, NULL, NULL
@@ -5242,7 +5242,7 @@ SELECT gen_random_uuid(), 'marina-symi-pedi', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marina Symi (Pedi)', 'Symi adası Pedi koyunda 2021''de açılan marina; Gialos''a 2 km. Her tonozda elektrik ve su bağlantısı, ücretsiz Wi-Fi, duş/WC. Datça-Bozburun karşı kıyısı.' FROM locations WHERE slug = 'marina-symi-pedi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 50, '71', NULL, NULL, NULL
@@ -5278,7 +5278,7 @@ SELECT gen_random_uuid(), 'symi-gialos-rihtimi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Symi Gialos Rıhtımı', 'Symi''nin ikonik ana limanı Gialos''ta kasaba rıhtımı; kıçtankara bağlama, liman görevlisi yönlendirir. Feribot neta''sına dikkat. Rıhtımda su/elektrik noktaları var ancak kullanılabilirlik değişken — varışta teyit edin.' FROM locations WHERE slug = 'symi-gialos-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302246070110', NULL, true
 FROM locations l WHERE l.slug = 'symi-gialos-rihtimi'
@@ -5305,7 +5305,7 @@ SELECT gen_random_uuid(), 'symi-panormitis-iskelesi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Panormitis İskelesi (Symi)', 'Symi''nin güneyinde, ünlü Panormitis Manastırı''nın korunaklı koyunda C-biçimli iskele (70 m) ve rıhtım (120 m). Yatlar ve yelkenliler için sakin bağlanma; derinlik iskele başında 5 m''ye kadar.' FROM locations WHERE slug = 'symi-panormitis-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302246070110', NULL, true
 FROM locations l WHERE l.slug = 'symi-panormitis-iskelesi'
@@ -5328,7 +5328,7 @@ SELECT gen_random_uuid(), 'rodos-mandraki-limani', 2, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mandraki Limanı (Rodos)', 'Rodos''un tarihî yat limanı — antik Kolossos''un yerinde, üç yel değirmeni manzaralı. Kıçtankara bağlama; rıhtımda su + 220V, tankerle yakıt, ofis yanında WC/sıcak duş. Yer ayırtma en az 48 saat önce önerilir; dipte eski tonoz hatları olduğundan bol kaloma bırakın.' FROM locations WHERE slug = 'rodos-mandraki-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, 175, '09', NULL, NULL, NULL
@@ -5360,7 +5360,7 @@ SELECT gen_random_uuid(), 'kastellorizo-meis-rihtimi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kastellorizo (Meis) Rıhtımı', 'Kaş''ın 2 deniz mili karşısındaki Meis adasının renkli kasaba rıhtımı; 82 m iskele, -6,3 m derinlik. Yunanistan''a GİRİŞ LİMANIDIR (gümrük/pasaport işlemi yapılır) — Türkiye''den geçiş yapan tekneler için ilk durak. Rıhtımda elektrik, su, Wi-Fi, duş/WC.' FROM locations WHERE slug = 'kastellorizo-meis-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kastellorizo-meis-rihtimi' AND a.code IN ('electricity', 'water', 'wifi', 'shower', 'wc')
@@ -5391,7 +5391,7 @@ SELECT gen_random_uuid(), 'tilos-livadia-rihtimi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Livadia Rıhtımı (Tilos)', 'Tilos adasının ana limanı Livadia''da belediye rıhtımı; 35 tekneye kadar yer, tatlı su ve elektrik bağlantısı. İskele güney kolu ~50 m, kullanılabilir derinlik -8 m. Liman duvarı içi iyi korunaklı; aborda bağlama alanı sınırlı.' FROM locations WHERE slug = 'tilos-livadia-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'tilos-livadia-rihtimi' AND a.code IN ('electricity', 'water')
@@ -5422,7 +5422,7 @@ SELECT gen_random_uuid(), 'lindos-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lindos Koyu (Rodos)', 'Rodos''un simgesi Lindos akropolünün altındaki demirleme koyu — rehberde ''Onikiadalar''ın en özel duraklarından'' diye geçer. Korunaklı, manzarası eşsiz; yaz aylarında kalabalık olabilir.' FROM locations WHERE slug = 'lindos-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'lindos-koyu'
@@ -5441,7 +5441,7 @@ SELECT gen_random_uuid(), 'anthony-quinn-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Anthony Quinn Koyu (Rodos)', 'Rodos''un doğu kıyısında turkuaz suları ve kayalık kollarıyla ünlü küçük koy; adını 1961''de burada film çeken aktörden alır. 8-10 m kuma demirlenir, bol kaloma önerilir.' FROM locations WHERE slug = 'anthony-quinn-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'anthony-quinn-koyu'
@@ -5460,7 +5460,7 @@ SELECT gen_random_uuid(), 'simi-nanou-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Nanou Koyu (Symi)', 'Symi''nin doğu kıyısında, yüksek kayalıklarla çevrili sakin demirleme koyu; rehberde ''mahremiyet noktası'' diye geçer. Kıyıda mevsimlik taverna bulunabilir.' FROM locations WHERE slug = 'simi-nanou-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'simi-nanou-koyu'
@@ -5479,7 +5479,7 @@ SELECT gen_random_uuid(), 'simi-marathounta-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Marathounta Koyu (Symi)', 'Symi''nin güneydoğusunda çakıl plajlı, tenha demirleme koyu; Pedi ve Gialos''a tekneyle kısa mesafede.' FROM locations WHERE slug = 'simi-marathounta-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'simi-marathounta-koyu'
@@ -5498,7 +5498,7 @@ SELECT gen_random_uuid(), 'simi-emporios-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Emporios Koyu (Symi)', 'Gialos''un kuzeybatısındaki Emporios (Nimborios) koyu — ana limana yürüme mesafesinde, daha sakin bir demirleme alternatifi.' FROM locations WHERE slug = 'simi-emporios-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'simi-emporios-koyu'
@@ -5517,7 +5517,7 @@ SELECT gen_random_uuid(), 'simi-agios-vasileios-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agios Vasileios Koyu (Symi)', 'Symi''nin batı kıyısında, küçük şapeliyle bilinen korunaklı demirleme koyu; batı rüzgârlarında dikkatli olunmalı.' FROM locations WHERE slug = 'simi-agios-vasileios-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'simi-agios-vasileios-koyu'
@@ -5536,7 +5536,7 @@ SELECT gen_random_uuid(), 'istinye-tekne-park-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İstinye Tekne Park Yakıt İskelesi (Türk Petrol)', 'Boğaz''da İstinye koyundaki İstmarin Tekne Park içinde yakıt iskelesi (Türk Petrol).' FROM locations WHERE slug = 'istinye-tekne-park-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'istinye-tekne-park-yakit'
@@ -5559,7 +5559,7 @@ SELECT gen_random_uuid(), 'setur-kusadasi-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Kuşadası Marina Yakıt İskelesi (OPET)', 'Setur Kuşadası Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-kusadasi-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'setur-kusadasi-yakit'
@@ -5582,7 +5582,7 @@ SELECT gen_random_uuid(), 'ecesaray-fethiye-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ece Saray Marina Yakıt İskelesi (OPET)', 'Fethiye Ece Saray Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'ecesaray-fethiye-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'ecesaray-fethiye-yakit'
@@ -5605,7 +5605,7 @@ SELECT gen_random_uuid(), 'setur-kalamis-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Kalamış Marina Yakıt İskelesi (OPET)', 'Setur Kalamış-Fenerbahçe Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-kalamis-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'setur-kalamis-yakit'
@@ -5628,7 +5628,7 @@ SELECT gen_random_uuid(), 'netsel-marmaris-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Netsel Marmaris Marina Yakıt İskelesi (OPET)', 'Marmaris Netsel Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'netsel-marmaris-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'netsel-marmaris-yakit'
@@ -5651,7 +5651,7 @@ SELECT gen_random_uuid(), 'setur-ayvalik-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Ayvalık Marina Yakıt İskelesi (OPET)', 'Setur Ayvalık Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-ayvalik-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'setur-ayvalik-yakit'
@@ -5674,7 +5674,7 @@ SELECT gen_random_uuid(), 'setur-yalova-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Setur Yalova Marina Yakıt İskelesi (OPET)', 'Setur Yalova Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'setur-yalova-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'setur-yalova-yakit'
@@ -5697,7 +5697,7 @@ SELECT gen_random_uuid(), 'kas-marina-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kaş Marina Yakıt İskelesi (OPET)', 'Kaş Marina içinde OPET yakıt iskelesi — Meis/Kekova rotasının yakıt noktası.' FROM locations WHERE slug = 'kas-marina-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'kas-marina-yakit'
@@ -5720,7 +5720,7 @@ SELECT gen_random_uuid(), 'finike-marina-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Finike Marina Yakıt İskelesi (OPET)', 'Setur Finike Marina içinde OPET yakıt iskelesi.' FROM locations WHERE slug = 'finike-marina-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'finike-marina-yakit'
@@ -5743,7 +5743,7 @@ SELECT gen_random_uuid(), 'mersin-yat-limani-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mersin Yat Limanı Yakıt İskelesi (OPET)', 'Mersin Yat Limanı içinde OPET yakıt iskelesi — Doğu Akdeniz''in ana yakıt noktalarından.' FROM locations WHERE slug = 'mersin-yat-limani-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'mersin-yat-limani-yakit'
@@ -5766,7 +5766,7 @@ SELECT gen_random_uuid(), 'oren-gokova-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ören Marina Yakıt İskelesi (OPET)', 'Gökova Ören Marina içinde OPET yakıt iskelesi — Gökova Körfezi''nin kuzey kıyısı.' FROM locations WHERE slug = 'oren-gokova-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'oren-gokova-yakit'
@@ -5789,7 +5789,7 @@ SELECT gen_random_uuid(), 'atakoy-marina-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ataköy Marina Yakıt İskelesi (Moil)', 'Ataköy Marina içinde Moil Deniz yakıt iskelesi.' FROM locations WHERE slug = 'atakoy-marina-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'atakoy-marina-yakit'
@@ -5812,7 +5812,7 @@ SELECT gen_random_uuid(), 'city-port-kartal-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'City Port Marina Yakıt İskelesi (Shell)', 'Kartal City Port Marina içinde Shell yakıt iskelesi.' FROM locations WHERE slug = 'city-port-kartal-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'city-port-kartal-yakit'
@@ -5835,7 +5835,7 @@ SELECT gen_random_uuid(), 'yalikavak-marina-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yalıkavak Marina Yakıt İskelesi (Lukoil)', 'Bodrum Yalıkavak Marina içinde Lukoil yakıt iskelesi — megayat kapasiteli.' FROM locations WHERE slug = 'yalikavak-marina-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'yalikavak-marina-yakit'
@@ -5858,7 +5858,7 @@ SELECT gen_random_uuid(), 'teos-marina-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Teos Marina Yakıt İskelesi (Petrol Ofisi)', 'Sığacık Teos Marina içinde Petrol Ofisi yakıt iskelesi.' FROM locations WHERE slug = 'teos-marina-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'teos-marina-yakit'
@@ -5881,7 +5881,7 @@ SELECT gen_random_uuid(), 'milta-bodrum-yakit', 6, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Milta Bodrum Marina Yakıt İskelesi (Aytemiz)', 'Milta Bodrum Marina içinde Aytemiz yakıt iskelesi.' FROM locations WHERE slug = 'milta-bodrum-yakit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'milta-bodrum-yakit'
@@ -5904,7 +5904,7 @@ SELECT gen_random_uuid(), 'gokkaya-koyu-kekova', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gökkaya Koyu (Kekova)', 'Kekova''nın en büyük koyu; her yönden korunaklı. 7-8 m çamura demirlenir, tutuş iyidir. Koy içinde restoranlar var; dar boğazın başındaki Smugglers Inn tekneden alma servisi yapar. Dikkat: adacıkların batısında üzerinde 3,5 m su olan tekil kaya.' FROM locations WHERE slug = 'gokkaya-koyu-kekova'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'gokkaya-koyu-kekova'
@@ -5916,14 +5916,14 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'kalekoy-simena-restoran-pontonlari', 5, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
-  'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir.',
+  'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir. Kaleköy, Kaş/Üçağız/Demre''den kalkan günübirlik teknelerin popüler durağıdır — gündüz saatlerinde hareketlidir.',
   ST_SetSRID(ST_MakePoint(29.847325, 36.195433), 4326)::geography,
   NULL, NULL, 4.5, 14,
   NULL, 'unknown', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir.' FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
-ON CONFLICT (location_id, locale) DO NOTHING;
+SELECT id, 'tr', 'Kaleköy (Simena) Restoran Pontonları', 'Simena kalesinin altındaki Kaleköy''de üç restoran pontonu (Likya, Hasan''s Roma, Hassan Deniz) — her biri ~50 m, çift taraflı 2-3''er yat alır. Pontonlarda su, elektrik ve Wi-Fi; çamaşır hizmeti var. Ponton dipleri 4,5-14 m. Demirlemede tutuş zayıf (çamur/yosun üstü kaya) ve kuvvetli batı rüzgârı neta sokar — pontona bağlanmak ya da Üçağız''da demirleyip botla gelmek önerilir. Kaleköy, Kaş/Üçağız/Demre''den kalkan günübirlik teknelerin popüler durağıdır — gündüz saatlerinde hareketlidir.' FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
@@ -5946,7 +5946,7 @@ SELECT gen_random_uuid(), 'kekova-tersane-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tersane Koyu (Kekova)', 'Kekova Adası''nın kuzeybatısında, koy başında Bizans kilisesi kalıntısı olan korunaklı koy. 4-5 m kuma demirlenir, tutuş iyi; kıç bağı için kayalarda halat delikleri var. Sezonda 09:00-20:00 arası günübirlik tekne trafiği yoğundur — geliş/gidiş saatini ona göre planlayın.' FROM locations WHERE slug = 'kekova-tersane-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'kekova-tersane-koyu'
@@ -5965,7 +5965,7 @@ SELECT gen_random_uuid(), 'karaloz-limani-kekova', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Karalöz Limanı (Kekova)', 'Kekova Adası''nın güneyinde tamamen kara ile çevrili, dört yönden korunaklı gizli fiyort (Port Saint Stefano). Girişte 8-10 m, güney bölümde 7-14 m; dip çamur/yosun, tutuş iyi. Kıç bağı önerilir; sağanak rüzgâr hamleleri olabilir. Tamamen ıssızdır.' FROM locations WHERE slug = 'karaloz-limani-kekova'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'karaloz-limani-kekova'
@@ -5984,7 +5984,7 @@ SELECT gen_random_uuid(), 'ekincik-koy-rihtimi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ekincik Köy Rıhtımı', 'Dalyan-Kaunos kapısı Ekincik''te kooperatifin işlettiği köy rıhtımı; baş-kıç bağlamayla ~15 tekne alır. Kuzeybatı köşedeki uzun iskelede su ve elektrik bağlantısı var. Yakıt Köyceğiz''den tankerle gelir. Kaunos antik kentine günübirlik tekneler buradan kalkar; Maden rıhtımındaki My Marina restoranı balığıyla ünlüdür.' FROM locations WHERE slug = 'ekincik-koy-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'ekincik-koy-rihtimi' AND a.code IN ('electricity', 'water')
@@ -6003,7 +6003,7 @@ SELECT gen_random_uuid(), 'ekincik-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ekincik Koyu', 'Marmaris-Göcek arasının klasik molası; kuzey rüzgârlarından korunaklı geniş koy. 5-15 m kuma demirlenir, tutuş iyi. Kuzeydoğu bölümü meltemiye karşı en iyi korumayı verir ama kalabalık olur; güneybatı köşesi daha sakindir.' FROM locations WHERE slug = 'ekincik-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'ekincik-koyu-demirleme'
@@ -6022,7 +6022,7 @@ SELECT gen_random_uuid(), 'karacaoren-adasi-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Karacaören Adası Demirleme', 'Gemiler Adası''nın batısında, Bizans kilise kalıntıları ve freskli mezar odalarıyla bilinen adacığın demirleme alanı. DİKKAT: geçitte su seviyesinde kayalar ve resifler var — adanın DOĞU yakasından yaklaşın; kayalar ile ada arasındaki geçit temizdir. Güneyden resifler koruma sağlar.' FROM locations WHERE slug = 'karacaoren-adasi-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'karacaoren-adasi-demirleme'
@@ -6041,7 +6041,7 @@ SELECT gen_random_uuid(), 'yesilkoy-firnaz-koyu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yeşilköy Koyu (Fırnaz)', 'Kalkan''ın 2 mil batısında berrak sulu koy. Kuzeybatı köşede 5-10 m, plaj önünde 6-10 m; dip kum+yosun — çapayı kumlu yamaya atın, yosunda tutuş zayıftır. Hakim rüzgârlardan korunaklı ama güney/güneydoğuya açık. Kıyıda restoran, büfe ve market var.' FROM locations WHERE slug = 'yesilkoy-firnaz-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'yesilkoy-firnaz-koyu'
@@ -6064,7 +6064,7 @@ SELECT gen_random_uuid(), 'halki-emporios-rihtimi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Emporios Rıhtımı (Halki)', 'Halki''nin (Herke) pastel renkli tek kasabası Emporios''ta rıhtım + mevsimlik T-ponton (Mayıs-Kasım). Kıçtankara/pontona bağlama; ücretsiz su, kasabada yakıt tedariki. Koy 12-18 m derinliğinde. Ücret örneği: 12,4 m tekne için ~15€. Rodos''un batı komşusu — sakin bir mola.' FROM locations WHERE slug = 'halki-emporios-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'halki-emporios-rihtimi' AND a.code IN ('water')
@@ -6091,7 +6091,7 @@ SELECT gen_random_uuid(), 'ucagiz-rihtimi', 3, 'draft', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Üçağız Rıhtımı (Kekova)', 'Kekova''nın kalbi Üçağız''da kooperatifin işlettiği iki iskele; yatlar T-iskeleye bağlanır. İskelede 2-5 m derinlik, elektrik ve su; ücret karşılığı WC/duş. Dip çamur — demirlerken çapa yer yer kayabilir. Her rüzgârda iyi korunma. Kooperatif görevlileri bağlamada yardım eder.' FROM locations WHERE slug = 'ucagiz-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'ucagiz-rihtimi' AND a.code IN ('electricity', 'water', 'wc', 'shower')
@@ -6114,7 +6114,7 @@ SELECT gen_random_uuid(), 'kalymnos-pothia-limani', 2, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Pothia Limanı (Kalymnos)', 'Sünger dalgıçlarının adası Kalymnos''un ana limanı Pothia''da rıhtımlı küçük marina. Su çekimi ~3 m; feribot giriş-çıkışlarında rıhtımda çalkantı olabilir. Bodrum''un karşı kıyısı — Türkiye''den kısa geçiş.' FROM locations WHERE slug = 'kalymnos-pothia-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '11', NULL, NULL, NULL
@@ -6142,7 +6142,7 @@ SELECT gen_random_uuid(), 'vlychadia-samandira-sahasi', 9, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Vlychadia Şamandıra Sahası (Kalymnos)', 'Kalymnos''un güney kıyısında Vlychadia plajı önünde 4 ÜCRETSİZ bağlama şamandırası. Dip kum/deniz çayırı; rehber, 25 knot üzeri hamlelerde bile tuttuğunu aktarıyor. Yunanistan verimizdeki ilk şamandıra sahası.' FROM locations WHERE slug = 'vlychadia-samandira-sahasi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'vlychadia-samandira-sahasi'
@@ -6161,7 +6161,7 @@ SELECT gen_random_uuid(), 'telendos-demirleme', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Telendos Demirleme (Kalymnos)', 'Kalymnos ile heybetli Telendos adacığı arasındaki boğazda demirleme; 2,5-6 m. Dip kum/deniz çayırı — çayır yoğun, çapayı kumlu yamaya atmak için yer seçin.' FROM locations WHERE slug = 'telendos-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'telendos-demirleme'
@@ -6180,7 +6180,7 @@ SELECT gen_random_uuid(), 'patmos-skala-rihtimi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Skala Rıhtımı (Patmos)', 'Vahiy Adası Patmos''un ana limanı Skala''da belediye rıhtımı; kıçtankara bağlama, ~5,5 m derinlik. Rıhtımda su ve elektrik (ücretli). Not: bağlama halatı ''yardımı'' için ~5€ isteyen görevliler olabilir.' FROM locations WHERE slug = 'patmos-skala-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'patmos-skala-rihtimi' AND a.code IN ('electricity', 'water')
@@ -6203,7 +6203,7 @@ SELECT gen_random_uuid(), 'patmos-kampos-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kampos Koyu (Patmos)', 'Patmos''un kuzeyinde berrak sulu plaj koyu; 5-7 m kuma demirlenir, kumda tutuş mükemmel — çayırlı bölgelerden kaçının.' FROM locations WHERE slug = 'patmos-kampos-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'patmos-kampos-koyu'
@@ -6222,7 +6222,7 @@ SELECT gen_random_uuid(), 'lakki-marina-leros', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lakki Marina (Leros)', 'Leros''un korunaklı Lakki körfezinde küçük, sakin marina; her tekneye iki tonoz halatı verilir. Derinlik ~7 m. WC/duş yok — sade ama güler yüzlü bir duraklama. (Aynı körfezdeki büyük Leros Marina ayrı kayıttır.)' FROM locations WHERE slug = 'lakki-marina-leros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '11', NULL, NULL, NULL
@@ -6246,7 +6246,7 @@ SELECT gen_random_uuid(), 'kos-eski-liman-mandraki', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kos Eski Limanı (Mandraki)', 'Kos kalesinin dibindeki tarihî eski liman; özel işletmeli küçük marina — rehber ''gerçek bir mücevher, birinci sınıf hizmet'' diye aktarıyor. ~4 m derinlik; rıhtımda su ve elektrik. Bodrum karşısı. (Adanın büyük Kos Marina''sı ayrı kayıttır.)' FROM locations WHERE slug = 'kos-eski-liman-mandraki'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -6278,7 +6278,7 @@ SELECT gen_random_uuid(), 'kardamena-limani', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kardamena Limanı (Kos)', 'Kos''un güney kıyısında Kardamena kasaba limanı — rehber ''meltemide gerçek bir sığınak, güçlü rüzgârdan kusursuz korunma'' diyor. DİKKAT: derinlik ~2 m — derin su çeken tekneler için uygun değil.' FROM locations WHERE slug = 'kardamena-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302242029130', NULL, true
 FROM locations l WHERE l.slug = 'kardamena-limani'
@@ -6297,7 +6297,7 @@ SELECT gen_random_uuid(), 'kamari-iskelesi-kefalos', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kamari İskelesi (Kefalos, Kos)', 'Kos''un batı ucunda Kefalos-Kamari koyunda iskele; ~4 m derinlik. Kuzey yüzü daha rahat yanaşılır; iskelenin ~20 m ilerisinde elektrik babalı iki tonoz var. Su noktası uzaktadır.' FROM locations WHERE slug = 'kamari-iskelesi-kefalos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kamari-iskelesi-kefalos' AND a.code IN ('electricity')
@@ -6316,7 +6316,7 @@ SELECT gen_random_uuid(), 'nisyros-mandraki-limani', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mandraki Limanı (Nisyros)', 'Yanardağ adası Nisyros''un ana kasabası Mandraki''nin limanı; baş demiri + kıç halatıyla bağlanılır, ~5 m derinlik. Yer durumu için limandaki Popi yardımcı olur (ikinci telefon).' FROM locations WHERE slug = 'nisyros-mandraki-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302242031222', NULL, true
 FROM locations l WHERE l.slug = 'nisyros-mandraki-limani'
@@ -6339,7 +6339,7 @@ SELECT gen_random_uuid(), 'pali-limani-nisyros', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Pali Limanı (Nisyros)', 'Nisyros''un kuzey kıyısında Pali balıkçı limanı; baş demiri + kıç halatıyla kolay bağlanma. DİKKAT: giriş kara tarafında ve sığdır (~2,5 m) — tarama çalışması sürüyor.' FROM locations WHERE slug = 'pali-limani-nisyros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302242031222', NULL, true
 FROM locations l WHERE l.slug = 'pali-limani-nisyros'
@@ -6358,7 +6358,7 @@ SELECT gen_random_uuid(), 'lipsi-limani', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lipsi Limanı', 'Patmos-Leros arasındaki sakin Lipsi adasının limanı; ~3 m derinlik. Kuzey rüzgârından gerçek korunma limanın içindedir; alan dar — demir ve zincirlerin çaprazlanması olağandır, yan rüzgârda dikkat.' FROM locations WHERE slug = 'lipsi-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302247041133', NULL, true
 FROM locations l WHERE l.slug = 'lipsi-limani'
@@ -6377,7 +6377,7 @@ SELECT gen_random_uuid(), 'limia-marina-sakiz', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Limia Marina (Sakız)', 'Sakız''ın kuzeybatısında, Volissos yakınındaki Limnia koyunda küçük marina; su ve elektrik ÜCRETSİZ. Su çekimi ~3,5 m. Çeşme-Karaburun karşısındaki sakin alternatif.' FROM locations WHERE slug = 'limia-marina-sakiz'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -6405,7 +6405,7 @@ SELECT gen_random_uuid(), 'mesta-limani-sakiz', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mesta Limanı (Sakız)', 'Sakız''ın güneybatısında, ortaçağ mastika köyü Mesta''nın limanı (Limenas Meston); su çekimi ~5,5 m — adanın derin limanlarından.' FROM locations WHERE slug = 'mesta-limani-sakiz'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302271076239', NULL, true
 FROM locations l WHERE l.slug = 'mesta-limani-sakiz'
@@ -6424,7 +6424,7 @@ SELECT gen_random_uuid(), 'agia-ermioni-limani-sakiz', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agia Ermioni Limanı (Sakız)', 'Sakız kentinin güneyinde Agia Ermioni balıkçı limanı; Çeşme''nin tam karşısı. İki telefonla liman yetkilisine ulaşılır.' FROM locations WHERE slug = 'agia-ermioni-limani-sakiz'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302271022770', NULL, true
 FROM locations l WHERE l.slug = 'agia-ermioni-limani-sakiz'
@@ -6447,7 +6447,7 @@ SELECT gen_random_uuid(), 'limnos-plaji-sakiz', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Limnos Plajı Demirleme (Sakız)', 'Limnia koyu yanındaki Limnos plajı önünde demirleme; 3,5 m kuma atılır — rehber ''mükemmel tutuş'' diye aktarıyor.' FROM locations WHERE slug = 'limnos-plaji-sakiz'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'limnos-plaji-sakiz'
@@ -6466,7 +6466,7 @@ SELECT gen_random_uuid(), 'agia-markella-sakiz', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agia Markella Demirleme (Sakız)', 'Sakız''ın kuzeybatısında, adanın koruyucu azizesinin manastırının önündeki plajda kumluk demirleme alanı.' FROM locations WHERE slug = 'agia-markella-sakiz'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'agia-markella-sakiz'
@@ -6485,7 +6485,7 @@ SELECT gen_random_uuid(), 'uzun-liman-hisaronu', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Uzun Liman (Hisarönü)', 'Hisarönü Körfezi''nde, Küfre''nin komşusu uzun ve dar koy; plaj tarafı her yönden korunaklıdır. Ana koyda 8-10 m''ye demirlenir; iç uçta ''Saklı Liman'' denen 2 m''den sığ gizli havuz vardır — sazlık kıyılara dikkat. Tamamen doğal, tesissiz.' FROM locations WHERE slug = 'uzun-liman-hisaronu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'uzun-liman-hisaronu'
@@ -6504,7 +6504,7 @@ SELECT gen_random_uuid(), 'coban-limani-kumluca', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Çoban Limanı (Kumluca)', 'Adrasan-Taşlık Burnu arasında vahşi ve doğal büyük koy; gecelemek için korunma sağlar. Karadan yol ve su YOKTUR — tamamen ıssız. Berrak suları şnorkel ve dalış için ünlüdür (koy 60 m''ye kadar derinleşir). Taşlıkburnu ve Adrasan fenerleri seyir yardımcısıdır.' FROM locations WHERE slug = 'coban-limani-kumluca'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'coban-limani-kumluca'
@@ -6523,7 +6523,7 @@ SELECT gen_random_uuid(), 'soguksu-koyu-fethiye', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Soğuksu Koyu (Fethiye)', 'Fethiye Körfezi''nde ''Tatlısu'' diye de bilinen koy: dipteki kaynaklar yüzeyde serin bir tatlı su tabakası oluşturur — yüzmesi meşhurdur. Plaj önünde 6-8 m''ye demir + kıça uzun halat düzeni; restoran personeli bağlamada yardım eder. Tepedeki restoran manzarası ve ızgarasıyla bilinir; tekneden alma-bırakma servisi vardır. İç kol (Soğuksu Limanı) iyi korunaklı; ana koy güneye açıktır.' FROM locations WHERE slug = 'soguksu-koyu-fethiye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'soguksu-koyu-fethiye'
@@ -6546,7 +6546,7 @@ SELECT gen_random_uuid(), 'molyvos-limani', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Molyvos Limanı (Midilli)', 'Midilli''nin kuzeyinde, kale manzaralı taş kasaba Molyvos''un (Mithymna) rıhtımı — rehber ''kuvvetli karayelde bile mükemmel korunma'' diyor. ÜCRETSİZ bağlama ve ücretsiz su. Ayvalık-Dikili karşı kıyısı.' FROM locations WHERE slug = 'molyvos-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'molyvos-limani' AND a.code IN ('water')
@@ -6569,7 +6569,7 @@ SELECT gen_random_uuid(), 'sigri-limani', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sigri Limanı (Midilli)', 'Midilli''nin batı ucunda Sigri limanı; su ve elektrik ''Lesbos kartı'' ile kullanılır. DİKKAT: haritaya göre su çekimi 1,4 m ile SINIRLI — yelkenliler için uygun değil, sığ tekneler içindir.' FROM locations WHERE slug = 'sigri-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'sigri-limani' AND a.code IN ('electricity', 'water')
@@ -6592,7 +6592,7 @@ SELECT gen_random_uuid(), 'skala-kallonis-demirleme', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Skala Kallonis Demirleme (Midilli)', 'Midilli''nin iç körfezi Kalloni''nin başındaki sardalyasıyla ünlü Skala Kallonis önünde demirleme; ~5 m, kum/çamur dip — rehber ''mükemmel tutuş'' ve kuzey rüzgârlarına iyi korunma aktarıyor.' FROM locations WHERE slug = 'skala-kallonis-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'skala-kallonis-demirleme'
@@ -6611,7 +6611,7 @@ SELECT gen_random_uuid(), 'icmeler-rihtimi', 3, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İçmeler Rıhtımı (Marmaris)', 'Marmaris İçmeler''de büyük rıhtım — 257 tekneye kadar kapasite. Rıhtımda su ve elektrik bağlantıları, duş/WC, sintine suyu boşaltma servisi. Kasabada restoran, market, banka/ATM, eczane, çamaşırhane — her ihtiyaç yürüme mesafesinde.' FROM locations WHERE slug = 'icmeler-rihtimi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'icmeler-rihtimi' AND a.code IN ('electricity', 'water', 'shower', 'wc', 'restaurant', 'market', 'laundry', 'pump_out')
@@ -6630,7 +6630,7 @@ SELECT gen_random_uuid(), 'icmeler-koyu-demirleme', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'İçmeler Koyu Demirleme (Marmaris)', 'İçmeler koyunda demirleme alanı; 10-14 m, dip yosun+kum. Keçi Adası feneri ile Sarı Mehmet Burnu arasındaki geçit derindir (~36 m). Kuvvetli batı rüzgârı dağlardan neta itebilir.' FROM locations WHERE slug = 'icmeler-koyu-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'icmeler-koyu-demirleme'
@@ -6649,7 +6649,7 @@ SELECT gen_random_uuid(), 'engeceli-manal-limani', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Engeceli (Manal) Limanı', 'Karaburun Yarımadası''nın batısında, üç koylu geniş doğal liman — bütünüyle her yönden korunma sağlar. Manal Koyu''nda 3-4 m kuma demirlenir (kuzeyliye korunaklı, güneye açık); batıdaki Körfez ve Gerence koyları her yönden korunaklıdır, kum dip iyi tutar.' FROM locations WHERE slug = 'engeceli-manal-limani'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'engeceli-manal-limani'
@@ -6668,7 +6668,7 @@ SELECT gen_random_uuid(), 'sig-liman-selimiye', 8, 'published', 'TR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sığ Liman (Selimiye)', 'Selimiye''ye 2 km''deki bu koyda su o kadar berraktır ki ''dibe değeceğim'' hissi verir. 4-12 m, yosun+kum — çapanın iyi gömüldüğünden emin olun, gecelemede kıça halat alın. Kuvvetli poyrazda neta girer. Gündüz günübirlik tekneler uğrar, geceleri sakindir; sığ kumlu plajı yüzme için idealdir.' FROM locations WHERE slug = 'sig-liman-selimiye'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'sig-liman-selimiye'
@@ -6687,7 +6687,7 @@ SELECT gen_random_uuid(), 'thymaina-iskelesi', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Thymaina İskelesi (Fourni)', 'Samos-İkarya arasındaki Fourni takımadasının sakin adası Thymaina''nın köy iskelesi; rehber ''rahat konaklama için iskeleye yanaşın'' diyor. Turizmin uğramadığı, otantik bir mola.' FROM locations WHERE slug = 'thymaina-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Thymaina Güney Koyu · güven: medium · kaynak: grecosailor.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -6702,7 +6702,7 @@ SELECT gen_random_uuid(), 'thymaina-guney-koyu', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Thymaina Güney Koyu', 'Şapeller arasına saklanmış küçük koy — öğle molası için huzurlu bir nokta. 4,5 m, kum/deniz çayırı; sakin havada yeterli korunma.' FROM locations WHERE slug = 'thymaina-guney-koyu'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'thymaina-guney-koyu'
@@ -6721,7 +6721,7 @@ SELECT gen_random_uuid(), 'lakkos-koyu-thymaina', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lakkos Koyu (Thymaina)', 'Thymaina''nın güneyinde berraklığıyla ''olağanüstü'' diye anılan koy; koy ortasında 8 m, kumda güvenli tutuş. Poyraz/karayelden mükemmel korunma; cep telefonu çeker.' FROM locations WHERE slug = 'lakkos-koyu-thymaina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'lakkos-koyu-thymaina'
@@ -6740,7 +6740,7 @@ SELECT gen_random_uuid(), 'kleftolimano-koyu-thymaina', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kleftolimano Koyu (Thymaina)', 'Adı ''korsan limanı'' anlamına gelen tek teknelik ıssız koy; kıyıya halat alınabilir. DİKKAT: çapa tutuşu ZAYIF (kum/çayır/kaya karışık dip) ve meltemiye açık — yalnız uygun havada.' FROM locations WHERE slug = 'kleftolimano-koyu-thymaina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'kleftolimano-koyu-thymaina'
@@ -6759,7 +6759,7 @@ SELECT gen_random_uuid(), 'maltezi-plaji-amorgos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Maltezi Plajı Demirleme (Amorgos)', 'Katapola körfezinin kuzey rüzgârlarında tercih edilen demirlemesi — Hozoviotissa Manastırı''nın adasında. Derin körfez güvenli demirleme sağlar; feribot manevraları çapaları etkileyebilir.' FROM locations WHERE slug = 'maltezi-plaji-amorgos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'maltezi-plaji-amorgos'
@@ -6778,7 +6778,7 @@ SELECT gen_random_uuid(), 'katapola-guney-demirleme', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Katapola Güney Demirleme (Amorgos)', 'Katapola''da güney rüzgârlarında tercih edilen demirleme (liman ile Panagia kilisesi arası). Kasaba rıhtımında kıçtankara yer, su ve elektrik vardır; feribot rıhtımının doğusu sığdır — uzak durun. Fazla kaloma zincir çaprazlanmasına yol açabilir.' FROM locations WHERE slug = 'katapola-guney-demirleme'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'katapola-guney-demirleme'
@@ -6797,7 +6797,7 @@ SELECT gen_random_uuid(), 'kalantos-marina-naxos', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kalantos Marina (Naxos)', 'Naxos''un güney ucunda, meltemiden saklanan Kalantos koyundaki küçük marina; su çekimi ~3 m. Kiklad geçişlerinde güney rotasının sığınağı.' FROM locations WHERE slug = 'kalantos-marina-naxos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -6821,7 +6821,7 @@ SELECT gen_random_uuid(), 'kalantos-koyu-naxos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kalantos Koyu (Naxos)', 'Naxos''un güneyindeki geniş Kalantos koyunda demirleme; derinlik 12 m''den 6 m''ye kademeli azalır, dip kum/kaya karışık — kumlu yamaları seçin.' FROM locations WHERE slug = 'kalantos-koyu-naxos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'kalantos-koyu-naxos'
@@ -6840,7 +6840,7 @@ SELECT gen_random_uuid(), 'pyrgaki-plaji-naxos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Pyrgaki Plajı (Naxos)', 'Naxos''un güneybatısında sakin plaj demirlemesi; ~6,5 m, kum/kaya karışık dip.' FROM locations WHERE slug = 'pyrgaki-plaji-naxos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'pyrgaki-plaji-naxos'
@@ -6859,7 +6859,7 @@ SELECT gen_random_uuid(), 'agios-prokopios-naxos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agios Prokopios (Naxos)', 'Naxos''un ünlü Agios Prokopios plajı önünde demirleme; ~10 m, kum dip. Naxos kasabasına yakın, yüzme molası için ideal.' FROM locations WHERE slug = 'agios-prokopios-naxos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'agios-prokopios-naxos'
@@ -6878,7 +6878,7 @@ SELECT gen_random_uuid(), 'plaka-plaji-naxos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Plaka Plajı (Naxos)', 'Kilometrelerce uzanan Plaka plajının önünde demirleme; ~7,9 m, kum/kaya karışık dip.' FROM locations WHERE slug = 'plaka-plaji-naxos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'plaka-plaji-naxos'
@@ -6897,7 +6897,7 @@ SELECT gen_random_uuid(), 'parikia-limani-paros', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Parikia Limanı (Paros)', 'Paros''un başkenti Parikia''nın ana limanı; VHF 11, su çekimi ~3,5 m. Cuma-cumartesi rıhtım kiralık teknelere ayrılır; kuvvetli poyrazda dış rıhtım zorlayıcıdır — koyda demirlemek önerilir.' FROM locations WHERE slug = 'parikia-limani-paros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+306948431842', NULL, true
 FROM locations l WHERE l.slug = 'parikia-limani-paros'
@@ -6920,7 +6920,7 @@ SELECT gen_random_uuid(), 'cabana-plaji-paros', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Cabana Plajı (Paros)', 'Parikia koyunun kuzeyinde demirleme; ~14 m, kum/kaya. Kuzey, doğu ve batı rüzgârlarından mükemmel korunma.' FROM locations WHERE slug = 'cabana-plaji-paros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'cabana-plaji-paros'
@@ -6939,7 +6939,7 @@ SELECT gen_random_uuid(), 'krios-plaji-paros', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Krios Plajı (Paros)', 'Parikia''ya botla 10 dakikadaki korunaklı plaj demirlemesi; dip kum/deniz çayırı — kumlu yamaları seçin.' FROM locations WHERE slug = 'krios-plaji-paros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'krios-plaji-paros'
@@ -6958,7 +6958,7 @@ SELECT gen_random_uuid(), 'kolympethres-paros', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kolympethres (Paros)', 'Naoussa körfezindeki ünlü granit kayalıklı Kolympethres plajı önünde demirleme; ~6 m, kristal berraklıkta su, tutuş iyi.' FROM locations WHERE slug = 'kolympethres-paros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'kolympethres-paros'
@@ -6977,7 +6977,7 @@ SELECT gen_random_uuid(), 'ermoupoli-limani-syros', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ermoupoli Limanı (Syros)', 'Kiklad''ın başkenti, neoklasik Ermoupoli''nin ana limanı; VHF 10. Elektrik bağlamaya DAHİL (ücretsiz). Liman reisi yardımseverdir; rehber 30 knot lodosta bile kalındığını, feribot netasının yalpa yaptırabildiğini aktarıyor.' FROM locations WHERE slug = 'ermoupoli-limani-syros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'ermoupoli-limani-syros' AND a.code IN ('electricity')
@@ -7004,7 +7004,7 @@ SELECT gen_random_uuid(), 'finikas-marina-syros', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Finikas Marina (Syros)', 'Syros''un güneybatısındaki sakin Finikas koyunda marina; su çekimi ~6,5 m. Gündüz su, çağrıyla motorin, akşam 8''e dek duş. Ücret örneği: 45 ft yat için ~20€. Rehber ''gerçekten hoş ve sakin bir nokta'' diyor.' FROM locations WHERE slug = 'finikas-marina-syros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -7032,7 +7032,7 @@ SELECT gen_random_uuid(), 'lazaretta-tonozlari-syros', 4, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lazaretta Tonozları (Ermoupoli)', 'Ermoupoli koyunun rüzgârüstü yakasındaki Lazaretta''da misafir tonozları; su çekimi ~3 m. Rehber ''rüzgârüstü tarafın en iyi noktası'' diyor; meltemide bir miktar neta girebilir.' FROM locations WHERE slug = 'lazaretta-tonozlari-syros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+31621266573', NULL, true
 FROM locations l WHERE l.slug = 'lazaretta-tonozlari-syros'
@@ -7051,7 +7051,7 @@ SELECT gen_random_uuid(), 'galissas-koyu-syros', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Galissas Koyu (Syros)', 'Syros''un batısında kristal berraklıkta koy; kum dip, rehber ''mükemmel tutuş'' diyor.' FROM locations WHERE slug = 'galissas-koyu-syros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'galissas-koyu-syros'
@@ -7070,7 +7070,7 @@ SELECT gen_random_uuid(), 'azolimnos-koyu-syros', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Azolimnos Koyu (Syros)', 'Ermoupoli''nin güneyinde, limanın kalabalığından uzak sessiz koy; kum dipte mükemmel tutuş.' FROM locations WHERE slug = 'azolimnos-koyu-syros'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'azolimnos-koyu-syros'
@@ -7089,7 +7089,7 @@ SELECT gen_random_uuid(), 'ornos-koyu-mykonos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Ornos Koyu (Mykonos)', 'Mykonos''un güneyindeki gözde Ornos koyu; ~14 m, kum/çamur dip — rehber 30 knot üzeri rüzgârda bile tuttuğunu aktarıyor. Kıyıda restoran ve dükkânlara rahat erişim. Tonoz şamandıralarının hemen dışına demirlenir.' FROM locations WHERE slug = 'ornos-koyu-mykonos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'ornos-koyu-mykonos'
@@ -7108,7 +7108,7 @@ SELECT gen_random_uuid(), 'argostoli-marina-kefalonya', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Argostoli Marina (Kefalonya)', 'Kefalonya''nın başkenti Argostoli''nin marinası; su çekimi ~3,5 m. DİKKAT: limana neta girer ve geri yıkama yapar — bol usturmaça ile bağlanın.' FROM locations WHERE slug = 'argostoli-marina-kefalonya'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -7132,7 +7132,7 @@ SELECT gen_random_uuid(), 'agia-pelagia-marina-kefalonya', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agia Pelagia Marina (Kefalonya)', 'Kefalonya''nın güneyinde küçük marina; su çekimi ~3 m, VHF 73. Gecelik ücret örneği ~20€ (elektrik hariç).' FROM locations WHERE slug = 'agia-pelagia-marina-kefalonya'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '73', NULL, NULL, NULL
@@ -7156,7 +7156,7 @@ SELECT gen_random_uuid(), 'poros-marina-kefalonya', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Poros Marina (Kefalonya)', 'Kefalonya''nın doğu kıyısında Poros marinası; su çekimi ~2,8 m, VHF 12.' FROM locations WHERE slug = 'poros-marina-kefalonya'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '12', NULL, NULL, NULL
@@ -7180,7 +7180,7 @@ SELECT gen_random_uuid(), 'assos-limani-kefalonya', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Assos Limanı (Kefalonya)', 'Venedik kalesinin eteğindeki kartpostal köyü Assos''un küçük limanı; su çekimi ~3 m.' FROM locations WHERE slug = 'assos-limani-kefalonya'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
 -- --- Zakynthos Marina · güven: medium · kaynak: grecosailor.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -7195,7 +7195,7 @@ SELECT gen_random_uuid(), 'zakinthos-marina', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Zakynthos Marina', 'Zakynthos kentinin marinası; su çekimi ~7 m — derin tekneler için rahat. Rehber ''olağanüstü misafirperverlik, netadan ve rüzgârdan mükemmel korunma'' diye aktarıyor.' FROM locations WHERE slug = 'zakinthos-marina'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, NULL, NULL, NULL, NULL
@@ -7223,7 +7223,7 @@ SELECT gen_random_uuid(), 'agios-nikolaos-limani-zakinthos', 3, 'published', 'GR
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agios Nikolaos Limanı (Zakynthos)', 'Zakynthos''un kuzeyinde, Mavi Mağaralar rotasının limanı; su çekimi ~5 m, VHF 72. Kıçtankara, aborda veya TONOZ ŞAMANDIRASI seçenekleri var — şamandırayı önceden ayırtın.' FROM locations WHERE slug = 'agios-nikolaos-limani-zakinthos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+306947329835', NULL, true
 FROM locations l WHERE l.slug = 'agios-nikolaos-limani-zakinthos'
@@ -7242,7 +7242,7 @@ SELECT gen_random_uuid(), 'mavi-magaralar-zakinthos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Mavi Mağaralar Demirleme (Zakynthos)', 'Zakynthos''un ünlü Mavi Mağaraları önünde kısa mola demirlemesi; 8-15 m, kum/deniz çayırı. DİKKAT: tutuş ZAYIF — yalnız sakin havada, teknede gözcü bırakarak durun.' FROM locations WHERE slug = 'mavi-magaralar-zakinthos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'mavi-magaralar-zakinthos'
@@ -7261,7 +7261,7 @@ SELECT gen_random_uuid(), 'filippoi-plaji-zakinthos', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Filippoi Plajı (Zakynthos)', 'Zakynthos''un kuzeybatı kıyısında sakin plaj demirlemesi; kum/deniz çayırı dip, tutuş iyi.' FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
@@ -7280,7 +7280,7 @@ SELECT gen_random_uuid(), 'gouvia-yakit-iskelesi', 6, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gouvia Marina Yakıt İstasyonu (Korfu)', 'Korfu Gouvia Marina içinde sabit yakıt istasyonu (D-Marin resmî tesis listesinde). Marina VHF 69''dan yardım alınır.' FROM locations WHERE slug = 'gouvia-yakit-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'gouvia-yakit-iskelesi'
@@ -7307,7 +7307,7 @@ SELECT gen_random_uuid(), 'lefkas-yakit-iskelesi', 6, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Lefkas Marina Yakıt İstasyonu', 'Lefkas Marina içinde sabit yakıt istasyonu — deniz motorini ve gaz yağı; boru hattı/duba/tanker ikmal seçenekleri. İyon''un ana ikmal noktalarından.' FROM locations WHERE slug = 'lefkas-yakit-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'lefkas-yakit-iskelesi'
@@ -7330,7 +7330,7 @@ SELECT gen_random_uuid(), 'kandiye-limani-girit', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kandiye (Heraklion) Limanı', 'Girit''in başkenti Kandiye''nin (Heraklion) kamu limanı; Venedik kalesi Koules''in gölgesinde. VHF 16/12, su çekimi ~3 m; 2-3 gecelik konaklamalara uygun. Ücret örneği: 2 gece ~14€. Knossos''a en yakın liman.' FROM locations WHERE slug = 'kandiye-limani-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302810338000', NULL, true
 FROM locations l WHERE l.slug = 'kandiye-limani-girit'
@@ -7353,7 +7353,7 @@ SELECT gen_random_uuid(), 'gouves-limani-girit', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Gouves Limanı (Girit)', 'Kandiye''nin doğusunda küçük Gouves limanı; su çekimi ~3 m. DİKKAT: misafir tekneler için tasarlanmamıştır — yer sınırlıdır, önceden telefonla sorun.' FROM locations WHERE slug = 'gouves-limani-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302897041112', NULL, true
 FROM locations l WHERE l.slug = 'gouves-limani-girit'
@@ -7372,7 +7372,7 @@ SELECT gen_random_uuid(), 'hersonissos-limani-girit', 3, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Hersonissos Limanı (Girit)', 'Turistik Hersonissos''un limanı. CİDDİ UYARI: aşırı sığ (~1,6 m, yer yer sıfır okumaları) ve girişte kaya engelleri var — yalnız çok sığ su çeken tekneler, dikkatli seyirle.' FROM locations WHERE slug = 'hersonissos-limani-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+302897028700', NULL, true
 FROM locations l WHERE l.slug = 'hersonissos-limani-girit'
@@ -7391,7 +7391,7 @@ SELECT gen_random_uuid(), 'alimos-yakit-iskelesi', 6, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Alimos Marina Yakıt İstasyonu (Shell, Atina)', 'Yunanistan''ın en büyük yat üssü Alimos (Kalamaki) Marina''da Shell yakıt istasyonu. Atina''dan çıkan kiralık filoların ana ikmal noktası.' FROM locations WHERE slug = 'alimos-yakit-iskelesi'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
 SELECT id, NULL, NULL, NULL, NULL, NULL
 FROM locations WHERE slug = 'alimos-yakit-iskelesi'
@@ -7414,7 +7414,7 @@ SELECT gen_random_uuid(), 'agios-nikolaos-marina-girit', 1, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agios Nikolaos Marina (Girit)', 'Doğu Girit''in Mirabello körfezindeki Agios Nikolaos marinası; VHF 72, su çekimi ~8 m — derin tekneler için rahat. Rehber ''Yunanistan''da gerçek bir mücevher, personeli harika'' diye aktarıyor.' FROM locations WHERE slug = 'agios-nikolaos-marina-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '72', NULL, NULL, NULL
@@ -7438,7 +7438,7 @@ SELECT gen_random_uuid(), 'sitia-marina-girit', 2, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sitia Marina (Girit)', 'Girit''in kuzeydoğu ucundaki Sitia limanı; VHF 12, rıhtımda elektrik ve su, restoranlar yakın. ÖNEMLİ: yer için varıştan bir gün önce liman kaptanını arayın (ikinci telefon).' FROM locations WHERE slug = 'sitia-marina-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
 SELECT id, NULL, '12', NULL, NULL, NULL
@@ -7470,7 +7470,7 @@ SELECT gen_random_uuid(), 'agiou-panteleimonos-girit', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Agiou Panteleimonos Koyu (Girit)', 'Agios Nikolaos''un güneyinde iyi korunaklı, ferah demirleme; 5 m kuma 20 m kaloma ile.' FROM locations WHERE slug = 'agiou-panteleimonos-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'agiou-panteleimonos-girit'
@@ -7489,7 +7489,7 @@ SELECT gen_random_uuid(), 'vai-plaji-girit', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Vai Plajı (Girit)', 'Girit''in kuzeydoğusundaki ünlü Vai plajı önünde demirleme; kum dipte mükemmel tutuş, kristal berraklıkta su.' FROM locations WHERE slug = 'vai-plaji-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'vai-plaji-girit'
@@ -7508,7 +7508,7 @@ SELECT gen_random_uuid(), 'kato-zakros-girit', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kato Zakros (Girit)', 'Minos sarayının koyunda demirleme; 7 m kum — plaja yaklaştıkça kayalar var, açıkta kalın. Şnorkel için mükemmel.' FROM locations WHERE slug = 'kato-zakros-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'kato-zakros-girit'
@@ -7527,7 +7527,7 @@ SELECT gen_random_uuid(), 'black-kavos-girit', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Black Kavos Koyu (Girit)', 'Sitia''nın doğusunda korunaklı küçük koy; ~6 m''ye 20 m kaloma, tutuş iyi. Salınım alanı DAR — kıyıya halat almanız önerilir.' FROM locations WHERE slug = 'black-kavos-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'black-kavos-girit'
@@ -7546,7 +7546,7 @@ SELECT gen_random_uuid(), 'analoukas-koyu-girit', 8, 'published', 'GR',
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Analoukas Koyu (Girit)', 'Sitia''nın doğusunda kumluk koy; özellikle doğu-güneydoğu rüzgârlarından mükemmel korunma.' FROM locations WHERE slug = 'analoukas-koyu-girit'
-ON CONFLICT (location_id, locale) DO NOTHING;
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'analoukas-koyu-girit'

@@ -201,7 +201,9 @@ def emit(records, batch_meta):
         out.append(
             "INSERT INTO location_i18n (location_id, locale, name, description)\n"
             f"SELECT id, 'tr', {q(r['name'])}, {q(r.get('descriptionTr'))} FROM locations WHERE slug = {q(s)}\n"
-            "ON CONFLICT (location_id, locale) DO NOTHING;"
+            # İçerik = kod: ad/açıklama düzeltmeleri canlıya AKMALI → DO UPDATE.
+            # Idempotent kalır (aynı girdi ikinci kez koşunca aynı sonuç).
+            "ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;"
         )
         is_marina = r["typeCode"] in ("private_marina", "municipal_marina")
         blue = "NULL" if r.get("blueFlag") is None else ("true" if r["blueFlag"] else "false")
