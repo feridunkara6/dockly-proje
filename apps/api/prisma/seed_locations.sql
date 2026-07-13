@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -6569,5 +6569,81 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'skala-kallonis-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- İçmeler Rıhtımı (Marmaris) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'icmeler-rihtimi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'İçmeler Rıhtımı (Marmaris)', 'Marmaris İçmeler''de büyük rıhtım — 257 tekneye kadar kapasite. Rıhtımda su ve elektrik bağlantıları, duş/WC, sintine suyu boşaltma servisi. Kasabada restoran, market, banka/ATM, eczane, çamaşırhane — her ihtiyaç yürüme mesafesinde.',
+  ST_SetSRID(ST_MakePoint(28.239423, 36.802375), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  257, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İçmeler Rıhtımı (Marmaris)', 'Marmaris İçmeler''de büyük rıhtım — 257 tekneye kadar kapasite. Rıhtımda su ve elektrik bağlantıları, duş/WC, sintine suyu boşaltma servisi. Kasabada restoran, market, banka/ATM, eczane, çamaşırhane — her ihtiyaç yürüme mesafesinde.' FROM locations WHERE slug = 'icmeler-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'icmeler-rihtimi' AND a.code IN ('electricity', 'water', 'shower', 'wc', 'restaurant', 'market', 'laundry', 'pump_out')
+ON CONFLICT DO NOTHING;
+
+-- --- İçmeler Koyu Demirleme (Marmaris) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'icmeler-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'İçmeler Koyu Demirleme (Marmaris)', 'İçmeler koyunda demirleme alanı; 10-14 m, dip yosun+kum. Keçi Adası feneri ile Sarı Mehmet Burnu arasındaki geçit derindir (~36 m). Kuvvetli batı rüzgârı dağlardan neta itebilir.',
+  ST_SetSRID(ST_MakePoint(28.237194, 36.804456), 4326)::geography,
+  NULL, NULL, 10, 14,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İçmeler Koyu Demirleme (Marmaris)', 'İçmeler koyunda demirleme alanı; 10-14 m, dip yosun+kum. Keçi Adası feneri ile Sarı Mehmet Burnu arasındaki geçit derindir (~36 m). Kuvvetli batı rüzgârı dağlardan neta itebilir.' FROM locations WHERE slug = 'icmeler-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'icmeler-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Engeceli (Manal) Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'engeceli-manal-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Engeceli (Manal) Limanı', 'Karaburun Yarımadası''nın batısında, üç koylu geniş doğal liman — bütünüyle her yönden korunma sağlar. Manal Koyu''nda 3-4 m kuma demirlenir (kuzeyliye korunaklı, güneye açık); batıdaki Körfez ve Gerence koyları her yönden korunaklıdır, kum dip iyi tutar.',
+  ST_SetSRID(ST_MakePoint(26.596861, 38.463472), 4326)::geography,
+  NULL, NULL, 3, 4,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Engeceli (Manal) Limanı', 'Karaburun Yarımadası''nın batısında, üç koylu geniş doğal liman — bütünüyle her yönden korunma sağlar. Manal Koyu''nda 3-4 m kuma demirlenir (kuzeyliye korunaklı, güneye açık); batıdaki Körfez ve Gerence koyları her yönden korunaklıdır, kum dip iyi tutar.' FROM locations WHERE slug = 'engeceli-manal-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'engeceli-manal-limani'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Sığ Liman (Selimiye) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sig-liman-selimiye', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Sığ Liman (Selimiye)', 'Selimiye''ye 2 km''deki bu koyda su o kadar berraktır ki ''dibe değeceğim'' hissi verir. 4-12 m, yosun+kum — çapanın iyi gömüldüğünden emin olun, gecelemede kıça halat alın. Kuvvetli poyrazda neta girer. Gündüz günübirlik tekneler uğrar, geceleri sakindir; sığ kumlu plajı yüzme için idealdir.',
+  ST_SetSRID(ST_MakePoint(28.090207, 36.726938), 4326)::geography,
+  NULL, NULL, 4, 12,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sığ Liman (Selimiye)', 'Selimiye''ye 2 km''deki bu koyda su o kadar berraktır ki ''dibe değeceğim'' hissi verir. 4-12 m, yosun+kum — çapanın iyi gömüldüğünden emin olun, gecelemede kıça halat alın. Kuvvetli poyrazda neta girer. Gündüz günübirlik tekneler uğrar, geceleri sakindir; sığ kumlu plajı yüzme için idealdir.' FROM locations WHERE slug = 'sig-liman-selimiye'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'sig-liman-selimiye'
 ON CONFLICT (location_id) DO NOTHING;
 
