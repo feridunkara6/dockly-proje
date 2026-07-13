@@ -175,6 +175,9 @@ class _FilterRow extends ConsumerWidget {
     return SizedBox(
       height: 52,
       child: ListView.separated(
+        // Test kimliği: çip şeridi yatay kaydırılabilir — testler dokunmadan
+        // önce hedef çipi bu şeritte görünür konuma kaydırır (CI dersi).
+        key: const ValueKey<String>('search-filter-row'),
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: chips.length,

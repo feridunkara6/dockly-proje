@@ -17,6 +17,20 @@ class _FixedBoat extends MyBoatController {
   MyBoat? build() => _boat;
 }
 
+/// Çip şeridi YATAY kaydırılabilir (CI dersi: hedef çip ekran dışında
+/// kurulmamış bile olabilir) — dokunmadan önce şeridi kaydırıp çipi görünür
+/// konuma getirir, sonra dokunur.
+Future<void> _tapChip(WidgetTester tester, String label) async {
+  final Finder chipRow = find.descendant(
+    of: find.byKey(const ValueKey<String>('search-filter-row')),
+    matching: find.byType(Scrollable),
+  );
+  await tester.scrollUntilVisible(find.text(label), 80, scrollable: chipRow);
+  await tester.ensureVisible(find.text(label));
+  await tester.pump();
+  await tester.tap(find.text(label));
+}
+
 Widget _app(FakeSearchGateway gateway, {MyBoat? boat}) {
   return ProviderScope(
     overrides: <Override>[
@@ -63,7 +77,7 @@ void main() {
     await tester.pumpWidget(_app(gateway));
     await tester.enterText(find.byType(TextField), 'göcek');
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilterChip, 'Özel Marina'));
+    await _tapChip(tester, 'Özel Marina');
     await tester.pumpAndSettle();
     expect(gateway.typeArgs.last, contains('private_marina'));
   });
@@ -134,7 +148,7 @@ void main() {
     await tester.pumpWidget(_app(gateway));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Yakıt'));
+    await _tapChip(tester, 'Yakıt');
     await tester.pumpAndSettle();
 
     expect(gateway.queries, <String>['']); // keşif modu: boş metin
@@ -151,13 +165,13 @@ void main() {
     await tester.enterText(find.byType(TextField), 'marina');
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Duş'));
+    await _tapChip(tester, 'Duş');
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Su'));
+    await _tapChip(tester, 'Su');
     await tester.pumpAndSettle();
     expect(gateway.amenityArgs.last, containsAll(<String>['shower', 'water']));
 
-    await tester.tap(find.text('Duş'));
+    await _tapChip(tester, 'Duş');
     await tester.pumpAndSettle();
     expect(gateway.amenityArgs.last, <String>['water']);
     expect(gateway.queries.last, 'marina');
@@ -171,11 +185,11 @@ void main() {
     await tester.pumpWidget(_app(gateway));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Yakıt'));
+    await _tapChip(tester, 'Yakıt');
     await tester.pumpAndSettle();
     expect(find.text('Alfa Marina'), findsOneWidget);
 
-    await tester.tap(find.text('Yakıt'));
+    await _tapChip(tester, 'Yakıt');
     await tester.pumpAndSettle();
     expect(find.text('Alfa Marina'), findsNothing);
     expect(find.textContaining('en az 2 harf'), findsOneWidget);
