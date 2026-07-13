@@ -1,0 +1,142 @@
+{
+ "batch": "22-gr-tur10-paros",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 10. tur — grecosailor.com Paros rehberi (önceki turlarla aynı yöntem). DMS→ondalık; tahmin/uydurma YOK.",
+ "notes": [
+  "Paros 4 kayıtla girdi (Parikia limanı + 3 demirleme). Naoussa ve Piso Livadi limanları kaynakta koordinatsız → bekliyor.",
+  "Parikia'nın cuma-cumartesi charter rezervasyonu notu operasyonel açıdan değerli — aynen taşındı."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "11",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306948431842",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+306979982381"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Su/elektrik bilgisi kaynakta net değil → amenity verilmedi.",
+   "slug": "parikia-limani-paros",
+   "name": "Parikia Limanı (Paros)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-paros",
+   "lat": 37.087806,
+   "lon": 25.15275,
+   "coordSource": "grecosailor.com Paros rehberi (37°05'16.1\"N 25°09'09.9\"E)",
+   "descriptionTr": "Paros'un başkenti Parikia'nın ana limanı; VHF 11, su çekimi ~3,5 m. Cuma-cumartesi rıhtım kiralık teknelere ayrılır; kuvvetli poyrazda dış rıhtım zorlayıcıdır — koyda demirlemek önerilir.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/paros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 14,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "cabana-plaji-paros",
+   "name": "Cabana Plajı (Paros)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-paros",
+   "lat": 37.093278,
+   "lon": 25.150028,
+   "coordSource": "grecosailor.com Paros rehberi (37°05'35.8\"N 25°09'00.1\"E)",
+   "descriptionTr": "Parikia koyunun kuzeyinde demirleme; ~14 m, kum/kaya. Kuzey, doğu ve batı rüzgârlarından mükemmel korunma.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/paros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Derinlik kaynakta rakamla verilmiyor → null.",
+   "slug": "krios-plaji-paros",
+   "name": "Krios Plajı (Paros)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-paros",
+   "lat": 37.095,
+   "lon": 25.140167,
+   "coordSource": "grecosailor.com Paros rehberi (37°05'42.0\"N 25°08'24.6\"E)",
+   "descriptionTr": "Parikia'ya botla 10 dakikadaki korunaklı plaj demirlemesi; dip kum/deniz çayırı — kumlu yamaları seçin.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/paros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 6,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "kolympethres-paros",
+   "name": "Kolympethres (Paros)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-paros",
+   "lat": 37.127806,
+   "lon": 25.216056,
+   "coordSource": "grecosailor.com Paros rehberi (37°07'40.1\"N 25°12'57.8\"E)",
+   "descriptionTr": "Naoussa körfezindeki ünlü granit kayalıklı Kolympethres plajı önünde demirleme; ~6 m, kristal berraklıkta su, tutuş iyi.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/cyclades/paros/"
+   ]
+  }
+ ]
+}

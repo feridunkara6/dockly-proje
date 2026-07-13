@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -117,6 +117,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Amorgos', 'gr-amorgos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Naxos', 'gr-naxos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Paros', 'gr-paros')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6864,5 +6867,85 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'plaka-plaji-naxos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Parikia Limanı (Paros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'parikia-limani-paros', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-paros'),
+  'Parikia Limanı (Paros)', 'Paros''un başkenti Parikia''nın ana limanı; VHF 11, su çekimi ~3,5 m. Cuma-cumartesi rıhtım kiralık teknelere ayrılır; kuvvetli poyrazda dış rıhtım zorlayıcıdır — koyda demirlemek önerilir.',
+  ST_SetSRID(ST_MakePoint(25.15275, 37.087806), 4326)::geography,
+  NULL, 3.5, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Parikia Limanı (Paros)', 'Paros''un başkenti Parikia''nın ana limanı; VHF 11, su çekimi ~3,5 m. Cuma-cumartesi rıhtım kiralık teknelere ayrılır; kuvvetli poyrazda dış rıhtım zorlayıcıdır — koyda demirlemek önerilir.' FROM locations WHERE slug = 'parikia-limani-paros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306948431842', NULL, true
+FROM locations l WHERE l.slug = 'parikia-limani-paros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306979982381', NULL, false
+FROM locations l WHERE l.slug = 'parikia-limani-paros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Cabana Plajı (Paros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cabana-plaji-paros', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-paros'),
+  'Cabana Plajı (Paros)', 'Parikia koyunun kuzeyinde demirleme; ~14 m, kum/kaya. Kuzey, doğu ve batı rüzgârlarından mükemmel korunma.',
+  ST_SetSRID(ST_MakePoint(25.150028, 37.093278), 4326)::geography,
+  NULL, NULL, NULL, 14,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Cabana Plajı (Paros)', 'Parikia koyunun kuzeyinde demirleme; ~14 m, kum/kaya. Kuzey, doğu ve batı rüzgârlarından mükemmel korunma.' FROM locations WHERE slug = 'cabana-plaji-paros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'cabana-plaji-paros'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Krios Plajı (Paros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'krios-plaji-paros', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-paros'),
+  'Krios Plajı (Paros)', 'Parikia''ya botla 10 dakikadaki korunaklı plaj demirlemesi; dip kum/deniz çayırı — kumlu yamaları seçin.',
+  ST_SetSRID(ST_MakePoint(25.140167, 37.095), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Krios Plajı (Paros)', 'Parikia''ya botla 10 dakikadaki korunaklı plaj demirlemesi; dip kum/deniz çayırı — kumlu yamaları seçin.' FROM locations WHERE slug = 'krios-plaji-paros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'krios-plaji-paros'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kolympethres (Paros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kolympethres-paros', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-paros'),
+  'Kolympethres (Paros)', 'Naoussa körfezindeki ünlü granit kayalıklı Kolympethres plajı önünde demirleme; ~6 m, kristal berraklıkta su, tutuş iyi.',
+  ST_SetSRID(ST_MakePoint(25.216056, 37.127806), 4326)::geography,
+  NULL, NULL, NULL, 6,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kolympethres (Paros)', 'Naoussa körfezindeki ünlü granit kayalıklı Kolympethres plajı önünde demirleme; ~6 m, kristal berraklıkta su, tutuş iyi.' FROM locations WHERE slug = 'kolympethres-paros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'kolympethres-paros'
 ON CONFLICT (location_id) DO NOTHING;
 
