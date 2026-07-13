@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -7400,4 +7400,155 @@ INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'alimos-yakit-iskelesi' AND a.code IN ('fuel')
 ON CONFLICT DO NOTHING;
+
+-- --- Agios Nikolaos Marina (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agios-nikolaos-marina-girit', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Agios Nikolaos Marina (Girit)', 'Doğu Girit''in Mirabello körfezindeki Agios Nikolaos marinası; VHF 72, su çekimi ~8 m — derin tekneler için rahat. Rehber ''Yunanistan''da gerçek bir mücevher, personeli harika'' diye aktarıyor.',
+  ST_SetSRID(ST_MakePoint(25.718444, 35.186056), 4326)::geography,
+  NULL, 8, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Nikolaos Marina (Girit)', 'Doğu Girit''in Mirabello körfezindeki Agios Nikolaos marinası; VHF 72, su çekimi ~8 m — derin tekneler için rahat. Rehber ''Yunanistan''da gerçek bir mücevher, personeli harika'' diye aktarıyor.' FROM locations WHERE slug = 'agios-nikolaos-marina-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '72', NULL, NULL, NULL
+FROM locations WHERE slug = 'agios-nikolaos-marina-girit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302841082384', NULL, true
+FROM locations l WHERE l.slug = 'agios-nikolaos-marina-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Sitia Marina (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sitia-marina-girit', 2, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Sitia Marina (Girit)', 'Girit''in kuzeydoğu ucundaki Sitia limanı; VHF 12, rıhtımda elektrik ve su, restoranlar yakın. ÖNEMLİ: yer için varıştan bir gün önce liman kaptanını arayın (ikinci telefon).',
+  ST_SetSRID(ST_MakePoint(26.108667, 35.207444), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sitia Marina (Girit)', 'Girit''in kuzeydoğu ucundaki Sitia limanı; VHF 12, rıhtımda elektrik ve su, restoranlar yakın. ÖNEMLİ: yer için varıştan bir gün önce liman kaptanını arayın (ikinci telefon).' FROM locations WHERE slug = 'sitia-marina-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '12', NULL, NULL, NULL
+FROM locations WHERE slug = 'sitia-marina-girit'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sitia-marina-girit' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302843022310', NULL, true
+FROM locations l WHERE l.slug = 'sitia-marina-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306984614513', NULL, false
+FROM locations l WHERE l.slug = 'sitia-marina-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Agiou Panteleimonos Koyu (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agiou-panteleimonos-girit', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Agiou Panteleimonos Koyu (Girit)', 'Agios Nikolaos''un güneyinde iyi korunaklı, ferah demirleme; 5 m kuma 20 m kaloma ile.',
+  ST_SetSRID(ST_MakePoint(25.73425, 35.128111), 4326)::geography,
+  NULL, NULL, NULL, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agiou Panteleimonos Koyu (Girit)', 'Agios Nikolaos''un güneyinde iyi korunaklı, ferah demirleme; 5 m kuma 20 m kaloma ile.' FROM locations WHERE slug = 'agiou-panteleimonos-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'agiou-panteleimonos-girit'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Vai Plajı (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'vai-plaji-girit', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Vai Plajı (Girit)', 'Girit''in kuzeydoğusundaki ünlü Vai plajı önünde demirleme; kum dipte mükemmel tutuş, kristal berraklıkta su.',
+  ST_SetSRID(ST_MakePoint(26.266333, 35.25475), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Vai Plajı (Girit)', 'Girit''in kuzeydoğusundaki ünlü Vai plajı önünde demirleme; kum dipte mükemmel tutuş, kristal berraklıkta su.' FROM locations WHERE slug = 'vai-plaji-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'vai-plaji-girit'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kato Zakros (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kato-zakros-girit', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Kato Zakros (Girit)', 'Minos sarayının koyunda demirleme; 7 m kum — plaja yaklaştıkça kayalar var, açıkta kalın. Şnorkel için mükemmel.',
+  ST_SetSRID(ST_MakePoint(26.265722, 35.097278), 4326)::geography,
+  NULL, NULL, NULL, 7,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kato Zakros (Girit)', 'Minos sarayının koyunda demirleme; 7 m kum — plaja yaklaştıkça kayalar var, açıkta kalın. Şnorkel için mükemmel.' FROM locations WHERE slug = 'kato-zakros-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'kato-zakros-girit'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Black Kavos Koyu (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'black-kavos-girit', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Black Kavos Koyu (Girit)', 'Sitia''nın doğusunda korunaklı küçük koy; ~6 m''ye 20 m kaloma, tutuş iyi. Salınım alanı DAR — kıyıya halat almanız önerilir.',
+  ST_SetSRID(ST_MakePoint(26.254972, 35.272917), 4326)::geography,
+  NULL, NULL, NULL, 6,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Black Kavos Koyu (Girit)', 'Sitia''nın doğusunda korunaklı küçük koy; ~6 m''ye 20 m kaloma, tutuş iyi. Salınım alanı DAR — kıyıya halat almanız önerilir.' FROM locations WHERE slug = 'black-kavos-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'black-kavos-girit'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Analoukas Koyu (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'analoukas-koyu-girit', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Analoukas Koyu (Girit)', 'Sitia''nın doğusunda kumluk koy; özellikle doğu-güneydoğu rüzgârlarından mükemmel korunma.',
+  ST_SetSRID(ST_MakePoint(26.184417, 35.213917), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Analoukas Koyu (Girit)', 'Sitia''nın doğusunda kumluk koy; özellikle doğu-güneydoğu rüzgârlarından mükemmel korunma.' FROM locations WHERE slug = 'analoukas-koyu-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'analoukas-koyu-girit'
+ON CONFLICT (location_id) DO NOTHING;
 

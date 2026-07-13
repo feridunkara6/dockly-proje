@@ -1,0 +1,242 @@
+{
+ "batch": "27-gr-tur14-dogu-girit",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 14. tur — grecosailor.com Agios Nikolaos ve Sitia rehberleri (önceki turlarla aynı yöntem). DMS→ondalık; tahmin/uydurma YOK.",
+ "notes": [
+  "Doğu Girit 7 kayıtla dolduruldu (2 marina + 5 koy). Hanya/Resmo rehber sayfaları koordinat vermiyor → bekliyor.",
+  "Sitia'nın 'bir gün önceden liman kaptanını ara' notu operasyonel altın — aynen taşındı.",
+  "Yakıt: bu adaların kaynaklarında sabit istasyon belgelenmedi; Zea/Rodos doğrulaması sürüyor."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 8,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "72",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302841082384",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "agios-nikolaos-marina-girit",
+   "name": "Agios Nikolaos Marina (Girit)",
+   "typeCode": "private_marina",
+   "lat": 35.186056,
+   "lon": 25.718444,
+   "coordSource": "grecosailor.com Girit rehberi (35°11'09.8\"N 25°43'06.4\"E)",
+   "descriptionTr": "Doğu Girit'in Mirabello körfezindeki Agios Nikolaos marinası; VHF 72, su çekimi ~8 m — derin tekneler için rahat. Rehber 'Yunanistan'da gerçek bir mücevher, personeli harika' diye aktarıyor.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/agios-nikolaos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302843022310",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+306984614513"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "sitia-marina-girit",
+   "name": "Sitia Marina (Girit)",
+   "typeCode": "municipal_marina",
+   "lat": 35.207444,
+   "lon": 26.108667,
+   "coordSource": "grecosailor.com Girit rehberi (35°12'26.8\"N 26°06'31.2\"E)",
+   "descriptionTr": "Girit'in kuzeydoğu ucundaki Sitia limanı; VHF 12, rıhtımda elektrik ve su, restoranlar yakın. ÖNEMLİ: yer için varıştan bir gün önce liman kaptanını arayın (ikinci telefon).",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 5,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "agiou-panteleimonos-girit",
+   "name": "Agiou Panteleimonos Koyu (Girit)",
+   "typeCode": "mooring_point",
+   "lat": 35.128111,
+   "lon": 25.73425,
+   "coordSource": "grecosailor.com Girit rehberi (35°07'41.2\"N 25°44'03.3\"E)",
+   "descriptionTr": "Agios Nikolaos'un güneyinde iyi korunaklı, ferah demirleme; 5 m kuma 20 m kaloma ile.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/agios-nikolaos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "vai-plaji-girit",
+   "name": "Vai Plajı (Girit)",
+   "typeCode": "mooring_point",
+   "lat": 35.25475,
+   "lon": 26.266333,
+   "coordSource": "grecosailor.com Girit rehberi (35°15'17.1\"N 26°15'58.8\"E)",
+   "descriptionTr": "Girit'in kuzeydoğusundaki ünlü Vai plajı önünde demirleme; kum dipte mükemmel tutuş, kristal berraklıkta su.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 7,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "kato-zakros-girit",
+   "name": "Kato Zakros (Girit)",
+   "typeCode": "mooring_point",
+   "lat": 35.097278,
+   "lon": 26.265722,
+   "coordSource": "grecosailor.com Girit rehberi (35°05'50.2\"N 26°15'56.6\"E)",
+   "descriptionTr": "Minos sarayının koyunda demirleme; 7 m kum — plaja yaklaştıkça kayalar var, açıkta kalın. Şnorkel için mükemmel.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 6,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "black-kavos-girit",
+   "name": "Black Kavos Koyu (Girit)",
+   "typeCode": "mooring_point",
+   "lat": 35.272917,
+   "lon": 26.254972,
+   "coordSource": "grecosailor.com Girit rehberi (35°16'22.5\"N 26°15'17.9\"E)",
+   "descriptionTr": "Sitia'nın doğusunda korunaklı küçük koy; ~6 m'ye 20 m kaloma, tutuş iyi. Salınım alanı DAR — kıyıya halat almanız önerilir.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "provinceSlug": "gr-girit",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "analoukas-koyu-girit",
+   "name": "Analoukas Koyu (Girit)",
+   "typeCode": "mooring_point",
+   "lat": 35.213917,
+   "lon": 26.184417,
+   "coordSource": "grecosailor.com Girit rehberi (35°12'50.1\"N 26°11'03.9\"E)",
+   "descriptionTr": "Sitia'nın doğusunda kumluk koy; özellikle doğu-güneydoğu rüzgârlarından mükemmel korunma.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ]
+  }
+ ]
+}
