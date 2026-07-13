@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -7916,5 +7916,526 @@ ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, descriptio
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'girneyit-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Ilıca Koyu (Sığacık) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ilica-koyu-sigacik', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Ilıca Koyu (Sığacık)', 'Sığacık Körfezi''nin kuzeyinde, kuzeye girintili ve kumlu plajda biten dar koy. 4-5 m''ye demirlenir; girinti dar olduğundan kayaya halat verilebilir; doğu yakasında az sayıda tekneye yer vardır. Dağlardan denize kuvvetli rüzgâr inebilir.',
+  ST_SetSRID(ST_MakePoint(26.640787, 38.201968), 4326)::geography,
+  NULL, NULL, 4, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ilıca Koyu (Sığacık)', 'Sığacık Körfezi''nin kuzeyinde, kuzeye girintili ve kumlu plajda biten dar koy. 4-5 m''ye demirlenir; girinti dar olduğundan kayaya halat verilebilir; doğu yakasında az sayıda tekneye yer vardır. Dağlardan denize kuvvetli rüzgâr inebilir.' FROM locations WHERE slug = 'ilica-koyu-sigacik'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'ilica-koyu-sigacik'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Papaz Boğazı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'papaz-bogazi-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Papaz Boğazı', 'Sığacık Körfezi''nin kuzeybatısındaki güzel koy; güneyli rüzgârlar dışında güvenli barınak. 8-10 m derinlik; doğu ucundaki girintide yalnız 2-3 tekneye yer vardır. Kıyı açığındaki mineral su kaynağı ve çamuru ile bilinir.',
+  ST_SetSRID(ST_MakePoint(26.653834, 38.207129), 4326)::geography,
+  NULL, NULL, 8, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Papaz Boğazı', 'Sığacık Körfezi''nin kuzeybatısındaki güzel koy; güneyli rüzgârlar dışında güvenli barınak. 8-10 m derinlik; doğu ucundaki girintide yalnız 2-3 tekneye yer vardır. Kıyı açığındaki mineral su kaynağı ve çamuru ile bilinir.' FROM locations WHERE slug = 'papaz-bogazi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'papaz-bogazi-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Taş Ada Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tas-ada-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Taş Ada Koyu', 'Sığacık Körfezi''nin kuzeyinde; adını girişin ortasındaki kayadan alır. Koya bu kayanın BATISINDAN girilir — kayanın doğusundan resifler uzanır. Kumsalda biten koyda 4-5 m''ye demirlenir; kuzeyli rüzgârlara yeterli korunak sağlar, güneye açıktır.',
+  ST_SetSRID(ST_MakePoint(26.662085, 38.207332), 4326)::geography,
+  NULL, NULL, 4, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Taş Ada Koyu', 'Sığacık Körfezi''nin kuzeyinde; adını girişin ortasındaki kayadan alır. Koya bu kayanın BATISINDAN girilir — kayanın doğusundan resifler uzanır. Kumsalda biten koyda 4-5 m''ye demirlenir; kuzeyli rüzgârlara yeterli korunak sağlar, güneye açıktır.' FROM locations WHERE slug = 'tas-ada-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'tas-ada-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kapıkaya Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kapikaya-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Kapıkaya Koyu', 'Demircili (Urla) kıyısında küçük koy. Plaj önünde 3-5 m''ye, yosun-kum zemine demirlenir; iç havza 2-3 m''dir. Kuvvetli kuzeyli rüzgârlar soluğan sokar.',
+  ST_SetSRID(ST_MakePoint(26.665064, 38.20603), 4326)::geography,
+  NULL, NULL, 3, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kapıkaya Koyu', 'Demircili (Urla) kıyısında küçük koy. Plaj önünde 3-5 m''ye, yosun-kum zemine demirlenir; iç havza 2-3 m''dir. Kuvvetli kuzeyli rüzgârlar soluğan sokar.' FROM locations WHERE slug = 'kapikaya-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'kapikaya-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Yarımada Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yarimada-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Yarımada Koyu', 'Sığacık Körfezi''nin kuzeyinde, oval kumsalda biten koy. Koya, kolay seçilen su seviyesindeki kayaların DOĞUSUNDAN girilir. 3-4 m''ye demirlenir; güney dışında her yöne korunak sağlar. Kuzey tepede kafe vardır; Demirci Limanı''na yürüyüş patikası uzanır.',
+  ST_SetSRID(ST_MakePoint(26.689185, 38.204936), 4326)::geography,
+  NULL, NULL, 3, 4,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yarımada Koyu', 'Sığacık Körfezi''nin kuzeyinde, oval kumsalda biten koy. Koya, kolay seçilen su seviyesindeki kayaların DOĞUSUNDAN girilir. 3-4 m''ye demirlenir; güney dışında her yöne korunak sağlar. Kuzey tepede kafe vardır; Demirci Limanı''na yürüyüş patikası uzanır.' FROM locations WHERE slug = 'yarimada-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'yarimada-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Düverlik (Merdivenli) Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'duverlik-merdivenli-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Düverlik (Merdivenli) Koyu', 'Sığacık Körfezi''nin kuzeybatısında, kumsalda biten koy. 4-6 m''ye kum-yosun zemine demirlenir; karaya halat verilebilir. Kuzeyli rüzgârlara iyi korunak, güneye açık. Kayalara oyulmuş denize inen antik merdivenleriyle ünlüdür.',
+  ST_SetSRID(ST_MakePoint(26.63288, 38.198287), 4326)::geography,
+  NULL, NULL, 4, 6,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Düverlik (Merdivenli) Koyu', 'Sığacık Körfezi''nin kuzeybatısında, kumsalda biten koy. 4-6 m''ye kum-yosun zemine demirlenir; karaya halat verilebilir. Kuzeyli rüzgârlara iyi korunak, güneye açık. Kayalara oyulmuş denize inen antik merdivenleriyle ünlüdür.' FROM locations WHERE slug = 'duverlik-merdivenli-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'duverlik-merdivenli-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Gök Liman (Kokar) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gok-liman-kokar-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Gök Liman (Kokar)', 'Teke Burnu''nun ~2 mil kuzeydoğusunda, fiyort gibi derin koy; HER YÖNE korunak sağlar. Kuzey krek: ortada 9-11 m, kıyıya doğru sığlaşır — 4-6 m''ye kum zemine demirleyip doğu kıyısına baş halatı verin; tutuş iyidir (balık çiftlikleri manzarayı bozar). Doğu krek: ~10 m, 1-2 tekne; tutuş kuzey kreke göre zayıftır. DİKKAT: girişte gemi şamandırası var — gece dikkat.',
+  ST_SetSRID(ST_MakePoint(26.613118, 38.136774), 4326)::geography,
+  NULL, NULL, 4, 11,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gök Liman (Kokar)', 'Teke Burnu''nun ~2 mil kuzeydoğusunda, fiyort gibi derin koy; HER YÖNE korunak sağlar. Kuzey krek: ortada 9-11 m, kıyıya doğru sığlaşır — 4-6 m''ye kum zemine demirleyip doğu kıyısına baş halatı verin; tutuş iyidir (balık çiftlikleri manzarayı bozar). Doğu krek: ~10 m, 1-2 tekne; tutuş kuzey kreke göre zayıftır. DİKKAT: girişte gemi şamandırası var — gece dikkat.' FROM locations WHERE slug = 'gok-liman-kokar-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'gok-liman-kokar-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Nergis Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'nergis-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Nergis Koyu', 'Sarpdere yakınında, kuzeye girintili koy. 4 m''ye, yer yer yosun yamalı kum zemine demirlenir; tutuş iyidir ama kum bazı yerlerde serttir — demiri motor gücüyle oturtun. Her yönden korunak sağlar; kuvvetli kuzeylide ~1 mil açıklık nedeniyle rahatsız edici dalgalanma olur. Dip o kadar berraktır ki mavinin tonları sayılır; içeride güzel bir plaj vardır.',
+  ST_SetSRID(ST_MakePoint(26.51646, 38.171888), 4326)::geography,
+  NULL, NULL, 4, 4,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Nergis Koyu', 'Sarpdere yakınında, kuzeye girintili koy. 4 m''ye, yer yer yosun yamalı kum zemine demirlenir; tutuş iyidir ama kum bazı yerlerde serttir — demiri motor gücüyle oturtun. Her yönden korunak sağlar; kuvvetli kuzeylide ~1 mil açıklık nedeniyle rahatsız edici dalgalanma olur. Dip o kadar berraktır ki mavinin tonları sayılır; içeride güzel bir plaj vardır.' FROM locations WHERE slug = 'nergis-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'nergis-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Zeytineli Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zeytineli-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Zeytineli Koyu', 'İnmece Burnu ile Böğürtlen Burnu arasındaki körfez; Böğürtlen Adası ve Dümbelek Adaları yakınında. Bölge kristal berraklığındaki suları ve art arda koylarıyla bilinir.',
+  ST_SetSRID(ST_MakePoint(26.484337, 38.189452), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zeytineli Koyu', 'İnmece Burnu ile Böğürtlen Burnu arasındaki körfez; Böğürtlen Adası ve Dümbelek Adaları yakınında. Bölge kristal berraklığındaki suları ve art arda koylarıyla bilinir.' FROM locations WHERE slug = 'zeytineli-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'zeytineli-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Böğürtlen Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bogurtlen-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Böğürtlen Koyu', 'Dümbelek Adaları ile Dümbelek Dağı arasındaki koy; Böğürtlen Adası''nın yakınındadır. Zeytineli ile birlikte Urla''nın açık deniz koyları hattındadır.',
+  ST_SetSRID(ST_MakePoint(26.456503, 38.200115), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Böğürtlen Koyu', 'Dümbelek Adaları ile Dümbelek Dağı arasındaki koy; Böğürtlen Adası''nın yakınındadır. Zeytineli ile birlikte Urla''nın açık deniz koyları hattındadır.' FROM locations WHERE slug = 'bogurtlen-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'bogurtlen-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Lakoz Koyları · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lakoz-koylari-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Lakoz Koyları', 'Urla açıklarında kuzey ve güney olmak üzere ikiz koy. Sarpdere ile Teke Burnu arasındaki tenha demirleme hattındadır.',
+  ST_SetSRID(ST_MakePoint(26.521944, 38.154556), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lakoz Koyları', 'Urla açıklarında kuzey ve güney olmak üzere ikiz koy. Sarpdere ile Teke Burnu arasındaki tenha demirleme hattındadır.' FROM locations WHERE slug = 'lakoz-koylari-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'lakoz-koylari-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Çıplak Ada · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ciplak-ada-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
+  'Çıplak Ada', 'Ayvalık kanalının girişinde, Sarımsaklı yarımadasının batısındaki ada. Güney koyunda 2-5 m''ye kum zemine demirlenir; kuzeyli rüzgârlara korunak sağlar — geceleri sakindir; çoğunlukla öğle molası durağıdır. Adanın fenerinin özellikleri: 18 m odak düzlemi, 3 sn''de bir kırmızı çakar, 8 mil görünürlük.',
+  ST_SetSRID(ST_MakePoint(26.592667, 39.281472), 4326)::geography,
+  NULL, NULL, 2, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çıplak Ada', 'Ayvalık kanalının girişinde, Sarımsaklı yarımadasının batısındaki ada. Güney koyunda 2-5 m''ye kum zemine demirlenir; kuzeyli rüzgârlara korunak sağlar — geceleri sakindir; çoğunlukla öğle molası durağıdır. Adanın fenerinin özellikleri: 18 m odak düzlemi, 3 sn''de bir kırmızı çakar, 8 mil görünürlük.' FROM locations WHERE slug = 'ciplak-ada-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'ciplak-ada-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Sarımsaklı Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sarimsakli-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
+  'Sarımsaklı Koyu', 'Ayvalık''ın 7 km uzunluğa ulaşan ünlü kumsalının önü. 2-5 m''de kum zemin iyi tutar; derinlik kıyıya doğru hızla azalır. YALNIZ İYİ HAVADA demirleme yeridir — kötü havada korunak sınırlıdır. Kıyıda oteller, restoranlar ve kafeler sıralıdır.',
+  ST_SetSRID(ST_MakePoint(26.632083, 39.270722), 4326)::geography,
+  NULL, NULL, 2, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sarımsaklı Koyu', 'Ayvalık''ın 7 km uzunluğa ulaşan ünlü kumsalının önü. 2-5 m''de kum zemin iyi tutar; derinlik kıyıya doğru hızla azalır. YALNIZ İYİ HAVADA demirleme yeridir — kötü havada korunak sınırlıdır. Kıyıda oteller, restoranlar ve kafeler sıralıdır.' FROM locations WHERE slug = 'sarimsakli-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'sarimsakli-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Altınova Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'altinova-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
+  'Altınova Balıkçı Barınağı', 'Ayvalık''ın güneyinde, Altınova''nın kooperatif barınağı; 85 tekne. Doğal dalgakıranla korunur; su ve elektrik bağlantısı vardır. Anakaraya 450 m''lik köprüyle bağlı Kum Ada hemen yanındadır. Kasabada market, sağlık merkezi, otel ve restoranlar; yöresel zeytinyağı dükkânları bulunur.',
+  ST_SetSRID(ST_MakePoint(26.734608, 39.210427), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  85, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Altınova Balıkçı Barınağı', 'Ayvalık''ın güneyinde, Altınova''nın kooperatif barınağı; 85 tekne. Doğal dalgakıranla korunur; su ve elektrik bağlantısı vardır. Anakaraya 450 m''lik köprüyle bağlı Kum Ada hemen yanındadır. Kasabada market, sağlık merkezi, otel ve restoranlar; yöresel zeytinyağı dükkânları bulunur.' FROM locations WHERE slug = 'altinova-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'altinova-balikci-barinagi' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+
+-- --- Garip Adası · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'garip-adasi-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Garip Adası', 'Bademli (Dikili) açıklarındaki iki adadan biri (357 bin m²); Kalem Adası ile kuzey-güney hattında uzanır, Midilli''nin karşısındadır. Bademli köyünde (limana 1 km) pansiyonlar, restoranlar, fırın, sağlık merkezi ve Salı pazarı vardır.',
+  ST_SetSRID(ST_MakePoint(26.78338, 39.007469), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Garip Adası', 'Bademli (Dikili) açıklarındaki iki adadan biri (357 bin m²); Kalem Adası ile kuzey-güney hattında uzanır, Midilli''nin karşısındadır. Bademli köyünde (limana 1 km) pansiyonlar, restoranlar, fırın, sağlık merkezi ve Salı pazarı vardır.' FROM locations WHERE slug = 'garip-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'garip-adasi-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Pissa Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pissa-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Pissa Koyu', 'Bademli (Dikili) kıyısında, Kalem ve Garip adalarının karşısındaki koy. Uzun kumsallarıyla bilinen Bademli köyü yakındadır; köyde konaklama, restoran ve sağlık hizmetleri bulunur.',
+  ST_SetSRID(ST_MakePoint(26.79884, 39.018434), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pissa Koyu', 'Bademli (Dikili) kıyısında, Kalem ve Garip adalarının karşısındaki koy. Uzun kumsallarıyla bilinen Bademli köyü yakındadır; köyde konaklama, restoran ve sağlık hizmetleri bulunur.' FROM locations WHERE slug = 'pissa-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'pissa-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kıyıkışlacık (İasos) Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kiyikislacik-balikci-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Kıyıkışlacık (İasos) Balıkçı Limanı', 'Antik İasos kentinin limanı; Milas''a 18 km. VHF 16''dan ''Kıyıkışlacık Harbour'' çağrılır. Ortalama derinlik 8 m; limanda 4 m''ye demirleme önerilir — çamur ve kum zemin iyi tutar. Antik dalgakıran kalıntıları güneyli dalgadan korur; koy her yönden korunaklıdır. Rıhtımda elektrik ve içme suyu; 500 litre üzeri için tankerle yakıt düzenlenir. Köyde restoran, kafe, pansiyon, balık pazarı ve eczane vardır. Port İasos Marina ayrı tesistir.',
+  ST_SetSRID(ST_MakePoint(27.5825, 37.276944), 4326)::geography,
+  NULL, NULL, 4, 8,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kıyıkışlacık (İasos) Balıkçı Limanı', 'Antik İasos kentinin limanı; Milas''a 18 km. VHF 16''dan ''Kıyıkışlacık Harbour'' çağrılır. Ortalama derinlik 8 m; limanda 4 m''ye demirleme önerilir — çamur ve kum zemin iyi tutar. Antik dalgakıran kalıntıları güneyli dalgadan korur; koy her yönden korunaklıdır. Rıhtımda elektrik ve içme suyu; 500 litre üzeri için tankerle yakıt düzenlenir. Köyde restoran, kafe, pansiyon, balık pazarı ve eczane vardır. Port İasos Marina ayrı tesistir.' FROM locations WHERE slug = 'kiyikislacik-balikci-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kiyikislacik-balikci-limani' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'kiyikislacik-balikci-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Güvercinlik Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'guvercinlik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Güvercinlik Balıkçı Barınağı', 'Bodrum''a 18 km, havalimanına 12 km uzaklıkta, Pina yarımadası boyunca doğuya uzanan ormanlık koyun köy barınağı. Köy önünde 4-9 m''ye kum zemine demirlenir; tutuş iyidir — hâkim batılıya karşı karaya halat verin. Köyde pansiyonlar, ATM, eczane, devlet kliniği ve jandarma vardır; koydaki çiftliklerden taze levrek alınabilir. Antik Karyanda kalıntıları yol girişindedir.',
+  ST_SetSRID(ST_MakePoint(27.580194, 37.135861), 4326)::geography,
+  NULL, NULL, 4, 9,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güvercinlik Balıkçı Barınağı', 'Bodrum''a 18 km, havalimanına 12 km uzaklıkta, Pina yarımadası boyunca doğuya uzanan ormanlık koyun köy barınağı. Köy önünde 4-9 m''ye kum zemine demirlenir; tutuş iyidir — hâkim batılıya karşı karaya halat verin. Köyde pansiyonlar, ATM, eczane, devlet kliniği ve jandarma vardır; koydaki çiftliklerden taze levrek alınabilir. Antik Karyanda kalıntıları yol girişindedir.' FROM locations WHERE slug = 'guvercinlik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ilıcabükü (Cennet Koyu) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ilicabuku-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Ilıcabükü (Cennet Koyu)', 'Çomca ve Gök burunları arasında, yerel adıyla ''Cennet Koyu''. Her iki burnun ucundan SIĞ KAYA YAMALARI uzanır — koya ortadaki kanaldan girin. 3-6 m''ye demirlenir, tutuş iyidir; emniyet için karaya halat verin. Güneybatı girinti hâkim rüzgârlara korunaklıdır; kuvvetli kuzeyli soluğan sokar. Çam kaplı yamaçlar ve koşu patikası; adını veren kuyu suları kıyıdadır.',
+  ST_SetSRID(ST_MakePoint(27.424056, 37.126944), 4326)::geography,
+  NULL, NULL, 3, 6,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ilıcabükü (Cennet Koyu)', 'Çomca ve Gök burunları arasında, yerel adıyla ''Cennet Koyu''. Her iki burnun ucundan SIĞ KAYA YAMALARI uzanır — koya ortadaki kanaldan girin. 3-6 m''ye demirlenir, tutuş iyidir; emniyet için karaya halat verin. Güneybatı girinti hâkim rüzgârlara korunaklıdır; kuvvetli kuzeyli soluğan sokar. Çam kaplı yamaçlar ve koşu patikası; adını veren kuyu suları kıyıdadır.' FROM locations WHERE slug = 'ilicabuku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'ilicabuku-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Demir Liman · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'demir-liman-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Demir Liman', 'Gök Burnu''nun güneyinde, Torba''nın 2,5 mil kuzeyinde ''saklı koy''. Derinlik 18-20 m''den hızla 7 m''ye düşer; 8-10 m''ye demirlenir. Meltemden iyi korunur. DİKKAT: girişte sağ taraftaki resiflerden mesafe alın; koyun kuzeyinde üzerinde 4 m su olan batık kayalık vardır. Kıyı palmiyelidir; özel ev ve özel iskele bulunur.',
+  ST_SetSRID(ST_MakePoint(27.436518, 37.120873), 4326)::geography,
+  NULL, NULL, 8, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Demir Liman', 'Gök Burnu''nun güneyinde, Torba''nın 2,5 mil kuzeyinde ''saklı koy''. Derinlik 18-20 m''den hızla 7 m''ye düşer; 8-10 m''ye demirlenir. Meltemden iyi korunur. DİKKAT: girişte sağ taraftaki resiflerden mesafe alın; koyun kuzeyinde üzerinde 4 m su olan batık kayalık vardır. Kıyı palmiyelidir; özel ev ve özel iskele bulunur.' FROM locations WHERE slug = 'demir-liman-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'rock', NULL, true
+FROM locations WHERE slug = 'demir-liman-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kuyucakbükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kuyucakbuku-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Kuyucakbükü', 'Güllük Körfezi''nin doğusunda, Salih Adası ile Kimse Burnu arasında çam kaplı doğal liman; HER RÜZGÂRDAN korunaklıdır. Kuzeybatı ve kuzeydoğu olmak üzere iki krekte demirlenir; orta su yolu her havada barınak verir. Kuzeybatı krekte otel iskelesine yanaşılabilir. DİKKAT: girişin iki yanındaki balık çiftliklerinin bağlantı halatlarına dikkat; bir bölüm bataklık olduğundan girilmez.',
+  ST_SetSRID(ST_MakePoint(27.557472, 37.154833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kuyucakbükü', 'Güllük Körfezi''nin doğusunda, Salih Adası ile Kimse Burnu arasında çam kaplı doğal liman; HER RÜZGÂRDAN korunaklıdır. Kuzeybatı ve kuzeydoğu olmak üzere iki krekte demirlenir; orta su yolu her havada barınak verir. Kuzeybatı krekte otel iskelesine yanaşılabilir. DİKKAT: girişin iki yanındaki balık çiftliklerinin bağlantı halatlarına dikkat; bir bölüm bataklık olduğundan girilmez.' FROM locations WHERE slug = 'kuyucakbuku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'kuyucakbuku-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Ülelibük (Varvil) Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ulelibuk-varvil-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Ülelibük (Varvil) Koyu', 'Güllük Körfezi''nde güneye uzanan, ortadan sığlaşıp Bükgöl bataklığında biten koy. 3 m''ye çamur zemine demirlenir. Meltem ve batılı rüzgârlar soluğan sokar. Boğaziçi balıkçı köyünün iskelesi ~4 tekne alır; su ve elektrik vardır; köyde kâhya ve balık restoranları bulunur. Antik Bargylia kalıntıları batı yakadadır.',
+  ST_SetSRID(ST_MakePoint(27.574004, 37.212674), 4326)::geography,
+  NULL, NULL, 3, 3,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ülelibük (Varvil) Koyu', 'Güllük Körfezi''nde güneye uzanan, ortadan sığlaşıp Bükgöl bataklığında biten koy. 3 m''ye çamur zemine demirlenir. Meltem ve batılı rüzgârlar soluğan sokar. Boğaziçi balıkçı köyünün iskelesi ~4 tekne alır; su ve elektrik vardır; köyde kâhya ve balık restoranları bulunur. Antik Bargylia kalıntıları batı yakadadır.' FROM locations WHERE slug = 'ulelibuk-varvil-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mud', NULL, true
+FROM locations WHERE slug = 'ulelibuk-varvil-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kocabahçe Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kocabahce-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kocabahçe Koyu', 'Hisarönü''nde Kargacık ve Ayı burunları arasında, güneybatıya yarım mil girintili daralan koy. 10-20 m''ye demirlenir; kıyıya doğru sığlaşır. Güneydeki dere ağzı tarafı meltemin dulundadır; kuvvetli kuzeyli hem soluğan sokar hem dağdan huni gibi iner. DİKKAT: girişte Kargacık burnu ucundan resifler uzanır. Koydaki ahşap restoran iskelesi ayrı kayıttır.',
+  ST_SetSRID(ST_MakePoint(28.010833, 36.70375), 4326)::geography,
+  NULL, NULL, 10, 20,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kocabahçe Koyu', 'Hisarönü''nde Kargacık ve Ayı burunları arasında, güneybatıya yarım mil girintili daralan koy. 10-20 m''ye demirlenir; kıyıya doğru sığlaşır. Güneydeki dere ağzı tarafı meltemin dulundadır; kuvvetli kuzeyli hem soluğan sokar hem dağdan huni gibi iner. DİKKAT: girişte Kargacık burnu ucundan resifler uzanır. Koydaki ahşap restoran iskelesi ayrı kayıttır.' FROM locations WHERE slug = 'kocabahce-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'kocabahce-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kocabahçe İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kocabahce-iskelesi', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kocabahçe İskelesi', 'Kocabahçe koyunun içindeki ahşap iskele; 11 tekneye kadar yanaşma kapasitesi. Hazır tonozlar (laid mooring) ve yüzer bağlama vardır. Kıyıda restoran ve tuvalet bulunur; elektrik jeneratörle sağlanır.',
+  ST_SetSRID(ST_MakePoint(28.008139, 36.698111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  11, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kocabahçe İskelesi', 'Kocabahçe koyunun içindeki ahşap iskele; 11 tekneye kadar yanaşma kapasitesi. Hazır tonozlar (laid mooring) ve yüzer bağlama vardır. Kıyıda restoran ve tuvalet bulunur; elektrik jeneratörle sağlanır.' FROM locations WHERE slug = 'kocabahce-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, 11, NULL, NULL
+FROM locations WHERE slug = 'kocabahce-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kocabahce-iskelesi' AND a.code IN ('restaurant', 'electricity', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'kocabahce-iskelesi' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+
+-- --- Tavşanbükü · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tavsanbuku-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Tavşanbükü', 'Bozburun yakınında büyük koy; ortasında Tavşanbükü Adası yer alır — koya adanın batısından ya da doğusundan girilir. 5-10 m''ye demirlenir; Değirmen Burnu''nun doğusunda karaya halat verilebilir. Bozburun''dan günübirlik tekne turlarının uğrağıdır. DİKKAT: ada ile kara arasındaki geçit DENENMEMELİDİR.',
+  ST_SetSRID(ST_MakePoint(28.014794, 36.670937), 4326)::geography,
+  NULL, NULL, 5, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tavşanbükü', 'Bozburun yakınında büyük koy; ortasında Tavşanbükü Adası yer alır — koya adanın batısından ya da doğusundan girilir. 5-10 m''ye demirlenir; Değirmen Burnu''nun doğusunda karaya halat verilebilir. Bozburun''dan günübirlik tekne turlarının uğrağıdır. DİKKAT: ada ile kara arasındaki geçit DENENMEMELİDİR.' FROM locations WHERE slug = 'tavsanbuku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'tavsanbuku-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Ayaca Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ayaca-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ayaca Koyu', 'Bozburun''da Ortaca Burnu''nun kuzeydoğusundaki geniş, güneye açık ıssız koy; bir çıkıntı koyu iki kreke böler. Doğu krekte 10-15 m''ye demirlenir ya da karaya halat verilir; batılı rüzgârlara korunak sağlar. Kıyı çalılık ve kekik kaplıdır. DİKKAT: çıkıntının ucundaki kayalıklardan mesafe alın.',
+  ST_SetSRID(ST_MakePoint(27.999778, 36.672722), 4326)::geography,
+  NULL, NULL, 10, 15,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ayaca Koyu', 'Bozburun''da Ortaca Burnu''nun kuzeydoğusundaki geniş, güneye açık ıssız koy; bir çıkıntı koyu iki kreke böler. Doğu krekte 10-15 m''ye demirlenir ya da karaya halat verilir; batılı rüzgârlara korunak sağlar. Kıyı çalılık ve kekik kaplıdır. DİKKAT: çıkıntının ucundaki kayalıklardan mesafe alın.' FROM locations WHERE slug = 'ayaca-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'ayaca-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Mercimek Bükü · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mercimek-buku-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Mercimek Bükü', 'Tavşanbükü Adası''nın doğusunda yarım mil uzanan dar koy; HER YÖNE korunak sağlar ama yalnız ~2 tekneye yer vardır — 18-22 m''ye demirleyip yer varsa karaya halat verin. Kıyıdaki vadide badem ağaçları ve kalıntılar vardır. Hemen yanındaki Bozen Koyu 10-13 m ile hâkim rüzgâra nispi korunak sunar.',
+  ST_SetSRID(ST_MakePoint(28.025025, 36.669681), 4326)::geography,
+  NULL, NULL, 18, 22,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mercimek Bükü', 'Tavşanbükü Adası''nın doğusunda yarım mil uzanan dar koy; HER YÖNE korunak sağlar ama yalnız ~2 tekneye yer vardır — 18-22 m''ye demirleyip yer varsa karaya halat verin. Kıyıdaki vadide badem ağaçları ve kalıntılar vardır. Hemen yanındaki Bozen Koyu 10-13 m ile hâkim rüzgâra nispi korunak sunar.' FROM locations WHERE slug = 'mercimek-buku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'mercimek-buku-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
