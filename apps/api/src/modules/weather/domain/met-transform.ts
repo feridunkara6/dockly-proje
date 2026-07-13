@@ -31,9 +31,11 @@ export function transformMetForecast(
   raw: unknown,
   horizonHours: number = FORECAST_HORIZON_HOURS,
 ): ForecastPoint[] {
-  const series: MetTimeseriesEntry[] | undefined = (raw as {
-    properties?: { timeseries?: MetTimeseriesEntry[] };
-  })?.properties?.timeseries;
+  const series: MetTimeseriesEntry[] | undefined = (
+    raw as {
+      properties?: { timeseries?: MetTimeseriesEntry[] };
+    }
+  )?.properties?.timeseries;
   if (!Array.isArray(series) || series.length === 0) {
     throw new AppProblem('service-unavailable', 'Tahmin kaynağı beklenmeyen yanıt döndürdü.');
   }
@@ -74,7 +76,10 @@ export function transformMetForecast(
 }
 
 /** lat/lon query doğrulaması — hatalıysa 422 alan hatalarıyla. */
-export function parseLatLon(rawLat: string | undefined, rawLon: string | undefined): {
+export function parseLatLon(
+  rawLat: string | undefined,
+  rawLon: string | undefined,
+): {
   lat: number;
   lon: number;
 } {

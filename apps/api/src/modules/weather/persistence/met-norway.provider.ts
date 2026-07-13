@@ -13,8 +13,7 @@ import { WeatherProvider } from '../domain/weather.provider';
 export class MetNorwayProvider implements WeatherProvider {
   private readonly logger = new Logger(MetNorwayProvider.name);
 
-  private static readonly BASE =
-    'https://api.met.no/weatherapi/locationforecast/2.0/compact';
+  private static readonly BASE = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
   private static readonly USER_AGENT =
     'Moorira/1.0 https://moorira.com (denizcilik keşif uygulaması)';
 

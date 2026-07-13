@@ -6,9 +6,6 @@ import { MetNorwayProvider } from './persistence/met-norway.provider';
 
 @Module({
   controllers: [WeatherController],
-  providers: [
-    WeatherService,
-    { provide: WEATHER_PROVIDER, useClass: MetNorwayProvider },
-  ],
+  providers: [WeatherService, { provide: WEATHER_PROVIDER, useClass: MetNorwayProvider }],
 })
 export class WeatherModule {}

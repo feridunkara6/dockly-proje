@@ -15,10 +15,7 @@ export class WeatherController {
 
   @Get()
   @Header('Cache-Control', 'public, max-age=600, s-maxage=600, stale-while-revalidate=1800')
-  async forecast(
-    @Query('lat') lat?: string,
-    @Query('lon') lon?: string,
-  ): Promise<WeatherForecast> {
+  async forecast(@Query('lat') lat?: string, @Query('lon') lon?: string): Promise<WeatherForecast> {
     const q = parseLatLon(lat, lon);
     return this.weather.forecast(q.lat, q.lon);
   }
