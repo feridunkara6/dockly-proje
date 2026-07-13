@@ -1,0 +1,150 @@
+{
+ "batch": "26-gr-tur13-girit-yakit2",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 13. tur — grecosailor.com Girit/Heraklion rehberi + yakıt turu 2 (mySea Shell Alimos kaydı). Önceki turlarla aynı yöntem; tahmin/uydurma YOK.",
+ "notes": [
+  "Girit ilk kez veri setinde: Kandiye kamu limanı + Gouves + Hersonissos (sığlık uyarısıyla).",
+  "Yakıt: Alimos'taki Shell istasyonu pin aldı (GR yakıt #3). Zea/Rodos Marina istasyonları doğrulama bekliyor.",
+  "Hanya/Resmo (Batı Girit) sonraki turda."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302810338000",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+302810338141"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Su/elektrik kaynakta net değil → amenity verilmedi. İlk çağrı VHF 16, çalışma 12.",
+   "slug": "kandiye-limani-girit",
+   "name": "Kandiye (Heraklion) Limanı",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-girit",
+   "lat": 35.343361,
+   "lon": 25.138194,
+   "coordSource": "grecosailor.com Girit rehberi (35°20'36.1\"N 25°08'17.5\"E)",
+   "descriptionTr": "Girit'in başkenti Kandiye'nin (Heraklion) kamu limanı; Venedik kalesi Koules'in gölgesinde. VHF 16/12, su çekimi ~3 m; 2-3 gecelik konaklamalara uygun. Ücret örneği: 2 gece ~14€. Knossos'a en yakın liman.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/heraklion/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302897041112",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "gouves-limani-girit",
+   "name": "Gouves Limanı (Girit)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-girit",
+   "lat": 35.335667,
+   "lon": 25.300306,
+   "coordSource": "grecosailor.com Girit rehberi (35°20'08.4\"N 25°18'01.1\"E)",
+   "descriptionTr": "Kandiye'nin doğusunda küçük Gouves limanı; su çekimi ~3 m. DİKKAT: misafir tekneler için tasarlanmamıştır — yer sınırlıdır, önceden telefonla sorun.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/heraklion/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 1.6,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302897028700",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Sığlık + kaya uyarısı kaynaktan aynen (güvenlik verisi).",
+   "slug": "hersonissos-limani-girit",
+   "name": "Hersonissos Limanı (Girit)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-girit",
+   "lat": 35.321944,
+   "lon": 25.393083,
+   "coordSource": "grecosailor.com Girit rehberi (35°19'19.0\"N 25°23'35.1\"E)",
+   "descriptionTr": "Turistik Hersonissos'un limanı. CİDDİ UYARI: aşırı sığ (~1,6 m, yer yer sıfır okumaları) ve girişte kaya engelleri var — yalnız çok sığ su çeken tekneler, dikkatli seyirle.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/crete/heraklion/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "İstasyonun rıhtım-içi hassas konumu/telefonu/saatleri kaynakta yok → marina koordinatı kullanıldı (Lefkas/batch12 yaklaşımı).",
+   "slug": "alimos-yakit-iskelesi",
+   "name": "Alimos Marina Yakıt İstasyonu (Shell, Atina)",
+   "typeCode": "fuel_pier",
+   "provinceSlug": "gr-atina",
+   "lat": 37.9113,
+   "lon": 23.7005,
+   "coordSource": "Alimos Marina konumu (batch9 — Yunan Marinalar Birliği rehberi (37°54'68N → 54,68' DDM; 23°...); istasyon varlığı mySea 'Shell Marina Alimos — Fuel station' kaydından",
+   "descriptionTr": "Yunanistan'ın en büyük yat üssü Alimos (Kalamaki) Marina'da Shell yakıt istasyonu. Atina'dan çıkan kiralık filoların ana ikmal noktası.",
+   "priceTier": "paid",
+   "sourceUrls": [
+    "https://my-sea.com/en/poi/greece/attica/athens/shell-marina-alimos/3082f0ff-cdaa-4f6c-9af6-bace6ff78f18 (Shell Marina Alimos — Fuel station kaydı)",
+    "https://greek-marinas.gr/ (marina konumu — batch9 kaydıyla aynı)"
+   ]
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -132,6 +132,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Kefalonya', 'gr-kefalonya')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Zakynthos', 'gr-zakinthos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Girit', 'gr-girit')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -7312,5 +7315,89 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'lefkas-yakit-iskelesi' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Kandiye (Heraklion) Limanı · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kandiye-limani-girit', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Kandiye (Heraklion) Limanı', 'Girit''in başkenti Kandiye''nin (Heraklion) kamu limanı; Venedik kalesi Koules''in gölgesinde. VHF 16/12, su çekimi ~3 m; 2-3 gecelik konaklamalara uygun. Ücret örneği: 2 gece ~14€. Knossos''a en yakın liman.',
+  ST_SetSRID(ST_MakePoint(25.138194, 35.343361), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kandiye (Heraklion) Limanı', 'Girit''in başkenti Kandiye''nin (Heraklion) kamu limanı; Venedik kalesi Koules''in gölgesinde. VHF 16/12, su çekimi ~3 m; 2-3 gecelik konaklamalara uygun. Ücret örneği: 2 gece ~14€. Knossos''a en yakın liman.' FROM locations WHERE slug = 'kandiye-limani-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302810338000', NULL, true
+FROM locations l WHERE l.slug = 'kandiye-limani-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302810338141', NULL, false
+FROM locations l WHERE l.slug = 'kandiye-limani-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gouves Limanı (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gouves-limani-girit', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Gouves Limanı (Girit)', 'Kandiye''nin doğusunda küçük Gouves limanı; su çekimi ~3 m. DİKKAT: misafir tekneler için tasarlanmamıştır — yer sınırlıdır, önceden telefonla sorun.',
+  ST_SetSRID(ST_MakePoint(25.300306, 35.335667), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gouves Limanı (Girit)', 'Kandiye''nin doğusunda küçük Gouves limanı; su çekimi ~3 m. DİKKAT: misafir tekneler için tasarlanmamıştır — yer sınırlıdır, önceden telefonla sorun.' FROM locations WHERE slug = 'gouves-limani-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302897041112', NULL, true
+FROM locations l WHERE l.slug = 'gouves-limani-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Hersonissos Limanı (Girit) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hersonissos-limani-girit', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
+  'Hersonissos Limanı (Girit)', 'Turistik Hersonissos''un limanı. CİDDİ UYARI: aşırı sığ (~1,6 m, yer yer sıfır okumaları) ve girişte kaya engelleri var — yalnız çok sığ su çeken tekneler, dikkatli seyirle.',
+  ST_SetSRID(ST_MakePoint(25.393083, 35.321944), 4326)::geography,
+  NULL, 1.6, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hersonissos Limanı (Girit)', 'Turistik Hersonissos''un limanı. CİDDİ UYARI: aşırı sığ (~1,6 m, yer yer sıfır okumaları) ve girişte kaya engelleri var — yalnız çok sığ su çeken tekneler, dikkatli seyirle.' FROM locations WHERE slug = 'hersonissos-limani-girit'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302897028700', NULL, true
+FROM locations l WHERE l.slug = 'hersonissos-limani-girit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Alimos Marina Yakıt İstasyonu (Shell, Atina) · güven: medium · kaynak: my-sea.com, greek-marinas.gr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'alimos-yakit-iskelesi', 6, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
+  'Alimos Marina Yakıt İstasyonu (Shell, Atina)', 'Yunanistan''ın en büyük yat üssü Alimos (Kalamaki) Marina''da Shell yakıt istasyonu. Atina''dan çıkan kiralık filoların ana ikmal noktası.',
+  ST_SetSRID(ST_MakePoint(23.7005, 37.9113), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Alimos Marina Yakıt İstasyonu (Shell, Atina)', 'Yunanistan''ın en büyük yat üssü Alimos (Kalamaki) Marina''da Shell yakıt istasyonu. Atina''dan çıkan kiralık filoların ana ikmal noktası.' FROM locations WHERE slug = 'alimos-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'alimos-yakit-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'alimos-yakit-iskelesi' AND a.code IN ('fuel')
 ON CONFLICT DO NOTHING;
 
