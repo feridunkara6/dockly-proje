@@ -25,19 +25,26 @@ class EmergencyScreen extends ConsumerWidget {
         origin == null ? null : formatDms(origin.lat, origin.lon);
     return Scaffold(
       appBar: AppBar(title: const Text('Acil Durum')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
-        children: <Widget>[
-          _DistressCard(theme: theme),
-          const SizedBox(height: 12),
-          _PositionCard(theme: theme, posText: posText, origin: origin),
-          const SizedBox(height: 12),
-          _MaydayCard(theme: theme, brand: brand, posText: posText),
-          const SizedBox(height: 12),
-          _RadioBasicsCard(theme: theme),
-          const SizedBox(height: 12),
-          _AlphabetCard(theme: theme),
-        ],
+      // Geniş ekranda (web/tablet) içerik ortalanır ve okunur genişlikte kalır;
+      // telefonda tam genişlik. Kart içi düzenler LayoutBuilder ile uyarlanır.
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+            children: <Widget>[
+              _DistressCard(theme: theme),
+              const SizedBox(height: 12),
+              _PositionCard(theme: theme, posText: posText, origin: origin),
+              const SizedBox(height: 12),
+              _MaydayCard(theme: theme, brand: brand, posText: posText),
+              const SizedBox(height: 12),
+              _RadioBasicsCard(theme: theme),
+              const SizedBox(height: 12),
+              _AlphabetCard(theme: theme),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -82,66 +89,106 @@ class _DistressCard extends StatelessWidget {
             style: TextStyle(color: theme.colorScheme.onErrorContainer),
           ),
           const SizedBox(height: 12),
-          Text('TÜRKİYE',
-              style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onErrorContainer)),
-          const SizedBox(height: 6),
-          for (final EmergencyNumber n in trEmergencyNumbers)
-            _CallRow(theme: theme, n: n),
-          const SizedBox(height: 10),
-          Text('YUNANİSTAN',
-              style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onErrorContainer)),
-          const SizedBox(height: 6),
-          for (final EmergencyNumber n in grEmergencyNumbers)
-            _CallRow(theme: theme, n: n),
+          // CİHAZA UYARLANIR ızgara: dar telefonda 2, geniş ekranda 4 sütun.
+          // Uzun etiketler tek satırda kısaltılır — kart aşağı sarkmaz.
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints c) {
+              final int cols = c.maxWidth >= 480 ? 4 : 2;
+              final double w = (c.maxWidth - (cols - 1) * 8) / cols;
+              final List<(String, EmergencyNumber)> entries =
+                  <(String, EmergencyNumber)>[
+                for (final EmergencyNumber n in trEmergencyNumbers) ('TR', n),
+                for (final EmergencyNumber n in grEmergencyNumbers) ('GR', n),
+              ];
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: <Widget>[
+                  for (final (String country, EmergencyNumber n) in entries)
+                    SizedBox(
+                      width: w,
+                      child: _CallTile(theme: theme, country: country, n: n),
+                    ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '112 her iki ülkede de geçerlidir. Numaraya dokununca arama açılır.',
+            style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onErrorContainer.withValues(alpha: 0.8)),
+          ),
         ],
       ),
     );
   }
 }
 
-class _CallRow extends StatelessWidget {
-  const _CallRow({required this.theme, required this.n});
+/// Tek dokunuşla arayan kompakt numara kutusu: ülke — NUMARA — kurum adı.
+class _CallTile extends StatelessWidget {
+  const _CallTile({required this.theme, required this.country, required this.n});
 
   final ThemeData theme;
+  final String country;
   final EmergencyNumber n;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('${n.label} · ${n.number}',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onErrorContainer)),
-                Text(n.detail,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onErrorContainer
-                            .withValues(alpha: 0.8))),
-              ],
-            ),
+    return Material(
+      color: theme.colorScheme.error,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => launchContact(context, 'phone', n.number),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  DocklyIcon(DocklyIcons.phone,
+                      size: 13, color: theme.colorScheme.onError),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      country == 'TR' ? 'TÜRKİYE' : 'YUNANİSTAN',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                        color: theme.colorScheme.onError.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                n.number,
+                maxLines: 1,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: theme.colorScheme.onError,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                n.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontSize: 10.5,
+                  color: theme.colorScheme.onError.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: theme.colorScheme.error,
-              foregroundColor: theme.colorScheme.onError,
-              visualDensity: VisualDensity.compact,
-            ),
-            onPressed: () => launchContact(context, 'phone', n.number),
-            icon: const DocklyIcon(DocklyIcons.phone, size: 16),
-            label: Text(n.number),
-          ),
-        ],
+        ),
       ),
     );
   }
