@@ -79,6 +79,21 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   }
 
   @override
+  void didUpdateWidget(covariant _WebMapSurface oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // "Konumum" odak isteği: seq değiştiyse kamerayı kullanıcının konumuna
+    // taşı (en az zoom 12 — tekne imleci tek bakışta seçilsin) ve yeni
+    // görünümü bildir (programatik hareket gesture saymaz).
+    final MapFocusRequest? f = widget.data.focus;
+    if (f != null && f.seq != oldWidget.data.focus?.seq) {
+      final double targetZoom = math.max(_map.camera.zoom, 12);
+      _lastZoom = targetZoom;
+      _map.move(LatLng(f.point.lat, f.point.lon), targetZoom);
+      _emit(_map.camera);
+    }
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
     super.dispose();
@@ -177,6 +192,19 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         ),
         MarkerLayer(
           markers: <Marker>[
+            // KULLANICININ KONUMU — yelkenli imleç (kullanıcı isteği): beyaz
+            // halkalı marka mavisi tekne. En altta eklenmez; pinlerden önce
+            // çizilir ki liman pinlerine dokunuş engellenmesin.
+            if (widget.data.devicePosition != null)
+              Marker(
+                point: LatLng(
+                  widget.data.devicePosition!.lat,
+                  widget.data.devicePosition!.lon,
+                ),
+                width: 52,
+                height: 52,
+                child: const RepaintBoundary(child: _DeviceBoatMarker()),
+              ),
             // Cluster'lar — ÜLKE renkli baloncukta sayı + ülke kodu; kalabalık
             // büyür, dokununca yaklaşır. (TR mavi, GR turkuaz.)
             for (final Cluster c in widget.data.clusters)
@@ -220,6 +248,43 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         // Yasal atıf: OSM karoları + OpenSeaMap katmanı (ODbL/CC — zorunlu).
         const _MapAttribution(),
       ],
+    );
+  }
+}
+
+/// Kullanıcının konum imleci — YELKENLİ (tasarım dili: beyaz konturlu marka
+/// mavisi). Dış halka yumuşak mavi hare; iç beyaz dairede yelkenli ikonu.
+/// Dokunulamaz (arkadaki pinleri engellemez) — salt gösterge.
+class _DeviceBoatMarker extends StatelessWidget {
+  const _DeviceBoatMarker();
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: DocklyColors.brandPrimary.withValues(alpha: 0.18),
+        ),
+        padding: const EdgeInsets.all(7),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFFFFFFFF),
+            border: Border.all(color: DocklyColors.brandPrimary, width: 2.5),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(color: Color(0x400A2540), blurRadius: 6, offset: Offset(0, 2)),
+            ],
+          ),
+          child: const Center(
+            child: DocklyIcon(
+              DocklyIcons.sailing,
+              size: 20,
+              color: DocklyColors.brandPrimary,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

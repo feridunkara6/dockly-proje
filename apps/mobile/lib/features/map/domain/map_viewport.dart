@@ -21,3 +21,13 @@ class MapViewport {
   int get hashCode =>
       Object.hash(zoom, bbox.minLon, bbox.minLat, bbox.maxLon, bbox.maxLat);
 }
+
+/// Haritaya "bu noktaya odaklan" isteği. `seq` her istekte artar — yüzey aynı
+/// noktaya ikinci kez odaklanma isteğini de ayırt edebilsin (değer eşitliği
+/// yüzünden yutulmasın). Kaynak: "Konumum" düğmesi.
+class MapFocusRequest {
+  const MapFocusRequest({required this.point, required this.seq});
+
+  final GeoPoint point;
+  final int seq;
+}

@@ -56,6 +56,10 @@ class MapScreen extends ConsumerWidget {
                       pins: visiblePins,
                       clusters: state.clusters,
                       selectedPinId: state.selectedPinId,
+                      // Kullanıcının GPS konumu → haritada yelkenli imleç;
+                      // "Konumum" isteği → kamera odaklanır (kullanıcı isteği).
+                      devicePosition: ref.watch(devicePositionProvider),
+                      focus: ref.watch(mapFocusProvider),
                     ),
                     MapSurfaceCallbacks(
                       onViewportChanged: controller.onViewportChanged,

@@ -2,6 +2,8 @@ import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/origin_provider.dart';
+import '../../map/application/map_controller.dart';
+import '../../map/domain/map_viewport.dart';
 import '../data/location_service_stub.dart'
     if (dart.library.html) '../data/location_service_web.dart';
 import '../domain/location_service.dart';
@@ -29,6 +31,12 @@ class LocationController extends Notifier<LocationStatus> {
       return;
     }
     ref.read(originProvider.notifier).state = pos;
+    // GPS konumu ayrıca saklanır (harita gezinmesi ezmesin) + haritadaki tekne
+    // imleci görünsün ve kamera kullanıcıya odaklansın (kullanıcı isteği).
+    ref.read(devicePositionProvider.notifier).state = pos;
+    final int nextSeq = (ref.read(mapFocusProvider)?.seq ?? 0) + 1;
+    ref.read(mapFocusProvider.notifier).state =
+        MapFocusRequest(point: pos, seq: nextSeq);
     state = LocationStatus.located;
   }
 }

@@ -19,7 +19,11 @@ class EmergencyScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
-    final GeoPoint? origin = ref.watch(originProvider);
+    // GPS konumu VARSA o kullanılır (kullanıcı isteği: paylaşılan konuma göre
+    // tam koordinat); yoksa harita merkezi en iyi çabadır.
+    final GeoPoint? device = ref.watch(devicePositionProvider);
+    final GeoPoint? origin = device ?? ref.watch(originProvider);
+    final bool isGps = device != null;
     final String? brand = ref.watch(myBoatProvider)?.brand;
     final String? posText =
         origin == null ? null : formatDms(origin.lat, origin.lon);
@@ -35,7 +39,12 @@ class EmergencyScreen extends ConsumerWidget {
             children: <Widget>[
               _DistressCard(theme: theme),
               const SizedBox(height: 12),
-              _PositionCard(theme: theme, posText: posText, origin: origin),
+              _PositionCard(
+                theme: theme,
+                posText: posText,
+                origin: origin,
+                isGps: isGps,
+              ),
               const SizedBox(height: 12),
               _MaydayCard(theme: theme, brand: brand, posText: posText),
               const SizedBox(height: 12),
@@ -196,11 +205,19 @@ class _CallTile extends StatelessWidget {
 
 /// Konum kartı: harita merkezinin koordinatı (DMS + ondalık) ve kopyalama.
 class _PositionCard extends StatelessWidget {
-  const _PositionCard({required this.theme, required this.posText, required this.origin});
+  const _PositionCard({
+    required this.theme,
+    required this.posText,
+    required this.origin,
+    required this.isGps,
+  });
 
   final ThemeData theme;
   final String? posText;
   final GeoPoint? origin;
+
+  /// true → koordinat cihazın GPS'inden; false → harita merkezinden.
+  final bool isGps;
 
   @override
   Widget build(BuildContext context) {
@@ -213,8 +230,8 @@ class _PositionCard extends StatelessWidget {
         children: <Widget>[
           if (posText == null || origin == null)
             const Text(
-              'Konum henüz alınamadı — haritayı açıp bulunduğun bölgeye '
-              'geldiğinde burada koordinat görünür.',
+              'Konum henüz alınamadı — haritadaki "Konumum" düğmesiyle konum '
+              'paylaşırsan burada tam GPS koordinatın görünür.',
             )
           else ...<Widget>[
             Text(posText!,
@@ -239,8 +256,12 @@ class _PositionCard extends StatelessWidget {
           ],
           const SizedBox(height: 8),
           Text(
-            'Not: Bu koordinat GPS değil, haritada baktığın alanın merkezidir. '
-            'Acil bildirimde mümkünse teknenin GPS/plotter konumunu okuyun.',
+            isGps
+                ? 'Kaynak: cihazının paylaştığı GPS konumu — acil bildirimde bu '
+                    'koordinatı okuyabilirsin.'
+                : 'Not: Bu koordinat GPS değil, haritada baktığın alanın '
+                    'merkezidir. Haritadaki "Konumum" düğmesiyle gerçek konumunu '
+                    'paylaşabilirsin.',
             style: theme.textTheme.labelSmall
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),

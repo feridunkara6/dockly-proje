@@ -56,6 +56,18 @@ class _FakeMapSurfaceState extends State<FakeMapSurface> {
             'secili:${widget.data.selectedPinId}',
             key: const ValueKey<String>('selection'),
           ),
+        // Kullanıcı konumu (tekne imleci) ve kamera odak isteği — testte
+        // metin olarak temsil edilir.
+        if (widget.data.devicePosition != null)
+          Text(
+            'ben:${widget.data.devicePosition!.lat},${widget.data.devicePosition!.lon}',
+            key: const ValueKey<String>('device-boat'),
+          ),
+        if (widget.data.focus != null)
+          Text(
+            'odak:${widget.data.focus!.point.lat},${widget.data.focus!.point.lon},${widget.data.focus!.seq}',
+            key: const ValueKey<String>('map-focus'),
+          ),
       ],
     );
   }

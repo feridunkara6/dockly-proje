@@ -32,6 +32,11 @@ final StateProvider<bool> mapFitFilterProvider = StateProvider<bool>((ref) => fa
 /// üstteki düğmeyle değiştirir; sekme değişse de korunur (uygulama-ömürlü).
 final StateProvider<bool> mapViewIsListProvider = StateProvider<bool>((ref) => false);
 
+/// Haritaya odaklanma isteği ("Konumum" → tekne imlecine uç). Yüzey bu değeri
+/// izler; seq değişince kamerayı noktaya taşır.
+final StateProvider<MapFocusRequest?> mapFocusProvider =
+    StateProvider<MapFocusRequest?>((ref) => null);
+
 /// Harita çağrılarının debounce süresi (docs/14 perf — pan/zoom sırasında
 /// gereksiz istek olmasın). Kısa tutulur: harita yüzeyinin kendi debounce'u
 /// (150ms) zaten var; ikisinin toplamı algılanan gecikmeyi belirler.
@@ -89,10 +94,14 @@ class MapController extends Notifier<MapState> {
     // Deniz-rota başlangıç noktası = görüntülenen alanın merkezi (P2). İleride
     // GPS ile gerçek konuma yükseltilecek; şimdilik "haritada baktığın yer".
     final Bbox b = viewport.bbox;
-    ref.read(originProvider.notifier).state = GeoPoint(
-      lat: (b.minLat + b.maxLat) / 2,
-      lon: (b.minLon + b.maxLon) / 2,
-    );
+    // GPS konumu VARSA harita merkezi origin'i ezmez — kullanıcının gerçek
+    // konumu mesafe/koordinat hesaplarında sabit kalır (kullanıcı isteği).
+    if (ref.read(devicePositionProvider) == null) {
+      ref.read(originProvider.notifier).state = GeoPoint(
+        lat: (b.minLat + b.maxLat) / 2,
+        lon: (b.minLon + b.maxLon) / 2,
+      );
+    }
     final seq = ++_seq;
     // Parametre verilmediyse haritadaki çip filtreleri kullanılır (boş = tümü).
     final List<String>? effectiveTypes =

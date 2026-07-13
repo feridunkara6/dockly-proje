@@ -16,7 +16,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 
+import 'package:dockly_mobile/features/location/application/location_controller.dart';
+
 import '../../support/fake_map_surface.dart';
+import '../../support/location_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/search_fakes.dart';
@@ -38,9 +41,11 @@ Widget _app(
   FakeMapCache? cache,
   MyBoat? boat,
   FakeNearbyGateway? nearby,
+  FakeLocationService? location,
 }) {
   return ProviderScope(
     overrides: <Override>[
+      if (location != null) locationServiceProvider.overrideWithValue(location),
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
@@ -291,5 +296,43 @@ void main() {
     await tester.tap(find.text('Teknem sığar'));
     await tester.pumpAndSettle();
     expect(find.text('Tekneni tanımla'), findsOneWidget); // tekne sayfası
+  });
+
+  testWidgets('Konumum → haritada yelkenli imleç + kamera odak isteği',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      location: FakeLocationService(const GeoPoint(lat: 38.4, lon: 27.1)),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('device-boat')), findsNothing);
+
+    await tester.tap(find.byTooltip('Konumum'));
+    await tester.pumpAndSettle();
+
+    // Tekne imleci yüzeye geçti + kamera odak isteği üretildi.
+    expect(find.byKey(const ValueKey<String>('device-boat')), findsOneWidget);
+    expect(find.text('ben:38.4,27.1'), findsOneWidget);
+    expect(find.text('odak:38.4,27.1,1'), findsOneWidget);
+    // SnackBar zamanlayıcısını akıt (CI dersi: bekleyen Timer kırmızı yapar).
+    await tester.pump(const Duration(seconds: 4));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Konum alınamazsa imleç çizilmez, bilgi mesajı çıkar',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      location: FakeLocationService(null),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Konumum'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('device-boat')), findsNothing);
+    expect(find.textContaining('Konum alınamadı'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
   });
 }

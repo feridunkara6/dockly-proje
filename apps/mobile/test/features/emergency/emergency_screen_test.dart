@@ -17,10 +17,11 @@ class _FixedBoat extends MyBoatController {
   MyBoat? build() => _boat;
 }
 
-Widget _app({GeoPoint? origin, MyBoat? boat}) {
+Widget _app({GeoPoint? origin, GeoPoint? device, MyBoat? boat}) {
   return ProviderScope(
     overrides: <Override>[
       if (origin != null) originProvider.overrideWith((ref) => origin),
+      if (device != null) devicePositionProvider.overrideWith((ref) => device),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: EmergencyScreen()),
@@ -153,5 +154,19 @@ void main() {
     expect(find.textContaining('Alfa'), findsWidgets);
     await tester.scrollUntilVisible(find.textContaining('Z · Zulu'), 300);
     expect(find.textContaining('9 · Niner'), findsOneWidget);
+  });
+
+  testWidgets('GPS konumu varsa harita merkezine değil GPS\'e göre gösterilir',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      origin: const GeoPoint(lat: 40.0, lon: 29.0), // harita merkezi (ezilmeli)
+      device: const GeoPoint(lat: 36.5, lon: 29.25), // GPS
+    ));
+    await tester.pumpAndSettle();
+
+    // Koordinat GPS'ten gelir; kaynak metni GPS'i söyler.
+    expect(find.text('36°30\'00.0"K 029°15\'00.0"D'), findsOneWidget);
+    expect(find.textContaining('GPS konumu'), findsOneWidget);
+    expect(find.textContaining('harita'), findsNothing); // merkez uyarısı yok
   });
 }

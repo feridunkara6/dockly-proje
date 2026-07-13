@@ -4,17 +4,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/map_viewport.dart';
 
-/// Harita yüzeyine çizilecek veri (marker/cluster + seçim).
+/// Harita yüzeyine çizilecek veri (marker/cluster + seçim + kullanıcı konumu).
 class MapSurfaceData {
   const MapSurfaceData({
     required this.pins,
     required this.clusters,
     required this.selectedPinId,
+    this.devicePosition,
+    this.focus,
   });
 
   final List<LocationPin> pins;
   final List<Cluster> clusters;
   final String? selectedPinId;
+
+  /// Kullanıcının GPS konumu — doluysa haritada TEKNE imleci çizilir.
+  final GeoPoint? devicePosition;
+
+  /// Kameraya "bu noktaya git" isteği (seq artınca uygulanır).
+  final MapFocusRequest? focus;
 }
 
 /// Harita yüzeyinden gelen etkileşim geri çağrıları.
