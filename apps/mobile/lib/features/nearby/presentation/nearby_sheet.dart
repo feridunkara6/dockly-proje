@@ -10,11 +10,18 @@ import '../../../core/origin_provider.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
 
+/// Alt-sayfanın katlanma durumu (oturum boyunca korunur): true → yalnız
+/// tutamaç + başlık şeridi görünür (kullanıcı aşağı kaydırıp gizledi).
+final StateProvider<bool> nearbySheetCollapsedProvider =
+    StateProvider<bool>((ref) => false);
+
 /// Harita altındaki "Yakınımdaki Bağlanma Noktaları" alt-sayfası (tasarım §07 phone
 /// mockup'ı: Apple Maps tarzı peek durumu). Cam zemin + tutamaç + başlık ve
 /// yatay mini-kart rayı (tasarım .mini-card: 132 px, kapak degradesi, ad,
 /// "tip · ★puan · mesafe"). Haritada bakılan noktaya göre en yakın limanlar;
 /// karta dokununca detay açılır. Boş/yükleniyor/hata → sessizce gizlenir.
+/// AŞAĞI kaydırınca katlanır (yalnız başlık şeridi kalır); şeride dokununca
+/// veya YUKARI kaydırınca yeniden açılır.
 class NearbySheet extends ConsumerWidget {
   const NearbySheet({super.key});
 
@@ -31,6 +38,7 @@ class NearbySheet extends ConsumerWidget {
     final List<LocationSummary>? items = async.valueOrNull;
     if (items == null || items.isEmpty) return const SizedBox.shrink();
 
+    final bool collapsed = ref.watch(nearbySheetCollapsedProvider);
     final ThemeData theme = Theme.of(context);
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -43,46 +51,74 @@ class NearbySheet extends ConsumerWidget {
               top: BorderSide(color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
           ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // Tutamaç (tasarım .handle: 36×4, yumuşak).
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    margin: const EdgeInsets.only(top: 8, bottom: 10),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
-                      borderRadius: BorderRadius.circular(999),
+          // Kaydırma/dokunma davranışı: aşağı sürükle → katla; yukarı sürükle
+          // veya (katlıyken) dokun → aç. Hız eşiği yanlışlıkla tetiklenmeyi önler.
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: collapsed
+                ? () => ref.read(nearbySheetCollapsedProvider.notifier).state = false
+                : null,
+            onVerticalDragEnd: (DragEndDetails d) {
+              final double v = d.primaryVelocity ?? 0;
+              if (v > 250) {
+                ref.read(nearbySheetCollapsedProvider.notifier).state = true;
+              } else if (v < -250) {
+                ref.read(nearbySheetCollapsedProvider.notifier).state = false;
+              }
+            },
+            child: SafeArea(
+              top: false,
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.topCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Tutamaç (tasarım .handle: 36×4, yumuşak).
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        margin: const EdgeInsets.only(top: 8, bottom: 10),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Yakınımdaki Bağlanma Noktaları',
+                        style: theme.textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    if (collapsed)
+                      // Katlı durum: yalnız başlık şeridi (alt boşluk payı).
+                      const SizedBox(height: 12)
+                    else ...<Widget>[
+                      SizedBox(
+                        // Kart içeriği (64 kapak + metinler) + pay: taşma testte
+                        // hata sayılır, yazı ölçeklerine karşı bolluk bırakılır.
+                        height: 134,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+                          itemCount: items.length,
+                          separatorBuilder: (BuildContext _, int __) =>
+                              const SizedBox(width: 10),
+                          itemBuilder: (BuildContext context, int i) =>
+                              _NearbyMiniCard(item: items[i]),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Yakınımdaki Bağlanma Noktaları',
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                SizedBox(
-                  // Kart içeriği (64 kapak + metinler) + pay: taşma testte hata
-                  // sayılır, farklı yazı ölçeklerine karşı bolluk bırakılır.
-                  height: 134,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
-                    itemCount: items.length,
-                    separatorBuilder: (BuildContext _, int __) => const SizedBox(width: 10),
-                    itemBuilder: (BuildContext context, int i) =>
-                        _NearbyMiniCard(item: items[i]),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
+              ),
             ),
           ),
         ),

@@ -199,6 +199,27 @@ void main() {
     expect(find.textContaining('2.1 nm'), findsOneWidget);
   });
 
+  testWidgets('yakın rayı aşağı kaydırınca katlanır; şeride dokununca açılır', (WidgetTester tester) async {
+    final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
+      sampleSummary('n1', 'Marina Symi', distanceNm: 2.1),
+    ]);
+    await tester.pumpWidget(_app(FakeMapGateway(result: pinResult), nearby: nearby));
+    await tester.pumpAndSettle();
+    expect(find.text('Marina Symi'), findsOneWidget);
+
+    // Aşağı hızlı kaydır → katlanır: kartlar gider, başlık şeridi kalır.
+    await tester.fling(
+        find.text('Yakınımdaki Bağlanma Noktaları'), const Offset(0, 80), 1200);
+    await tester.pumpAndSettle();
+    expect(find.text('Marina Symi'), findsNothing);
+    expect(find.text('Yakınımdaki Bağlanma Noktaları'), findsOneWidget);
+
+    // Şeride dokun → yeniden açılır.
+    await tester.tap(find.text('Yakınımdaki Bağlanma Noktaları'));
+    await tester.pumpAndSettle();
+    expect(find.text('Marina Symi'), findsOneWidget);
+  });
+
   testWidgets('pin seçilince yakın rayı gizlenir (yerini detay kartı alır)', (WidgetTester tester) async {
     final FakeNearbyGateway nearby = FakeNearbyGateway(results: <LocationSummary>[
       sampleSummary('n1', 'Marina Symi', distanceNm: 2.1),
