@@ -85,7 +85,8 @@ class NearbySheet extends ConsumerWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, collapsed ? 12 : 0),
+                          // Not: değer 'collapsed'a bağlı → const OLAMAZ.
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, collapsed ? 12 : 0),
                           child: Row(
                             children: <Widget>[
                               Expanded(

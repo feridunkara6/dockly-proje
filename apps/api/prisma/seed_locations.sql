@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -105,6 +105,9 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Nisyros', 'gr-nisyros')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Lipsi', 'gr-lipsi')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Sakız (Chios)', 'gr-sakiz')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6333,4 +6336,112 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'phone', '+302247041133', NULL, true
 FROM locations l WHERE l.slug = 'lipsi-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Limia Marina (Sakız) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'limia-marina-sakiz', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
+  'Limia Marina (Sakız)', 'Sakız''ın kuzeybatısında, Volissos yakınındaki Limnia koyunda küçük marina; su ve elektrik ÜCRETSİZ. Su çekimi ~3,5 m. Çeşme-Karaburun karşısındaki sakin alternatif.',
+  ST_SetSRID(ST_MakePoint(25.918, 38.469583), 4326)::geography,
+  NULL, 3.5, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Limia Marina (Sakız)', 'Sakız''ın kuzeybatısında, Volissos yakınındaki Limnia koyunda küçük marina; su ve elektrik ÜCRETSİZ. Su çekimi ~3,5 m. Çeşme-Karaburun karşısındaki sakin alternatif.' FROM locations WHERE slug = 'limia-marina-sakiz'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'limia-marina-sakiz'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'limia-marina-sakiz' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306936775999', NULL, true
+FROM locations l WHERE l.slug = 'limia-marina-sakiz'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mesta Limanı (Sakız) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mesta-limani-sakiz', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
+  'Mesta Limanı (Sakız)', 'Sakız''ın güneybatısında, ortaçağ mastika köyü Mesta''nın limanı (Limenas Meston); su çekimi ~5,5 m — adanın derin limanlarından.',
+  ST_SetSRID(ST_MakePoint(25.930083, 38.289056), 4326)::geography,
+  NULL, 5.5, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mesta Limanı (Sakız)', 'Sakız''ın güneybatısında, ortaçağ mastika köyü Mesta''nın limanı (Limenas Meston); su çekimi ~5,5 m — adanın derin limanlarından.' FROM locations WHERE slug = 'mesta-limani-sakiz'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302271076239', NULL, true
+FROM locations l WHERE l.slug = 'mesta-limani-sakiz'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Agia Ermioni Limanı (Sakız) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agia-ermioni-limani-sakiz', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
+  'Agia Ermioni Limanı (Sakız)', 'Sakız kentinin güneyinde Agia Ermioni balıkçı limanı; Çeşme''nin tam karşısı. İki telefonla liman yetkilisine ulaşılır.',
+  ST_SetSRID(ST_MakePoint(26.148944, 38.3005), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agia Ermioni Limanı (Sakız)', 'Sakız kentinin güneyinde Agia Ermioni balıkçı limanı; Çeşme''nin tam karşısı. İki telefonla liman yetkilisine ulaşılır.' FROM locations WHERE slug = 'agia-ermioni-limani-sakiz'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302271022770', NULL, true
+FROM locations l WHERE l.slug = 'agia-ermioni-limani-sakiz'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302271023237', NULL, false
+FROM locations l WHERE l.slug = 'agia-ermioni-limani-sakiz'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Limnos Plajı Demirleme (Sakız) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'limnos-plaji-sakiz', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
+  'Limnos Plajı Demirleme (Sakız)', 'Limnia koyu yanındaki Limnos plajı önünde demirleme; 3,5 m kuma atılır — rehber ''mükemmel tutuş'' diye aktarıyor.',
+  ST_SetSRID(ST_MakePoint(25.909222, 38.472167), 4326)::geography,
+  NULL, NULL, NULL, 3.5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Limnos Plajı Demirleme (Sakız)', 'Limnia koyu yanındaki Limnos plajı önünde demirleme; 3,5 m kuma atılır — rehber ''mükemmel tutuş'' diye aktarıyor.' FROM locations WHERE slug = 'limnos-plaji-sakiz'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'limnos-plaji-sakiz'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Agia Markella Demirleme (Sakız) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agia-markella-sakiz', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
+  'Agia Markella Demirleme (Sakız)', 'Sakız''ın kuzeybatısında, adanın koruyucu azizesinin manastırının önündeki plajda kumluk demirleme alanı.',
+  ST_SetSRID(ST_MakePoint(25.884861, 38.47925), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agia Markella Demirleme (Sakız)', 'Sakız''ın kuzeybatısında, adanın koruyucu azizesinin manastırının önündeki plajda kumluk demirleme alanı.' FROM locations WHERE slug = 'agia-markella-sakiz'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'agia-markella-sakiz'
+ON CONFLICT (location_id) DO NOTHING;
 

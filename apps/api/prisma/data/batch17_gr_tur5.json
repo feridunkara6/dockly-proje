@@ -1,0 +1,198 @@
+{
+ "batch": "17-gr-tur5-sakiz",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 5. tur — grecosailor.com Sakız (Chios) demirleme rehberi (önceki turlarla aynı kaynak/yöntem). Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "Sakız ilk kez veri setinde: Çeşme-Karaburun karşı kıyısı 5 kayıt (1 marina, 2 belediye limanı, 2 demirleme).",
+  "Samos/Pythagorio bu turda ÇIKMADI (rehber sayfası koordinat vermiyor) — Samos Marina zaten kayıtlı; belediye rıhtımı hassas kaynak bulununca eklenecek.",
+  "Gökçeada Kuzu Limanı: iki kaynak da erişilemez (login/erişim) — TR listesinde bekliyor."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306936775999",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "limia-marina-sakiz",
+   "name": "Limia Marina (Sakız)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-sakiz",
+   "lat": 38.469583,
+   "lon": 25.918,
+   "coordSource": "grecosailor.com Sakız demirleme rehberi (38°28'10.5\"N 25°55'04.8\"E)",
+   "descriptionTr": "Sakız'ın kuzeybatısında, Volissos yakınındaki Limnia koyunda küçük marina; su ve elektrik ÜCRETSİZ. Su çekimi ~3,5 m. Çeşme-Karaburun karşısındaki sakin alternatif.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 5.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302271076239",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Su/elektrik ve VHF kaynakta belirtilmiyor.",
+   "slug": "mesta-limani-sakiz",
+   "name": "Mesta Limanı (Sakız)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-sakiz",
+   "lat": 38.289056,
+   "lon": 25.930083,
+   "coordSource": "grecosailor.com Sakız rehberi (38°17'20.6\"N 25°55'48.3\"E)",
+   "descriptionTr": "Sakız'ın güneybatısında, ortaçağ mastika köyü Mesta'nın limanı (Limenas Meston); su çekimi ~5,5 m — adanın derin limanlarından.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302271022770",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+302271023237"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik/VHF/su-elektrik kaynakta belirtilmiyor → null.",
+   "slug": "agia-ermioni-limani-sakiz",
+   "name": "Agia Ermioni Limanı (Sakız)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-sakiz",
+   "lat": 38.3005,
+   "lon": 26.148944,
+   "coordSource": "grecosailor.com Sakız rehberi (38°18'01.8\"N 26°08'56.2\"E)",
+   "descriptionTr": "Sakız kentinin güneyinde Agia Ermioni balıkçı limanı; Çeşme'nin tam karşısı. İki telefonla liman yetkilisine ulaşılır.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 3.5,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "limnos-plaji-sakiz",
+   "name": "Limnos Plajı Demirleme (Sakız)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-sakiz",
+   "lat": 38.472167,
+   "lon": 25.909222,
+   "coordSource": "grecosailor.com Sakız rehberi (38°28'19.8\"N 25°54'33.2\"E)",
+   "descriptionTr": "Limnia koyu yanındaki Limnos plajı önünde demirleme; 3,5 m kuma atılır — rehber 'mükemmel tutuş' diye aktarıyor.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Derinlik kaynakta rakamla verilmiyor → null.",
+   "slug": "agia-markella-sakiz",
+   "name": "Agia Markella Demirleme (Sakız)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-sakiz",
+   "lat": 38.47925,
+   "lon": 25.884861,
+   "coordSource": "grecosailor.com Sakız rehberi (38°28'45.3\"N 25°53'05.5\"E)",
+   "descriptionTr": "Sakız'ın kuzeybatısında, adanın koruyucu azizesinin manastırının önündeki plajda kumluk demirleme alanı.",
+   "priceTier": "free",
+   "holdingType": "sand",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+   ]
+  }
+ ]
+}
