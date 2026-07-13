@@ -101,7 +101,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -212,11 +214,37 @@ export class PrismaLocationsRepository implements LocationsRepository {
         ? Prisma.sql`AND lt.code = ANY(${params.types}::text[])`
         : Prisma.empty;
 
+    // Olanak filtresi (S-07 gelişmiş arama) — AND: seçilen HER olanak kayıtta
+    // bulunmalı ("yakıtı VE duşu olan"). Alt sorgu, seçili kodlardan kaçının
+    // kayıtta var olduğunu sayar; hepsi varsa eşleşir.
+    const amens = params.amenities ?? [];
+    const amenityFilter =
+      amens.length > 0
+        ? Prisma.sql`AND (
+            SELECT COUNT(DISTINCT a2.code)
+            FROM location_amenities la2
+            JOIN amenities a2 ON a2.id = la2.amenity_id
+            WHERE la2.location_id = l.id
+              AND a2.is_active = true
+              AND a2.code = ANY(${amens}::text[])
+          ) = ${amens.length}`
+        : Prisma.empty;
+
     // ILIKE = büyük/küçük harf duyarsız (v1; aksan katlama unaccent gelince).
     // Kullanıcı metnindeki LIKE joker'leri (% _ \) kaçırılır → düz metin araması.
+    // q BOŞ olabilir (yalnız olanak filtresiyle keşif) → metin koşulu düşer,
+    // sıralama popülerliğe (rating_count) döner.
     const esc = params.q.replace(/[\\%_]/g, (c) => `\\${c}`);
     const contains = `%${esc}%`;
     const prefix = `${esc}%`;
+    const textFilter =
+      params.q.length > 0
+        ? Prisma.sql`AND (l.name ILIKE ${contains} OR aa.name ILIKE ${contains} OR wb.name ILIKE ${contains})`
+        : Prisma.empty;
+    const orderBy =
+      params.q.length > 0
+        ? Prisma.sql`(l.name ILIKE ${prefix}) DESC, l.rating_count DESC`
+        : Prisma.sql`l.rating_count DESC, l.name ASC`;
 
     // Ad/şehir/su-alanı adında geçenler; ada baştan uyanlar önce, sonra önem.
     // coverMedia medya alt sistemiyle gelecek → şimdilik null. ADR-005 ham SQL.
@@ -252,9 +280,10 @@ export class PrismaLocationsRepository implements LocationsRepository {
       LEFT JOIN water_bodies wb ON wb.id = l.water_body_id
       WHERE l.status = 'published'
         AND l.deleted_at IS NULL
-        AND (l.name ILIKE ${contains} OR aa.name ILIKE ${contains} OR wb.name ILIKE ${contains})
+        ${textFilter}
         ${typeFilter}
-      ORDER BY (l.name ILIKE ${prefix}) DESC, l.rating_count DESC
+        ${amenityFilter}
+      ORDER BY ${orderBy}
       LIMIT ${params.limit}
     `);
 
@@ -284,7 +313,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir; hücre + ÜLKE'ye göre
     // GROUP BY → sınır hücrelerinde TR/GR ayrı balon (istemci ülkeye göre renkler).
@@ -435,11 +466,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -486,12 +513,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({

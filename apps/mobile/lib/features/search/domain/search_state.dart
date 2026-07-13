@@ -10,6 +10,7 @@ class SearchState {
   const SearchState({
     this.query = '',
     this.types = const <String>{},
+    this.amenities = const <String>{},
     this.boatFitOnly = false,
     this.results = const <LocationSummary>[],
     this.isLoading = false,
@@ -22,6 +23,10 @@ class SearchState {
   /// Seçili `location_type` kodları (boş = tüm türler). Aramayı daraltır.
   final Set<String> types;
 
+  /// Seçili olanak kodları (AND — hepsi bulunmalı). Boş = filtre yok.
+  /// Olanak seçiliyken METİN OLMADAN da arama yapılır (keşif modu).
+  final Set<String> amenities;
+
   /// "Teknem sığar" filtresi açık mı? Açıksa (ve tekne tanımlıysa) teknenin
   /// kesinlikle sığmadığı sonuçlar gizlenir (istemci tarafı).
   final bool boatFitOnly;
@@ -32,16 +37,20 @@ class SearchState {
   /// En az bir arama tamamlandı mı? İlk arama bitmeden "sonuç yok" GÖSTERİLMEZ.
   final bool hasSearched;
 
-  /// Sorgu anlamlı uzunlukta değil (kısa) — arama yapılmaz, ipucu gösterilir.
+  /// Sorgu anlamlı uzunlukta değil (kısa) — tek başına arama yapılmaz.
   bool get isQueryTooShort => query.trim().length < kMinSearchLen;
 
-  /// Boş durum: yeterli sorgu var, arama bitti, hata yok ve sonuç boş.
+  /// Arama koşulabilir mi: yeterli metin YA DA en az bir olanak filtresi.
+  bool get canSearch => !isQueryTooShort || amenities.isNotEmpty;
+
+  /// Boş durum: aranabilir durumda, arama bitti, hata yok ve sonuç boş.
   bool get isEmpty =>
-      !isQueryTooShort && hasSearched && !isLoading && failure == null && results.isEmpty;
+      canSearch && hasSearched && !isLoading && failure == null && results.isEmpty;
 
   SearchState copyWith({
     String? query,
     Set<String>? types,
+    Set<String>? amenities,
     bool? boatFitOnly,
     List<LocationSummary>? results,
     bool? isLoading,
@@ -52,6 +61,7 @@ class SearchState {
     return SearchState(
       query: query ?? this.query,
       types: types ?? this.types,
+      amenities: amenities ?? this.amenities,
       boatFitOnly: boatFitOnly ?? this.boatFitOnly,
       results: results ?? this.results,
       isLoading: isLoading ?? this.isLoading,

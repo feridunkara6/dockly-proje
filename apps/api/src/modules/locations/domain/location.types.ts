@@ -102,6 +102,8 @@ export interface SearchParams {
   q: string;
   types?: string[];
   limit: number;
+  /** Olanak kodları (AND: hepsi bulunmalı); boş/yok = filtre yok. */
+  amenities?: string[];
 }
 
 /** Yayınlanmış (onaylı, silinmemiş) bir yorum — misafir okuma (docs/23 §11.3). */
@@ -237,7 +239,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

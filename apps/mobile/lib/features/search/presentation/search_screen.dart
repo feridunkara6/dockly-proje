@@ -3,6 +3,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/amenity_labels.dart';
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
@@ -151,6 +152,16 @@ class _FilterRow extends ConsumerWidget {
               sort == SearchSort.distance ? SearchSort.relevance : SearchSort.distance,
           visualDensity: VisualDensity.compact,
         ),
+      // GELİŞMİŞ ARAMA — olanak çipleri ("yakıtı olan" gibi; AND birleşir).
+      // Metin yazmadan da çalışır: çip seçiliyse keşif modu aramayı koşar.
+      for (final String a in kSearchAmenities)
+        FilterChip(
+          label: Text(amenityLabelTr(a)),
+          selected: state.amenities.contains(a),
+          onSelected: (bool _) => controller.toggleAmenity(a),
+          avatar: DocklyIcon(DocklyIcons.forAmenity(a), size: 14),
+          visualDensity: VisualDensity.compact,
+        ),
       for (final String type in types)
         FilterChip(
           label: Text(locationTypeLabelTr(type)),
@@ -183,10 +194,11 @@ class _SearchBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.isQueryTooShort) {
+    if (!state.canSearch) {
       return const _Hint(
         icon: DocklyIcons.search,
-        message: 'Aramak için en az 2 harf yaz.\nÖrn. "Göcek" ya da "D-Marin".',
+        message: 'Aramak için en az 2 harf yaz\nya da üstten bir olanak seç '
+            '(örn. Yakıt, Duş).',
       );
     }
     if (state.isLoading && results.isEmpty) {

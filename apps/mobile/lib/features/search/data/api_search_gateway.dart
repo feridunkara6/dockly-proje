@@ -9,7 +9,11 @@ class ApiSearchGateway implements SearchGateway {
   final LocationsApi _api;
 
   @override
-  Future<List<LocationSummary>> search(String q, {List<String>? types}) {
-    return _api.search(q: q, types: types);
+  Future<List<LocationSummary>> search(
+    String q, {
+    List<String>? types,
+    List<String>? amenities,
+  }) {
+    return _api.search(q: q, types: types, amenities: amenities);
   }
 }

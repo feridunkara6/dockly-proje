@@ -67,14 +67,17 @@ class LocationsApi {
   Future<List<LocationSummary>> search({
     required String q,
     List<String>? types,
+    List<String>? amenities,
     int? limit,
   }) async {
     return _call(() async {
       final res = await _dio.get<Map<String, dynamic>>(
         '/v1/locations/search',
         queryParameters: <String, dynamic>{
-          'q': q,
+          // q boş olabilir: yalnız olanak filtresiyle keşif (S-07 genişletme).
+          if (q.isNotEmpty) 'q': q,
           if (types != null && types.isNotEmpty) 'type': types,
+          if (amenities != null && amenities.isNotEmpty) 'amenity': amenities,
           if (limit != null) 'limit': limit,
         },
         options: Options(listFormat: ListFormat.multi),

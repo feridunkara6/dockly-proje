@@ -116,4 +116,29 @@ runIf('Locations search API (e2e — gerçek PostGIS)', () => {
     expect(res.status).toBe(200);
     expect(onlyE2E(res.body.data as LocationSummary[])).toEqual([]);
   });
+
+  it('olanak filtresi (AND): electricity+water → yalnız marina', async () => {
+    const res = await request(http).get(
+      '/v1/locations/search?q=Alfa&amenity=electricity&amenity=water',
+    );
+    expect(res.status).toBe(200);
+    const slugs = onlyE2E(res.body.data as LocationSummary[]).map((i) => i.slug);
+    expect(slugs).toEqual(['e2e-search-marina']);
+  });
+
+  it('karşılanamayan olanak (fuel) → fixture eşleşmez', async () => {
+    const res = await request(http).get('/v1/locations/search?q=Alfa&amenity=fuel');
+    expect(res.status).toBe(200);
+    expect(onlyE2E(res.body.data as LocationSummary[])).toHaveLength(0);
+  });
+
+  it('yalnız olanakla keşif (q YOK): marina listelenir', async () => {
+    const res = await request(http).get(
+      '/v1/locations/search?amenity=electricity&amenity=water&limit=50',
+    );
+    expect(res.status).toBe(200);
+    const slugs = (res.body.data as LocationSummary[]).map((i) => i.slug);
+    expect(slugs).toContain('e2e-search-marina');
+  });
+
 });

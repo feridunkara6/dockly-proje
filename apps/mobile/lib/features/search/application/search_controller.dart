@@ -38,7 +38,9 @@ class LocationSearchController extends Notifier<SearchState> {
   void onQueryChanged(String q) {
     _debounce?.cancel();
     final SearchState next = state.copyWith(query: q, clearFailure: true);
-    if (next.isQueryTooShort) {
+    // Olanak filtresi seçiliyken kısa/boş metin aramayı DURDURMAZ (keşif modu);
+    // ikisi de yoksa sonuçlar temizlenir ve ipucu gösterilir.
+    if (!next.canSearch) {
       state = next.copyWith(
         results: const <LocationSummary>[],
         hasSearched: false,
@@ -57,17 +59,43 @@ class LocationSearchController extends Notifier<SearchState> {
     if (!next.add(type)) next.remove(type);
     state = state.copyWith(types: next);
     _debounce?.cancel();
-    if (!state.isQueryTooShort) unawaited(_run());
+    if (state.canSearch) unawaited(_run());
+  }
+
+  /// Olanak filtresini aç/kapat ("yakıtı olan" gibi; AND birleşir). Metin
+  /// olmasa da arama koşulur; son filtre kapanınca ve metin de kısaysa
+  /// sonuçlar temizlenir.
+  void toggleAmenity(String code) {
+    final Set<String> next = Set<String>.of(state.amenities);
+    if (!next.add(code)) next.remove(code);
+    state = state.copyWith(amenities: next, clearFailure: true);
+    _debounce?.cancel();
+    if (state.canSearch) {
+      unawaited(_run());
+    } else {
+      state = state.copyWith(
+        results: const <LocationSummary>[],
+        hasSearched: false,
+        isLoading: false,
+      );
+    }
   }
 
   Future<void> _run() async {
     final String q = state.query.trim();
-    if (q.length < kMinSearchLen) return;
+    final bool textOk = q.length >= kMinSearchLen;
+    if (!textOk && state.amenities.isEmpty) return;
     final int seq = ++_seq;
     state = state.copyWith(isLoading: true, clearFailure: true);
     try {
       final List<String>? types = state.types.isEmpty ? null : state.types.toList();
-      final List<LocationSummary> results = await _gateway.search(q, types: types);
+      final List<String>? amenities =
+          state.amenities.isEmpty ? null : state.amenities.toList();
+      final List<LocationSummary> results = await _gateway.search(
+        textOk ? q : '',
+        types: types,
+        amenities: amenities,
+      );
       if (seq != _seq) return;
       state = state.copyWith(
         results: results,
@@ -88,7 +116,7 @@ class LocationSearchController extends Notifier<SearchState> {
 
   /// Hata ekranından son sorguyu yeniden dener.
   Future<void> retry() async {
-    if (!state.isQueryTooShort) await _run();
+    if (state.canSearch) await _run();
   }
 }
 

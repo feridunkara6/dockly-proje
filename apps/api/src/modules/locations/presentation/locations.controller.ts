@@ -44,9 +44,11 @@ export class LocationsController {
   async search(
     @Query('q') q?: string,
     @Query('type') type?: string | string[],
+    @Query('amenity') amenity?: string | string[],
     @Query('limit') limit?: string,
   ): Promise<{ data: LocationSummary[] }> {
-    return this.locations.search(q, normalizeTypes(type), limit);
+    // amenity: olanak kodu filtreleri (AND) — doğrulama service katmanında.
+    return this.locations.search(q, normalizeTypes(type), normalizeTypes(amenity), limit);
   }
 
   /**
@@ -81,8 +83,6 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type])
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }

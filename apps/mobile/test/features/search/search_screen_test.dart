@@ -125,4 +125,59 @@ void main() {
     expect(find.text('Teknen sığar'), findsNothing);
     expect(find.text('Teknen sığmayabilir'), findsNothing);
   });
+
+  testWidgets('olanak çipi: metin YOKKEN de arar; amenity parametresi gider',
+      (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[sampleSummary('loc-1', 'Netsel Marmaris')],
+    );
+    await tester.pumpWidget(_app(gateway));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Yakıt'));
+    await tester.pumpAndSettle();
+
+    expect(gateway.queries, <String>['']); // keşif modu: boş metin
+    expect(gateway.amenityArgs.single, <String>['fuel']);
+    expect(find.text('Netsel Marmaris'), findsOneWidget);
+  });
+
+  testWidgets('olanak çipleri AND birleşir; kapatınca parametreden düşer',
+      (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[sampleSummary('loc-1', 'Alfa Marina')],
+    );
+    await tester.pumpWidget(_app(gateway));
+    await tester.enterText(find.byType(TextField), 'marina');
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Duş'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Su'));
+    await tester.pumpAndSettle();
+    expect(gateway.amenityArgs.last, containsAll(<String>['shower', 'water']));
+
+    await tester.tap(find.text('Duş'));
+    await tester.pumpAndSettle();
+    expect(gateway.amenityArgs.last, <String>['water']);
+    expect(gateway.queries.last, 'marina');
+  });
+
+  testWidgets('son olanak çipi kapanınca (metin de kısa) ipucuya dönülür',
+      (WidgetTester tester) async {
+    final FakeSearchGateway gateway = FakeSearchGateway(
+      results: <LocationSummary>[sampleSummary('loc-1', 'Alfa Marina')],
+    );
+    await tester.pumpWidget(_app(gateway));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Yakıt'));
+    await tester.pumpAndSettle();
+    expect(find.text('Alfa Marina'), findsOneWidget);
+
+    await tester.tap(find.text('Yakıt'));
+    await tester.pumpAndSettle();
+    expect(find.text('Alfa Marina'), findsNothing);
+    expect(find.textContaining('en az 2 harf'), findsOneWidget);
+  });
 }

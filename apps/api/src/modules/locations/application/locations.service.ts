@@ -3,7 +3,7 @@ import { LOCATIONS_REPOSITORY, LocationsRepository } from '../domain/locations.r
 import { PIN_CAP, parseBbox, quantizeBbox } from '../domain/bbox';
 import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../domain/cluster';
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
-import { normalizeSearch } from '../domain/search';
+import { normalizeSearch, sanitizeAmenities } from '../domain/search';
 import { parseReviewsLimit } from '../domain/reviews';
 import { LocationDetail, LocationSummary, MapResult, ReviewItem } from '../domain/location.types';
 import { pickLabel } from '../../../common/i18n/locale';
@@ -26,7 +26,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -79,11 +81,20 @@ export class LocationsService {
   async search(
     rawQ: string | undefined,
     types: string[] | undefined,
+    amenities: string[] | undefined,
     rawLimit: string | undefined,
   ): Promise<{ data: LocationSummary[] }> {
     const query = normalizeSearch({ q: rawQ, limit: rawLimit });
-    if (!query.searchable) return { data: [] };
-    const data = await this.repo.findSearch({ q: query.q, types, limit: query.limit });
+    const amens = sanitizeAmenities(amenities);
+    // Gelişmiş arama: metin YA DA olanak filtresi yeterlidir — kullanıcı hiç
+    // yazmadan "yakıtı olan yerler" diye keşif yapabilir (S-07 genişletme).
+    if (!query.searchable && amens.length === 0) return { data: [] };
+    const data = await this.repo.findSearch({
+      q: query.searchable ? query.q : '',
+      types,
+      amenities: amens.length > 0 ? amens : undefined,
+      limit: query.limit,
+    });
     return { data };
   }
 
@@ -91,7 +102,10 @@ export class LocationsService {
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }
