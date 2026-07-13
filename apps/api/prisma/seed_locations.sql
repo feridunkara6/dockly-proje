@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -370,6 +370,14 @@ ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Silivri', 'istanbul-silivri'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Aydıncık', 'mersin-aydincik'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Anamur', 'mersin-anamur'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'İzmit', 'kocaeli-izmit'
@@ -9102,4 +9110,275 @@ ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Pera Gialos Limanı (Astypalaia)', 'Kelebek biçimli Astypalaia''nın Chora''nın eteğindeki geleneksel limanı. Ana feribot trafiği yeni Agios Andreas limanına taşındı; Pera Gialos''ta son yıllarda yelkenliler için küçük bir marina düzeni kuruldu; Kalymnos''tan yerel feribot yanaşır. Beyaz Chora evleri ve kale limanın hemen üzerindedir.' FROM locations WHERE slug = 'astypalaia-pera-gialos'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Azmak İskelesi (Çiftlik Koyu) · güven: medium · kaynak: sail-friend.club ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'azmak-iskelesi-ciftlik', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Azmak İskelesi (Çiftlik Koyu)', 'Marmaris Çiftlik koyunun kuzeybatı yakasındaki restoran iskelesi. T-biçimli iskele hazır tonozludur (mooring line); su ve elektrik bağlanır. VHF 16''dan ''Azmak Jetty'' çağrılır. Kaynağa göre kapasite ~100 tekne, maksimum boy 10 m, maksimum su çekimi 5 m. Restoran ve bar hizmet verir.',
+  ST_SetSRID(ST_MakePoint(28.238285, 36.716057), 4326)::geography,
+  10, 5, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Azmak İskelesi (Çiftlik Koyu)', 'Marmaris Çiftlik koyunun kuzeybatı yakasındaki restoran iskelesi. T-biçimli iskele hazır tonozludur (mooring line); su ve elektrik bağlanır. VHF 16''dan ''Azmak Jetty'' çağrılır. Kaynağa göre kapasite ~100 tekne, maksimum boy 10 m, maksimum su çekimi 5 m. Restoran ve bar hizmet verir.' FROM locations WHERE slug = 'azmak-iskelesi-ciftlik'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, 100, NULL, NULL
+FROM locations WHERE slug = 'azmak-iskelesi-ciftlik'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'azmak-iskelesi-ciftlik' AND a.code IN ('restaurant', 'water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'azmak-iskelesi-ciftlik' AND sv.code IN ('mooring_assist')
+ON CONFLICT DO NOTHING;
+
+-- --- Karia Bel' Otel İskelesi (Bozburun) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karia-bel-iskelesi-bozburun', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Karia Bel'' Otel İskelesi (Bozburun)', 'Bozburun''da otel-restoran iskelesi; pontonlara yanaşılır, restoranda ağırlanırsınız. Ana binada 16 oda, üç dakika tekne mesafesindeki Beach House''ta 10 oda + 1 süit vardır. Bozburun köy merkezine tekneyle birkaç dakika.',
+  ST_SetSRID(ST_MakePoint(28.048696, 36.67595), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karia Bel'' Otel İskelesi (Bozburun)', 'Bozburun''da otel-restoran iskelesi; pontonlara yanaşılır, restoranda ağırlanırsınız. Ana binada 16 oda, üç dakika tekne mesafesindeki Beach House''ta 10 oda + 1 süit vardır. Bozburun köy merkezine tekneyle birkaç dakika.' FROM locations WHERE slug = 'karia-bel-iskelesi-bozburun'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'karia-bel-iskelesi-bozburun'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karia-bel-iskelesi-bozburun' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524562056', NULL, true
+FROM locations l WHERE l.slug = 'karia-bel-iskelesi-bozburun'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@kariabel.com', NULL, false
+FROM locations l WHERE l.slug = 'karia-bel-iskelesi-bozburun'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://kariabel.com/', NULL, false
+FROM locations l WHERE l.slug = 'karia-bel-iskelesi-bozburun'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Nuri's Beach İskelesi (Limanağzı) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'nuris-beach-iskelesi-kas', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Nuri''s Beach İskelesi (Limanağzı)', 'Kaş Limanağzı koyundaki plaj-restoran iskelesi; karadan yol yoktur, yalnız denizden ulaşılır. İskele TÜM TEKNELERE ÜCRETSİZDİR; elektrik, su, duş, WC ve soyunma kabinleri de ücretsizdir; Wi-Fi vardır. Akdeniz ve Türk mutfağı sunar; bungalov konaklama ve plaj barı bulunur; koyda caretta görülebilir.',
+  ST_SetSRID(ST_MakePoint(29.650217, 36.172594), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Nuri''s Beach İskelesi (Limanağzı)', 'Kaş Limanağzı koyundaki plaj-restoran iskelesi; karadan yol yoktur, yalnız denizden ulaşılır. İskele TÜM TEKNELERE ÜCRETSİZDİR; elektrik, su, duş, WC ve soyunma kabinleri de ücretsizdir; Wi-Fi vardır. Akdeniz ve Türk mutfağı sunar; bungalov konaklama ve plaj barı bulunur; koyda caretta görülebilir.' FROM locations WHERE slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'nuris-beach-iskelesi-kas' AND a.code IN ('restaurant', 'water', 'electricity', 'shower', 'wc', 'wifi')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902428363816', NULL, true
+FROM locations l WHERE l.slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@nurisbeach.com', NULL, false
+FROM locations l WHERE l.slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://nurisbeach.com/', NULL, false
+FROM locations l WHERE l.slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Adaköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'adakoy-marina-marmaris', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Adaköy Marina', 'Marmaris Adaköy yarımadasında özel marina; 200 bağlama yeri — 150 m''ye kadar teknelere kıçtan ya da aborda. VHF 73. 400 amperlik elektrik altyapısı, içme suyu, 75 ton kapasiteli travel lift ve 15.000 m² beton kara sahası; 7/24 güvenlik ve CCTV. Yat kulübü, restoran-bar, havuz, spor salonu ve tenis kortları vardır.',
+  ST_SetSRID(ST_MakePoint(28.292989, 36.819405), 4326)::geography,
+  150, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Adaköy Marina', 'Marmaris Adaköy yarımadasında özel marina; 200 bağlama yeri — 150 m''ye kadar teknelere kıçtan ya da aborda. VHF 73. 400 amperlik elektrik altyapısı, içme suyu, 75 ton kapasiteli travel lift ve 15.000 m² beton kara sahası; 7/24 güvenlik ve CCTV. Yat kulübü, restoran-bar, havuz, spor salonu ve tenis kortları vardır.' FROM locations WHERE slug = 'adakoy-marina-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 200, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'adakoy-marina-marmaris'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'adakoy-marina-marmaris' AND a.code IN ('electricity', 'water', 'security', 'restaurant', 'travel_lift')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'adakoy-marina-marmaris' AND sv.code IN ('winter_storage', 'technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524125555', NULL, true
+FROM locations l WHERE l.slug = 'adakoy-marina-marmaris'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@adakoymarina.com', NULL, false
+FROM locations l WHERE l.slug = 'adakoy-marina-marmaris'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://adakoymarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'adakoy-marina-marmaris'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Aydıncık Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aydincik-balikci-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-aydincik'),
+  'Aydıncık Balıkçı Limanı', 'Silifke''nin 75 km batısında, antik Kelenderis''in limanı; 110 tekne, rıhtımda 3,8-4 m su; kum-çamur zemin. VHF 73''ten ''Aydıncık Harbour'' çağrılır. İçme suyu, elektrik, yakıt, çekek yeri, WC-duş ve dükkanlar vardır. Fener 9,5 mil görünürlüktedir. Alanya-Taşucu hattının ortasındaki ana sığınaktır.',
+  ST_SetSRID(ST_MakePoint(33.32575, 36.145639), 4326)::geography,
+  NULL, NULL, 3.8, 4,
+  110, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aydıncık Balıkçı Limanı', 'Silifke''nin 75 km batısında, antik Kelenderis''in limanı; 110 tekne, rıhtımda 3,8-4 m su; kum-çamur zemin. VHF 73''ten ''Aydıncık Harbour'' çağrılır. İçme suyu, elektrik, yakıt, çekek yeri, WC-duş ve dükkanlar vardır. Fener 9,5 mil görünürlüktedir. Alanya-Taşucu hattının ortasındaki ana sığınaktır.' FROM locations WHERE slug = 'aydincik-balikci-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aydincik-balikci-limani' AND a.code IN ('electricity', 'water', 'fuel', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+903248413050', NULL, true
+FROM locations l WHERE l.slug = 'aydincik-balikci-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'belediye@mersinaydincik.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'aydincik-balikci-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Anamur İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'anamur-iskelesi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-anamur'),
+  'Anamur İskelesi', 'Türkiye''nin en güney ucu Anamur Burnu''nun doğusundaki kasaba iskelesi. VHF 16''dan ''Anamur İskele'' çağrılır. Kasabada tamirhane, teknik malzeme dükkanları, otel-pansiyon, restoran, eczane ve banka vardır; Anemurion antik kenti ve Mamure Kalesi yakındır. DİKKAT: bölge caretta caretta yuvalama alanıdır — plajlarda gece kısıtlamaları olabilir.',
+  ST_SetSRID(ST_MakePoint(32.868, 36.068278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Anamur İskelesi', 'Türkiye''nin en güney ucu Anamur Burnu''nun doğusundaki kasaba iskelesi. VHF 16''dan ''Anamur İskele'' çağrılır. Kasabada tamirhane, teknik malzeme dükkanları, otel-pansiyon, restoran, eczane ve banka vardır; Anemurion antik kenti ve Mamure Kalesi yakındır. DİKKAT: bölge caretta caretta yuvalama alanıdır — plajlarda gece kısıtlamaları olabilir.' FROM locations WHERE slug = 'anamur-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+903248141115', NULL, true
+FROM locations l WHERE l.slug = 'anamur-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'halklailiskiler@anamur.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'anamur-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Alanya Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'alanya-balikci-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-alanya'),
+  'Alanya Balıkçı Limanı', 'Alanya kalesinin altındaki belediye balıkçı limanı; 550 m dış + 240 m iç mendirek, 125 tekne. Rıhtımda su, elektrik ve motorin-benzin pompası vardır; derinlik ~3 m. VHF 16''dan ''Alanya Harbour'' çağrılır. 209 m odak düzlemli Alanya feneri 20 milden görünür. Alanya Marina 2,5 mil batıdadır (ayrı kayıt).',
+  ST_SetSRID(ST_MakePoint(32.00386, 36.539532), 4326)::geography,
+  NULL, NULL, 3, 3,
+  125, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Alanya Balıkçı Limanı', 'Alanya kalesinin altındaki belediye balıkçı limanı; 550 m dış + 240 m iç mendirek, 125 tekne. Rıhtımda su, elektrik ve motorin-benzin pompası vardır; derinlik ~3 m. VHF 16''dan ''Alanya Harbour'' çağrılır. 209 m odak düzlemli Alanya feneri 20 milden görünür. Alanya Marina 2,5 mil batıdadır (ayrı kayıt).' FROM locations WHERE slug = 'alanya-balikci-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'alanya-balikci-limani' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902424448207', NULL, true
+FROM locations l WHERE l.slug = 'alanya-balikci-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'kultur@alanya.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'alanya-balikci-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mamure Kalesi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mamure-kalesi-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-anamur'),
+  'Mamure Kalesi Koyu', 'Anamur''un doğusunda, denize sıfır ortaçağ kalesi Mamure''nin önündeki açık demirleme. Anamur iskelesi ~2 mil batıdadır. Bölge caretta caretta yuvalama alanıdır — kıyı kullanımında gece kısıtlamaları olabilir.',
+  ST_SetSRID(ST_MakePoint(32.896323, 36.081569), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mamure Kalesi Koyu', 'Anamur''un doğusunda, denize sıfır ortaçağ kalesi Mamure''nin önündeki açık demirleme. Anamur iskelesi ~2 mil batıdadır. Bölge caretta caretta yuvalama alanıdır — kıyı kullanımında gece kısıtlamaları olabilir.' FROM locations WHERE slug = 'mamure-kalesi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'mamure-kalesi-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Hisarönü Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hisaronu-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Hisarönü Koyu', 'Hisarönü Körfezi''nin iç ucunda, körfeze adını veren köyün önündeki geniş, sığ koy; kiremit rengi kumlu deniz uzun süre bel hizasında ilerler. Kıyıda iskele, market, kafeterya, restoran, WC-duş ve köy pazarı; hemen yanında 5.000 çadırlık Çubucak orman kampı vardır. Bölge rüzgârlıdır — sörfçülerin tercihi; demirlemede meltemi hesaba katın. Komşu duraklar: İnbükü, Kartal koyu, Tavşan adası, Bencik.',
+  ST_SetSRID(ST_MakePoint(28.128341, 36.794572), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hisarönü Koyu', 'Hisarönü Körfezi''nin iç ucunda, körfeze adını veren köyün önündeki geniş, sığ koy; kiremit rengi kumlu deniz uzun süre bel hizasında ilerler. Kıyıda iskele, market, kafeterya, restoran, WC-duş ve köy pazarı; hemen yanında 5.000 çadırlık Çubucak orman kampı vardır. Bölge rüzgârlıdır — sörfçülerin tercihi; demirlemede meltemi hesaba katın. Komşu duraklar: İnbükü, Kartal koyu, Tavşan adası, Bencik.' FROM locations WHERE slug = 'hisaronu-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'hisaronu-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Günlüklü Koyu · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gunluklu-koyu-demirleme', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Günlüklü Koyu', 'Fethiye ile Göcek arasında, adını kıyısını saran sığla (günlük) ormanından alan koy. ~10 m''ye demirlenir; ince çakıl-kum plajdan sonra deniz hızla derinleşir. Kıyıda tatlı su kuyusu ve tekneye su dolumu; kamp alanı, duş-WC ve The Bay Beach Club (46 bungalov, havuz, spa) vardır. Hafta sonları yerel ziyaretçilerle yoğunlaşır.',
+  ST_SetSRID(ST_MakePoint(29.018506, 36.712994), 4326)::geography,
+  NULL, NULL, 10, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Günlüklü Koyu', 'Fethiye ile Göcek arasında, adını kıyısını saran sığla (günlük) ormanından alan koy. ~10 m''ye demirlenir; ince çakıl-kum plajdan sonra deniz hızla derinleşir. Kıyıda tatlı su kuyusu ve tekneye su dolumu; kamp alanı, duş-WC ve The Bay Beach Club (46 bungalov, havuz, spa) vardır. Hafta sonları yerel ziyaretçilerle yoğunlaşır.' FROM locations WHERE slug = 'gunluklu-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'gunluklu-koyu-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
 

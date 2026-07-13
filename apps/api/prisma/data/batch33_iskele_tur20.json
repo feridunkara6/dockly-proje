@@ -1,0 +1,409 @@
+{
+  "batch": "33-iskele-tur20-restoran-marina-liman",
+  "collectedAt": "2026-07-13",
+  "method": "Karma tur (20. tur — kullanıcı isteği: bağlama yerleri + liman/marina + Ege restoran iskeleleri): turkeymarinas.blogspot.com 2016/03 (Mersin-Alanya limanları) ve 2018/08-09 (iskele/restoran/marina sayfaları) + sail-friend.club (Azmak iskelesi). DMS koordinat + kapasite + iletişim aynı yöntemle. Tahmin/uydurma YOK; Alanya kaynağındaki tutarsız maks. boy verisi ALINMADI.",
+  "notes": [
+    "Restoran iskeleleri: Azmak (Çiftlik koyu, VHF 16), Karia Bel' (Bozburun otel iskelesi), Nuri's Beach (Kaş Limanağzı — iskele/su/elektrik/duş ÜCRETSİZ). Deveboynu fener restoranı iskelesiz (yalnız karadan) olduğu için ALINMADI.",
+    "Adaköy Marina (Marmaris): 200 yer, 150 m'ye kadar tekne, 75 ton lift — resmî listede olmayan büyük özel marina eksiğiydi.",
+    "Doğu Akdeniz batı ucu kapandı: Aydıncık (VHF 73), Anamur iskelesi (VHF 16), Alanya balıkçı limanı (VHF 16), Mamure Kalesi demirlemesi — Alanya-Taşucu arası artık boş değil.",
+    "Bağlama: Hisarönü koyu (Orhaniye-Bencik arası ana koy) + Günlüklü (Fethiye'nin sığla ormanı koyu).",
+    "Bekleyenler: Yakacık (Gazipaşa), Büyükeceli/Sipahili/Soğuksu (Mersin) — kaynak URL'leri hazır, sonraki tur."
+  ],
+  "records": [
+    {
+      "slug": "azmak-iskelesi-ciftlik",
+      "name": "Azmak İskelesi (Çiftlik Koyu)",
+      "operator": "Azmak Restaurant",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.716057,
+      "lon": 28.238285,
+      "coordSource": "sail-friend.club (36°42'57.8\"N 28°14'17.8\"E → 36.716057, 28.238285)",
+      "descriptionTr": "Marmaris Çiftlik koyunun kuzeybatı yakasındaki restoran iskelesi. T-biçimli iskele hazır tonozludur (mooring line); su ve elektrik bağlanır. VHF 16'dan 'Azmak Jetty' çağrılır. Kaynağa göre kapasite ~100 tekne, maksimum boy 10 m, maksimum su çekimi 5 m. Restoran ve bar hizmet verir.",
+      "berthCount": 100,
+      "maxLoaM": 10,
+      "maxDraftM": 5,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "restaurant",
+        "water",
+        "electricity"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [],
+      "sourceUrls": [
+        "https://sail-friend.club/listings/azmak-jetty-and-restaurant/"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite (100) ile maks. boy (10 m) kaynakta birlikte veriliyor — küçük/orta tekne ağırlıklı düzen. Telefon kaynakta yok."
+    },
+    {
+      "slug": "karia-bel-iskelesi-bozburun",
+      "name": "Karia Bel' Otel İskelesi (Bozburun)",
+      "operator": "Karia Bel' Hotel",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.67595,
+      "lon": 28.048696,
+      "coordSource": "turkeymarinas (36°40'33.4\"N 28°02'55.3\"E → 36.675950, 28.048696)",
+      "descriptionTr": "Bozburun'da otel-restoran iskelesi; pontonlara yanaşılır, restoranda ağırlanırsınız. Ana binada 16 oda, üç dakika tekne mesafesindeki Beach House'ta 10 oda + 1 süit vardır. Bozburun köy merkezine tekneyle birkaç dakika.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524562056",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@kariabel.com"
+        },
+        {
+          "type": "website",
+          "value": "https://kariabel.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/09/karia-bel-hotel-jetty.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "İskele derinliği, kapasite ve VHF kaynakta yok."
+    },
+    {
+      "slug": "nuris-beach-iskelesi-kas",
+      "name": "Nuri's Beach İskelesi (Limanağzı)",
+      "operator": "Nuri's Beach",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-kas",
+      "lat": 36.172594,
+      "lon": 29.650217,
+      "coordSource": "turkeymarinas (36°10'21.3\"N 29°39'00.8\"E → 36.172594, 29.650217)",
+      "descriptionTr": "Kaş Limanağzı koyundaki plaj-restoran iskelesi; karadan yol yoktur, yalnız denizden ulaşılır. İskele TÜM TEKNELERE ÜCRETSİZDİR; elektrik, su, duş, WC ve soyunma kabinleri de ücretsizdir; Wi-Fi vardır. Akdeniz ve Türk mutfağı sunar; bungalov konaklama ve plaj barı bulunur; koyda caretta görülebilir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant",
+        "water",
+        "electricity",
+        "shower",
+        "wc",
+        "wifi"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902428363816",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@nurisbeach.com"
+        },
+        {
+          "type": "website",
+          "value": "https://nurisbeach.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/08/nuris-beach-and-jetty.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "İskele derinliği ve kapasite kaynakta yok."
+    },
+    {
+      "slug": "adakoy-marina-marmaris",
+      "name": "Adaköy Marina",
+      "operator": "Adaköy Marina",
+      "status": "published",
+      "typeCode": "private_marina",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.819405,
+      "lon": 28.292989,
+      "coordSource": "turkeymarinas (36°49'09.9\"N 28°17'34.8\"E → 36.819405, 28.292989)",
+      "descriptionTr": "Marmaris Adaköy yarımadasında özel marina; 200 bağlama yeri — 150 m'ye kadar teknelere kıçtan ya da aborda. VHF 73. 400 amperlik elektrik altyapısı, içme suyu, 75 ton kapasiteli travel lift ve 15.000 m² beton kara sahası; 7/24 güvenlik ve CCTV. Yat kulübü, restoran-bar, havuz, spor salonu ve tenis kortları vardır.",
+      "berthCount": 200,
+      "maxLoaM": 150,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": [
+        "electricity",
+        "water",
+        "security",
+        "restaurant",
+        "travel_lift"
+      ],
+      "services": [
+        "winter_storage",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524125555",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@adakoymarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://adakoymarina.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/09/adakoy-marina.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok."
+    },
+    {
+      "slug": "aydincik-balikci-limani",
+      "name": "Aydıncık Balıkçı Limanı",
+      "operator": "Aydıncık Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mersin",
+      "districtSlug": "mersin-aydincik",
+      "lat": 36.145639,
+      "lon": 33.32575,
+      "coordSource": "turkeymarinas (36°08'44.3\"N 33°19'32.7\"E → 36.145639, 33.325750)",
+      "descriptionTr": "Silifke'nin 75 km batısında, antik Kelenderis'in limanı; 110 tekne, rıhtımda 3,8-4 m su; kum-çamur zemin. VHF 73'ten 'Aydıncık Harbour' çağrılır. İçme suyu, elektrik, yakıt, çekek yeri, WC-duş ve dükkanlar vardır. Fener 9,5 mil görünürlüktedir. Alanya-Taşucu hattının ortasındaki ana sığınaktır.",
+      "berthCount": 110,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 3.8,
+      "depthMaxM": 4,
+      "vhfChannel": "73",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wc",
+        "shower"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+903248413050",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "belediye@mersinaydincik.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/03/aydincik-fisher-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": null
+    },
+    {
+      "slug": "anamur-iskelesi",
+      "name": "Anamur İskelesi",
+      "operator": "Anamur Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mersin",
+      "districtSlug": "mersin-anamur",
+      "lat": 36.068278,
+      "lon": 32.868,
+      "coordSource": "turkeymarinas, iskele feneri (36°04'05.8\"N 32°52'04.8\"E → 36.068278, 32.868000)",
+      "descriptionTr": "Türkiye'nin en güney ucu Anamur Burnu'nun doğusundaki kasaba iskelesi. VHF 16'dan 'Anamur İskele' çağrılır. Kasabada tamirhane, teknik malzeme dükkanları, otel-pansiyon, restoran, eczane ve banka vardır; Anemurion antik kenti ve Mamure Kalesi yakındır. DİKKAT: bölge caretta caretta yuvalama alanıdır — plajlarda gece kısıtlamaları olabilir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+903248141115",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "halklailiskiler@anamur.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/03/anamur-pier.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Koordinat iskele fenerinindir. Derinlik, kapasite ve rıhtım hizmetleri kaynakta yok."
+    },
+    {
+      "slug": "alanya-balikci-limani",
+      "name": "Alanya Balıkçı Limanı",
+      "operator": "Alanya Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-alanya",
+      "lat": 36.539532,
+      "lon": 32.00386,
+      "coordSource": "turkeymarinas (36°32'22.3\"N 32°00'13.9\"E → 36.539532, 32.003860)",
+      "descriptionTr": "Alanya kalesinin altındaki belediye balıkçı limanı; 550 m dış + 240 m iç mendirek, 125 tekne. Rıhtımda su, elektrik ve motorin-benzin pompası vardır; derinlik ~3 m. VHF 16'dan 'Alanya Harbour' çağrılır. 209 m odak düzlemli Alanya feneri 20 milden görünür. Alanya Marina 2,5 mil batıdadır (ayrı kayıt).",
+      "berthCount": 125,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 3,
+      "depthMaxM": 3,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902424448207",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "kultur@alanya.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/03/alanya-fish-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kaynaktaki 'maks. boy 4 m' verisi tutarsız (125 yat kapasitesiyle çelişir) → alınmadı."
+    },
+    {
+      "slug": "mamure-kalesi-demirleme",
+      "name": "Mamure Kalesi Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mersin",
+      "districtSlug": "mersin-anamur",
+      "lat": 36.081569,
+      "lon": 32.896323,
+      "coordSource": "turkeymarinas (36°04'53.6\"N 32°53'46.8\"E → 36.081569, 32.896323)",
+      "descriptionTr": "Anamur'un doğusunda, denize sıfır ortaçağ kalesi Mamure'nin önündeki açık demirleme. Anamur iskelesi ~2 mil batıdadır. Bölge caretta caretta yuvalama alanıdır — kıyı kullanımında gece kısıtlamaları olabilir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/03/mamure-kalesi-koyu-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Derinlik, zemin ve korunaklılık kaynakta yok → boş; yalnız konum doğrulandı. Yerleşik havada günlük mola noktası."
+    },
+    {
+      "slug": "hisaronu-koyu-demirleme",
+      "name": "Hisarönü Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.794572,
+      "lon": 28.128341,
+      "coordSource": "turkeymarinas (36°47'40.5\"N 28°07'42.0\"E → 36.794572, 28.128341)",
+      "descriptionTr": "Hisarönü Körfezi'nin iç ucunda, körfeze adını veren köyün önündeki geniş, sığ koy; kiremit rengi kumlu deniz uzun süre bel hizasında ilerler. Kıyıda iskele, market, kafeterya, restoran, WC-duş ve köy pazarı; hemen yanında 5.000 çadırlık Çubucak orman kampı vardır. Bölge rüzgârlıdır — sörfçülerin tercihi; demirlemede meltemi hesaba katın. Komşu duraklar: İnbükü, Kartal koyu, Tavşan adası, Bencik.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": "sand",
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/09/hisaronu-cove-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Derinlik rakamı kaynakta yok (yalnız 'sığ') → null."
+    },
+    {
+      "slug": "gunluklu-koyu-demirleme",
+      "name": "Günlüklü Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.712994,
+      "lon": 29.018506,
+      "coordSource": "turkeymarinas (36°42'46.8\"N 29°01'06.6\"E → 36.712994, 29.018506)",
+      "descriptionTr": "Fethiye ile Göcek arasında, adını kıyısını saran sığla (günlük) ormanından alan koy. ~10 m'ye demirlenir; ince çakıl-kum plajdan sonra deniz hızla derinleşir. Kıyıda tatlı su kuyusu ve tekneye su dolumu; kamp alanı, duş-WC ve The Bay Beach Club (46 bungalov, havuz, spa) vardır. Hafta sonları yerel ziyaretçilerle yoğunlaşır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 10,
+      "depthMaxM": 10,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/09/gunluklu-kucuk-kargi-cove-anchorage.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Zemin türü kaynakta yok → null. Mevcut 'kucuk-kargi-koyu' kaydı ayrı koydur (Göcek tarafı)."
+    }
+  ]
+}
