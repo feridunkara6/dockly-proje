@@ -149,18 +149,24 @@ class _DetailContent extends StatelessWidget {
         _SeaRouteRow(destination: detail.position),
 
         const SizedBox(height: 14),
-        SizedBox(
-          width: double.infinity,
-          child: DocklyButton(
-            label: 'Rezervasyon Talebi',
-            icon: DocklyIcons.eventNote,
-            onPressed: () => showReservationSheet(
-              context,
-              locationName: detail.name,
-              contacts: detail.contacts,
+        // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon
+        // OLMAZ — ilk gelen demirler. Bu tiplerde talep düğmesi yerine
+        // "Demirleme Notları" gösterilir; diğer tiplerde düğme kalır.
+        if (_isAnchoringType(detail.type))
+          _AnchoringNotes(priceTier: detail.priceTier)
+        else
+          SizedBox(
+            width: double.infinity,
+            child: DocklyButton(
+              label: 'Rezervasyon Talebi',
+              icon: DocklyIcons.eventNote,
+              onPressed: () => showReservationSheet(
+                context,
+                locationName: detail.name,
+                contacts: detail.contacts,
+              ),
             ),
           ),
-        ),
 
         if (detail.description != null && detail.description!.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),
@@ -537,6 +543,65 @@ class _DetailError extends StatelessWidget {
             DocklyButton(label: 'Tekrar dene', onPressed: onRetry),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+/// Rezervasyonun ANLAMSIZ olduğu tipler: demirleme koyu, şamandıra, misafir
+/// tonozu — buralarda ilk gelen demirler (ürün kararı, 2026-07).
+bool _isAnchoringType(String type) =>
+    type == 'mooring_point' || type == 'buoy' || type == 'guest_mooring';
+
+/// "Demirleme Notları" — rezervasyon düğmesinin yerini alan bilgi kutusu.
+/// UYDURMA VERİ YOK ilkesi: koya özel yoğunluk SAATİ göstermeyiz (elimizde
+/// kaynaklı veri yoksa); kaynaklı yoğunluk notları zaten açıklama metnindedir.
+/// Buradaki öneri satırı AÇIKÇA "genel öneri" olarak etiketlenir.
+class _AnchoringNotes extends StatelessWidget {
+  const _AnchoringNotes({required this.priceTier});
+
+  final String priceTier;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              DocklyIcon(DocklyIcons.amMooring, size: 18, color: theme.colorScheme.primary),
+              const SizedBox(width: 8),
+              Text('Demirleme Notları',
+                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            priceTier == 'free'
+                ? 'Rezervasyon yapılmaz — ilk gelen demirler. Ücretsiz demirleme alanıdır.'
+                : 'Rezervasyon yapılmaz — ilk gelen demirler.',
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Genel öneri (bu noktaya özel veri değildir): popüler koylar yaz '
+            'aylarında öğleden sonra dolar — erken varış rahat yer bulmanın '
+            'anahtarıdır; günübirlik tur tekneleri genellikle akşamüstü ayrılır. '
+            'Varsa yukarıdaki açıklamada bu koya özel, kaynaklı yoğunluk notları yer alır.',
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ],
       ),
     );
   }

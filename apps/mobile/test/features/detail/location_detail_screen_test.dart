@@ -87,4 +87,28 @@ void main() {
     expect(find.text('Tekrar dene'), findsOneWidget);
     expect(find.byKey(LocationDetailScreen.contentKey), findsNothing);
   });
+
+  testWidgets('demirleme koyunda Rezervasyon Talebi YOK; Demirleme Notları var',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _app(FakeLocationDetailGateway(result: sampleAnchorageDetail)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Rezervasyon Talebi'), findsNothing);
+    await tester.scrollUntilVisible(find.text('Demirleme Notları'), 200);
+    expect(find.text('Demirleme Notları'), findsOneWidget);
+    expect(find.textContaining('ilk gelen demirler'), findsOneWidget);
+    expect(find.textContaining('Ücretsiz demirleme alanı'), findsOneWidget);
+    // Öneri açıkça GENEL etiketli — koya özel veri gibi sunulmaz (0-uydurma).
+    expect(find.textContaining('Genel öneri'), findsOneWidget);
+  });
+
+  testWidgets('marinada Rezervasyon Talebi düğmesi DURUYOR',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Rezervasyon Talebi'), 200);
+    expect(find.text('Rezervasyon Talebi'), findsOneWidget);
+  });
 }
