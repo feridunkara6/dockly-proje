@@ -125,9 +125,11 @@ void main() {
         _app(boat: const MyBoat(lengthM: 12, brand: 'Beneteau')));
     await tester.pumpAndSettle();
 
-    // CI dersi: scrollUntilVisible yalnız "ağaçta bulunana" kadar kaydırır —
-    // düğme görünür alana girmeden dokunuş boşa gider. ensureVisible + pump
-    // ile gerçekten ekrana getir.
+    // CI dersi (iki aşama şart): (1) scrollUntilVisible düğme AĞAÇTA
+    // OLUŞANA kadar kaydırır (çok aşağıda olduğundan başta hiç kurulmuyor);
+    // (2) ensureVisible + pump onu GÖRÜNÜR alana getirir — yoksa dokunuş
+    // ekran dışına düşer ve boşa gider.
+    await tester.scrollUntilVisible(find.text('Şablonu kopyala'), 200);
     await tester.ensureVisible(find.text('Şablonu kopyala'));
     await tester.pump();
     expect(find.textContaining('BURASI BENETEAU'), findsOneWidget);
