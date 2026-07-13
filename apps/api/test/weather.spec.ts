@@ -7,6 +7,7 @@ import { WeatherService } from '../src/modules/weather/application/weather.servi
 import { msToKn } from '../src/modules/weather/domain/forecast.types';
 import { parseLatLon, transformMetForecast } from '../src/modules/weather/domain/met-transform';
 import { WEATHER_PROVIDER, WeatherProvider } from '../src/modules/weather/domain/weather.provider';
+import { MetNorwayProvider } from '../src/modules/weather/persistence/met-norway.provider';
 import { WeatherController } from '../src/modules/weather/presentation/weather.controller';
 
 /** MET compact yanıtının küçültülmüş gerçekçi örneği (uydurma değil — şema birebir). */
@@ -43,6 +44,14 @@ class FakeProvider implements WeatherProvider {
   }
 }
 
+describe('MetNorwayProvider (birim)', () => {
+  it('User-Agent YALNIZ ASCII — Türkçe karakter HTTP başlığında isteği patlatır (canlı ders)', () => {
+    // eslint-disable-next-line no-control-regex
+    expect(/^[\x20-\x7E]+$/.test(MetNorwayProvider.USER_AGENT)).toBe(true);
+    expect(MetNorwayProvider.USER_AGENT).toContain('moorira.com'); // MET şartı: iletişim
+  });
+});
+
 describe('met-transform (birim)', () => {
   it('m/s → knot çevrimi doğru (1.943844) ve 1 ondalık', () => {
     expect(msToKn(5)).toBeCloseTo(9.7, 5); // 5 m/s = 9.71922 → 9.7
@@ -60,15 +69,15 @@ describe('met-transform (birim)', () => {
   });
 
   it('48 saat ufku aşan dilimler alınmaz', () => {
-    const pts = transformMetForecast(metFixture(['2026-07-13T00:00:00Z', '2026-07-16T00:00:00Z']));
+    const pts = transformMetForecast(
+      metFixture(['2026-07-13T00:00:00Z', '2026-07-16T00:00:00Z']),
+    );
     expect(pts).toHaveLength(1);
   });
 
   it('eksik sayısal alanlı dilim DAHİL EDİLMEZ (uydurma yok)', () => {
     const raw = metFixture(['2026-07-13T09:00:00Z']) as {
-      properties: {
-        timeseries: Array<{ data: { instant: { details: Record<string, unknown> } } }>;
-      };
+      properties: { timeseries: Array<{ data: { instant: { details: Record<string, unknown> } } }> };
     };
     delete raw.properties.timeseries[0].data.instant.details.wind_speed;
     expect(() => transformMetForecast(raw)).toThrow(AppProblem); // tek dilim vardı → boş → hata
