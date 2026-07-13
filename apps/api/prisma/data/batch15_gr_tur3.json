@@ -1,0 +1,233 @@
+{
+ "batch": "15-gr-tur3-kalymnos-patmos-leros",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 3. tur — grecosailor.com kaptan rehberi ada sayfaları (Halki'dekiyle aynı kaynak/yöntem): DMS koordinatlar ondalığa çevrildi; VHF/telefon/derinlik/tutuş aynen aktarıldı. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "Vlychadia = Yunanistan verisindeki İLK şamandıra (buoy) kaydı — 4 ücretsiz tonoz.",
+  "Leros Marina (büyük, batch9) ile Lakki Marina (küçük, bu parti) AYRI işletmelerdir — isim/koordinat ayrımı kayıtlarda belirtildi.",
+  "Sonraki turlar: Kos belediye rıhtımları (Kardamena/Mastichari/Kefalos), Lipsi-Agathonisi-Nisyros, Samos-Sakız-Midilli kıyıları; TR: Gökçeada, Gökova restoran iskeleleri, Kaş koordinatı."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "11",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302243024444",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+306947112679"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Tonoz sayısı/ücret tarifesi kaynakta yok. Su/elektrik bilgisi net değil → amenity verilmedi.",
+   "slug": "kalymnos-pothia-limani",
+   "name": "Pothia Limanı (Kalymnos)",
+   "typeCode": "municipal_marina",
+   "provinceSlug": "gr-kalymnos",
+   "lat": 36.950194,
+   "lon": 26.986167,
+   "coordSource": "grecosailor.com kaptan rehberi (36°57'00.7\"N 26°59'10.2\"E)",
+   "descriptionTr": "Sünger dalgıçlarının adası Kalymnos'un ana limanı Pothia'da rıhtımlı küçük marina. Su çekimi ~3 m; feribot giriş-çıkışlarında rıhtımda çalkantı olabilir. Bodrum'un karşı kıyısı — Türkiye'den kısa geçiş.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kalymnos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Şamandıraların bakım sorumlusu kaynakta belirtilmiyor.",
+   "slug": "vlychadia-samandira-sahasi",
+   "name": "Vlychadia Şamandıra Sahası (Kalymnos)",
+   "typeCode": "buoy",
+   "provinceSlug": "gr-kalymnos",
+   "lat": 36.930167,
+   "lon": 26.964972,
+   "coordSource": "grecosailor.com kaptan rehberi (36°55'48.6\"N 26°57'53.9\"E)",
+   "descriptionTr": "Kalymnos'un güney kıyısında Vlychadia plajı önünde 4 ÜCRETSİZ bağlama şamandırası. Dip kum/deniz çayırı; rehber, 25 knot üzeri hamlelerde bile tuttuğunu aktarıyor. Yunanistan verimizdeki ilk şamandıra sahası.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kalymnos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2.5,
+   "depthMaxM": 6,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "telendos-demirleme",
+   "name": "Telendos Demirleme (Kalymnos)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-kalymnos",
+   "lat": 36.996194,
+   "lon": 26.921778,
+   "coordSource": "grecosailor.com kaptan rehberi (36°59'46.3\"N 26°55'18.4\"E)",
+   "descriptionTr": "Kalymnos ile heybetli Telendos adacığı arasındaki boğazda demirleme; 2,5-6 m. Dip kum/deniz çayırı — çayır yoğun, çapayı kumlu yamaya atmak için yer seçin.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kalymnos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 5.5,
+   "vhfChannel": "12",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306934684668",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "patmos-skala-rihtimi",
+   "name": "Skala Rıhtımı (Patmos)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-patmos",
+   "lat": 37.328694,
+   "lon": 26.545333,
+   "coordSource": "grecosailor.com kaptan rehberi (37°19'43.3\"N 26°32'43.2\"E)",
+   "descriptionTr": "Vahiy Adası Patmos'un ana limanı Skala'da belediye rıhtımı; kıçtankara bağlama, ~5,5 m derinlik. Rıhtımda su ve elektrik (ücretli). Not: bağlama halatı 'yardımı' için ~5€ isteyen görevliler olabilir.",
+   "priceTier": "paid",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/patmos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 5,
+   "depthMaxM": 7,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "patmos-kampos-koyu",
+   "name": "Kampos Koyu (Patmos)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-patmos",
+   "lat": 37.350083,
+   "lon": 26.567278,
+   "coordSource": "grecosailor.com kaptan rehberi (37°21'00.3\"N 26°34'02.2\"E)",
+   "descriptionTr": "Patmos'un kuzeyinde berrak sulu plaj koyu; 5-7 m kuma demirlenir, kumda tutuş mükemmel — çayırlı bölgelerden kaçının.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/patmos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 7,
+   "vhfChannel": "11",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+306909400488",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "WC/duş yok (kaynak açıkça belirtiyor) → amenity boş. Kapasite/ücret bilinmiyor.",
+   "slug": "lakki-marina-leros",
+   "name": "Lakki Marina (Leros)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-leros",
+   "lat": 37.129722,
+   "lon": 26.849139,
+   "coordSource": "grecosailor.com kaptan rehberi (37°07'47.0\"N 26°50'56.9\"E)",
+   "descriptionTr": "Leros'un korunaklı Lakki körfezinde küçük, sakin marina; her tekneye iki tonoz halatı verilir. Derinlik ~7 m. WC/duş yok — sade ama güler yüzlü bir duraklama. (Aynı körfezdeki büyük Leros Marina ayrı kayıttır.)",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/leros/"
+   ]
+  }
+ ]
+}

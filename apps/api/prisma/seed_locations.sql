@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -93,6 +93,12 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Tilos', 'gr-tilos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Halki (Herke)', 'gr-halki')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Kalymnos', 'gr-kalymnos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Patmos', 'gr-patmos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6058,4 +6064,136 @@ INSERT INTO location_services (location_id, service_id)
 SELECT l.id, sv.id FROM locations l, services sv
 WHERE l.slug = 'ucagiz-rihtimi' AND sv.code IN ('mooring_assist')
 ON CONFLICT DO NOTHING;
+
+-- --- Pothia Limanı (Kalymnos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalymnos-pothia-limani', 2, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalymnos'),
+  'Pothia Limanı (Kalymnos)', 'Sünger dalgıçlarının adası Kalymnos''un ana limanı Pothia''da rıhtımlı küçük marina. Su çekimi ~3 m; feribot giriş-çıkışlarında rıhtımda çalkantı olabilir. Bodrum''un karşı kıyısı — Türkiye''den kısa geçiş.',
+  ST_SetSRID(ST_MakePoint(26.986167, 36.950194), 4326)::geography,
+  NULL, 3, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pothia Limanı (Kalymnos)', 'Sünger dalgıçlarının adası Kalymnos''un ana limanı Pothia''da rıhtımlı küçük marina. Su çekimi ~3 m; feribot giriş-çıkışlarında rıhtımda çalkantı olabilir. Bodrum''un karşı kıyısı — Türkiye''den kısa geçiş.' FROM locations WHERE slug = 'kalymnos-pothia-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '11', NULL, NULL, NULL
+FROM locations WHERE slug = 'kalymnos-pothia-limani'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302243024444', NULL, true
+FROM locations l WHERE l.slug = 'kalymnos-pothia-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306947112679', NULL, false
+FROM locations l WHERE l.slug = 'kalymnos-pothia-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Vlychadia Şamandıra Sahası (Kalymnos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'vlychadia-samandira-sahasi', 9, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalymnos'),
+  'Vlychadia Şamandıra Sahası (Kalymnos)', 'Kalymnos''un güney kıyısında Vlychadia plajı önünde 4 ÜCRETSİZ bağlama şamandırası. Dip kum/deniz çayırı; rehber, 25 knot üzeri hamlelerde bile tuttuğunu aktarıyor. Yunanistan verimizdeki ilk şamandıra sahası.',
+  ST_SetSRID(ST_MakePoint(26.964972, 36.930167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Vlychadia Şamandıra Sahası (Kalymnos)', 'Kalymnos''un güney kıyısında Vlychadia plajı önünde 4 ÜCRETSİZ bağlama şamandırası. Dip kum/deniz çayırı; rehber, 25 knot üzeri hamlelerde bile tuttuğunu aktarıyor. Yunanistan verimizdeki ilk şamandıra sahası.' FROM locations WHERE slug = 'vlychadia-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'vlychadia-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Telendos Demirleme (Kalymnos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'telendos-demirleme', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalymnos'),
+  'Telendos Demirleme (Kalymnos)', 'Kalymnos ile heybetli Telendos adacığı arasındaki boğazda demirleme; 2,5-6 m. Dip kum/deniz çayırı — çayır yoğun, çapayı kumlu yamaya atmak için yer seçin.',
+  ST_SetSRID(ST_MakePoint(26.921778, 36.996194), 4326)::geography,
+  NULL, NULL, 2.5, 6,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Telendos Demirleme (Kalymnos)', 'Kalymnos ile heybetli Telendos adacığı arasındaki boğazda demirleme; 2,5-6 m. Dip kum/deniz çayırı — çayır yoğun, çapayı kumlu yamaya atmak için yer seçin.' FROM locations WHERE slug = 'telendos-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'telendos-demirleme'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Skala Rıhtımı (Patmos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'patmos-skala-rihtimi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-patmos'),
+  'Skala Rıhtımı (Patmos)', 'Vahiy Adası Patmos''un ana limanı Skala''da belediye rıhtımı; kıçtankara bağlama, ~5,5 m derinlik. Rıhtımda su ve elektrik (ücretli). Not: bağlama halatı ''yardımı'' için ~5€ isteyen görevliler olabilir.',
+  ST_SetSRID(ST_MakePoint(26.545333, 37.328694), 4326)::geography,
+  NULL, NULL, NULL, 5.5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Skala Rıhtımı (Patmos)', 'Vahiy Adası Patmos''un ana limanı Skala''da belediye rıhtımı; kıçtankara bağlama, ~5,5 m derinlik. Rıhtımda su ve elektrik (ücretli). Not: bağlama halatı ''yardımı'' için ~5€ isteyen görevliler olabilir.' FROM locations WHERE slug = 'patmos-skala-rihtimi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'patmos-skala-rihtimi' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306934684668', NULL, true
+FROM locations l WHERE l.slug = 'patmos-skala-rihtimi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kampos Koyu (Patmos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'patmos-kampos-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-patmos'),
+  'Kampos Koyu (Patmos)', 'Patmos''un kuzeyinde berrak sulu plaj koyu; 5-7 m kuma demirlenir, kumda tutuş mükemmel — çayırlı bölgelerden kaçının.',
+  ST_SetSRID(ST_MakePoint(26.567278, 37.350083), 4326)::geography,
+  NULL, NULL, 5, 7,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kampos Koyu (Patmos)', 'Patmos''un kuzeyinde berrak sulu plaj koyu; 5-7 m kuma demirlenir, kumda tutuş mükemmel — çayırlı bölgelerden kaçının.' FROM locations WHERE slug = 'patmos-kampos-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'patmos-kampos-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Lakki Marina (Leros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lakki-marina-leros', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-leros'),
+  'Lakki Marina (Leros)', 'Leros''un korunaklı Lakki körfezinde küçük, sakin marina; her tekneye iki tonoz halatı verilir. Derinlik ~7 m. WC/duş yok — sade ama güler yüzlü bir duraklama. (Aynı körfezdeki büyük Leros Marina ayrı kayıttır.)',
+  ST_SetSRID(ST_MakePoint(26.849139, 37.129722), 4326)::geography,
+  NULL, NULL, NULL, 7,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lakki Marina (Leros)', 'Leros''un korunaklı Lakki körfezinde küçük, sakin marina; her tekneye iki tonoz halatı verilir. Derinlik ~7 m. WC/duş yok — sade ama güler yüzlü bir duraklama. (Aynı körfezdeki büyük Leros Marina ayrı kayıttır.)' FROM locations WHERE slug = 'lakki-marina-leros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '11', NULL, NULL, NULL
+FROM locations WHERE slug = 'lakki-marina-leros'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306909400488', NULL, true
+FROM locations l WHERE l.slug = 'lakki-marina-leros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
