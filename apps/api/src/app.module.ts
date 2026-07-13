@@ -13,6 +13,7 @@ import { UsersModule } from './modules/users/users.module';
 import { BoatsModule } from './modules/boats/boats.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { LocationsModule } from './modules/locations/locations.module';
+import { WeatherModule } from './modules/weather/weather.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -36,7 +37,8 @@ const REDACT_PATHS = [
           autoLogging: {
             ignore: (req) => req.url === '/healthz' || req.url === '/readyz',
           },
-          transport: env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
+          transport:
+            env.get('NODE_ENV') === 'development' ? { target: 'pino-pretty' } : undefined,
         },
       }),
     }),
@@ -48,6 +50,7 @@ const REDACT_PATHS = [
     BoatsModule,
     CatalogModule,
     LocationsModule,
+    WeatherModule,
   ],
 })
 export class AppModule implements NestModule {
@@ -58,10 +61,7 @@ export class AppModule implements NestModule {
     // önizlemesini (farklı köken) engellemez. Modülde tanımlı → üretimde VE
     // e2e testlerinde aynı şekilde uygulanır.
     consumer
-      .apply(
-        helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }),
-        RequestContextMiddleware,
-      )
+      .apply(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }), RequestContextMiddleware)
       .forRoutes('*');
   }
 }
