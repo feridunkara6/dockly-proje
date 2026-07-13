@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -108,6 +108,12 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Lipsi', 'gr-lipsi')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Sakız (Chios)', 'gr-sakiz')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Fourni', 'gr-fourni')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Amorgos', 'gr-amorgos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6645,5 +6651,115 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'sig-liman-selimiye'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Thymaina İskelesi (Fourni) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'thymaina-iskelesi', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-fourni'),
+  'Thymaina İskelesi (Fourni)', 'Samos-İkarya arasındaki Fourni takımadasının sakin adası Thymaina''nın köy iskelesi; rehber ''rahat konaklama için iskeleye yanaşın'' diyor. Turizmin uğramadığı, otantik bir mola.',
+  ST_SetSRID(ST_MakePoint(26.454528, 37.582444), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Thymaina İskelesi (Fourni)', 'Samos-İkarya arasındaki Fourni takımadasının sakin adası Thymaina''nın köy iskelesi; rehber ''rahat konaklama için iskeleye yanaşın'' diyor. Turizmin uğramadığı, otantik bir mola.' FROM locations WHERE slug = 'thymaina-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+
+-- --- Thymaina Güney Koyu · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'thymaina-guney-koyu', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-fourni'),
+  'Thymaina Güney Koyu', 'Şapeller arasına saklanmış küçük koy — öğle molası için huzurlu bir nokta. 4,5 m, kum/deniz çayırı; sakin havada yeterli korunma.',
+  ST_SetSRID(ST_MakePoint(26.454611, 37.580472), 4326)::geography,
+  NULL, NULL, NULL, 4.5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Thymaina Güney Koyu', 'Şapeller arasına saklanmış küçük koy — öğle molası için huzurlu bir nokta. 4,5 m, kum/deniz çayırı; sakin havada yeterli korunma.' FROM locations WHERE slug = 'thymaina-guney-koyu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'thymaina-guney-koyu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Lakkos Koyu (Thymaina) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lakkos-koyu-thymaina', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-fourni'),
+  'Lakkos Koyu (Thymaina)', 'Thymaina''nın güneyinde berraklığıyla ''olağanüstü'' diye anılan koy; koy ortasında 8 m, kumda güvenli tutuş. Poyraz/karayelden mükemmel korunma; cep telefonu çeker.',
+  ST_SetSRID(ST_MakePoint(26.453306, 37.572167), 4326)::geography,
+  NULL, NULL, NULL, 8,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lakkos Koyu (Thymaina)', 'Thymaina''nın güneyinde berraklığıyla ''olağanüstü'' diye anılan koy; koy ortasında 8 m, kumda güvenli tutuş. Poyraz/karayelden mükemmel korunma; cep telefonu çeker.' FROM locations WHERE slug = 'lakkos-koyu-thymaina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'sand', NULL, true
+FROM locations WHERE slug = 'lakkos-koyu-thymaina'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Kleftolimano Koyu (Thymaina) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kleftolimano-koyu-thymaina', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-fourni'),
+  'Kleftolimano Koyu (Thymaina)', 'Adı ''korsan limanı'' anlamına gelen tek teknelik ıssız koy; kıyıya halat alınabilir. DİKKAT: çapa tutuşu ZAYIF (kum/çayır/kaya karışık dip) ve meltemiye açık — yalnız uygun havada.',
+  ST_SetSRID(ST_MakePoint(26.44025, 37.577056), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kleftolimano Koyu (Thymaina)', 'Adı ''korsan limanı'' anlamına gelen tek teknelik ıssız koy; kıyıya halat alınabilir. DİKKAT: çapa tutuşu ZAYIF (kum/çayır/kaya karışık dip) ve meltemiye açık — yalnız uygun havada.' FROM locations WHERE slug = 'kleftolimano-koyu-thymaina'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'kleftolimano-koyu-thymaina'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Maltezi Plajı Demirleme (Amorgos) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'maltezi-plaji-amorgos', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-amorgos'),
+  'Maltezi Plajı Demirleme (Amorgos)', 'Katapola körfezinin kuzey rüzgârlarında tercih edilen demirlemesi — Hozoviotissa Manastırı''nın adasında. Derin körfez güvenli demirleme sağlar; feribot manevraları çapaları etkileyebilir.',
+  ST_SetSRID(ST_MakePoint(25.8533, 36.83569), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Maltezi Plajı Demirleme (Amorgos)', 'Katapola körfezinin kuzey rüzgârlarında tercih edilen demirlemesi — Hozoviotissa Manastırı''nın adasında. Derin körfez güvenli demirleme sağlar; feribot manevraları çapaları etkileyebilir.' FROM locations WHERE slug = 'maltezi-plaji-amorgos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'maltezi-plaji-amorgos'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Katapola Güney Demirleme (Amorgos) · güven: medium · kaynak: sailingissues.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'katapola-guney-demirleme', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-amorgos'),
+  'Katapola Güney Demirleme (Amorgos)', 'Katapola''da güney rüzgârlarında tercih edilen demirleme (liman ile Panagia kilisesi arası). Kasaba rıhtımında kıçtankara yer, su ve elektrik vardır; feribot rıhtımının doğusu sığdır — uzak durun. Fazla kaloma zincir çaprazlanmasına yol açabilir.',
+  ST_SetSRID(ST_MakePoint(25.85621, 36.82733), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Katapola Güney Demirleme (Amorgos)', 'Katapola''da güney rüzgârlarında tercih edilen demirleme (liman ile Panagia kilisesi arası). Kasaba rıhtımında kıçtankara yer, su ve elektrik vardır; feribot rıhtımının doğusu sığdır — uzak durun. Fazla kaloma zincir çaprazlanmasına yol açabilir.' FROM locations WHERE slug = 'katapola-guney-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'katapola-guney-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
