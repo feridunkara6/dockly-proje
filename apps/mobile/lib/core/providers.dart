@@ -26,3 +26,8 @@ final Provider<AuthApi> authApiProvider = Provider<AuthApi>((ref) {
 final Provider<LocationsApi> locationsApiProvider = Provider<LocationsApi>((ref) {
   return LocationsApi(ref.watch(docklyClientProvider).dio);
 });
+
+/// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
+final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
+  return WeatherApi(ref.watch(docklyClientProvider).dio);
+});

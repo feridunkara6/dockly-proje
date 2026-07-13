@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dar
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
+import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
+import '../../support/weather_fakes.dart';
 
 /// İkonlar artık SVG tabanlı [DocklyIcon]; Material `find.byIcon` yerine ikon
 /// verisiyle bulunur.
@@ -28,6 +30,7 @@ Widget _app(LocationDetailGateway gateway) {
       locationDetailGatewayProvider.overrideWithValue(gateway),
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
+      weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
     ],
     child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
   );
@@ -66,6 +69,7 @@ void main() {
           locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
           nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
           reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
+      weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
           originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
         ],
         child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),

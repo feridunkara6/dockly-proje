@@ -19,6 +19,7 @@ import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
 import 'cover_photo.dart';
 import 'maritime_info_panel.dart';
+import '../../weather/presentation/weather_card.dart';
 import 'operating_info.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
@@ -197,6 +198,9 @@ class _DetailContent extends StatelessWidget {
           seasons: detail.seasons,
           is24h: detail.is24h,
         ),
+
+        // Rüzgâr & Hava — noktanın 48 saatlik tahmini (MET Norway, atıflı).
+        WeatherCard(position: detail.position),
 
         if (detail.contacts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
