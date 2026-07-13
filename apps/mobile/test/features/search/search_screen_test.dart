@@ -25,6 +25,11 @@ Future<void> _tapChip(WidgetTester tester, String label) async {
     of: find.byKey(const ValueKey<String>('search-filter-row')),
     matching: find.byType(Scrollable),
   );
+  // ŞERİDİ BAŞA SAR (CI dersi 2): scrollUntilVisible yalnız İLERİ kaydırır —
+  // hedef çip o anki görünümün SOLUNDA kaldıysa asla bulunamazdı. Baştan
+  // ileri arama her çip için belirlenimcidir.
+  tester.state<ScrollableState>(chipRow).position.jumpTo(0);
+  await tester.pump();
   await tester.scrollUntilVisible(find.text(label), 80, scrollable: chipRow);
   await tester.ensureVisible(find.text(label));
   await tester.pump();

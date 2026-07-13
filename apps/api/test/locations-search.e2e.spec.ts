@@ -140,4 +140,5 @@ runIf('Locations search API (e2e — gerçek PostGIS)', () => {
     const slugs = (res.body.data as LocationSummary[]).map((i) => i.slug);
     expect(slugs).toContain('e2e-search-marina');
   });
+
 });
