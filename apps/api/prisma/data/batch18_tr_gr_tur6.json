@@ -1,0 +1,210 @@
+{
+ "batch": "18-tr-gr-tur6-fethiye-hisaronu-midilli",
+ "collectedAt": "2026-07-13",
+ "method": "Çift ülke turu — TR: turkeymarinas.blogspot.com (batch4/12/13 ile aynı kaynak/yöntem); GR: grecosailor.com Midilli rehberi (önceki turlarla aynı). DMS→ondalık; tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "TR: Hisarönü'ne Uzun Liman (Saklı Liman havuzuyla), Antalya'ya Çoban Limanı (Adrasan), Fethiye'ye tatlı su kaynaklı Soğuksu (restoranlı) eklendi.",
+  "GR: Midilli ilk rıhtım/koy kayıtlarını aldı (Mytilene Marina batch9'dan beri yalnızdı): Molyvos ÜCRETSİZ rıhtım, Sigri (1,4 m sınır uyarısıyla), Skala Kallonis.",
+  "Bekleyenler: Gökçeada + Üçağız/Kaş koordinatları (kaynak kilitli), Samos rıhtımı, İçmeler/Engeceli/Sığ Liman koyları (sonraki tur)."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "TR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 8,
+   "depthMaxM": 10,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "high",
+   "missingNotes": null,
+   "slug": "uzun-liman-hisaronu",
+   "name": "Uzun Liman (Hisarönü)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "mugla",
+   "lat": 36.868878,
+   "lon": 28.046812,
+   "coordSource": "turkeymarinas (36°52'08.0\"N 28°02'48.5\"E → 36.868878, 28.046812)",
+   "descriptionTr": "Hisarönü Körfezi'nde, Küfre'nin komşusu uzun ve dar koy; plaj tarafı her yönden korunaklıdır. Ana koyda 8-10 m'ye demirlenir; iç uçta 'Saklı Liman' denen 2 m'den sığ gizli havuz vardır — sazlık kıyılara dikkat. Tamamen doğal, tesissiz.",
+   "priceTier": "free",
+   "holdingType": null,
+   "isFree": true,
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/06/uzun-liman-anchorage.html"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "TR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Demirleme derinliği/tutuş kaynakta rakamla verilmiyor → null.",
+   "slug": "coban-limani-kumluca",
+   "name": "Çoban Limanı (Kumluca)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "antalya",
+   "lat": 36.342172,
+   "lon": 30.524414,
+   "coordSource": "turkeymarinas (36°20'31.8\"N 30°31'27.9\"E → 36.342172, 30.524414)",
+   "descriptionTr": "Adrasan-Taşlık Burnu arasında vahşi ve doğal büyük koy; gecelemek için korunma sağlar. Karadan yol ve su YOKTUR — tamamen ıssız. Berrak suları şnorkel ve dalış için ünlüdür (koy 60 m'ye kadar derinleşir). Taşlıkburnu ve Adrasan fenerleri seyir yardımcısıdır.",
+   "priceTier": "free",
+   "isFree": true,
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/04/coban-limani-anchorage.html"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "TR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 6,
+   "depthMaxM": 8,
+   "vhfChannel": null,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [],
+   "confidence": "high",
+   "missingNotes": null,
+   "slug": "soguksu-koyu-fethiye",
+   "name": "Soğuksu Koyu (Fethiye)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "mugla",
+   "lat": 36.562924,
+   "lon": 29.08339,
+   "coordSource": "turkeymarinas (36°33'46.5\"N 29°05'00.2\"E → 36.562924, 29.083390)",
+   "descriptionTr": "Fethiye Körfezi'nde 'Tatlısu' diye de bilinen koy: dipteki kaynaklar yüzeyde serin bir tatlı su tabakası oluşturur — yüzmesi meşhurdur. Plaj önünde 6-8 m'ye demir + kıça uzun halat düzeni; restoran personeli bağlamada yardım eder. Tepedeki restoran manzarası ve ızgarasıyla bilinir; tekneden alma-bırakma servisi vardır. İç kol (Soğuksu Limanı) iyi korunaklı; ana koy güneye açıktır.",
+   "priceTier": "free",
+   "isFree": true,
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/04/soguksu-koyu-anchorage.html"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302253071847",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik/VHF kaynakta belirtilmiyor. Elektrik bilgisi yok → amenity verilmedi.",
+   "slug": "molyvos-limani",
+   "name": "Molyvos Limanı (Midilli)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-midilli",
+   "lat": 39.368389,
+   "lon": 26.168528,
+   "coordSource": "grecosailor.com Midilli rehberi (39°22'06.2\"N 26°10'06.7\"E)",
+   "descriptionTr": "Midilli'nin kuzeyinde, kale manzaralı taş kasaba Molyvos'un (Mithymna) rıhtımı — rehber 'kuvvetli karayelde bile mükemmel korunma' diyor. ÜCRETSİZ bağlama ve ücretsiz su. Ayvalık-Dikili karşı kıyısı.",
+   "priceTier": "free",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": 1.4,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302253054321",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "1,4 m su çekimi siniri kritik — kayıtta vurgulandı.",
+   "slug": "sigri-limani",
+   "name": "Sigri Limanı (Midilli)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-midilli",
+   "lat": 39.212833,
+   "lon": 25.852028,
+   "coordSource": "grecosailor.com Midilli rehberi (39°12'46.2\"N 25°51'07.3\"E)",
+   "descriptionTr": "Midilli'nin batı ucunda Sigri limanı; su ve elektrik 'Lesbos kartı' ile kullanılır. DİKKAT: haritaya göre su çekimi 1,4 m ile SINIRLI — yelkenliler için uygun değil, sığ tekneler içindir.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 5,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "skala-kallonis-demirleme",
+   "name": "Skala Kallonis Demirleme (Midilli)",
+   "typeCode": "mooring_point",
+   "provinceSlug": "gr-midilli",
+   "lat": 39.202722,
+   "lon": 26.209694,
+   "coordSource": "grecosailor.com Midilli rehberi (39°12'09.8\"N 26°12'34.9\"E)",
+   "descriptionTr": "Midilli'nin iç körfezi Kalloni'nin başındaki sardalyasıyla ünlü Skala Kallonis önünde demirleme; ~5 m, kum/çamur dip — rehber 'mükemmel tutuş' ve kuzey rüzgârlarına iyi korunma aktarıyor.",
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
+   ]
+  }
+ ]
+}

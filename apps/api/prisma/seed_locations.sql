@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -6443,5 +6443,131 @@ ON CONFLICT (location_id, locale) DO NOTHING;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, true
 FROM locations WHERE slug = 'agia-markella-sakiz'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Uzun Liman (Hisarönü) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'uzun-liman-hisaronu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Uzun Liman (Hisarönü)', 'Hisarönü Körfezi''nde, Küfre''nin komşusu uzun ve dar koy; plaj tarafı her yönden korunaklıdır. Ana koyda 8-10 m''ye demirlenir; iç uçta ''Saklı Liman'' denen 2 m''den sığ gizli havuz vardır — sazlık kıyılara dikkat. Tamamen doğal, tesissiz.',
+  ST_SetSRID(ST_MakePoint(28.046812, 36.868878), 4326)::geography,
+  NULL, NULL, 8, 10,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Uzun Liman (Hisarönü)', 'Hisarönü Körfezi''nde, Küfre''nin komşusu uzun ve dar koy; plaj tarafı her yönden korunaklıdır. Ana koyda 8-10 m''ye demirlenir; iç uçta ''Saklı Liman'' denen 2 m''den sığ gizli havuz vardır — sazlık kıyılara dikkat. Tamamen doğal, tesissiz.' FROM locations WHERE slug = 'uzun-liman-hisaronu'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'uzun-liman-hisaronu'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Çoban Limanı (Kumluca) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'coban-limani-kumluca', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Çoban Limanı (Kumluca)', 'Adrasan-Taşlık Burnu arasında vahşi ve doğal büyük koy; gecelemek için korunma sağlar. Karadan yol ve su YOKTUR — tamamen ıssız. Berrak suları şnorkel ve dalış için ünlüdür (koy 60 m''ye kadar derinleşir). Taşlıkburnu ve Adrasan fenerleri seyir yardımcısıdır.',
+  ST_SetSRID(ST_MakePoint(30.524414, 36.342172), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çoban Limanı (Kumluca)', 'Adrasan-Taşlık Burnu arasında vahşi ve doğal büyük koy; gecelemek için korunma sağlar. Karadan yol ve su YOKTUR — tamamen ıssız. Berrak suları şnorkel ve dalış için ünlüdür (koy 60 m''ye kadar derinleşir). Taşlıkburnu ve Adrasan fenerleri seyir yardımcısıdır.' FROM locations WHERE slug = 'coban-limani-kumluca'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'coban-limani-kumluca'
+ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Soğuksu Koyu (Fethiye) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'soguksu-koyu-fethiye', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Soğuksu Koyu (Fethiye)', 'Fethiye Körfezi''nde ''Tatlısu'' diye de bilinen koy: dipteki kaynaklar yüzeyde serin bir tatlı su tabakası oluşturur — yüzmesi meşhurdur. Plaj önünde 6-8 m''ye demir + kıça uzun halat düzeni; restoran personeli bağlamada yardım eder. Tepedeki restoran manzarası ve ızgarasıyla bilinir; tekneden alma-bırakma servisi vardır. İç kol (Soğuksu Limanı) iyi korunaklı; ana koy güneye açıktır.',
+  ST_SetSRID(ST_MakePoint(29.08339, 36.562924), 4326)::geography,
+  NULL, NULL, 6, 8,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Soğuksu Koyu (Fethiye)', 'Fethiye Körfezi''nde ''Tatlısu'' diye de bilinen koy: dipteki kaynaklar yüzeyde serin bir tatlı su tabakası oluşturur — yüzmesi meşhurdur. Plaj önünde 6-8 m''ye demir + kıça uzun halat düzeni; restoran personeli bağlamada yardım eder. Tepedeki restoran manzarası ve ızgarasıyla bilinir; tekneden alma-bırakma servisi vardır. İç kol (Soğuksu Limanı) iyi korunaklı; ana koy güneye açıktır.' FROM locations WHERE slug = 'soguksu-koyu-fethiye'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, true
+FROM locations WHERE slug = 'soguksu-koyu-fethiye'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'soguksu-koyu-fethiye' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+
+-- --- Molyvos Limanı (Midilli) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'molyvos-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-midilli'),
+  'Molyvos Limanı (Midilli)', 'Midilli''nin kuzeyinde, kale manzaralı taş kasaba Molyvos''un (Mithymna) rıhtımı — rehber ''kuvvetli karayelde bile mükemmel korunma'' diyor. ÜCRETSİZ bağlama ve ücretsiz su. Ayvalık-Dikili karşı kıyısı.',
+  ST_SetSRID(ST_MakePoint(26.168528, 39.368389), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Molyvos Limanı (Midilli)', 'Midilli''nin kuzeyinde, kale manzaralı taş kasaba Molyvos''un (Mithymna) rıhtımı — rehber ''kuvvetli karayelde bile mükemmel korunma'' diyor. ÜCRETSİZ bağlama ve ücretsiz su. Ayvalık-Dikili karşı kıyısı.' FROM locations WHERE slug = 'molyvos-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'molyvos-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302253071847', NULL, true
+FROM locations l WHERE l.slug = 'molyvos-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Sigri Limanı (Midilli) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sigri-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-midilli'),
+  'Sigri Limanı (Midilli)', 'Midilli''nin batı ucunda Sigri limanı; su ve elektrik ''Lesbos kartı'' ile kullanılır. DİKKAT: haritaya göre su çekimi 1,4 m ile SINIRLI — yelkenliler için uygun değil, sığ tekneler içindir.',
+  ST_SetSRID(ST_MakePoint(25.852028, 39.212833), 4326)::geography,
+  NULL, 1.4, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sigri Limanı (Midilli)', 'Midilli''nin batı ucunda Sigri limanı; su ve elektrik ''Lesbos kartı'' ile kullanılır. DİKKAT: haritaya göre su çekimi 1,4 m ile SINIRLI — yelkenliler için uygun değil, sığ tekneler içindir.' FROM locations WHERE slug = 'sigri-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sigri-limani' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302253054321', NULL, true
+FROM locations l WHERE l.slug = 'sigri-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Skala Kallonis Demirleme (Midilli) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'skala-kallonis-demirleme', 8, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-midilli'),
+  'Skala Kallonis Demirleme (Midilli)', 'Midilli''nin iç körfezi Kalloni''nin başındaki sardalyasıyla ünlü Skala Kallonis önünde demirleme; ~5 m, kum/çamur dip — rehber ''mükemmel tutuş'' ve kuzey rüzgârlarına iyi korunma aktarıyor.',
+  ST_SetSRID(ST_MakePoint(26.209694, 39.202722), 4326)::geography,
+  NULL, NULL, NULL, 5,
+  NULL, 'free', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Skala Kallonis Demirleme (Midilli)', 'Midilli''nin iç körfezi Kalloni''nin başındaki sardalyasıyla ünlü Skala Kallonis önünde demirleme; ~5 m, kum/çamur dip — rehber ''mükemmel tutuş'' ve kuzey rüzgârlarına iyi korunma aktarıyor.' FROM locations WHERE slug = 'skala-kallonis-demirleme'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, 'mixed', NULL, true
+FROM locations WHERE slug = 'skala-kallonis-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
