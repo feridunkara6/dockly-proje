@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -138,6 +138,21 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Zakynthos', 'gr-zakinthos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Girit', 'gr-girit')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Agathonisi', 'gr-agathonisi')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Astypalaia', 'gr-astypalaia')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Egina (Aegina)', 'gr-egina')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'İdra (Hydra)', 'gr-hydra')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Spetses', 'gr-spetses')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -8868,4 +8883,223 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.seturmarinas.com/', NULL, false
 FROM locations l WHERE l.slug = 'setur-altinyunus-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Pythagorio Limanı · güven: high · kaynak: www.cruiserswiki.org ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pythagorio-limani-samos', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-samos'),
+  'Pythagorio Limanı', 'Antik Samos''un limanı; Kuşadası-Dilek Yarımadası''nın tam karşısı. Liman içinde derinlik ~5 m; çamur zemin, 25 m zincirle iyi tutar. İç liman her havada güvenlidir; dış rıhtım güneydoğuya açıktır — kuvvetli D/GD rüzgârında iki demir önerilir. Su-elektrik rıhtımda; yakıt mini tankerle ya da 1,5 mil kuzeydeki Samos Marina''dan. Liman ücreti ~10 € /gece (2017). DİKKAT: iç liman girişinin ortasına yakın, şamandırayla işaretli TEHLİKELİ KAYA vardır — kuzey kenardan girin; 2021''den beri iç limanda demirleme yasaktır. Gece rıhtım kafeleri sabaha dek gürültülü olabilir.',
+  ST_SetSRID(ST_MakePoint(26.95, 37.686667), 4326)::geography,
+  NULL, NULL, 4, 5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pythagorio Limanı', 'Antik Samos''un limanı; Kuşadası-Dilek Yarımadası''nın tam karşısı. Liman içinde derinlik ~5 m; çamur zemin, 25 m zincirle iyi tutar. İç liman her havada güvenlidir; dış rıhtım güneydoğuya açıktır — kuvvetli D/GD rüzgârında iki demir önerilir. Su-elektrik rıhtımda; yakıt mini tankerle ya da 1,5 mil kuzeydeki Samos Marina''dan. Liman ücreti ~10 € /gece (2017). DİKKAT: iç liman girişinin ortasına yakın, şamandırayla işaretli TEHLİKELİ KAYA vardır — kuzey kenardan girin; 2021''den beri iç limanda demirleme yasaktır. Gece rıhtım kafeleri sabaha dek gürültülü olabilir.' FROM locations WHERE slug = 'pythagorio-limani-samos'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'pythagorio-limani-samos' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302273061225', NULL, true
+FROM locations l WHERE l.slug = 'pythagorio-limani-samos'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Vathy Limanı (Samos) · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'samos-vathy-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-samos'),
+  'Vathy Limanı (Samos)', 'Samos''un başkenti Vathy''nin limanı. Rıhtım çevresinde hemen her yerde ~3 m su vardır; feribot rıhtımından uzağa bağlanılır. Ana körfez kuzey-kuzeybatıya tamamen açıktır — meltemde belirgin çapraz dalga girer; güneydoğu köşedeki küçük marina meltemden korunur (hafif soluğanla). Su marinada; yakıt mini tankerle. Kasabada market, banka ve restoranlar rıhtım boyundadır.',
+  ST_SetSRID(ST_MakePoint(26.973063, 37.75536), 4326)::geography,
+  NULL, NULL, 3, 3,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Vathy Limanı (Samos)', 'Samos''un başkenti Vathy''nin limanı. Rıhtım çevresinde hemen her yerde ~3 m su vardır; feribot rıhtımından uzağa bağlanılır. Ana körfez kuzey-kuzeybatıya tamamen açıktır — meltemde belirgin çapraz dalga girer; güneydoğu köşedeki küçük marina meltemden korunur (hafif soluğanla). Su marinada; yakıt mini tankerle. Kasabada market, banka ve restoranlar rıhtım boyundadır.' FROM locations WHERE slug = 'samos-vathy-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'samos-vathy-limani' AND a.code IN ('water', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Agios Georgios Rıhtımı (Agathonisi) · güven: medium · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'agathonisi-agios-georgios', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-agathonisi'),
+  'Agios Georgios Rıhtımı (Agathonisi)', 'Didim-Datça hattının karşısındaki küçük Agathonisi''nin tek limanı. Feribot rıhtımına 3-4 tek gövdeli tekne sığar (katamaran varsa daha az); koyda demir yeri sınırlıdır — batı ve doğu kollarında 7-12 m''ye demirlenir, tutuş iyidir. Meltemden iyi korunur; güneye açıktır; Temmuz-Eylül arası kuvvetli sağanak rüzgâr (gust) görülür. DİKKAT: yazın yüzme şamandıraları konur ve sıkı denetlenir. Köyde 3 restoran ve bakkallar vardır; SUYU İÇMEYİN (içme suyu değildir).',
+  ST_SetSRID(ST_MakePoint(26.966928, 37.457523), 4326)::geography,
+  NULL, NULL, 7, 12,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Agios Georgios Rıhtımı (Agathonisi)', 'Didim-Datça hattının karşısındaki küçük Agathonisi''nin tek limanı. Feribot rıhtımına 3-4 tek gövdeli tekne sığar (katamaran varsa daha az); koyda demir yeri sınırlıdır — batı ve doğu kollarında 7-12 m''ye demirlenir, tutuş iyidir. Meltemden iyi korunur; güneye açıktır; Temmuz-Eylül arası kuvvetli sağanak rüzgâr (gust) görülür. DİKKAT: yazın yüzme şamandıraları konur ve sıkı denetlenir. Köyde 3 restoran ve bakkallar vardır; SUYU İÇMEYİN (içme suyu değildir).' FROM locations WHERE slug = 'agathonisi-agios-georgios'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'agathonisi-agios-georgios' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+
+-- --- Katapola Limanı (Amorgos) · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'katapola-limani-amorgos', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-amorgos'),
+  'Katapola Limanı (Amorgos)', 'Amorgos''un ana limanı. Kuzeye demir atıp kıçtan rıhtıma bağlanılır. Geniş koy kuzey-kuzeydoğuya açıktır; kuvvetli batı rüzgârında koyda dalga 1,5 m''yi bulabilir. Elektrik rıhtımda; yakıt mini tankerle; tersane, market, banka ve restoranlar vardır. Liman ücreti ~14 €/gece (12 m tekne, 2017), su ~5 €. Koyun karşı (kuzey) yakası Xilokeratidi balıkçı limanıdır.',
+  ST_SetSRID(ST_MakePoint(25.8652, 36.828701), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Katapola Limanı (Amorgos)', 'Amorgos''un ana limanı. Kuzeye demir atıp kıçtan rıhtıma bağlanılır. Geniş koy kuzey-kuzeydoğuya açıktır; kuvvetli batı rüzgârında koyda dalga 1,5 m''yi bulabilir. Elektrik rıhtımda; yakıt mini tankerle; tersane, market, banka ve restoranlar vardır. Liman ücreti ~14 €/gece (12 m tekne, 2017), su ~5 €. Koyun karşı (kuzey) yakası Xilokeratidi balıkçı limanıdır.' FROM locations WHERE slug = 'katapola-limani-amorgos'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'katapola-limani-amorgos' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Tourlos Marina (Mykonos Yeni Limanı) · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tourlos-marina-mykonos', 2, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-mykonos'),
+  'Tourlos Marina (Mykonos Yeni Limanı)', 'Mykonos''un yeni limanındaki yat bölümü; ~40 ponton yeri, maksimum boy 25 m, derinlik 3-5 m. İki giriş vardır (güney kırmızı, kuzey yeşil fener); güney rıhtım daha korunaklıdır. Su-elektrik pontonlarda; yakıt mini tankerle; Wi-Fi, duş-WC ve mekanik tamir bulunur. DİKKAT: meltem K/KB''den doğrudan marinaya eser — Mykonos, Kikladlar''ın en rüzgârlı adalarındandır. Kasabaya 20 dk yürüyüş ya da otobüs.',
+  ST_SetSRID(ST_MakePoint(25.322599, 37.465302), 4326)::geography,
+  25, NULL, 3, 5,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tourlos Marina (Mykonos Yeni Limanı)', 'Mykonos''un yeni limanındaki yat bölümü; ~40 ponton yeri, maksimum boy 25 m, derinlik 3-5 m. İki giriş vardır (güney kırmızı, kuzey yeşil fener); güney rıhtım daha korunaklıdır. Su-elektrik pontonlarda; yakıt mini tankerle; Wi-Fi, duş-WC ve mekanik tamir bulunur. DİKKAT: meltem K/KB''den doğrudan marinaya eser — Mykonos, Kikladlar''ın en rüzgârlı adalarındandır. Kasabaya 20 dk yürüyüş ya da otobüs.' FROM locations WHERE slug = 'tourlos-marina-mykonos'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 40, '12', NULL, NULL, NULL
+FROM locations WHERE slug = 'tourlos-marina-mykonos'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tourlos-marina-mykonos' AND a.code IN ('electricity', 'water', 'fuel', 'wifi', 'shower', 'wc')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'tourlos-marina-mykonos' AND sv.code IN ('technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302289022218', NULL, true
+FROM locations l WHERE l.slug = 'tourlos-marina-mykonos'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Naoussa Limanı (Paros) · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'naoussa-limani-paros', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-paros'),
+  'Naoussa Limanı (Paros)', 'Paros''un kuzeyindeki şirin balıkçı kasabası. Rıhtımda 3-5 m, dış kesimde 4-10 m; çamur-kum-yosun zemin iyi tutar; ~70 yer vardır. Meltemden iyi korunur; ama her yönden kuvvetli rüzgâr bağlamayı rahatsız eder. DİKKAT: rıhtımın bazı bölümlerinde su altı kaya çıkıntısı ve doğu-batı uzanan zincir vardır; feribot alanı boş bırakılır; yerin çoğunu yerel balıkçı tekneleri tutar. Yakıt mini tankerle; tamir/tersane, market ve restoranlar vardır. Çevre koylar (Langeri, Ag. Ioannou, Plastira) alternatif demirleme sunar.',
+  ST_SetSRID(ST_MakePoint(25.237101, 37.124001), 4326)::geography,
+  NULL, NULL, 3, 5,
+  70, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Naoussa Limanı (Paros)', 'Paros''un kuzeyindeki şirin balıkçı kasabası. Rıhtımda 3-5 m, dış kesimde 4-10 m; çamur-kum-yosun zemin iyi tutar; ~70 yer vardır. Meltemden iyi korunur; ama her yönden kuvvetli rüzgâr bağlamayı rahatsız eder. DİKKAT: rıhtımın bazı bölümlerinde su altı kaya çıkıntısı ve doğu-batı uzanan zincir vardır; feribot alanı boş bırakılır; yerin çoğunu yerel balıkçı tekneleri tutar. Yakıt mini tankerle; tamir/tersane, market ve restoranlar vardır. Çevre koylar (Langeri, Ag. Ioannou, Plastira) alternatif demirleme sunar.' FROM locations WHERE slug = 'naoussa-limani-paros'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'naoussa-limani-paros' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'naoussa-limani-paros' AND sv.code IN ('technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302284052646', NULL, true
+FROM locations l WHERE l.slug = 'naoussa-limani-paros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İdra (Hydra) Limanı · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hydra-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-hydra'),
+  'İdra (Hydra) Limanı', 'Saronik''in incisi, arabasız ada İdra''nın taş limanı. VHF 12. Su, elektrik ve yakıt vardır. DİKKAT: zemin ot-kaya-çamur karışımı ve TUTUŞ ZAYIFTIR; kuzeybatı rüzgârı tehlikeli dalgalanma yapar — K/KD rüzgârında kuzey mendireği tercih edilir. Yoğunluk (kaynaklı): yaz aylarında aşırı kalabalıktır, tekneler rıhtıma ÜÇ SIRA aborda bağlanır; dar girişte feribot ve hidrofiller hızlı geçer. Erken saatte gelin.',
+  ST_SetSRID(ST_MakePoint(23.4659, 37.350601), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İdra (Hydra) Limanı', 'Saronik''in incisi, arabasız ada İdra''nın taş limanı. VHF 12. Su, elektrik ve yakıt vardır. DİKKAT: zemin ot-kaya-çamur karışımı ve TUTUŞ ZAYIFTIR; kuzeybatı rüzgârı tehlikeli dalgalanma yapar — K/KD rüzgârında kuzey mendireği tercih edilir. Yoğunluk (kaynaklı): yaz aylarında aşırı kalabalıktır, tekneler rıhtıma ÜÇ SIRA aborda bağlanır; dar girişte feribot ve hidrofiller hızlı geçer. Erken saatte gelin.' FROM locations WHERE slug = 'hydra-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'hydra-limani' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302298052279', NULL, true
+FROM locations l WHERE l.slug = 'hydra-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Egina (Aegina) Limanı · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aegina-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-egina'),
+  'Egina (Aegina) Limanı', 'Atina''ya en yakın adalardan Egina''nın ana limanı; batı mendireğindeki beyaz şapel uzaktan seçilir. Kanalda 8-9 m; zemin kaya+çamur. Girişte sancak tarafı marinadır; pontonlara dik bağlanılır; rıhtımda şamandıralı bağlama vardır (güney mendireği charter teknelerine ayrılır). VHF 12. Su, elektrik ve mini tankerle yakıt. Her yönden iyi korunur; güneyli rüzgâr rahatsız soluğan sokar; kuvvetli KB rüzgârında DGD kesiminde bağlama tehlikelidir — zinciri tam kaçırın. DİKKAT: feribot/hidrofil trafiği hızlıdır. Kuzeyde N. Metopi yönünde sığlık uzanır.',
+  ST_SetSRID(ST_MakePoint(23.426901, 37.745098), 4326)::geography,
+  NULL, NULL, 8, 9,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Egina (Aegina) Limanı', 'Atina''ya en yakın adalardan Egina''nın ana limanı; batı mendireğindeki beyaz şapel uzaktan seçilir. Kanalda 8-9 m; zemin kaya+çamur. Girişte sancak tarafı marinadır; pontonlara dik bağlanılır; rıhtımda şamandıralı bağlama vardır (güney mendireği charter teknelerine ayrılır). VHF 12. Su, elektrik ve mini tankerle yakıt. Her yönden iyi korunur; güneyli rüzgâr rahatsız soluğan sokar; kuvvetli KB rüzgârında DGD kesiminde bağlama tehlikelidir — zinciri tam kaçırın. DİKKAT: feribot/hidrofil trafiği hızlıdır. Kuzeyde N. Metopi yönünde sığlık uzanır.' FROM locations WHERE slug = 'aegina-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aegina-limani' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302297022328', NULL, true
+FROM locations l WHERE l.slug = 'aegina-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Spetses Baltiza (Eski Liman) · güven: high · kaynak: www.sea-seek.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'spetses-baltiza-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-spetses'),
+  'Spetses Baltiza (Eski Liman)', 'Spetses''in geleneksel kayık tersaneleriyle çevrili eski limanı; doğu girişini Ak Fanari feneri işaretler. İç havza çamur zeminde iyi tutar ve TAM korunak sağlar; kıyıya bağlanılabilir. Dış liman kuvvetli KB rüzgârında rahatsızdır; güneybatı köşesinde büyük sahipsiz zincir vardır — demiri oraya atmayın. Yakıt, su ve elektrik vardır. Sezonda iç havza tıkanır. DİKKAT: Spetses ile Spetsopoula adası arasında çok sayıda resif vardır.',
+  ST_SetSRID(ST_MakePoint(23.164801, 37.262199), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Spetses Baltiza (Eski Liman)', 'Spetses''in geleneksel kayık tersaneleriyle çevrili eski limanı; doğu girişini Ak Fanari feneri işaretler. İç havza çamur zeminde iyi tutar ve TAM korunak sağlar; kıyıya bağlanılabilir. Dış liman kuvvetli KB rüzgârında rahatsızdır; güneybatı köşesinde büyük sahipsiz zincir vardır — demiri oraya atmayın. Yakıt, su ve elektrik vardır. Sezonda iç havza tıkanır. DİKKAT: Spetses ile Spetsopoula adası arasında çok sayıda resif vardır.' FROM locations WHERE slug = 'spetses-baltiza-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'spetses-baltiza-limani' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Pera Gialos Limanı (Astypalaia) · güven: medium · kaynak: www.imaps.gr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'astypalaia-pera-gialos', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-astypalaia'),
+  'Pera Gialos Limanı (Astypalaia)', 'Kelebek biçimli Astypalaia''nın Chora''nın eteğindeki geleneksel limanı. Ana feribot trafiği yeni Agios Andreas limanına taşındı; Pera Gialos''ta son yıllarda yelkenliler için küçük bir marina düzeni kuruldu; Kalymnos''tan yerel feribot yanaşır. Beyaz Chora evleri ve kale limanın hemen üzerindedir.',
+  ST_SetSRID(ST_MakePoint(26.355408, 36.54716), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pera Gialos Limanı (Astypalaia)', 'Kelebek biçimli Astypalaia''nın Chora''nın eteğindeki geleneksel limanı. Ana feribot trafiği yeni Agios Andreas limanına taşındı; Pera Gialos''ta son yıllarda yelkenliler için küçük bir marina düzeni kuruldu; Kalymnos''tan yerel feribot yanaşır. Beyaz Chora evleri ve kale limanın hemen üzerindedir.' FROM locations WHERE slug = 'astypalaia-pera-gialos'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 
