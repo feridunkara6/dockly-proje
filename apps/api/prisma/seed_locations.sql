@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -99,6 +99,12 @@ VALUES (gen_random_uuid(), 'GR', 'province', 'Kalymnos', 'gr-kalymnos')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Patmos', 'gr-patmos')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Nisyros', 'gr-nisyros')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'GR', 'province', 'Lipsi', 'gr-lipsi')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
@@ -6195,5 +6201,136 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'phone', '+306909400488', NULL, true
 FROM locations l WHERE l.slug = 'lakki-marina-leros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kos Eski Limanı (Mandraki) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kos-eski-liman-mandraki', 1, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
+  'Kos Eski Limanı (Mandraki)', 'Kos kalesinin dibindeki tarihî eski liman; özel işletmeli küçük marina — rehber ''gerçek bir mücevher, birinci sınıf hizmet'' diye aktarıyor. ~4 m derinlik; rıhtımda su ve elektrik. Bodrum karşısı. (Adanın büyük Kos Marina''sı ayrı kayıttır.)',
+  ST_SetSRID(ST_MakePoint(27.288861, 36.895361), 4326)::geography,
+  NULL, NULL, NULL, 4,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kos Eski Limanı (Mandraki)', 'Kos kalesinin dibindeki tarihî eski liman; özel işletmeli küçük marina — rehber ''gerçek bir mücevher, birinci sınıf hizmet'' diye aktarıyor. ~4 m derinlik; rıhtımda su ve elektrik. Bodrum karşısı. (Adanın büyük Kos Marina''sı ayrı kayıttır.)' FROM locations WHERE slug = 'kos-eski-liman-mandraki'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kos-eski-liman-mandraki'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kos-eski-liman-mandraki' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242307559', NULL, true
+FROM locations l WHERE l.slug = 'kos-eski-liman-mandraki'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242026594', NULL, false
+FROM locations l WHERE l.slug = 'kos-eski-liman-mandraki'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kardamena Limanı (Kos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kardamena-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
+  'Kardamena Limanı (Kos)', 'Kos''un güney kıyısında Kardamena kasaba limanı — rehber ''meltemide gerçek bir sığınak, güçlü rüzgârdan kusursuz korunma'' diyor. DİKKAT: derinlik ~2 m — derin su çeken tekneler için uygun değil.',
+  ST_SetSRID(ST_MakePoint(27.144583, 36.781861), 4326)::geography,
+  NULL, NULL, NULL, 2,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kardamena Limanı (Kos)', 'Kos''un güney kıyısında Kardamena kasaba limanı — rehber ''meltemide gerçek bir sığınak, güçlü rüzgârdan kusursuz korunma'' diyor. DİKKAT: derinlik ~2 m — derin su çeken tekneler için uygun değil.' FROM locations WHERE slug = 'kardamena-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242029130', NULL, true
+FROM locations l WHERE l.slug = 'kardamena-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kamari İskelesi (Kefalos, Kos) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kamari-iskelesi-kefalos', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
+  'Kamari İskelesi (Kefalos, Kos)', 'Kos''un batı ucunda Kefalos-Kamari koyunda iskele; ~4 m derinlik. Kuzey yüzü daha rahat yanaşılır; iskelenin ~20 m ilerisinde elektrik babalı iki tonoz var. Su noktası uzaktadır.',
+  ST_SetSRID(ST_MakePoint(26.972667, 36.736667), 4326)::geography,
+  NULL, NULL, NULL, 4,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kamari İskelesi (Kefalos, Kos)', 'Kos''un batı ucunda Kefalos-Kamari koyunda iskele; ~4 m derinlik. Kuzey yüzü daha rahat yanaşılır; iskelenin ~20 m ilerisinde elektrik babalı iki tonoz var. Su noktası uzaktadır.' FROM locations WHERE slug = 'kamari-iskelesi-kefalos'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kamari-iskelesi-kefalos' AND a.code IN ('electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Mandraki Limanı (Nisyros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'nisyros-mandraki-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-nisyros'),
+  'Mandraki Limanı (Nisyros)', 'Yanardağ adası Nisyros''un ana kasabası Mandraki''nin limanı; baş demiri + kıç halatıyla bağlanılır, ~5 m derinlik. Yer durumu için limandaki Popi yardımcı olur (ikinci telefon).',
+  ST_SetSRID(ST_MakePoint(27.139444, 36.614), 4326)::geography,
+  NULL, NULL, NULL, 5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mandraki Limanı (Nisyros)', 'Yanardağ adası Nisyros''un ana kasabası Mandraki''nin limanı; baş demiri + kıç halatıyla bağlanılır, ~5 m derinlik. Yer durumu için limandaki Popi yardımcı olur (ikinci telefon).' FROM locations WHERE slug = 'nisyros-mandraki-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242031222', NULL, true
+FROM locations l WHERE l.slug = 'nisyros-mandraki-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+306986059610', NULL, false
+FROM locations l WHERE l.slug = 'nisyros-mandraki-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Pali Limanı (Nisyros) · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pali-limani-nisyros', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-nisyros'),
+  'Pali Limanı (Nisyros)', 'Nisyros''un kuzey kıyısında Pali balıkçı limanı; baş demiri + kıç halatıyla kolay bağlanma. DİKKAT: giriş kara tarafında ve sığdır (~2,5 m) — tarama çalışması sürüyor.',
+  ST_SetSRID(ST_MakePoint(27.171361, 36.619139), 4326)::geography,
+  NULL, NULL, NULL, 2.5,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pali Limanı (Nisyros)', 'Nisyros''un kuzey kıyısında Pali balıkçı limanı; baş demiri + kıç halatıyla kolay bağlanma. DİKKAT: giriş kara tarafında ve sığdır (~2,5 m) — tarama çalışması sürüyor.' FROM locations WHERE slug = 'pali-limani-nisyros'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302242031222', NULL, true
+FROM locations l WHERE l.slug = 'pali-limani-nisyros'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Lipsi Limanı · güven: medium · kaynak: grecosailor.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lipsi-limani', 3, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-lipsi'),
+  'Lipsi Limanı', 'Patmos-Leros arasındaki sakin Lipsi adasının limanı; ~3 m derinlik. Kuzey rüzgârından gerçek korunma limanın içindedir; alan dar — demir ve zincirlerin çaprazlanması olağandır, yan rüzgârda dikkat.',
+  ST_SetSRID(ST_MakePoint(26.767389, 37.294389), 4326)::geography,
+  NULL, NULL, NULL, 3,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lipsi Limanı', 'Patmos-Leros arasındaki sakin Lipsi adasının limanı; ~3 m derinlik. Kuzey rüzgârından gerçek korunma limanın içindedir; alan dar — demir ve zincirlerin çaprazlanması olağandır, yan rüzgârda dikkat.' FROM locations WHERE slug = 'lipsi-limani'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+302247041133', NULL, true
+FROM locations l WHERE l.slug = 'lipsi-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 

@@ -1,0 +1,241 @@
+{
+ "batch": "16-gr-tur4-kos-nisyros-lipsi",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan 4. tur — grecosailor.com kaptan rehberi (önceki turlarla aynı kaynak/yöntem): DMS→ondalık, VHF/telefon/derinlik aynen. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "Kos artık 4 kayıtlı: Kos Marina (batch9) + eski liman + Kardamena + Kefalos. Mastichari rehberde detaysız → veri bulununca eklenecek.",
+  "Nisyros'ta iki liman AYRI kayıt (Mandraki ana, Pali sığ); rehberin 'Nisyros Port' başlıklı koordinatı Pali köyüne düştüğü coordSource'ta belgelendi.",
+  "Onikiadalar TR-karşısı zinciri tamamlanıyor; kalan: Agathonisi, Astypalaia, Mastichari + Samos-Sakız-Midilli; TR: Gökçeada, Gökova restoranları, Kaş."
+ ],
+ "records": [
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 4,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302242307559",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+302242026594"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": null,
+   "slug": "kos-eski-liman-mandraki",
+   "name": "Kos Eski Limanı (Mandraki)",
+   "typeCode": "private_marina",
+   "provinceSlug": "gr-kos",
+   "lat": 36.895361,
+   "lon": 27.288861,
+   "coordSource": "grecosailor.com kaptan rehberi (36°53'43.3\"N 27°17'19.9\"E)",
+   "descriptionTr": "Kos kalesinin dibindeki tarihî eski liman; özel işletmeli küçük marina — rehber 'gerçek bir mücevher, birinci sınıf hizmet' diye aktarıyor. ~4 m derinlik; rıhtımda su ve elektrik. Bodrum karşısı. (Adanın büyük Kos Marina'sı ayrı kayıttır.)",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 2,
+   "vhfChannel": "12",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302242029130",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Sığ liman (~2 m) — su çekimi kaydı kritik. Su/elektrik detayı kaynakta net değil.",
+   "slug": "kardamena-limani",
+   "name": "Kardamena Limanı (Kos)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-kos",
+   "lat": 36.781861,
+   "lon": 27.144583,
+   "coordSource": "grecosailor.com kaptan rehberi (36°46'54.7\"N 27°08'40.5\"E)",
+   "descriptionTr": "Kos'un güney kıyısında Kardamena kasaba limanı — rehber 'meltemide gerçek bir sığınak, güçlü rüzgârdan kusursuz korunma' diyor. DİKKAT: derinlik ~2 m — derin su çeken tekneler için uygun değil.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 4,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "confidence": "medium",
+   "missingNotes": "Telefon/VHF kaynakta yok. Su iskeleden uzak → amenity verilmedi.",
+   "slug": "kamari-iskelesi-kefalos",
+   "name": "Kamari İskelesi (Kefalos, Kos)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-kos",
+   "lat": 36.736667,
+   "lon": 26.972667,
+   "coordSource": "grecosailor.com kaptan rehberi (36°44'12.0\"N 26°58'21.6\"E)",
+   "descriptionTr": "Kos'un batı ucunda Kefalos-Kamari koyunda iskele; ~4 m derinlik. Kuzey yüzü daha rahat yanaşılır; iskelenin ~20 m ilerisinde elektrik babalı iki tonoz var. Su noktası uzaktadır.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 5,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302242031222",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+306986059610"
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Su/elektrik ve VHF kaynakta belirtilmiyor.",
+   "slug": "nisyros-mandraki-limani",
+   "name": "Mandraki Limanı (Nisyros)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-nisyros",
+   "lat": 36.614,
+   "lon": 27.139444,
+   "coordSource": "grecosailor.com kaptan rehberi (36°36'50.4\"N 27°08'22.0\"E)",
+   "descriptionTr": "Yanardağ adası Nisyros'un ana kasabası Mandraki'nin limanı; baş demiri + kıç halatıyla bağlanılır, ~5 m derinlik. Yer durumu için limandaki Popi yardımcı olur (ikinci telefon).",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/nisyros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 2.5,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302242031222",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "Sığ giriş — derin su çeken tekneler Mandraki'yi tercih etmeli.",
+   "slug": "pali-limani-nisyros",
+   "name": "Pali Limanı (Nisyros)",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-nisyros",
+   "lat": 36.619139,
+   "lon": 27.171361,
+   "coordSource": "grecosailor.com kaptan rehberi (36°37'08.9\"N 27°10'16.9\"E — rehberde 'Nisyros Port' başlığıyla; koordinat Pali köyüne düşer)",
+   "descriptionTr": "Nisyros'un kuzey kıyısında Pali balıkçı limanı; baş demiri + kıç halatıyla kolay bağlanma. DİKKAT: giriş kara tarafında ve sığdır (~2,5 m) — tarama çalışması sürüyor.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/nisyros/"
+   ]
+  },
+  {
+   "operator": null,
+   "status": "published",
+   "countryCode": "GR",
+   "districtSlug": null,
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 3,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302247041133",
+     "primary": true
+    }
+   ],
+   "confidence": "medium",
+   "missingNotes": "VHF ve su/elektrik kaynakta belirtilmiyor.",
+   "slug": "lipsi-limani",
+   "name": "Lipsi Limanı",
+   "typeCode": "municipal_pier",
+   "provinceSlug": "gr-lipsi",
+   "lat": 37.294389,
+   "lon": 26.767389,
+   "coordSource": "grecosailor.com kaptan rehberi (37°17'39.8\"N 26°46'02.6\"E)",
+   "descriptionTr": "Patmos-Leros arasındaki sakin Lipsi adasının limanı; ~3 m derinlik. Kuzey rüzgârından gerçek korunma limanın içindedir; alan dar — demir ve zincirlerin çaprazlanması olağandır, yan rüzgârda dikkat.",
+   "sourceUrls": [
+    "https://grecosailor.com/skippers/dodecanese/lipsi/"
+   ]
+  }
+ ]
+}
