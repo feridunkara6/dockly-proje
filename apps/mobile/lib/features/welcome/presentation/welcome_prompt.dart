@@ -32,6 +32,10 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
   await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
+    // İçerik (marka alanı + feet çipleri) standart tavandan uzun olabilir;
+    // scroll-controlled + içerideki kaydırma küçük ekranlarda taşmayı önler.
+    isScrollControlled: true,
+    useSafeArea: true,
     builder: (BuildContext sheetContext) => WelcomeSheetBody(
       onPickLength: (double lengthM, String? brand) {
         ref.read(myBoatProvider.notifier).set(MyBoat(lengthM: lengthM, brand: brand));
@@ -84,7 +88,9 @@ class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return Padding(
+    // SingleChildScrollView: klavye açıkken / kısa ekranlarda içerik kaydırılır,
+    // asla taşmaz (CI dersi: taşma testte hata sayılır).
+    return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(
         20, 4, 20, 24 + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
