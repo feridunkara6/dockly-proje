@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -7263,4 +7263,54 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_fre
 SELECT id, 'mixed', NULL, true
 FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
 ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Gouvia Marina Yakıt İstasyonu (Korfu) · güven: high · kaynak: www.d-marin.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gouvia-yakit-iskelesi', 6, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-korfu'),
+  'Gouvia Marina Yakıt İstasyonu (Korfu)', 'Korfu Gouvia Marina içinde sabit yakıt istasyonu (D-Marin resmî tesis listesinde). Marina VHF 69''dan yardım alınır.',
+  ST_SetSRID(ST_MakePoint(19.8525, 39.648611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gouvia Marina Yakıt İstasyonu (Korfu)', 'Korfu Gouvia Marina içinde sabit yakıt istasyonu (D-Marin resmî tesis listesinde). Marina VHF 69''dan yardım alınır.' FROM locations WHERE slug = 'gouvia-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'gouvia-yakit-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gouvia-yakit-iskelesi' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.d-marin.com/en/marinas/gouvia/', NULL, false
+FROM locations l WHERE l.slug = 'gouvia-yakit-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Lefkas Marina Yakıt İstasyonu · güven: medium · kaynak: www.revolutionfuel.com, greek-marinas.gr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lefkas-yakit-iskelesi', 6, 'published', 'GR',
+  (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-lefkada'),
+  'Lefkas Marina Yakıt İstasyonu', 'Lefkas Marina içinde sabit yakıt istasyonu — deniz motorini ve gaz yağı; boru hattı/duba/tanker ikmal seçenekleri. İyon''un ana ikmal noktalarından.',
+  ST_SetSRID(ST_MakePoint(20.7133, 38.83), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lefkas Marina Yakıt İstasyonu', 'Lefkas Marina içinde sabit yakıt istasyonu — deniz motorini ve gaz yağı; boru hattı/duba/tanker ikmal seçenekleri. İyon''un ana ikmal noktalarından.' FROM locations WHERE slug = 'lefkas-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO NOTHING;
+INSERT INTO fuel_dock_details (location_id, has_diesel, has_gasoline, has_adblue, min_depth_m, payment_note)
+SELECT id, NULL, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'lefkas-yakit-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'lefkas-yakit-iskelesi' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
 

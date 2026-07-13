@@ -1,0 +1,80 @@
+{
+ "batch": "25-gr-yakit-tur1",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan yakıt turu 1 — yalnız SABİT istasyonu resmî/doğrulanabilir kaynakla belgelenen marinalar pin aldı (D-Marin resmî sitesi; Revolution Fuel istasyon kaydı). Tankerle servis verilen yerler pin ALMADI (sabit tesis değil) — o bilgi ilgili liman kayıtlarının açıklamasında.",
+ "notes": [
+  "Kullanıcı sorusu üzerine başlatıldı: GR'de yakıt çoğunlukla mini tankerle rıhtıma servis edilir; sabit istasyon azdır ve tek tek resmî kaynak ister.",
+  "Adaylar (doğrulama bekliyor): Kos Marina (resmî site ana sayfası yakıtı saymıyor — teyit gerekli), Alimos, Zea, Rodos Marina.",
+  "Mandraki (Rodos) tankerle yakıt → pin değil, kayıt açıklamasında."
+ ],
+ "records": [
+  {
+   "slug": "gouvia-yakit-iskelesi",
+   "name": "Gouvia Marina Yakıt İstasyonu (Korfu)",
+   "operator": "D-Marin",
+   "status": "published",
+   "typeCode": "fuel_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-korfu",
+   "districtSlug": null,
+   "lat": 39.648611,
+   "lon": 19.8525,
+   "coordSource": "D-Marin resmî sitesi (39°38'55\"N 19°51'9\"E → 39.648611, 19.852500)",
+   "descriptionTr": "Korfu Gouvia Marina içinde sabit yakıt istasyonu (D-Marin resmî tesis listesinde). Marina VHF 69'dan yardım alınır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "69",
+   "priceTier": "paid",
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://www.d-marin.com/en/marinas/gouvia/"
+    }
+   ],
+   "sourceUrls": [
+    "https://www.d-marin.com/en/marinas/gouvia/ (resmî tesis listesi: 'Fuel station' + koordinat + VHF 69)"
+   ],
+   "confidence": "high",
+   "missingNotes": "Çalışma saatleri/istasyon telefonu kaynakta yok."
+  },
+  {
+   "slug": "lefkas-yakit-iskelesi",
+   "name": "Lefkas Marina Yakıt İstasyonu",
+   "operator": null,
+   "status": "published",
+   "typeCode": "fuel_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-lefkada",
+   "districtSlug": null,
+   "lat": 38.83,
+   "lon": 20.7133,
+   "coordSource": "Lefkas Marina konumu (batch9 — Yunan Marinalar Birliği rehberinden); istasyonun 'marina içinde özel yakıt istasyonu' olduğu revolutionfuel.com kaydından",
+   "descriptionTr": "Lefkas Marina içinde sabit yakıt istasyonu — deniz motorini ve gaz yağı; boru hattı/duba/tanker ikmal seçenekleri. İyon'un ana ikmal noktalarından.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.revolutionfuel.com/locations/lefkas-marina ('marina içinde özel yakıt istasyonu')",
+    "https://greek-marinas.gr/ (marina konumu — batch9 kaydıyla aynı)"
+   ],
+   "confidence": "medium",
+   "missingNotes": "İstasyonun rıhtım-içi hassas konumu ayrıca verilmiyor → marina koordinatı kullanıldı (batch12 TR yakıt yaklaşımıyla aynı)."
+  }
+ ]
+}
