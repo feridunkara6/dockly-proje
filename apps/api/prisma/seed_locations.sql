@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -42,6 +42,9 @@ VALUES (gen_random_uuid(), 'TR', 'province', 'Bursa', 'bursa')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'TR', 'province', 'Tekirdağ', 'tekirdag')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Kocaeli', 'kocaeli')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Korfu', 'gr-korfu')
@@ -344,6 +347,34 @@ ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Söke', 'aydin-soke'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'aydin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Maltepe', 'istanbul-maltepe'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Silivri', 'istanbul-silivri'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'İzmit', 'kocaeli-izmit'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gebze', 'kocaeli-gebze'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Darıca', 'kocaeli-darica'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Körfez', 'kocaeli-korfez'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Karamürsel', 'kocaeli-karamursel'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 -- --- Setur Kalamış & Fenerbahçe Marina · güven: high · kaynak: www.seturmarinas.com ---
@@ -8438,4 +8469,403 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_fre
 SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'mercimek-buku-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
+
+-- --- Yeşilköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yesilkoy-marina', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-bakirkoy'),
+  'Yeşilköy Marina', 'Yeşilköy''de 350 m dış + 150 m iç mendirekli liman; balıkçı bölümü 95 tekne alır. VHF 16''dan ''Yeşilköy Marina'' çağrılır. Rıhtımda su, elektrik ve yakıt pompası; WC-duş ve idare ofisi vardır. Barınma yeterlidir; büyük ticari gemilerin soluğanı rahatsız edebilir. Yurda giriş-çıkış işlemleri Karaköy Yolcu Salonu''nda yapılır. Yanındaki fenerin özellikleri: 18 m kule, 10 sn''de beyaz çakar, 15 mil.',
+  ST_SetSRID(ST_MakePoint(28.825833, 40.955278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  95, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeşilköy Marina', 'Yeşilköy''de 350 m dış + 150 m iç mendirekli liman; balıkçı bölümü 95 tekne alır. VHF 16''dan ''Yeşilköy Marina'' çağrılır. Rıhtımda su, elektrik ve yakıt pompası; WC-duş ve idare ofisi vardır. Barınma yeterlidir; büyük ticari gemilerin soluğanı rahatsız edebilir. Yurda giriş-çıkış işlemleri Karaköy Yolcu Salonu''nda yapılır. Yanındaki fenerin özellikleri: 18 m kule, 10 sn''de beyaz çakar, 15 mil.' FROM locations WHERE slug = 'yesilkoy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yesilkoy-marina' AND a.code IN ('electricity', 'water', 'fuel', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+
+-- --- Bostancı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bostanci-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-maltepe'),
+  'Bostancı Balıkçı Barınağı', 'Anadolu yakasının en işlek barınaklarından; 520 m ana mendirek, 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Metro, minibüs, banliyö treni ve deniz otobüsü bağlantıları hemen yanındadır.',
+  ST_SetSRID(ST_MakePoint(29.094833, 40.950139), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bostancı Balıkçı Barınağı', 'Anadolu yakasının en işlek barınaklarından; 520 m ana mendirek, 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Metro, minibüs, banliyö treni ve deniz otobüsü bağlantıları hemen yanındadır.' FROM locations WHERE slug = 'bostanci-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bostanci-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902164589999', NULL, true
+FROM locations l WHERE l.slug = 'bostanci-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Küçükyalı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kucukyali-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-maltepe'),
+  'Küçükyalı Balıkçı Barınağı', 'Maltepe Küçükyalı''da 250 m ana mendirekli kooperatif barınağı; 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Kıyıdaki balık restoranları mevsim balığına göre çalışır.',
+  ST_SetSRID(ST_MakePoint(29.105806, 40.942639), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Küçükyalı Balıkçı Barınağı', 'Maltepe Küçükyalı''da 250 m ana mendirekli kooperatif barınağı; 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Kıyıdaki balık restoranları mevsim balığına göre çalışır.' FROM locations WHERE slug = 'kucukyali-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kucukyali-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902164589999', NULL, true
+FROM locations l WHERE l.slug = 'kucukyali-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Heybeliada Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'heybeliada-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-adalar'),
+  'Heybeliada Balıkçı Barınağı', 'Adalar''ın ikinci büyüğü Heybeliada''nın kooperatif barınağı; 70 tekne. Mendirek feneri 2 sn''de kırmızı çakar (7 mil). Adada restoranlar, oteller, tamirhaneler, sağlık ve banka hizmetleri vardır; Bostancı ve Kabataş''a deniz otobüsü, Kadıköy''e vapur kalkar. Çam Limanı koyu adanın güneybatısında ayrı kayıttır.',
+  ST_SetSRID(ST_MakePoint(29.100361, 40.879611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  70, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Heybeliada Balıkçı Barınağı', 'Adalar''ın ikinci büyüğü Heybeliada''nın kooperatif barınağı; 70 tekne. Mendirek feneri 2 sn''de kırmızı çakar (7 mil). Adada restoranlar, oteller, tamirhaneler, sağlık ve banka hizmetleri vardır; Bostancı ve Kabataş''a deniz otobüsü, Kadıköy''e vapur kalkar. Çam Limanı koyu adanın güneybatısında ayrı kayıttır.' FROM locations WHERE slug = 'heybeliada-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902163823382', NULL, true
+FROM locations l WHERE l.slug = 'heybeliada-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'iletisim@adalar.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'heybeliada-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Selimpaşa Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'selimpasa-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-silivri'),
+  'Selimpaşa Balıkçı Barınağı', 'İstanbul''un 50 km batısında, Silivri Selimpaşa''da 265 m ana mendirekli barınak. VHF 16''dan ''Selimpaşa Harbour'' çağrılır. Girişte 2-3,5 m; batı ve kuzey rıhtımlarında 0,5-1,5 m — SU ÇEKİMİ FAZLA TEKNELER DİKKAT. Doğu dışında her yöne iyi barınak. İçme suyu, elektrik, yakıt ve çekek yeri vardır; kuzey tarafta restoran bulunur.',
+  ST_SetSRID(ST_MakePoint(28.367361, 41.051861), 4326)::geography,
+  NULL, NULL, 1, 3,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Selimpaşa Balıkçı Barınağı', 'İstanbul''un 50 km batısında, Silivri Selimpaşa''da 265 m ana mendirekli barınak. VHF 16''dan ''Selimpaşa Harbour'' çağrılır. Girişte 2-3,5 m; batı ve kuzey rıhtımlarında 0,5-1,5 m — SU ÇEKİMİ FAZLA TEKNELER DİKKAT. Doğu dışında her yöne iyi barınak. İçme suyu, elektrik, yakıt ve çekek yeri vardır; kuzey tarafta restoran bulunur.' FROM locations WHERE slug = 'selimpasa-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'selimpasa-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902124442047', NULL, true
+FROM locations l WHERE l.slug = 'selimpasa-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'sibim@silivri.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'selimpasa-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Mimarsinan Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mimarsinan-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-buyukcekmece'),
+  'Mimarsinan Balıkçı Barınağı', 'Büyükçekmece Mimarsinan''da belediye işletmesindeki barınak; 290 m dış mendirek. VHF 73''ten ''Mimarsinan Marina'' çağrılır. Elektrik, içme suyu, yakıt, çekek yeri ve kara park sahası vardır. Mendirek feneri: 7 m kule, 3 mil görünürlük.',
+  ST_SetSRID(ST_MakePoint(28.565796, 41.015403), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mimarsinan Balıkçı Barınağı', 'Büyükçekmece Mimarsinan''da belediye işletmesindeki barınak; 290 m dış mendirek. VHF 73''ten ''Mimarsinan Marina'' çağrılır. Elektrik, içme suyu, yakıt, çekek yeri ve kara park sahası vardır. Mendirek feneri: 7 m kule, 3 mil görünürlük.' FROM locations WHERE slug = 'mimarsinan-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'mimarsinan-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902124440340', NULL, true
+FROM locations l WHERE l.slug = 'mimarsinan-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'danisma@bcekmece.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'mimarsinan-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İzmit Belediye Marinası · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'izmit-belediye-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-izmit'),
+  'İzmit Belediye Marinası', 'İzmit Körfezi''nin doğu ucunda, İstanbul''a ~100 km mesafede belediye marinası; 400 yat kapasitesi, 7-10 m derinlik. VHF 16''dan ''İzmit Marina'' çağrılır. İçme suyu, elektrik, yakıt istasyonu, telefon/internet, kablolu TV, çekek yeri ve bakım-onarım hizmetleri vardır. Çevrede tersaneler, oteller, hastaneler ve alışveriş olanakları bulunur.',
+  ST_SetSRID(ST_MakePoint(29.921752, 40.758762), 4326)::geography,
+  NULL, NULL, 7, 10,
+  400, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İzmit Belediye Marinası', 'İzmit Körfezi''nin doğu ucunda, İstanbul''a ~100 km mesafede belediye marinası; 400 yat kapasitesi, 7-10 m derinlik. VHF 16''dan ''İzmit Marina'' çağrılır. İçme suyu, elektrik, yakıt istasyonu, telefon/internet, kablolu TV, çekek yeri ve bakım-onarım hizmetleri vardır. Çevrede tersaneler, oteller, hastaneler ve alışveriş olanakları bulunur.' FROM locations WHERE slug = 'izmit-belediye-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 400, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'izmit-belediye-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'izmit-belediye-marina' AND a.code IN ('electricity', 'water', 'fuel', 'wifi')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'izmit-belediye-marina' AND sv.code IN ('technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902623181001', NULL, true
+FROM locations l WHERE l.slug = 'izmit-belediye-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Darıca Balıkçı Barınağı ve Yat Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'darica-balikci-barinagi', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-darica'),
+  'Darıca Balıkçı Barınağı ve Yat Limanı', 'Darıca''da belediye işletmesinde barınak + yat limanı; 300 tekne. İçme suyu, elektrik, yakıt, teknik servis, çekek yeri, idare binası, ağ tamirhanesi ve balık hali vardır. Girişi 18 mil görünürlüklü Yelkenkaya Feneri işaretler. Kıyı balık restoranlarıyla ünlüdür.',
+  ST_SetSRID(ST_MakePoint(29.388389, 40.752611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  300, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Darıca Balıkçı Barınağı ve Yat Limanı', 'Darıca''da belediye işletmesinde barınak + yat limanı; 300 tekne. İçme suyu, elektrik, yakıt, teknik servis, çekek yeri, idare binası, ağ tamirhanesi ve balık hali vardır. Girişi 18 mil görünürlüklü Yelkenkaya Feneri işaretler. Kıyı balık restoranlarıyla ünlüdür.' FROM locations WHERE slug = 'darica-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 300, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'darica-balikci-barinagi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'darica-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'darica-balikci-barinagi' AND sv.code IN ('technical_service')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902627452132', NULL, true
+FROM locations l WHERE l.slug = 'darica-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'beyazmasa@darica.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'darica-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Eskihisar Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'eskihisar-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-gebze'),
+  'Eskihisar Balıkçı Barınağı', 'Gebze Eskihisar''da, Topçular (Yalova) feribot iskelesinin yanındaki kooperatif barınağı; 95 tekne. VHF 16. İçme suyu, elektrik, yakıt, WC-duş ve gümrük ofisi vardır. Kıyı balık restoranları, Osman Hamdi Bey Müzesi ve kale yakındadır.',
+  ST_SetSRID(ST_MakePoint(29.428056, 40.768611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  95, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Eskihisar Balıkçı Barınağı', 'Gebze Eskihisar''da, Topçular (Yalova) feribot iskelesinin yanındaki kooperatif barınağı; 95 tekne. VHF 16. İçme suyu, elektrik, yakıt, WC-duş ve gümrük ofisi vardır. Kıyı balık restoranları, Osman Hamdi Bey Müzesi ve kale yakındadır.' FROM locations WHERE slug = 'eskihisar-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'eskihisar-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel', 'wc', 'shower')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'bilgi@gebze.bel.tr', NULL, true
+FROM locations l WHERE l.slug = 'eskihisar-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Atabay Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'atabay-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-gebze'),
+  'Atabay Marina', 'Eskihisar''da yıl boyu çalışan tersane-marina. VHF 16''dan ''Atabay Marina'' çağrılır. Yakıt, tatlı su ve elektrik; motor-pervane-tekne tamiri, fiberglas/ahşap onarım, elektronik, torna ve boya atölyeleri; 100 tonluk iki vinç vardır. Karada ~100 tekne kapasitesi; 25 odalı otel, restoran ve bar bulunur.',
+  ST_SetSRID(ST_MakePoint(29.44, 40.770833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Atabay Marina', 'Eskihisar''da yıl boyu çalışan tersane-marina. VHF 16''dan ''Atabay Marina'' çağrılır. Yakıt, tatlı su ve elektrik; motor-pervane-tekne tamiri, fiberglas/ahşap onarım, elektronik, torna ve boya atölyeleri; 100 tonluk iki vinç vardır. Karada ~100 tekne kapasitesi; 25 odalı otel, restoran ve bar bulunur.' FROM locations WHERE slug = 'atabay-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'atabay-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'atabay-marina' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'atabay-marina' AND sv.code IN ('technical_service', 'crane', 'winter_storage')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902626555854', NULL, true
+FROM locations l WHERE l.slug = 'atabay-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@atabaymarina.com', NULL, false
+FROM locations l WHERE l.slug = 'atabay-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.atabaymarina.com/', NULL, false
+FROM locations l WHERE l.slug = 'atabay-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Hereke Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hereke-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-korfez'),
+  'Hereke Balıkçı Barınağı', 'İzmit Körfezi''nin kuzey kıyısında, ipek halısıyla ünlü Hereke''nin kooperatif barınağı; 60 tekne. Elektrik, içme suyu, yakıt istasyonu ve idare ofisi vardır; günün balığı barınaktaki halden alınabilir.',
+  ST_SetSRID(ST_MakePoint(29.617639, 40.782528), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  60, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hereke Balıkçı Barınağı', 'İzmit Körfezi''nin kuzey kıyısında, ipek halısıyla ünlü Hereke''nin kooperatif barınağı; 60 tekne. Elektrik, içme suyu, yakıt istasyonu ve idare ofisi vardır; günün balığı barınaktaki halden alınabilir.' FROM locations WHERE slug = 'hereke-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'hereke-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Karamürsel Ereğli Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karamursel-eregli-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-karamursel'),
+  'Karamürsel Ereğli Balıkçı Barınağı', 'İzmit Körfezi''nin güney kıyısında, Karamürsel''e 4 km uzaklıkta Ereğli köyünün barınağı; 85 tekne. VHF 16''dan ''Ereğli Marina'' çağrılır. Elektrik, içme suyu, yakıt istasyonu, balık restoranı, balık hali ve soğuk hava deposu vardır. Yenikapı''ya deniz otobüsü bağlantısı bulunur.',
+  ST_SetSRID(ST_MakePoint(29.659722, 40.701944), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  85, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karamürsel Ereğli Balıkçı Barınağı', 'İzmit Körfezi''nin güney kıyısında, Karamürsel''e 4 km uzaklıkta Ereğli köyünün barınağı; 85 tekne. VHF 16''dan ''Ereğli Marina'' çağrılır. Elektrik, içme suyu, yakıt istasyonu, balık restoranı, balık hali ve soğuk hava deposu vardır. Yenikapı''ya deniz otobüsü bağlantısı bulunur.' FROM locations WHERE slug = 'karamursel-eregli-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karamursel-eregli-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902624521025', NULL, true
+FROM locations l WHERE l.slug = 'karamursel-eregli-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'info@karamursel.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'karamursel-eregli-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Setur Gökova Ören Marina · güven: high · kaynak: marinakedisi.com, tkygm.uab.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gokova-oren-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Setur Gökova Ören Marina', 'Gökova Körfezi''nin kuzey kıyısında, Ören''de büyük marina: denizde 410, karada 150 tekne. VHF 73''ten (Setur çağrı düzeni 16/73) ulaşılır. Gökova''nın kuzey yakasında bu ölçekte tek tam donanımlı liman olması nedeniyle körfez rotalarının önemli durağıdır. Keramos antik kenti hemen ardındadır.',
+  ST_SetSRID(ST_MakePoint(27.981972, 37.031417), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  410, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Gökova Ören Marina', 'Gökova Körfezi''nin kuzey kıyısında, Ören''de büyük marina: denizde 410, karada 150 tekne. VHF 73''ten (Setur çağrı düzeni 16/73) ulaşılır. Gökova''nın kuzey yakasında bu ölçekte tek tam donanımlı liman olması nedeniyle körfez rotalarının önemli durağıdır. Keramos antik kenti hemen ardındadır.' FROM locations WHERE slug = 'gokova-oren-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 410, '73', NULL, NULL, NULL
+FROM locations WHERE slug = 'gokova-oren-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gokova-oren-marina' AND a.code IN ('electricity', 'water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'gokova-oren-marina' AND sv.code IN ('winter_storage')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525323361', NULL, true
+FROM locations l WHERE l.slug = 'gokova-oren-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'gokovaoren@seturmarinas.com', NULL, false
+FROM locations l WHERE l.slug = 'gokova-oren-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.seturmarinas.com/', NULL, false
+FROM locations l WHERE l.slug = 'gokova-oren-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Setur Çeşme Altınyunus Marina · güven: high · kaynak: marinalar.com, tkygm.uab.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'setur-altinyunus-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Setur Çeşme Altınyunus Marina', 'Çeşme Boyalık ile Ilıca arasındaki Altınyunus koyunda marina: denizde 186, karada 60 tekne; maksimum boy 45 m, derinlik 4 m''ye kadar. Elektrik, su, Wi-Fi, güvenlik, yakıt ve dalgıç hizmeti; WC-duş, çamaşırhane, ATM, restoran-bar ve plaj vardır. Koy, rüzgâr sörfü için dünyanın elverişli koylarından sayılır — öğleden sonra termik rüzgâr belirgindir.',
+  ST_SetSRID(ST_MakePoint(26.34201, 38.3231), 4326)::geography,
+  45, NULL, NULL, 4,
+  186, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Setur Çeşme Altınyunus Marina', 'Çeşme Boyalık ile Ilıca arasındaki Altınyunus koyunda marina: denizde 186, karada 60 tekne; maksimum boy 45 m, derinlik 4 m''ye kadar. Elektrik, su, Wi-Fi, güvenlik, yakıt ve dalgıç hizmeti; WC-duş, çamaşırhane, ATM, restoran-bar ve plaj vardır. Koy, rüzgâr sörfü için dünyanın elverişli koylarından sayılır — öğleden sonra termik rüzgâr belirgindir.' FROM locations WHERE slug = 'setur-altinyunus-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 186, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'setur-altinyunus-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'setur-altinyunus-marina' AND a.code IN ('electricity', 'water', 'wifi', 'security', 'fuel', 'wc', 'shower', 'laundry', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_services (location_id, service_id)
+SELECT l.id, sv.id FROM locations l, services sv
+WHERE l.slug = 'setur-altinyunus-marina' AND sv.code IN ('diver')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327231434', NULL, true
+FROM locations l WHERE l.slug = 'setur-altinyunus-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'cesme@seturmarinas.com', NULL, false
+FROM locations l WHERE l.slug = 'setur-altinyunus-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.seturmarinas.com/', NULL, false
+FROM locations l WHERE l.slug = 'setur-altinyunus-marina'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
