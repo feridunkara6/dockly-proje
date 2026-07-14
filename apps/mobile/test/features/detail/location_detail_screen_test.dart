@@ -106,7 +106,11 @@ void main() {
     // Açıklamadaki demirleme + DİKKAT cümleleri karta taşındı (tek kopya)…
     expect(find.textContaining('tutuş iyidir'), findsOneWidget);
     expect(find.textContaining('tekil kaya'), findsOneWidget);
-    // …koyu anlatan metin altta açıklama olarak duruyor.
+    // …koyu anlatan metin altta açıklama olarak duruyor. CI dersi: kart
+    // uzadığı için açıklama görünür alanın DIŞINDA kalıyor ve tembel liste
+    // onu kurmuyor — görünene dek kaydır, sonra doğrula.
+    await tester.scrollUntilVisible(
+        find.textContaining('her yönden korunaklı'), 200);
     expect(find.textContaining('her yönden korunaklı'), findsOneWidget);
     // Eski sabit içerik kalktı — koya özel olmayan öneri artık gösterilmez.
     expect(find.textContaining('Genel öneri'), findsNothing);
@@ -122,7 +126,11 @@ void main() {
     await tester.scrollUntilVisible(find.text('Demirleme Notları'), 200);
     expect(find.textContaining('kayıtlı zemin ve uyarı bilgisi henüz yok'),
         findsOneWidget);
-    // İşaret içermeyen açıklama olduğu gibi altta kalır.
+    // İşaret içermeyen açıklama olduğu gibi altta kalır (tembel liste:
+    // görünene dek kaydır — kart kısayken de güvenli, zaten görünürse
+    // kaydırma hiç yapılmaz).
+    await tester.scrollUntilVisible(
+        find.textContaining('Zeytinlikler arasında'), 200);
     expect(find.textContaining('Zeytinlikler arasında'), findsOneWidget);
     // priceTier 'unknown' → "Ücretsiz" iddiası YOK (0-uydurma).
     expect(find.textContaining('Ücretsiz demirleme alanı'), findsNothing);
