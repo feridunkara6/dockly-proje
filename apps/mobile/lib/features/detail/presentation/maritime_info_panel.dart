@@ -42,12 +42,23 @@ class MaritimeInfoPanel extends StatelessWidget {
             const double gap = 10;
             // İki sütun; dar ekranlarda taşarsa Wrap alt satıra alır.
             final double tileWidth = (constraints.maxWidth - gap) / 2;
+            // TASARIM KARARI (kullanıcı isteği): kutucukların hepsi AYNI boyda —
+            // içerik uzunluğu ne olursa olsun. Yükseklik 2 satır değer + 1 satır
+            // etiket + iç boşluğu karşılar; cihazın yazı ölçeğiyle birlikte
+            // büyür (erişilebilirlik: büyük yazıda taşma olmasın).
+            final double tileHeight =
+                MediaQuery.textScalerOf(context).scale(kMaritimeStatTileHeight);
             return Wrap(
               spacing: gap,
               runSpacing: gap,
               children: <Widget>[
                 for (final MaritimeStat s in stats)
-                  SizedBox(width: tileWidth, child: _StatTile(stat: s)),
+                  SizedBox(
+                    key: ValueKey<String>('stat-${s.label}'),
+                    width: tileWidth,
+                    height: tileHeight,
+                    child: _StatTile(stat: s),
+                  ),
               ],
             );
           },
@@ -56,6 +67,11 @@ class MaritimeInfoPanel extends StatelessWidget {
     );
   }
 }
+
+/// Stat kutusunun SABİT yüksekliği (yazı ölçeği 1.0'da, piksel):
+/// 2 satır değer (~40) + ara (2) + 1 satır etiket (~16) + dikey dolgu (24).
+/// Tüm kutular bu yüksekliği kullanır → içerikten bağımsız eşit boy.
+const double kMaritimeStatTileHeight = 84;
 
 class _StatTile extends StatelessWidget {
   const _StatTile({required this.stat});
@@ -73,7 +89,9 @@ class _StatTile extends StatelessWidget {
         border: Border.all(color: theme.colorScheme.outline),
         borderRadius: BorderRadius.circular(12),
       ),
+      // Dikeyde ortala: tek satırlık içerik sabit yükseklikte şık dursun.
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           DocklyIcon(stat.icon, size: 22, color: DocklyColors.brandPrimary),
           const SizedBox(width: 10),
