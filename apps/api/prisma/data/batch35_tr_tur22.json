@@ -1,0 +1,401 @@
+{
+  "batch": "35-tr-tur22-fethiye-korfezi-iskeleler",
+  "collectedAt": "2026-07-14",
+  "method": "Türkiye (22. tur): Fethiye Körfezi koyları (2016/04 arşivi) + Muğla restoran/otel iskeleleri (2018/06 arşivi) — turkeymarinas.blogspot.com, DMS koordinat + kapasite + iletişim, aynı yöntem. Tahmin/uydurma YOK; kaynakta Gökova Boncuk ile karışmış görünen köpekbalığı iddiası Fethiye Boncuklu kaydına ALINMADI.",
+  "notes": [
+    "BEKLEYEN LİSTEDEN ÇÖZÜLDÜ: Hayıtbükü (Datça) — Ogun's Place iskelesi (30 tonoz, maks 10 m, VHF 16, telefonlu).",
+    "Restoran/otel iskeleleri: Kızılada Fener Restoranı (1871 feneri), Osman's Place (Selimiye), Deniz Restaurant (Delikyol), Letoonia Marinet (30 yat).",
+    "Fethiye Körfezi içi ilk kez detaylandı: Şövalye Adası, Batıkkaya, Boncuklu koyları, Darboğaz, Beştaş (soğuk kaynak suyu notuyla).",
+    "Kalan bekleyenler: Palamutbükü iskelesi (koordinat yok), Poros/İkarya/Aegiali (GR), Sinop/Amasra (Karadeniz — şimdilik istenmedi)."
+  ],
+  "records": [
+    {
+      "slug": "oguns-place-hayitbuku",
+      "name": "Ogun's Place İskelesi (Hayıtbükü)",
+      "operator": "Ogun's Place",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-datca",
+      "lat": 36.684334,
+      "lon": 27.572252,
+      "coordSource": "turkeymarinas (36°41'03.6\"N 27°34'20.1\"E → 36.684334, 27.572252)",
+      "descriptionTr": "Datça Hayıtbükü'nde restoran-bar iskelesi; BEKLEYEN LİSTEDEN: Hayıtbükü ilk kez kayıtta. 30 tonoz, maksimum boy 10 m. VHF 16'dan 'Ogun's Place' çağrılır. İçme suyu, elektrik, Wi-Fi ve çamaşır servisi vardır; kışlama (tekne bekletme) yapılır; stüdyo/dubleks konaklama bulunur. Ovabükü plajına ~1,3 km yürüyüş; Pazar günleri köy pazarı kurulur.",
+      "berthCount": 30,
+      "maxLoaM": 10,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "restaurant",
+        "water",
+        "electricity",
+        "wifi",
+        "laundry"
+      ],
+      "services": [
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902527280023",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@ogunplace.com"
+        },
+        {
+          "type": "website",
+          "value": "https://ogunplace.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/06/oguns-place-jetty.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "İskele derinliği kaynakta net değil (girişte derin su notu var)."
+    },
+    {
+      "slug": "kizilada-fener-restorani",
+      "name": "Kızılada Fener Restoranı",
+      "operator": "Kızılada Fener Restaurant",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.652399,
+      "lon": 29.04362,
+      "coordSource": "turkeymarinas (36°39'08.6\"N 29°02'37.0\"E → 36.652399, 29.043620)",
+      "descriptionTr": "Fethiye Körfezi'nin girişindeki Kızılada'nın tarihi feneri (1871) restoran-butik otele dönüştürülmüştür; 100 kişilik restoran + 9 oda. İskeleye yanaşılır ya da ada önünde 5-7 m'ye KUM zemine demirlenir. Gün batımı yemeğiyle ünlü, teknelerin özel duraklarındandır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 5,
+      "depthMaxM": 7,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant"
+      ],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/06/kizilada-lighthouse-restaurant.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "İletişim, VHF ve iskele kapasitesi kaynakta yok. Zemin kum (demirleme)."
+    },
+    {
+      "slug": "osmans-place-selimiye",
+      "name": "Osman's Place İskelesi (Selimiye)",
+      "operator": "Osman's Place",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.70775,
+      "lon": 28.093944,
+      "coordSource": "turkeymarinas (36°42'27.9\"N 28°05'38.2\"E → 36.707750, 28.093944)",
+      "descriptionTr": "Selimiye koyunda restoran iskelesi; tekne malzemeleri de satılır. Selimiye'nin ünlü balık restoranları hattındadır (levrek, lagos, kalamar, böcek).",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant"
+      ],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/06/osmans-place-restaurant-jetty.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite, derinlik, iletişim ve VHF kaynakta yok."
+    },
+    {
+      "slug": "deniz-restaurant-delikyol",
+      "name": "Deniz Restaurant İskelesi (Delikyol)",
+      "operator": "Deniz Restaurant",
+      "status": "published",
+      "typeCode": "restaurant_pier",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.726113,
+      "lon": 28.130128,
+      "coordSource": "turkeymarinas (36°43'34.0\"N 28°07'48.5\"E → 36.726113, 28.130128)",
+      "descriptionTr": "Hisarönü Delikyol koyundaki plaj restoranı iskelesi; 150 kişilik restoran. İskelede elektrik ve içme suyu bağlanır; kumanya ikmali yapılabilir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant",
+        "water",
+        "electricity"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524173299",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@delikyoldenizrestaurant.com"
+        },
+        {
+          "type": "website",
+          "value": "https://delikyoldenizrestaurant.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2018/06/deniz-restaurant-and-jetty.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "İskele kapasitesi, derinlik ve VHF kaynakta yok."
+    },
+    {
+      "slug": "letoonia-marinet-fethiye",
+      "name": "Letoonia Marinet",
+      "operator": "Letoonia Club & Hotel",
+      "status": "published",
+      "typeCode": "private_marina",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.635848,
+      "lon": 29.099131,
+      "coordSource": "turkeymarinas (36°38'09.1\"N 29°05'56.9\"E → 36.635848, 29.099131)",
+      "descriptionTr": "Fethiye Körfezi'nde Paçariz Burnu'ndaki Letoonia tatil köyünün küçük marinası; 30 yat kapasitesi. Su ve elektrik bağlanır; restoran-bar tesis içindedir. Tesisin batısında 10-15 m'ye demirlenebilir. Yakıt, Fethiye merkezden tankerle ikmal edilir. Paçariz feneri: yeşil çakar/3 sn, 4 mil.",
+      "berthCount": 30,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "restaurant",
+        "water",
+        "electricity"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526144966",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "letoonia@letoonia.com"
+        },
+        {
+          "type": "website",
+          "value": "https://letoonia.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/letoonia-marinet.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "VHF ve derinlik (rıhtım) kaynakta yok; kaynak 2016 tarihli."
+    },
+    {
+      "slug": "sovalye-adasi-demirleme",
+      "name": "Şövalye Adası",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.65144,
+      "lon": 29.102621,
+      "coordSource": "turkeymarinas (36°39'05.2\"N 29°06'09.4\"E → 36.651440, 29.102621)",
+      "descriptionTr": "Fethiye Körfezi'nin ağzında, 12 Adalar zincirinin kente en yakın adası; araç yoktur, çam ormanlıdır. Berrak suda su altı kalıntıları (antik duvar, kilise, Roma sarnıcı) kanoyla ~1 saatte turlanır. DİKKAT: adanın DOĞU kanalı büyük tekneler için ÇOK SIĞDIR. Fethiye'den deniz taksisi ~20 dk.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/sovalye-adasi-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Demirleme derinliği/zemin kaynakta yok → null."
+    },
+    {
+      "slug": "bestas-kalevezi-demirleme",
+      "name": "Beştaş (Kalevezi) Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.558448,
+      "lon": 29.086393,
+      "coordSource": "turkeymarinas (36°33'30.4\"N 29°05'11.0\"E → 36.558448, 29.086393)",
+      "descriptionTr": "Gemiler Adası yakınında kuzeye girintili koy; 'Soğuk Su Koyu' da denir — dipten çıkan kaynak suları deniz suyunu belirgin soğutur (yüzerken şaşırtır!). Su derindir; ana koyun BATI ve DOĞU kreklerinde barınılır. Kayaköy'e ~1 saatlik yürüyüş (Bizans kiliseleri ve terk edilmiş köy).",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/bestas-kalevezi-koyu-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Derinlik rakamı ve zemin kaynakta yok ('su derin')."
+    },
+    {
+      "slug": "darbogaz-koyu-demirleme",
+      "name": "Darboğaz Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.650722,
+      "lon": 28.907417,
+      "coordSource": "turkeymarinas (36°39'02.6\"N 28°54'26.7\"E → 36.650722, 28.907417)",
+      "descriptionTr": "Fethiye Körfezi'nin batısında, Bozdoğan (Kapıdağ) yarımadasının doğusundaki koy. BATI ucu uygun demirlemedir: 10-15 m'ye demirleyip GÜNEYBATIYA karaya halat verin. Hâkim rüzgârlar koya soluğan sokar — yerleşik havada tercih edin. Güney yakası ormanlık, su turkuvazdır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 10,
+      "depthMaxM": 15,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/darbogaz-koyu-anchorage.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Zemin türü kaynakta yok → null."
+    },
+    {
+      "slug": "buyuk-boncuklu-koyu",
+      "name": "Büyük Boncuklu Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.621861,
+      "lon": 29.076694,
+      "coordSource": "turkeymarinas (36°37'18.7\"N 29°04'36.1\"E → 36.621861, 29.076694)",
+      "descriptionTr": "Fethiye Körfezi'nde doğal korunaklı küçük koy; sert ve rüzgârlı havadan nadiren etkilenir. Kıyıda palmiyeli plaj restoranı vardır; plaj işletmesi giriş ücreti alabilir. Küçük antik kalıntılar ve sakin su — hafta sonları yerel halkın uğrağıdır ama komşu plajlardan tenhadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/boncuklu-cove-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Derinlik/zemin kaynakta yok. Kaynaktaki köpekbalığı üreme iddiası Gökova Boncuk Koyu ile karışmış görünüyor → ALINMADI (0-uydurma)."
+    },
+    {
+      "slug": "kucuk-boncuklu-koyu",
+      "name": "Küçük Boncuklu Koyu",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.629306,
+      "lon": 29.076611,
+      "coordSource": "turkeymarinas (36°37'45.5\"N 29°04'35.8\"E → 36.629306, 29.076611)",
+      "descriptionTr": "Büyük Boncuklu'nun hemen kuzeyindeki kardeş koy; aynı korunaklı hattın devamıdır. Daha küçük ve tenhadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/boncuklu-cove-anchorage.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Derinlik/zemin kaynakta yok → null."
+    },
+    {
+      "slug": "batikkaya-buku-demirleme",
+      "name": "Batıkkaya Bükü",
+      "operator": null,
+      "status": "published",
+      "typeCode": "mooring_point",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.642556,
+      "lon": 29.086,
+      "coordSource": "turkeymarinas, demirleme (36°38'33.2\"N 29°05'09.6\"E → 36.642556, 29.086000)",
+      "descriptionTr": "Fethiye kasabasının ~1 mil kuzeyinde, Batıkkaya feneri altındaki kıyı açıklıklarında 5-10 m'ye demirlenir. Hâkim B/KB rüzgârlarına iyi korunak sağlar; DOĞUYA AÇIKTIR. Kente yakınlığıyla pratik bir duraktır (tamirhaneler, restoranlar, Pazartesi/Çarşamba pazarı); Amyntas kaya mezarı yürüme mesafesindedir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 5,
+      "depthMaxM": 10,
+      "vhfChannel": null,
+      "priceTier": "free",
+      "holdingType": null,
+      "isFree": true,
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/04/batikkaya-buku-anchorage.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Zemin türü kaynakta yok → null."
+    }
+  ]
+}
