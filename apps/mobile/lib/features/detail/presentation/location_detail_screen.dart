@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/external_links.dart';
 import '../../../core/location_type_labels.dart';
 import '../../../core/origin_provider.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../boat/presentation/boat_fit.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
@@ -64,13 +65,13 @@ FavoriteLocation _favoriteFrom(LocationDetail d) {
   return FavoriteLocation(id: d.id, name: d.name, type: d.type, city: city);
 }
 
-class _DetailContent extends StatelessWidget {
+class _DetailContent extends ConsumerWidget {
   const _DetailContent({required this.detail});
 
   final LocationDetail detail;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     // Denizci bilgileri: boyut + türe özel veriden yalnız DOLU alanlar stat'a
     // çevrilir (uydurma veri yok). Tekne boyu/su çekimi zaten BoatFitRow'da
@@ -169,10 +170,18 @@ class _DetailContent extends StatelessWidget {
             child: DocklyButton(
               label: 'Rezervasyon Talebi',
               icon: DocklyIcons.eventNote,
-              onPressed: () => showReservationSheet(
+              // ÜYELİK KAPISI (kullanıcı kararı 2026-07): talep göndermek
+              // hesap ister; hesabı olmayana kayıt yolu gösterilir.
+              onPressed: () => requireAccount(
                 context,
-                locationName: detail.name,
-                contacts: detail.contacts,
+                ref,
+                message: 'Rezervasyon talebi göndermek için hesabınla giriş '
+                    'yap — marina talebinin kime ait olduğunu bilsin.',
+                onAllowed: () => showReservationSheet(
+                  context,
+                  locationName: detail.name,
+                  contacts: detail.contacts,
+                ),
               ),
             ),
           ),
@@ -444,12 +453,12 @@ class _IconChips extends StatelessWidget {
   }
 }
 
-class _ContactRow extends StatelessWidget {
+class _ContactRow extends ConsumerWidget {
   const _ContactRow({required this.contact});
   final Contact contact;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final String? label = contact.label;
     final Uri? uri = contactUri(contact.type, contact.value);
@@ -481,10 +490,27 @@ class _ContactRow extends StatelessWidget {
       ),
     );
     // Açılabilen türler (telefon/WhatsApp/web/e-posta) tek dokunuşla çalışır;
-    // VHF gibi açılamayanlar düz metin kalır.
+    // VHF gibi açılamayanlar düz metin kalır. ÜYELİK KAPISI (kullanıcı kararı
+    // 2026-07): marina/limanı DOĞRUDAN ARAMAK (telefon/WhatsApp) hesap ister;
+    // numara görünür kalır, web/e-posta serbesttir. Acil Durum sayfası kapı
+    // dışıdır (güvenlik).
     if (uri == null) return inner;
+    final bool needsAccount =
+        contact.type == 'phone' || contact.type == 'whatsapp';
     return InkWell(
-      onTap: () => launchContact(context, contact.type, contact.value),
+      onTap: () {
+        if (!needsAccount) {
+          launchContact(context, contact.type, contact.value);
+          return;
+        }
+        requireAccount(
+          context,
+          ref,
+          message: 'Marinayı uygulamadan tek dokunuşla aramak için hesabınla '
+              'giriş yap.',
+          onAllowed: () => launchContact(context, contact.type, contact.value),
+        );
+      },
       child: inner,
     );
   }

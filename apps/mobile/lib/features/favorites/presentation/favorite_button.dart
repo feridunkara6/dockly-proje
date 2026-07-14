@@ -2,12 +2,14 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../auth/presentation/account_gate.dart';
 import '../application/favorites_controller.dart';
 import '../domain/favorite_location.dart';
 
 /// Bir lokasyonu favorilere ekleyip çıkaran kalp düğmesi (detay ekranı başlığı).
-/// Favoriyse dolu kırmızı kalp, değilse çizgi kalp gösterir. Misafir-dostu:
-/// hesap gerektirmez, seçim cihazda kalır.
+/// Favoriyse dolu kırmızı kalp, değilse çizgi kalp gösterir.
+/// ÜYELİK KAPISI (kullanıcı kararı 2026-07): favoriye EKLEME hesap ister;
+/// çıkarma serbesttir (kullanıcının eski seçimini silmesi engellenmez).
 class FavoriteButton extends ConsumerWidget {
   const FavoriteButton({required this.favorite, super.key});
 
@@ -21,6 +23,20 @@ class FavoriteButton extends ConsumerWidget {
             list.any((FavoriteLocation f) => f.id == favorite.id),
       ),
     );
+    void toggleAndNotify() {
+      final FavoritesController controller = ref.read(favoritesProvider.notifier);
+      controller.toggle(favorite);
+      final bool nowFav = controller.isFavorite(favorite.id);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(nowFav ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+    }
+
     return IconButton(
       tooltip: isFav ? 'Favorilerden çıkar' : 'Favorilere ekle',
       icon: DocklyIcon(
@@ -28,17 +44,17 @@ class FavoriteButton extends ConsumerWidget {
         color: isFav ? DocklyColors.error : null,
       ),
       onPressed: () {
-        final FavoritesController controller = ref.read(favoritesProvider.notifier);
-        controller.toggle(favorite);
-        final bool nowFav = controller.isFavorite(favorite.id);
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Text(nowFav ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı'),
-              duration: const Duration(seconds: 2),
-            ),
-          );
+        if (isFav) {
+          toggleAndNotify(); // çıkarma kapısız
+          return;
+        }
+        requireAccount(
+          context,
+          ref,
+          message: 'Favori limanlarını kaydetmek için hesabınla giriş yap — '
+              'listen her cihazında seninle olur.',
+          onAllowed: toggleAndNotify,
+        );
       },
     );
   }

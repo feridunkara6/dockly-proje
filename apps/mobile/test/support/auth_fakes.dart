@@ -1,10 +1,28 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/features/auth/application/auth_controller.dart';
 import 'package:dockly_mobile/features/auth/data/auth_repository.dart';
 import 'package:dockly_mobile/features/auth/domain/auth_gateway.dart';
+import 'package:dockly_mobile/features/auth/domain/auth_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const SessionUser testUser = SessionUser(id: 'u1', role: 'user', isGuest: false, locale: 'tr');
 const SessionUser testGuest = SessionUser(id: 'g1', role: 'user', isGuest: true, locale: 'tr');
+
+/// Sabit oturum durumu döndüren kontrolcü (üyelik kapısı testleri için).
+class FixedAuthController extends AuthController {
+  FixedAuthController(this._fixed);
+  final AuthState _fixed;
+
+  @override
+  AuthState build() => _fixed;
+}
+
+/// Testte "hesap açık" durumu: authControllerProvider bu override ile
+/// Authenticated(testUser) döndürür — üyelik kapısı açılmaz.
+Override signedInAuthOverride({SessionUser user = testUser}) =>
+    authControllerProvider
+        .overrideWith(() => FixedAuthController(Authenticated(user)));
 
 /// Testte AuthRepository yerine geçen sahte (yalnız testte mock kuralı, docs/15).
 class FakeAuthRepository implements AuthRepository {

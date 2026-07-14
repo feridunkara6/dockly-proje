@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
@@ -24,13 +25,15 @@ Finder _docklyIcon(DocklyIconData d) =>
 
 /// Detay ekranı testleri: yakın-alternatifler ve yorumlar ağ geçitleri boş sahte
 /// ile override edilir (aksi halde gerçek API zinciri appConfig'e ulaşıp fırlatır).
-Widget _app(LocationDetailGateway gateway) {
+/// `signedIn: true` → üyelik kapısı açık (hesaplı kullanıcı) senaryosu.
+Widget _app(LocationDetailGateway gateway, {bool signedIn = false}) {
   return ProviderScope(
     overrides: <Override>[
       locationDetailGatewayProvider.overrideWithValue(gateway),
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      if (signedIn) signedInAuthOverride(),
     ],
     child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
   );
@@ -142,5 +145,90 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Rezervasyon Talebi'), 200);
     expect(find.text('Rezervasyon Talebi'), findsOneWidget);
+  });
+
+  // --- Üyelik kapısı (kullanıcı kararı 2026-07) ---
+
+  testWidgets('HESAPSIZ: Rezervasyon Talebi → "Hesap gerekli" sayfası açılır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Rezervasyon Talebi'), 200);
+    await tester.ensureVisible(find.text('Rezervasyon Talebi'));
+    await tester.pump();
+    await tester.tap(find.text('Rezervasyon Talebi'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hesap gerekli'), findsOneWidget);
+    expect(find.textContaining('Rezervasyon talebi göndermek'), findsOneWidget);
+    // Rezervasyon sayfası AÇILMADI (başlık yalnız düğmede, tek kopya).
+    expect(find.text('Rezervasyon Talebi'), findsOneWidget);
+    // "Şimdi değil" ile kapanır, gezinme engellenmez.
+    await tester.tap(find.text('Şimdi değil'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hesap gerekli'), findsNothing);
+  });
+
+  testWidgets('HESAPLI: Rezervasyon Talebi doğrudan açılır (kapı yok)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway(), signedIn: true));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Rezervasyon Talebi'), 200);
+    await tester.ensureVisible(find.text('Rezervasyon Talebi'));
+    await tester.pump();
+    await tester.tap(find.text('Rezervasyon Talebi'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hesap gerekli'), findsNothing);
+    // Düğme + açılan sayfanın başlığı → iki kopya.
+    expect(find.text('Rezervasyon Talebi'), findsNWidgets(2));
+  });
+
+  testWidgets('HESAPSIZ: telefon satırına dokununca kapı; numara görünür kalır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('+902526451234'), 300);
+    expect(find.text('+902526451234'), findsOneWidget); // bilgi herkese açık
+    await tester.ensureVisible(find.text('+902526451234'));
+    await tester.pump();
+    await tester.tap(find.text('+902526451234'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hesap gerekli'), findsOneWidget);
+    expect(find.textContaining('tek dokunuşla aramak'), findsOneWidget);
+  });
+
+  testWidgets('HESAPSIZ: favori kalbine dokununca kapı; favori eklenmez',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Favorilere ekle'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hesap gerekli'), findsOneWidget);
+    expect(find.text('Favorilere eklendi'), findsNothing);
+  });
+
+  testWidgets('HESAPLI: favori kalbi çalışır (SnackBar onayı)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway(), signedIn: true));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Favorilere ekle'));
+    await tester.pump();
+    expect(find.text('Hesap gerekli'), findsNothing);
+    expect(find.text('Favorilere eklendi'), findsOneWidget);
+    // SnackBar zamanlayıcısını akıt (CI dersi: bekleyen Timer kırmızı yapar).
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('kapıdan "Giriş yap veya kayıt ol" → giriş sayfası açılır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLocationDetailGateway()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Favorilere ekle'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Giriş yap veya kayıt ol'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hoş geldin, kaptan'), findsOneWidget); // SignInSheetBody
   });
 }
