@@ -19,8 +19,9 @@ final StateProvider<bool> splashDoneProvider = StateProvider<bool>((ref) => true
 class SplashGate extends ConsumerStatefulWidget {
   const SplashGate({
     required this.child,
-    // 2400ms: rota çizgisi animasyonu nefes alsın (çizim ~1.5sn + akış).
-    this.duration = const Duration(milliseconds: 2400),
+    // 1500ms: kullanıcı isteği (açılış hızlansın) — çizim ~0.95sn'e
+    // sıkıştırıldı; marka animasyonu korunur ama bekletmez.
+    this.duration = const Duration(milliseconds: 1500),
     this.now,
     super.key,
   });
@@ -61,7 +62,7 @@ class _SplashGateState extends ConsumerState<SplashGate> {
       ref.read(splashDoneProvider.notifier).state = true;
       // Kararma animasyonu bitince açılış katmanı tamamen kaldırılır
       // (animasyon denetleyicileri dursun — arka planda boşa iş yapmasın).
-      _removeTimer = Timer(const Duration(milliseconds: 600), () {
+      _removeTimer = Timer(const Duration(milliseconds: 500), () {
         if (mounted) setState(() => _gone = true);
       });
     });
@@ -86,7 +87,7 @@ class _SplashGateState extends ConsumerState<SplashGate> {
             ignoring: _done,
             child: AnimatedOpacity(
               opacity: _done ? 0 : 1,
-              duration: const Duration(milliseconds: 550),
+              duration: const Duration(milliseconds: 450),
               child: _SplashScreen(variant: splashIsNight(t) ? _gece : _gunduz),
             ),
           ),
@@ -178,7 +179,7 @@ class _SplashScreenState extends State<_SplashScreen>
   /// Tek seferlik: çizginin tekneden çapaya uzaması.
   late final AnimationController _draw = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1500),
+    duration: const Duration(milliseconds: 950),
   )..forward();
 
   /// Sürekli: kesiklerin rota boyunca akışı (yaşayan his).

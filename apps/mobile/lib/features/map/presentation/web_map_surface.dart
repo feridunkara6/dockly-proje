@@ -58,9 +58,9 @@ class _WebMapSurface extends ConsumerStatefulWidget {
   ConsumerState<_WebMapSurface> createState() => _WebMapSurfaceState();
 }
 
-/// Sunucu pin eşiğinin aynası (apps/api cluster.ts MIN_PIN_ZOOM): zoom ≥ 10 →
+/// Sunucu pin eşiğinin aynası (apps/api cluster.ts MIN_PIN_ZOOM): zoom ≥ 9 →
 /// pin modu. Eşik GEÇİLİRKEN debounce beklenmez — pinler anında istenir.
-const int _minPinZoom = 10;
+const int _minPinZoom = 9;
 
 class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   final MapController _map = MapController();
@@ -145,7 +145,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     widget.callbacks.onClusterTap(c);
     // Pin eşiği 10 olduğundan hedef en az 10.5 — baloncuğa dokunuş her zaman
     // tekil pin bölgesine indirir (bir kez daha dokunma gereği kalmaz).
-    final double targetZoom = math.min(math.max(_map.camera.zoom + 2.5, 10.5), 14.0);
+    final double targetZoom = math.min(math.max(_map.camera.zoom + 2.5, 9.5), 14.0);
     _lastZoom = targetZoom; // programatik hareket — eşik-geçiş takibi güncel kalsın
     _map.move(LatLng(c.position.lat, c.position.lon), targetZoom);
     _emit(_map.camera);

@@ -45,8 +45,8 @@ final Provider<Duration> mapDebounceProvider =
     Provider<Duration>((ref) => const Duration(milliseconds: 120));
 
 /// Sunucu pin eşiğinin aynası (apps/api cluster.ts MIN_PIN_ZOOM):
-/// zoom ≥ 10 → pin modu. Bellek-içi hızlı yol bu eşiğe göre çalışır.
-const int _minPinZoom = 10;
+/// zoom ≥ 9 → pin modu. Bellek-içi hızlı yol bu eşiğe göre çalışır.
+const int _minPinZoom = 9;
 
 /// Bellek-içi pin önbelleğinin tazelik süresi — sunucunun CDN cache'iyle
 /// (Cache-Control 120s) hizalı: bu süre içinde ağa çıkmak zaten aynı veriyi

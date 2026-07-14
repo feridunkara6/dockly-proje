@@ -1,8 +1,10 @@
 import { AppProblem } from '../../../common/problem/problem';
 
-/** Pin/cluster eşiği: zoom < 10 ⇒ cluster, zoom ≥ 10 ⇒ pin. (docs/23 §9.5
- * temeli 12 idi; pinler daha uzaktan görünsün diye 10'a çekildi — UX kararı.) */
-export const MIN_PIN_ZOOM = 10;
+/** Pin/cluster eşiği: zoom < 9 ⇒ cluster, zoom ≥ 9 ⇒ pin. (docs/23 §9.5
+ * temeli 12 idi; pinler daha uzaktan görünsün diye önce 10'a, kullanıcı geri
+ * bildirimiyle ("fazla yakınlaştırma gerekiyor") 9'a çekildi — UX kararı.
+ * Güvenlik: PIN_CAP=500 > toplam yayınlı kayıt, kesilme riski yok.) */
+export const MIN_PIN_ZOOM = 9;
 
 /** Cluster yanıtı üst sınırı (koruma; en kalabalık balonlar korunur). */
 export const CLUSTER_CAP = 1000;
@@ -11,9 +13,7 @@ export const CLUSTER_CAP = 1000;
 export const MAX_ZOOM = 22;
 
 function fail(field: string, code: string, message: string): never {
-  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [
-    { field, code, message },
-  ]);
+  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [{ field, code, message }]);
 }
 
 /**
@@ -31,10 +31,11 @@ export function parseZoom(raw: string | undefined): number | undefined {
 
 /**
  * Zoom → grid hücre boyutu (derece). Mercator: dünya 360°'yi 2^zoom karoya böler;
- * cluster hücresi ≈ yarım karo (docs/13 §5.2 zoom-tabanlı ST_SnapToGrid). Düşük
- * zoom = büyük hücre = az balon; yüksek zoom = küçük hücre = çok balon.
+ * cluster hücresi ≈ ÇEYREK karo (yarım karodan küçültüldü — balonlar daha uzak
+ * zoom'da dağılsın, kullanıcı isteği; docs/13 §5.2 zoom-tabanlı ST_SnapToGrid).
+ * Düşük zoom = büyük hücre = az balon; yüksek zoom = küçük hücre = çok balon.
  */
 export function clusterCellSizeDeg(zoom: number): number {
   const z = Math.max(0, Math.min(zoom, MAX_ZOOM));
-  return 360 / 2 ** (z + 1);
+  return 360 / 2 ** (z + 2);
 }

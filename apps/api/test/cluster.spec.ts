@@ -38,7 +38,7 @@ describe('clusterCellSizeDeg', () => {
     expect(clusterCellSizeDeg(0)).toBeGreaterThan(clusterCellSizeDeg(5));
   });
 
-  it('zoom 0 → 180° (yarım dünya karosu)', () => {
-    expect(clusterCellSizeDeg(0)).toBe(180);
+  it('zoom 0 → 90° (çeyrek karo — balonlar daha uzaktan dağılır)', () => {
+    expect(clusterCellSizeDeg(0)).toBe(90);
   });
 });
