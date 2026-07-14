@@ -13,7 +13,9 @@ export const CLUSTER_CAP = 1000;
 export const MAX_ZOOM = 22;
 
 function fail(field: string, code: string, message: string): never {
-  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [{ field, code, message }]);
+  throw new AppProblem('validation-error', 'Geçersiz zoom parametresi.', [
+    { field, code, message },
+  ]);
 }
 
 /**
