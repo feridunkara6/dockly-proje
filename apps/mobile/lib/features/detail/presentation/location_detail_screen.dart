@@ -17,6 +17,7 @@ import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../application/location_detail_controller.dart';
+import '../domain/anchorage_notes.dart';
 import 'cover_photo.dart';
 import 'maritime_info_panel.dart';
 import '../../weather/presentation/weather_card.dart';
@@ -78,6 +79,14 @@ class _DetailContent extends StatelessWidget {
       ..._dimensionStats(detail.dimensions),
       ..._typeStats(detail.typeDetails),
     ];
+
+    // Demirleme tiplerinde açıklama cümle cümle ayrıştırılır: zemin/DİKKAT
+    // cümleleri "Demirleme Notları" kartına taşınır, koyu anlatan metin
+    // aşağıda açıklama olarak kalır (ürün kararı 2026-07, 0-uydurma).
+    final AnchorageDescriptionSplit? split =
+        _isAnchoringType(detail.type) ? splitAnchorageDescription(detail.description) : null;
+    final String? descriptionBelow =
+        split != null ? split.general : detail.description;
 
     return ListView(
       key: LocationDetailScreen.contentKey,
@@ -152,8 +161,8 @@ class _DetailContent extends StatelessWidget {
         // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon
         // OLMAZ — ilk gelen demirler. Bu tiplerde talep düğmesi yerine
         // "Demirleme Notları" gösterilir; diğer tiplerde düğme kalır.
-        if (_isAnchoringType(detail.type))
-          _AnchoringNotes(priceTier: detail.priceTier)
+        if (split != null)
+          _AnchoringNotes(detail: detail, split: split)
         else
           SizedBox(
             width: double.infinity,
@@ -168,9 +177,9 @@ class _DetailContent extends StatelessWidget {
             ),
           ),
 
-        if (detail.description != null && detail.description!.trim().isNotEmpty) ...<Widget>[
+        if (descriptionBelow != null && descriptionBelow.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),
-          Text(detail.description!, style: theme.textTheme.bodyLarge),
+          Text(descriptionBelow, style: theme.textTheme.bodyLarge),
         ],
 
         MaritimeInfoPanel(stats: stats),
@@ -555,17 +564,31 @@ bool _isAnchoringType(String type) =>
     type == 'mooring_point' || type == 'buoy' || type == 'guest_mooring';
 
 /// "Demirleme Notları" — rezervasyon düğmesinin yerini alan bilgi kutusu.
-/// UYDURMA VERİ YOK ilkesi: koya özel yoğunluk SAATİ göstermeyiz (elimizde
-/// kaynaklı veri yoksa); kaynaklı yoğunluk notları zaten açıklama metnindedir.
-/// Buradaki öneri satırı AÇIKÇA "genel öneri" olarak etiketlenir.
+/// Sabit metin yerine KOYA ÖZEL veri gösterir (ürün kararı 2026-07):
+/// zemin (dip tutunması) + derinlik satırları ve açıklamadan ayrıştırılan
+/// demirleme/DİKKAT cümleleri. UYDURMA VERİ YOK ilkesi: yalnız kayıtlı alanlar
+/// ve açıklamada zaten var olan cümleler; koya özel veri hiç yoksa bunu
+/// dürüstçe söyleyen tek satır kalır.
 class _AnchoringNotes extends StatelessWidget {
-  const _AnchoringNotes({required this.priceTier});
+  const _AnchoringNotes({required this.detail, required this.split});
 
-  final String priceTier;
+  final LocationDetail detail;
+  final AnchorageDescriptionSplit split;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final AnchorageTypeDetails? a = switch (detail.typeDetails) {
+      final AnchorageTypeDetails t => t,
+      _ => null,
+    };
+    final String? zemin = a?.holdingType == null ? null : _capTr(holdingTypeLabelTr(a!.holdingType!));
+    final String? depth = _depthText(detail.dimensions);
+    final bool hasSpecific = zemin != null ||
+        depth != null ||
+        split.anchoring.isNotEmpty ||
+        split.warnings.isNotEmpty;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(14),
@@ -587,19 +610,94 @@ class _AnchoringNotes extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            priceTier == 'free'
+            detail.priceTier == 'free'
                 ? 'Rezervasyon yapılmaz — ilk gelen demirler. Ücretsiz demirleme alanıdır.'
                 : 'Rezervasyon yapılmaz — ilk gelen demirler.',
             style: theme.textTheme.bodyMedium,
           ),
-          const SizedBox(height: 6),
-          Text(
-            'Genel öneri (bu noktaya özel veri değildir): popüler koylar yaz '
-            'aylarında öğleden sonra dolar — erken varış rahat yer bulmanın '
-            'anahtarıdır; günübirlik tur tekneleri genellikle akşamüstü ayrılır. '
-            'Varsa yukarıdaki açıklamada bu koya özel, kaynaklı yoğunluk notları yer alır.',
-            style: theme.textTheme.bodySmall
-                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          // Koya özel yapısal satırlar (yalnız kayıtlı alanlar).
+          if (zemin != null)
+            _NoteRow(icon: DocklyIcons.amMooring, text: 'Zemin: $zemin'),
+          if (depth != null)
+            _NoteRow(icon: DocklyIcons.straighten, text: 'Derinlik: $depth'),
+          // Açıklamadan taşınan demirleme/zemin cümleleri.
+          for (final String s in split.anchoring)
+            _NoteRow(icon: DocklyIcons.infoOutline, text: s),
+          // DİKKAT cümleleri — uyarı renginde, vurgulu.
+          for (final String s in split.warnings)
+            _NoteRow(
+              icon: DocklyIcons.errorOutline,
+              text: s,
+              color: DocklyColors.warning,
+              emphasize: true,
+            ),
+          if (!hasSpecific) ...<Widget>[
+            const SizedBox(height: 6),
+            Text(
+              'Bu nokta için kayıtlı zemin ve uyarı bilgisi henüz yok — '
+              'derinlik ve dip tutunmasını yerinde kontrol edin.',
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Derinlik metni: "7–8 m" / "7 m" / null (veri yoksa satır çıkmaz).
+  static String? _depthText(Dimensions d) {
+    final double? min = d.depthMinM;
+    final double? max = d.depthMaxM;
+    if (min == null && max == null) return null;
+    String n(double v) => v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+    if (min != null && max != null && min != max) return '${n(min)}–${n(max)} m';
+    return '${n((min ?? max)!)} m';
+  }
+
+  /// Türkçe baş harf büyütme ("çamur" → "Çamur"; i→İ, ı→I kuralına saygılı).
+  static String _capTr(String s) {
+    if (s.isEmpty) return s;
+    final String first = switch (s[0]) {
+      'i' => 'İ',
+      'ı' => 'I',
+      final String c => c.toUpperCase(),
+    };
+    return first + s.substring(1);
+  }
+}
+
+/// Demirleme Notları içindeki tek satır: küçük ikon + metin.
+class _NoteRow extends StatelessWidget {
+  const _NoteRow({
+    required this.icon,
+    required this.text,
+    this.color,
+    this.emphasize = false,
+  });
+
+  final DocklyIconData icon;
+  final String text;
+  final Color? color;
+  final bool emphasize;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          DocklyIcon(icon, size: 16, color: color ?? theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: emphasize ? FontWeight.w600 : null,
+              ),
+            ),
           ),
         ],
       ),

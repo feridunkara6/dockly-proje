@@ -70,7 +70,11 @@ const LocationDetail sampleAnchorageDetail = LocationDetail(
   type: 'mooring_point',
   status: 'published',
   name: 'Gökkaya Koyu',
-  description: 'Kekova\'nın en büyük koyu; 7-8 m çamura demirlenir.',
+  // Üç sınıf cümle bilinçli: genel (koy tanımı) + demirleme (çamura demirlenir)
+  // + DİKKAT (tekil kaya) — ayrıştırıcının ekrandaki davranışı test edilir.
+  description: 'Kekova\'nın en büyük koyu; her yönden korunaklı. '
+      '7-8 m çamura demirlenir, tutuş iyidir. '
+      'Dikkat: adacıkların batısında üzerinde 3,5 m su olan tekil kaya.',
   position: GeoPoint(lat: 36.210667, lon: 29.891167),
   geo: GeoInfo(
     countryCode: 'TR',
@@ -95,6 +99,46 @@ const LocationDetail sampleAnchorageDetail = LocationDetail(
   seasons: <Season>[],
   typeDetails: AnchorageTypeDetails(
     holdingType: 'mud',
+    protectionN: null,
+    protectionS: null,
+    protectionE: null,
+    protectionW: null,
+    swellExposure: null,
+    isFree: true,
+  ),
+  media: MediaInfo(cover: null, count: 0),
+  counts: Counts(reviews: 0, photos: 0),
+);
+
+/// Koya özel verisi HİÇ olmayan demirleme noktası — Demirleme Notları'nın
+/// dürüst yedek metni ("kayıtlı zemin ve uyarı bilgisi henüz yok") test edilir.
+const LocationDetail sampleBareAnchorageDetail = LocationDetail(
+  id: 'loc-koy-2',
+  slug: 'sakin-koy',
+  type: 'buoy',
+  status: 'published',
+  name: 'Sakin Koy',
+  description: 'Zeytinlikler arasında sessiz bir mola noktası.',
+  position: GeoPoint(lat: 36.7, lon: 28.2),
+  geo: GeoInfo(countryCode: 'TR', adminArea: null, waterBody: null),
+  dimensions: Dimensions(
+    maxBoatLengthM: null,
+    maxDraftM: null,
+    depthMinM: null,
+    depthMaxM: null,
+    capacity: null,
+  ),
+  priceTier: 'unknown',
+  is24h: false,
+  verifiedAt: null,
+  rating: Rating(avg: null, count: 0, dimensions: <RatingDimension>[]),
+  amenities: <AmenityLabeled>[],
+  services: <ServiceLabeled>[],
+  contacts: <Contact>[],
+  hours: <Hour>[],
+  seasons: <Season>[],
+  typeDetails: AnchorageTypeDetails(
+    holdingType: null,
     protectionN: null,
     protectionS: null,
     protectionE: null,

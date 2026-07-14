@@ -88,7 +88,7 @@ void main() {
     expect(find.byKey(LocationDetailScreen.contentKey), findsNothing);
   });
 
-  testWidgets('demirleme koyunda Rezervasyon Talebi YOK; Demirleme Notları var',
+  testWidgets('demirleme koyunda Rezervasyon Talebi YOK; notlar KOYA ÖZEL',
       (WidgetTester tester) async {
     await tester.pumpWidget(
       _app(FakeLocationDetailGateway(result: sampleAnchorageDetail)),
@@ -100,8 +100,32 @@ void main() {
     expect(find.text('Demirleme Notları'), findsOneWidget);
     expect(find.textContaining('ilk gelen demirler'), findsOneWidget);
     expect(find.textContaining('Ücretsiz demirleme alanı'), findsOneWidget);
-    // Öneri açıkça GENEL etiketli — koya özel veri gibi sunulmaz (0-uydurma).
-    expect(find.textContaining('Genel öneri'), findsOneWidget);
+    // Koya özel yapısal satırlar: zemin (holdingType=mud) + derinlik (7-8 m).
+    expect(find.text('Zemin: Çamur'), findsOneWidget);
+    expect(find.text('Derinlik: 7–8 m'), findsOneWidget);
+    // Açıklamadaki demirleme + DİKKAT cümleleri karta taşındı (tek kopya)…
+    expect(find.textContaining('tutuş iyidir'), findsOneWidget);
+    expect(find.textContaining('tekil kaya'), findsOneWidget);
+    // …koyu anlatan metin altta açıklama olarak duruyor.
+    expect(find.textContaining('her yönden korunaklı'), findsOneWidget);
+    // Eski sabit içerik kalktı — koya özel olmayan öneri artık gösterilmez.
+    expect(find.textContaining('Genel öneri'), findsNothing);
+  });
+
+  testWidgets('koya özel veri yoksa notlarda dürüst yedek metin gösterilir',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _app(FakeLocationDetailGateway(result: sampleBareAnchorageDetail)),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('Demirleme Notları'), 200);
+    expect(find.textContaining('kayıtlı zemin ve uyarı bilgisi henüz yok'),
+        findsOneWidget);
+    // İşaret içermeyen açıklama olduğu gibi altta kalır.
+    expect(find.textContaining('Zeytinlikler arasında'), findsOneWidget);
+    // priceTier 'unknown' → "Ücretsiz" iddiası YOK (0-uydurma).
+    expect(find.textContaining('Ücretsiz demirleme alanı'), findsNothing);
   });
 
   testWidgets('marinada Rezervasyon Talebi düğmesi DURUYOR',
