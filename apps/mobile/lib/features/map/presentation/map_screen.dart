@@ -68,17 +68,19 @@ class MapScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          // Üst-sol: tip filtre çipleri (renk noktalı — aynı zamanda lejant).
+          // Üst şerit: tip filtre çipleri TAM GENİŞLİK (renk noktalı lejant).
+          // Kullanıcı isteği (2026-07): ekranın üstünü rozetler kaplasın,
+          // konum/liste düğmeleri bir alt sıraya insin.
           Positioned(
             top: 12,
             left: 0,
-            right: 64,
+            right: 0,
             child: SafeArea(child: _TypeFilterRow(selected: state.types)),
           ),
-          // Üst-sağ kontroller: "Konumum" (her zaman) + harita↔liste geçişi
-          // (yalnız pin/yakın zoom verisi varken).
+          // Çip şeridinin HEMEN ALTINDA sağda: "Konumum" (her zaman) +
+          // harita↔liste geçişi (yalnız pin/yakın zoom verisi varken).
           Positioned(
-            top: 12,
+            top: 60, // 12 (çip üst boşluğu) + 40 (çip şeridi) + 8 (ara)
             right: 12,
             child: SafeArea(
               child: Column(
