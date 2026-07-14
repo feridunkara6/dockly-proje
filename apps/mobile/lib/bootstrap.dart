@@ -2,13 +2,17 @@ import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart' show DocklyClient;
 import 'package:dockly_ui/dockly_ui.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/flavor.dart';
+import 'core/firebase_options.dart';
 import 'core/providers.dart';
 import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
+import 'features/auth/infrastructure/firebase_auth_gateway.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
 import 'features/shell/presentation/dockly_shell.dart';
 import 'features/splash/presentation/splash_screen.dart';
@@ -22,25 +26,57 @@ import 'platform/map_platform.dart'
 const String _mapboxToken = String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
 
 /// Uygulama giriş noktası — ProviderScope + config bağlama (docs/26 §1 bootstrap).
-void bootstrap(AppConfig config) {
+Future<void> bootstrap(AppConfig config) async {
   WidgetsFlutterBinding.ensureInitialized();
   mapplat.applyMapAccessToken(_mapboxToken);
-  // Sunucuyu HEMEN uyandır (fire-and-forget): ücretsiz barındırma uykudaysa,
-  // kullanıcı daha ilk ekrana bakarken ısınma başlasın → veri daha erken gelir.
+  // Sunucuyu HEMEN uyandır (fire-and-forget): kullanıcı daha ilk ekrana
+  // bakarken ısınma başlasın → veri daha erken gelir.
   unawaited(DocklyClient(baseUrl: config.apiBaseUrl).warmUp());
-  runApp(
-    ProviderScope(
-      overrides: <Override>[
-        appConfigProvider.overrideWithValue(config),
-        ...mapplat.mapPlatformOverrides(),
-      ],
-      child: const DocklyApp(),
-    ),
-  );
+
+  final List<Override> overrides = <Override>[
+    appConfigProvider.overrideWithValue(config),
+    ...mapplat.mapPlatformOverrides(),
+  ];
+
+  // Firebase kimlik köprüsü (giriş/kayıt paketi 1): şimdilik yalnız web —
+  // iOS/Android kayıtları mağaza fazında eklenecek. Başlatma BAŞARISIZ olursa
+  // uygulama stub gateway ile misafir modda sorunsuz çalışmaya devam eder;
+  // giriş düğmesi nazik bir mesaj gösterir (çökme yok).
+  if (kIsWeb) {
+    try {
+      await Firebase.initializeApp(options: mooriraFirebaseOptionsWeb);
+      overrides.add(
+        authGatewayProvider.overrideWithValue(FirebaseAuthGateway()),
+      );
+    } catch (err) {
+      debugPrint('Firebase başlatılamadı (misafir mod sürer): $err');
+    }
+  }
+
+  runApp(ProviderScope(overrides: overrides, child: const DocklyApp()));
 }
 
-class DocklyApp extends StatelessWidget {
+class DocklyApp extends ConsumerStatefulWidget {
   const DocklyApp({super.key});
+
+  @override
+  ConsumerState<DocklyApp> createState() => _DocklyAppState();
+}
+
+class _DocklyAppState extends ConsumerState<DocklyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Saklanan oturumu arka planda geri yükle (docs/26 §8): kullanıcı sekmeyi
+    // kapatıp açınca girişi sürer. Hata olursa sessizce misafir kalınır.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future<void>(() async {
+        try {
+          await ref.read(authControllerProvider.notifier).restore();
+        } catch (_) {/* oturum yok/geçersiz → misafir */}
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +85,8 @@ class DocklyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
-      // Açılış ekranı (marka + slogan) → ardından 5 sekmeli kabuk; ilk sekme
-      // harita. Giriş akışı (AuthGate/SignInScreen) Firebase 2.4c ile bağlanacak.
+      // Açılış ekranı (marka) → 5 sekmeli kabuk; giriş/hesap Profil sekmesinde
+      // (AccountSection). Giriş zorunlu değil — misafir modu ilkedir.
       home: const SplashGate(child: DocklyShell()),
     );
   }

@@ -10,9 +10,10 @@ import '../domain/token_store.dart';
 final Provider<AuthGateway> authGatewayProvider =
     Provider<AuthGateway>((ref) => const StubAuthGateway());
 
-/// Token deposu — 2.4c'de secure storage impl ile override edilecek (keepAlive).
+/// Token deposu — kalıcı (web: localStorage). Depoya erişilemezse sessizce
+/// oturumsuz davranır (PrefsTokenStore hataları yutar; testler etkilenmez).
 final Provider<TokenStore> tokenStoreProvider =
-    Provider<TokenStore>((ref) => InMemoryTokenStore());
+    Provider<TokenStore>((ref) => PrefsTokenStore());
 
 final Provider<AuthRepository> authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
@@ -39,6 +40,17 @@ class AuthController extends Notifier<AuthState> {
   /// Sağlayıcıyla giriş; başarısızlıkta AppFailure fırlatır (durum değişmez).
   Future<void> signIn(AuthProviderKind kind) async {
     final user = await _repo.signIn(kind);
+    state = Authenticated(user);
+  }
+
+  /// E-posta + şifre ile giriş/kayıt; başarısızlıkta AppFailure fırlatır.
+  Future<void> signInEmail({
+    required String email,
+    required String password,
+    required bool register,
+  }) async {
+    final user = await _repo.signInEmail(
+        email: email, password: password, register: register);
     state = Authenticated(user);
   }
 

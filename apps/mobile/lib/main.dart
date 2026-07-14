@@ -10,6 +10,6 @@ const String _apiBaseUrl = String.fromEnvironment(
 
 /// Varsayılan giriş (dev). Flavor'a özel main_dev/main_stg/main_prod girişleri
 /// build yapılandırmasıyla (docs/26 §17) bir sonraki alt fazda eklenecek.
-void main() {
-  bootstrap(const AppConfig(flavor: Flavor.dev, apiBaseUrl: _apiBaseUrl));
+Future<void> main() {
+  return bootstrap(const AppConfig(flavor: Flavor.dev, apiBaseUrl: _apiBaseUrl));
 }

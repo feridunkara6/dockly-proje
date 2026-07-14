@@ -15,11 +15,25 @@ class FakeAuthRepository implements AuthRepository {
   AppFailure? signInError;
 
   final List<AuthProviderKind> signInCalls = <AuthProviderKind>[];
+  final List<({String email, bool register})> emailCalls =
+      <({String email, bool register})>[];
   bool loggedOut = false;
 
   @override
   Future<SessionUser> signIn(AuthProviderKind kind) async {
     signInCalls.add(kind);
+    final error = signInError;
+    if (error != null) throw error;
+    return signInResult;
+  }
+
+  @override
+  Future<SessionUser> signInEmail({
+    required String email,
+    required String password,
+    required bool register,
+  }) async {
+    emailCalls.add((email: email, register: register));
     final error = signInError;
     if (error != null) throw error;
     return signInResult;

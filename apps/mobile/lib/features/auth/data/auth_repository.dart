@@ -9,6 +9,13 @@ abstract interface class AuthRepository {
   /// Sağlayıcıyla giriş: gateway → sunucu oturumu → token saklama → kullanıcı.
   Future<SessionUser> signIn(AuthProviderKind kind);
 
+  /// E-posta + şifre ile giriş ya da kayıt (register=true → hesap oluşturur).
+  Future<SessionUser> signInEmail({
+    required String email,
+    required String password,
+    required bool register,
+  });
+
   /// Açılışta saklanan refresh token'dan oturumu geri yükler; yoksa/geçersizse null.
   Future<SessionUser?> restore();
 
@@ -32,6 +39,23 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<SessionUser> signIn(AuthProviderKind kind) async {
     final idToken = await _gateway.obtainIdToken(kind);
+    return _openSession(idToken);
+  }
+
+  @override
+  Future<SessionUser> signInEmail({
+    required String email,
+    required String password,
+    required bool register,
+  }) async {
+    final idToken = register
+        ? await _gateway.registerWithEmail(email: email, password: password)
+        : await _gateway.signInWithEmail(email: email, password: password);
+    return _openSession(idToken);
+  }
+
+  /// Firebase ID token → sunucu oturumu (docs/23 §3.1) → refresh saklama.
+  Future<SessionUser> _openSession(String idToken) async {
     final bundle = await _api.createSession(idToken);
     await _store.saveRefreshToken(bundle.refreshToken);
     return bundle.user;
@@ -63,5 +87,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     }
     await _store.clear();
+    // Sağlayıcı (Firebase) oturumunu da kapat — en-iyi-çaba, hata fırlatmaz.
+    await _gateway.signOutProvider();
   }
 }

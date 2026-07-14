@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../auth/presentation/account_section.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
@@ -41,13 +42,8 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 28),
           Text('Hesap', style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
-          const _InfoCard(
-            icon: DocklyIcons.lockOutline,
-            message:
-                'Yakında: hesap oluşturarak favori limanlarını kaydet, yorum yaz '
-                've rezervasyon iste. Şimdilik tüm keşif özellikleri giriş '
-                'gerektirmeden açık.',
-          ),
+          // Giriş/kayıt (paket 1): oturum yoksa giriş kartı, varsa hesap kartı.
+          const AccountSection(),
         ],
       ),
     );
@@ -187,26 +183,5 @@ class _BoatEmptyCard extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({required this.icon, required this.message});
-
-  final DocklyIconData icon;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            DocklyIcon(icon, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            const SizedBox(width: 12),
-            Expanded(child: Text(message)),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// _InfoCard kaldırıldı: "Yakında hesap" bilgi kartının yerini gerçek
+// AccountSection aldı (giriş/kayıt paketi 1, 2026-07).

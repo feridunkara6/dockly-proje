@@ -1,0 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
+
+/// Moorira Firebase projesi — WEB uygulaması yapılandırması (proje: moorira).
+///
+/// Bu değerler GİZLİ DEĞİLDİR (docs/24 §7.1): şifre/anahtar değil, projenin
+/// adres etiketleridir; Google bunların istemciye gömülmesini öngörür. Erişim
+/// güvenliği Authentication kuralları + yetkili alan adları (moorira.com) ile
+/// sağlanır. iOS/Android kayıtları mağaza hesapları açılınca eklenecek.
+const FirebaseOptions mooriraFirebaseOptionsWeb = FirebaseOptions(
+  apiKey: 'AIzaSyCU-b560CUR29mPETh27mEZxVbFmrVBuRU',
+  authDomain: 'moorira.firebaseapp.com',
+  projectId: 'moorira',
+  storageBucket: 'moorira.firebasestorage.app',
+  messagingSenderId: '1072474722600',
+  appId: '1:1072474722600:web:d68770dca002165486c01d',
+  measurementId: 'G-KMZXH18WNW',
+);
