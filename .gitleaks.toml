@@ -8,5 +8,13 @@
 useDefault = true
 
 [allowlist]
-description = "Şablon env dosyası — gerçek secret barındırmaz"
-paths = ['''apps/api/\.env\.example$''']
+description = "Gerçek secret barındırmayan dosyalar"
+paths = [
+  # Şablon env dosyası — tanımı gereği gerçek secret içermez.
+  '''apps/api/\.env\.example$''',
+  # Firebase WEB yapılandırması: apiKey vb. değerler Google tasarımı gereği
+  # HERKESE AÇIK tanımlayıcılardır (şifre/secret değildir); istemciye gömülür.
+  # Erişim güvenliği Firebase Authentication kuralları + yetkili alan adları
+  # (moorira.com) ile sağlanır. Bkz. docs/24 §7.1 ve dosya içi açıklama.
+  '''apps/mobile/lib/core/firebase_options\.dart$''',
+]
