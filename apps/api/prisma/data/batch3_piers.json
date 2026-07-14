@@ -1,412 +1,876 @@
 {
-  "batch": "5.3-piers",
-  "collectedAt": "2026-07-08",
-  "method": "Restoran iskeleleri + müstakil yakıt iskeleleri (Muğla pilotu). Kaynaklar: denizcilik rehberleri (Navily, My-Sea, Sea-Seek, cruiserswiki), işletme siteleri/telefonları. 2 paralel araştırma. Koordinatı kaynaklanamayan tesis DB'ye girmez.",
-  "notes": [
-    "Restoran iskelelerinde 'restaurant' amenity'si her kayıtta; bağlama politikası (yemek yiyene ücretsiz) yalnız kaynakta yazılıysa dolu.",
-    "confidence=low → status=draft. Marina içi yakıt istasyonları kapsam dışı (marina kayıtlarının parçası).",
-    "My Marina Ekincik restoran iskelesi ZATEN batch1'de kayıtlı (my-marina-ekincik) — mükerrer açılmadı; tip düzeltmesi bakım listesinde."
-  ],
-  "records": [
+ "batch": "5.3-piers",
+ "collectedAt": "2026-07-08",
+ "method": "Restoran iskeleleri + müstakil yakıt iskeleleri (Muğla pilotu). Kaynaklar: denizcilik rehberleri (Navily, My-Sea, Sea-Seek, cruiserswiki), işletme siteleri/telefonları. 2 paralel araştırma. Koordinatı kaynaklanamayan tesis DB'ye girmez.",
+ "notes": [
+  "Restoran iskelelerinde 'restaurant' amenity'si her kayıtta; bağlama politikası (yemek yiyene ücretsiz) yalnız kaynakta yazılıysa dolu.",
+  "confidence=low → status=draft. Marina içi yakıt istasyonları kapsam dışı (marina kayıtlarının parçası).",
+  "My Marina Ekincik restoran iskelesi ZATEN batch1'de kayıtlı (my-marina-ekincik) — mükerrer açılmadı; tip düzeltmesi bakım listesinde."
+ ],
+ "records": [
+  {
+   "slug": "kapi-creek-restaurant",
+   "name": "Kapı Creek Restaurant",
+   "operator": "Kapı Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.645,
+   "lon": 28.8933,
+   "coordSource": "sunseayachting + navily (Kapı/Göbün koyu)",
+   "descriptionTr": "Skopea Körfezi girişindeki korunaklı Kapı Koyu'nda, iskelesinde yaklaşık 20 tekneye tonozlu bağlama imkânı sunan klasik koy restoranı. Personel bağlamada yardımcı olur.",
+   "berthCount": 20,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2,
+   "depthMaxM": 2.5,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, Türk mutfağı",
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "water"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.navily.com/mouillage/kapi-creek-gobun-koyu/21036",
+    "https://sunseayachting.com/homepage/sailing-area/suggested-itineries/kapi-creek/"
+   ],
+   "confidence": "high",
+   "missingNotes": "Telefon doğrulanamadı; 'yemek yiyene bağlama ücretsiz' yaygın uygulama ama yazılı kaynak yok — boş bırakıldı."
+  },
+  {
+   "slug": "gobun-restaurant",
+   "name": "Göbün Restaurant",
+   "operator": "Göbün Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.6416,
+   "lon": 28.8933,
+   "coordSource": "gotosailing.com (N36°38'29.76\" E28°53'35.88\")",
+   "descriptionTr": "1979'dan beri işletilen Göbün Koyu restoranı; iki iskelesinde 40 tekneye kadar bağlama kapasitesi vardır. Güneş enerjisiyle elektrik, su, duş/WC ve Wi-Fi sağlanır.",
+   "berthCount": 40,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "08",
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, mezeler, kuzu tandır",
+   "minSpendPolicy": "yemek yiyene bağlama ücretsiz",
+   "reservationRecommended": true,
+   "amenities": [
+    "restaurant",
+    "water",
+    "electricity",
+    "wifi",
+    "shower",
+    "wc"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
     {
-      "slug": "kapi-creek-restaurant",
-      "name": "Kapı Creek Restaurant",
-      "operator": "Kapı Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.645, "lon": 28.8933,
-      "coordSource": "sunseayachting + navily (Kapı/Göbün koyu)",
-      "descriptionTr": "Skopea Körfezi girişindeki korunaklı Kapı Koyu'nda, iskelesinde yaklaşık 20 tekneye tonozlu bağlama imkânı sunan klasik koy restoranı. Personel bağlamada yardımcı olur.",
-      "berthCount": 20, "maxLoaM": null, "maxDraftM": null, "depthMinM": 2, "depthMaxM": 2.5,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "deniz ürünleri, Türk mutfağı", "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "water"],
-      "services": ["mooring_assist"],
-      "contacts": [],
-      "sourceUrls": ["https://www.navily.com/mouillage/kapi-creek-gobun-koyu/21036", "https://sunseayachting.com/homepage/sailing-area/suggested-itineries/kapi-creek/"],
-      "confidence": "high",
-      "missingNotes": "Telefon doğrulanamadı; 'yemek yiyene bağlama ücretsiz' yaygın uygulama ama yazılı kaynak yok — boş bırakıldı."
+     "type": "phone",
+     "value": "+905322474065",
+     "primary": true
     },
     {
-      "slug": "gobun-restaurant",
-      "name": "Göbün Restaurant",
-      "operator": "Göbün Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.6416, "lon": 28.8933,
-      "coordSource": "gotosailing.com (N36°38'29.76\" E28°53'35.88\")",
-      "descriptionTr": "1979'dan beri işletilen Göbün Koyu restoranı; iki iskelesinde 40 tekneye kadar bağlama kapasitesi vardır. Güneş enerjisiyle elektrik, su, duş/WC ve Wi-Fi sağlanır.",
-      "berthCount": 40, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": "08", "priceTier": "paid",
-      "cuisine": "deniz ürünleri, mezeler, kuzu tandır", "minSpendPolicy": "yemek yiyene bağlama ücretsiz", "reservationRecommended": true,
-      "amenities": ["restaurant", "water", "electricity", "wifi", "shower", "wc"],
-      "services": ["mooring_assist"],
-      "contacts": [
-        {"type": "phone", "value": "+905322474065", "primary": true},
-        {"type": "phone", "value": "+905553570987"},
-        {"type": "email", "value": "info@kapicreek.com"}
-      ],
-      "sourceUrls": ["https://gotosailing.com/en/gobun-restaurant-fethiye", "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/kapi-creek-four-fanthom-cove/gobun/a12f5a0f-9a69-4f89-b063-126c69025db2"],
-      "confidence": "high",
-      "missingNotes": "Su çekimi yayımlanmamış."
+     "type": "phone",
+     "value": "+905553570987"
     },
     {
-      "slug": "adaia-gocek-restaurant",
-      "name": "Adaia Göcek Restaurant",
-      "operator": "Adaia Göcek",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.6447, "lon": 28.8512,
-      "coordSource": "navily.com/port/adaia-gocek-restaurant",
-      "descriptionTr": "Wall Bay / Hamam (Kleopatra) Koyu'nda kendi iskelesi olan restoran; eski Wall Bay Restaurant'ın yerinde hizmet verir. İskelede su, duş ve WC mevcuttur.",
-      "berthCount": 30, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "Akdeniz mutfağı", "minSpendPolicy": "yemek yiyene bağlama ücretsiz", "reservationRecommended": null,
-      "amenities": ["restaurant", "water", "shower", "wc"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+905333313854", "primary": true}],
-      "sourceUrls": ["https://www.navily.com/port/adaia-gocek-restaurant/23905", "https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek"],
-      "confidence": "high",
-      "missingNotes": "Kapasite (~30) yaklaşık değerdir."
-    },
-    {
-      "slug": "sarsala-restaurant",
-      "name": "Sarsala Restaurant",
-      "operator": "Sarsala Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.657, "lon": 28.857,
-      "coordSource": "navily.com/port/sarsala-kucuk",
-      "descriptionTr": "Küçük Sarsala Koyu'ndaki restoran iskelesi yaklaşık 35 tekne kapasitelidir; su, duş ve WC imkânı bulunur.",
-      "berthCount": 35, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "Türk mutfağı, deniz ürünleri", "minSpendPolicy": "yemek yiyene bağlama ücretsiz", "reservationRecommended": null,
-      "amenities": ["restaurant", "water", "shower", "wc"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+905324233345", "primary": true}],
-      "sourceUrls": ["https://www.navily.com/port/sarsala-kucuk/26451", "https://boatscribe.com/journal/itineraries/mooring-in-skopea-limani-gocek"],
-      "confidence": "high",
-      "missingNotes": "Resmî maks. su çekimi yayımlanmamış (iskele önü ~4 m raporlanıyor)."
-    },
-    {
-      "slug": "boynuzbuku-restaurant",
-      "name": "Boynuzbükü Restaurant",
-      "operator": null,
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.7112, "lon": 28.8967,
-      "coordSource": "navily.com/mouillage/boynuz-buku",
-      "descriptionTr": "Skopea Körfezi'nin kuzeyindeki Boynuzbükü Koyu'nda iskeleli koy restoranı; iskelede yaklaşık 18 tekneye yer vardır ve su temini mümkündür.",
-      "berthCount": 18, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": null, "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "water"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.navily.com/mouillage/boynuz-buku/43112", "https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek"],
-      "confidence": "medium",
-      "missingNotes": "İletişim ve bağlama politikası doğrulanamadı; 2025 rehberinde faal olarak geçiyor."
-    },
-    {
-      "slug": "miori-restaurant",
-      "name": "Miori Restaurant",
-      "operator": "Miori",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.6933, "lon": 28.8717,
-      "coordSource": "irmakyachting.com (Tomb Bay koy koordinatı — iskeleye ~100-200 m sapma olabilir)",
-      "descriptionTr": "Bedri Rahmi (Taşyaka / Tomb Bay) Koyu'nda kendi iskelesi olan modern Akdeniz restoranı.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "modern Akdeniz mutfağı", "minSpendPolicy": "yemek yiyene bağlama ücretsiz", "reservationRecommended": true,
-      "amenities": ["restaurant"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+905351080048", "primary": true}],
-      "sourceUrls": ["https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek", "https://irmakyachting.com/blog/tomb-bay-the-skopea-limani-3641-6%E2%80%B2n-2852-3%E2%80%B2e/"],
-      "confidence": "medium",
-      "missingNotes": "Koordinat koy merkezlidir; iskele kapasitesi yayımlanmamış."
-    },
-    {
-      "slug": "ersoy-restaurant-orhaniye",
-      "name": "Ersoy Restaurant",
-      "operator": "Ersoy Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.753, "lon": 28.1295,
-      "coordSource": "navily.com/port/ersoy-restaurant",
-      "descriptionTr": "Orhaniye Keçibükü'nde kendi iskelesi olan aile restoranı; iskelede elektrik, su, duş, WC ve Wi-Fi imkânı bulunur.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": null, "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "electricity", "water", "shower", "wc", "wifi"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.navily.com/port/ersoy-restaurant/8023", "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/ersoy-restaurant-jetty/e93da7cb-9a6f-4b75-964f-f1dd1c05acaf"],
-      "confidence": "medium",
-      "missingNotes": "Telefon, kapasite ve bağlama politikası yayımlanmamış."
-    },
-    {
-      "slug": "aurora-restaurant-selimiye",
-      "name": "Aurora Restaurant",
-      "operator": null,
-      "status": "draft", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.707164, "lon": 28.092273,
-      "coordSource": "wanderlog/harbourmaps",
-      "descriptionTr": "Selimiye kıyısında kendi iskelesi olan restoran; yemek yiyen teknelere bağlama, su, elektrik ve Wi-Fi sunulur.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "Türk mutfağı, deniz ürünleri", "minSpendPolicy": "yemek yiyene bağlama ücretsiz", "reservationRecommended": null,
-      "amenities": ["restaurant", "electricity", "water", "shower", "wc", "wifi"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+902524464097", "primary": true}],
-      "sourceUrls": ["https://www.harbourmaps.com/en/harbour/aurora-restaurant", "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/selimiye-koyu/aurora-restaurant-jetty/17933a99-dda7-4a70-8276-c6db32ed9555"],
-      "confidence": "low",
-      "missingNotes": "İşletme adının değişmiş olabileceği (Voca) bildirimi var; güncel durum doğrulanana dek taslak."
-    },
-    {
-      "slug": "poseidon-selimiye",
-      "name": "Poseidon Boutique Hotel & Yacht Club",
-      "operator": "Poseidon Selimiye",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.706601, "lon": 28.102339,
-      "coordSource": "turkeymarinas (36°42'23.8\"N 28°06'08.4\"E)",
-      "descriptionTr": "Selimiye'de iskeleli butik otel ve restoran; misafir teknelere kendi iskelesinde bağlama imkânı sunar.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": null, "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant"],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+902524464080", "primary": true},
-        {"type": "email", "value": "info@poseidonselimiye.com"},
-        {"type": "website", "value": "https://poseidonselimiye.com"}
-      ],
-      "sourceUrls": ["https://turkeymarinas.blogspot.com/2016/05/poseidon-boutique-hotel-yacht-club.html"],
-      "confidence": "medium",
-      "missingNotes": "İskele kapasitesi/derinlik/politika yayımlanmamış."
-    },
-    {
-      "slug": "dirsek-buku-restaurant",
-      "name": "Dirsek Bükü Restaurant",
-      "operator": "Dirsek Bükü Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.691718, "lon": 27.980973,
-      "coordSource": "turkeymarinas (36°41'30.2\"N 27°58'51.5\"E)",
-      "descriptionTr": "Karayolu bağlantısı olmayan Dirsek Bükü'ndeki tek restoran; taş iskelesine kıçtankara bağlanılır. Nisan-Ekim arası açıktır ve akşamları meze büfesiyle bilinir.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "deniz ürünleri, mezeler, ev yemekleri, ızgara", "minSpendPolicy": null, "reservationRecommended": null,
-      "season": {"opensOn": [4, 1], "closesOn": [10, 31]},
-      "amenities": ["restaurant", "water", "wc"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+905323940001", "primary": true}],
-      "sourceUrls": ["https://turkeymarinas.blogspot.com/2018/12/dirsek-buku-anchorage.html", "https://www.coastguidetr.com/en/bay/100714/dirsek-buku"],
-      "confidence": "high",
-      "missingNotes": "İskele kapasitesi ve derinlik yayımlanmamış."
-    },
-    {
-      "slug": "bozburun-yacht-club",
-      "name": "Bozburun Yacht Club",
-      "operator": "Bozburun Yacht Club Hotel",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.6753, "lon": 28.0483,
-      "coordSource": "navily.com/mouillage/bozburun-yacht-club",
-      "descriptionTr": "Bozburun Koyu kıyısında iskelesi ve restoranı olan yat kulübü ve butik otel; misafir teknelere rıhtım bağlaması sunar.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": null, "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.navily.com/mouillage/bozburun-yacht-club/22339", "https://www.harbourmaps.com/en/harbour/bozburun-yacht-club"],
-      "confidence": "medium",
-      "missingNotes": "Temmuz 2025 sosyal medya paylaşımı mevcut (faal); kapasite/iletişim yayımlanmamış."
-    },
-    {
-      "slug": "octopus-restaurant-sogut",
-      "name": "Octopus Restaurant",
-      "operator": "Octopus Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.6587, "lon": 28.0833,
-      "coordSource": "navily.com/port/sogut-marina (Söğüt iskele bölgesi)",
-      "descriptionTr": "Söğüt Koyu'ndaki köklü restoran; teknelere kendi iskelesinde bağlama imkânı verir. Duş, WC ve Wi-Fi mevcuttur.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "deniz ürünleri", "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "shower", "wc", "wifi"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.navily.com/port/sogut-marina/1643", "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/sout/octopus-restaurant/b9114ded-854f-458e-977e-38f1929a4e23"],
-      "confidence": "medium",
-      "missingNotes": "İletişim ve kapasite yayımlanmamış."
-    },
-    {
-      "slug": "loryma-restaurant-bozukkale",
-      "name": "Loryma Restaurant",
-      "operator": "Loryma Restaurant",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.576377, "lon": 28.011648,
-      "coordSource": "turkeymarinas (36°34'35.0\"N 28°00'41.9\"E)",
-      "descriptionTr": "Bozukkale (Loryma) Koyu'nda 20'den fazla yat kapasiteli iskelesi ve tonozları olan restoran; personel yanaşmada yardım eder. İskele önü derinliği 8-10 m'dir.",
-      "berthCount": 20, "maxLoaM": null, "maxDraftM": null, "depthMinM": 8, "depthMaxM": 10,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "deniz ürünleri, Türk mutfağı", "minSpendPolicy": "restoran misafirlerine bağlama ücretsiz", "reservationRecommended": null,
-      "amenities": ["restaurant", "security"],
-      "services": ["mooring_assist"],
-      "contacts": [
-        {"type": "phone", "value": "+905333434264", "primary": true},
-        {"type": "phone", "value": "+905372124339"},
-        {"type": "email", "value": "paul@lorymarestaurant.com"},
-        {"type": "website", "value": "http://lorymarestaurant.com"}
-      ],
-      "sourceUrls": ["https://turkeymarinas.blogspot.com/2018/12/loryma-restaurant-jetty.html"],
-      "confidence": "medium",
-      "missingNotes": "Ana kaynak 2018 tarihli; güncellik yeniden doğrulanmalı (doğrulama listesinde)."
-    },
-    {
-      "slug": "rosemary-cokertme",
-      "name": "Rosemary Yacht Harbour & Restaurant",
-      "operator": "Rosemary",
-      "status": "published", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-milas",
-      "lat": 37.00544, "lon": 27.793611,
-      "coordSource": "turkeymarinas (37°00'19.6\"N 27°47'37.0\"E)",
-      "descriptionTr": "Çökertme Koyu'nda restoran iskelesi ve tonozlarıyla hizmet veren işletme; VHF 16'dan 'Rosemary Yacht Harbour' çağrısıyla ulaşılır. İskelede su, elektrik, Wi-Fi ve duş/WC mevcuttur.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": "16", "priceTier": "paid",
-      "cuisine": "deniz ürünleri, Türk mutfağı", "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "water", "electricity", "wifi", "shower", "wc"],
-      "services": ["mooring_assist"],
-      "contacts": [
-        {"type": "phone", "value": "+902525310158", "primary": true},
-        {"type": "phone", "value": "+905324325731"},
-        {"type": "email", "value": "mahirvurmaz@superonline.com"},
-        {"type": "website", "value": "http://rosemarycokertme.com"}
-      ],
-      "sourceUrls": ["https://turkeymarinas.blogspot.com/2018/12/rosemary-pirate-yacht-jetty.html"],
-      "confidence": "medium",
-      "missingNotes": "Kapasite/derinlik yayımlanmamış; kaynaktaki 'yakıt' bilgisi güncelliği doğrulanamadığı için eklenmedi."
-    },
-    {
-      "slug": "denizkizi-kaptan-okluk",
-      "name": "Denizkızı Kaptan Restaurant",
-      "operator": "Denizkızı Kaptan Restaurant",
-      "status": "draft", "typeCode": "restaurant_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.9175, "lon": 28.169722,
-      "coordSource": "turkeymarinas (36°55'03.0\"N 28°10'11.0\"E)",
-      "descriptionTr": "Gökova'nın Okluk (Değirmen Bükü) Koyu'nda yaklaşık 20 tekne kapasiteli iskelesi olan restoran ve market; iskelede elektrik ve su sağlanır.",
-      "berthCount": 20, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "cuisine": "deniz ürünleri, et yemekleri", "minSpendPolicy": null, "reservationRecommended": null,
-      "amenities": ["restaurant", "electricity", "water", "market"],
-      "services": ["mooring_assist"],
-      "contacts": [
-        {"type": "phone", "value": "+902524655262", "primary": true},
-        {"type": "phone", "value": "+905368622544"},
-        {"type": "email", "value": "info@denizkizikaptan.com"},
-        {"type": "website", "value": "http://denizkizikaptan.com"}
-      ],
-      "sourceUrls": ["https://turkeymarinas.blogspot.com/2018/07/denizkizi-kaptan-restaurant-jetty.html"],
-      "confidence": "low",
-      "missingNotes": "Kaynak 2018 tarihli; son 2 yılda faaliyet teyidi bulunamadı — doğrulanana dek taslak."
-    },
-    {
-      "slug": "gocek-yakit-iskelesi-po",
-      "name": "Göcek Yakıt İskelesi (Petrol Ofisi)",
-      "operator": "Petrol Ofisi (bayi)",
-      "status": "published", "typeCode": "fuel_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.751999, "lon": 28.939501,
-      "coordSource": "sea-seek (Göcek belediye rıhtımı KD başı; ±150 m)",
-      "descriptionTr": "Göcek köy rıhtımının kuzeydoğu başında yer alan Petrol Ofisi yakıt iskelesi. Pompa hortumu iskelenin tamamına yetişir; tekneler aborda olarak ikmal yapar.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": 2.5, "depthMaxM": 4,
-      "vhfChannel": null, "priceTier": "paid",
-      "hasDiesel": null, "hasGasoline": null, "hasAdblue": null, "fuelMinDepthM": null,
-      "paymentNote": "Nakit ve kredi kartı",
-      "amenities": ["fuel"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.sea-seek.com/en/Gocek-Belediye-marina-Fethiye-Korfezi-", "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/skopea-liman/po/34c59ef2-2bea-40e2-a802-4b9429967a19"],
-      "confidence": "high",
-      "missingNotes": "Yakıt türleri ve doğrudan telefon yayımlanmamış; çalışma saati 09:00-18:00 (my-sea)."
-    },
-    {
-      "slug": "gocek-lukoil-yakit-iskelesi",
-      "name": "Göcek Lukoil Yakıt İskelesi",
-      "operator": "Lukoil (bayi)",
-      "status": "published", "typeCode": "fuel_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-fethiye",
-      "lat": 36.748169, "lon": 28.924889,
-      "coordSource": "my-sea + gotosailing (Club Marina referanslı, yaklaşık)",
-      "descriptionTr": "Göcek koyunun batı kıyısında yüzer pontonlu Lukoil yakıt istasyonu. Tekneler pontona aborda olur; derinlik 4 m ve üzeridir, büyük yatlar için mobil tanker çağrılabilir.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": 4, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "paid",
-      "hasDiesel": null, "hasGasoline": null, "hasAdblue": null, "fuelMinDepthM": 4,
-      "paymentNote": "Nakit ve kredi kartı",
-      "amenities": ["fuel"],
-      "services": [],
-      "contacts": [{"type": "phone", "value": "+902526451458", "primary": true}],
-      "sourceUrls": ["https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/skopea-liman/lukoil/dc429fb1-2242-46c3-a55b-2c4fe4384199"],
-      "confidence": "medium",
-      "missingNotes": "Koordinat yaklaşık; sezon saatleri 07:30-19:00 (yaz)."
-    },
-    {
-      "slug": "datca-yakit-iskelesi",
-      "name": "Datça Limanı Yakıt İkmal Noktası",
-      "operator": null,
-      "status": "draft", "typeCode": "fuel_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-datca",
-      "lat": 36.721667, "lon": 27.691667,
-      "coordSource": "cruiserswiki (36°43.300'N 027°41.500'E)",
-      "descriptionTr": "Datça yat limanındaki yakıt ikmal noktası; kaynaklar sabit iskele ile mini-tanker servisi konusunda çelişmektedir.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": null, "priceTier": "unknown",
-      "hasDiesel": null, "hasGasoline": null, "hasAdblue": null, "fuelMinDepthM": null,
-      "paymentNote": null,
-      "amenities": ["fuel"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://www.cruiserswiki.org/wiki/Datca", "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/datca/fuel-station/a89425b5-1568-4bc0-aaee-614fd2a7d0f3"],
-      "confidence": "low",
-      "missingNotes": "İşleyiş biçimi (sabit pompa mı tanker mi) doğrulanana dek taslak."
-    },
-    {
-      "slug": "palmiye-yakit-kecibuku",
-      "name": "Palmiye Yakıt İskelesi",
-      "operator": "Palmiye",
-      "status": "draft", "typeCode": "fuel_pier",
-      "provinceSlug": "mugla", "districtSlug": "mugla-marmaris",
-      "lat": 36.75876, "lon": 28.127146,
-      "coordSource": "sea-seek (Keçi Bükü koy merkezi — yaklaşık)",
-      "descriptionTr": "Keçi Bükü'nde (Orhaniye) kıyıda yakıt tankı ve iskeleye uzanan ikmal hortumu bulunan küçük tesis; yakıt için VHF 73 kanalından çağrı yapılır.",
-      "berthCount": null, "maxLoaM": null, "maxDraftM": null, "depthMinM": null, "depthMaxM": null,
-      "vhfChannel": "73", "priceTier": "unknown",
-      "hasDiesel": null, "hasGasoline": null, "hasAdblue": null, "fuelMinDepthM": null,
-      "paymentNote": null,
-      "amenities": ["fuel", "restaurant"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": ["https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/palmiye-marina/c4d8ecd8-a7c7-4a63-ab94-38846fe0d16a"],
-      "confidence": "low",
-      "missingNotes": "Koordinat koy merkezli (yaklaşık); tesis konumu netleşene dek taslak."
+     "type": "email",
+     "value": "info@kapicreek.com"
     }
-  ],
-  "excluded": [
-    {"name": "My Marina Yacht Club Restaurant (Ekincik)", "reason": "batch1'de my-marina-ekincik olarak zaten kayıtlı — mükerrer. Tip düzeltmesi (private_marina→restaurant_pier) bakım listesine alındı."},
-    {"name": "Üçağız Opet yakıt ikmali", "reason": "Ayrı tesis değil — mevcut Üçağız İskelesi'ne hortumla ikmal. 'fuel' amenity eklemesi bakım listesinde."},
-    {"name": "Kaş Opet-Yenier yakıt iskelesi", "reason": "Zengin veri bulundu ama koordinat kaynaklanamadı + Setur Kaş Marina istasyonuyla karışma riski."},
-    {"name": "Sardunya Restaurant (Selimiye)", "reason": "Koordinat kaynağına erişilemedi."},
-    {"name": "Captain's Table (Söğüt)", "reason": "Koordinat kaynakları erişilemedi."},
-    {"name": "Tersane Adası restoran iskelesi", "reason": "Koordinatlı kaynak bulunamadı."},
-    {"name": "Kuzbükü Yacht Club (Hisarönü)", "reason": "2016 sonrası faaliyet teyidi yok."},
-    {"name": "Captain İbrahim (Çökertme)", "reason": "Yalnız koy düzeyi koordinat bulunabildi."},
-    {"name": "Bozburun yakıt", "reason": "Sabit iskele yok — tanker çağrısıyla servis."}
-  ]
+   ],
+   "sourceUrls": [
+    "https://gotosailing.com/en/gobun-restaurant-fethiye",
+    "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/kapi-creek-four-fanthom-cove/gobun/a12f5a0f-9a69-4f89-b063-126c69025db2"
+   ],
+   "confidence": "high",
+   "missingNotes": "Su çekimi yayımlanmamış."
+  },
+  {
+   "slug": "adaia-gocek-restaurant",
+   "name": "Adaia Göcek Restaurant",
+   "operator": "Adaia Göcek",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.6447,
+   "lon": 28.8512,
+   "coordSource": "navily.com/port/adaia-gocek-restaurant",
+   "descriptionTr": "Wall Bay / Hamam (Kleopatra) Koyu'nda kendi iskelesi olan restoran; eski Wall Bay Restaurant'ın yerinde hizmet verir. İskelede su, duş ve WC mevcuttur.",
+   "berthCount": 30,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "Akdeniz mutfağı",
+   "minSpendPolicy": "yemek yiyene bağlama ücretsiz",
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "water",
+    "shower",
+    "wc"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+905333313854",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.navily.com/port/adaia-gocek-restaurant/23905",
+    "https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek"
+   ],
+   "confidence": "high",
+   "missingNotes": "Kapasite (~30) yaklaşık değerdir."
+  },
+  {
+   "slug": "sarsala-restaurant",
+   "name": "Sarsala Restaurant",
+   "operator": "Sarsala Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.657,
+   "lon": 28.857,
+   "coordSource": "navily.com/port/sarsala-kucuk",
+   "descriptionTr": "Küçük Sarsala Koyu'ndaki restoran iskelesi yaklaşık 35 tekne kapasitelidir; su, duş ve WC imkânı bulunur.",
+   "berthCount": 35,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "Türk mutfağı, deniz ürünleri",
+   "minSpendPolicy": "yemek yiyene bağlama ücretsiz",
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "water",
+    "shower",
+    "wc"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+905324233345",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.navily.com/port/sarsala-kucuk/26451",
+    "https://boatscribe.com/journal/itineraries/mooring-in-skopea-limani-gocek"
+   ],
+   "confidence": "high",
+   "missingNotes": "Resmî maks. su çekimi yayımlanmamış (iskele önü ~4 m raporlanıyor)."
+  },
+  {
+   "slug": "boynuzbuku-restaurant",
+   "name": "Boynuzbükü Restaurant",
+   "operator": null,
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.7112,
+   "lon": 28.8967,
+   "coordSource": "navily.com/mouillage/boynuz-buku",
+   "descriptionTr": "Skopea Körfezi'nin kuzeyindeki Boynuzbükü Koyu'nda iskeleli koy restoranı; iskelede yaklaşık 18 tekneye yer vardır ve su temini mümkündür.",
+   "berthCount": 18,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": null,
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.navily.com/mouillage/boynuz-buku/43112",
+    "https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek"
+   ],
+   "confidence": "medium",
+   "missingNotes": "İletişim ve bağlama politikası doğrulanamadı; 2025 rehberinde faal olarak geçiyor."
+  },
+  {
+   "slug": "miori-restaurant",
+   "name": "Miori Restaurant",
+   "operator": "Miori",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.6933,
+   "lon": 28.8717,
+   "coordSource": "irmakyachting.com (Tomb Bay koy koordinatı — iskeleye ~100-200 m sapma olabilir)",
+   "descriptionTr": "Bedri Rahmi (Taşyaka / Tomb Bay) Koyu'nda kendi iskelesi olan modern Akdeniz restoranı.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "modern Akdeniz mutfağı",
+   "minSpendPolicy": "yemek yiyene bağlama ücretsiz",
+   "reservationRecommended": true,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+905351080048",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.gocekonline.com/en/gocek-guide/experience-gocek/best-cove-restaurants-gocek",
+    "https://irmakyachting.com/blog/tomb-bay-the-skopea-limani-3641-6%E2%80%B2n-2852-3%E2%80%B2e/"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Koordinat koy merkezlidir; iskele kapasitesi yayımlanmamış."
+  },
+  {
+   "slug": "ersoy-restaurant-orhaniye",
+   "name": "Ersoy Restaurant",
+   "operator": "Ersoy Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.753,
+   "lon": 28.1295,
+   "coordSource": "navily.com/port/ersoy-restaurant",
+   "descriptionTr": "Orhaniye Keçibükü'nde kendi iskelesi olan aile restoranı; iskelede elektrik, su, duş, WC ve Wi-Fi imkânı bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": null,
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "electricity",
+    "water",
+    "shower",
+    "wc",
+    "wifi"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.navily.com/port/ersoy-restaurant/8023",
+    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/ersoy-restaurant-jetty/e93da7cb-9a6f-4b75-964f-f1dd1c05acaf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Telefon, kapasite ve bağlama politikası yayımlanmamış."
+  },
+  {
+   "slug": "aurora-restaurant-selimiye",
+   "name": "Aurora Restaurant",
+   "operator": null,
+   "status": "draft",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.707164,
+   "lon": 28.092273,
+   "coordSource": "wanderlog/harbourmaps",
+   "descriptionTr": "Selimiye kıyısında kendi iskelesi olan restoran; yemek yiyen teknelere bağlama, su, elektrik ve Wi-Fi sunulur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "Türk mutfağı, deniz ürünleri",
+   "minSpendPolicy": "yemek yiyene bağlama ücretsiz",
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "electricity",
+    "water",
+    "shower",
+    "wc",
+    "wifi"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902524464097",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.harbourmaps.com/en/harbour/aurora-restaurant",
+    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/selimiye-koyu/aurora-restaurant-jetty/17933a99-dda7-4a70-8276-c6db32ed9555"
+   ],
+   "confidence": "low",
+   "missingNotes": "İşletme adının değişmiş olabileceği (Voca) bildirimi var; güncel durum doğrulanana dek taslak."
+  },
+  {
+   "slug": "poseidon-selimiye",
+   "name": "Poseidon Boutique Hotel & Yacht Club",
+   "operator": "Poseidon Selimiye",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.706601,
+   "lon": 28.102339,
+   "coordSource": "turkeymarinas (36°42'23.8\"N 28°06'08.4\"E)",
+   "descriptionTr": "Selimiye'de iskeleli butik otel ve restoran; misafir teknelere kendi iskelesinde bağlama imkânı sunar.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": null,
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902524464080",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "info@poseidonselimiye.com"
+    },
+    {
+     "type": "website",
+     "value": "https://poseidonselimiye.com"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2016/05/poseidon-boutique-hotel-yacht-club.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "İskele kapasitesi/derinlik/politika yayımlanmamış. | 2026-07 doğrulama turu: telefon güncel kaynakta doğrulanamadı (tur: yalnız açık/izinli kaynaklar tarandı)."
+  },
+  {
+   "slug": "dirsek-buku-restaurant",
+   "name": "Dirsek Bükü Restaurant",
+   "operator": "Dirsek Bükü Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.691718,
+   "lon": 27.980973,
+   "coordSource": "turkeymarinas (36°41'30.2\"N 27°58'51.5\"E)",
+   "descriptionTr": "Karayolu bağlantısı olmayan Dirsek Bükü'ndeki tek restoran; taş iskelesine kıçtankara bağlanılır. Nisan-Ekim arası açıktır ve akşamları meze büfesiyle bilinir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, mezeler, ev yemekleri, ızgara",
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "season": {
+    "opensOn": [
+     4,
+     1
+    ],
+    "closesOn": [
+     10,
+     31
+    ]
+   },
+   "amenities": [
+    "restaurant",
+    "water",
+    "wc"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+905323940001",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/12/dirsek-buku-anchorage.html",
+    "https://www.coastguidetr.com/en/bay/100714/dirsek-buku"
+   ],
+   "confidence": "high",
+   "missingNotes": "İskele kapasitesi ve derinlik yayımlanmamış. | 2026-07 doğrulama turu: telefon güncel kaynakta doğrulanamadı (tur: yalnız açık/izinli kaynaklar tarandı)."
+  },
+  {
+   "slug": "bozburun-yacht-club",
+   "name": "Bozburun Yacht Club",
+   "operator": "Bozburun Yacht Club Hotel",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.6753,
+   "lon": 28.0483,
+   "coordSource": "navily.com/mouillage/bozburun-yacht-club",
+   "descriptionTr": "Bozburun Koyu kıyısında iskelesi ve restoranı olan yat kulübü ve butik otel; misafir teknelere rıhtım bağlaması sunar.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": null,
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.navily.com/mouillage/bozburun-yacht-club/22339",
+    "https://www.harbourmaps.com/en/harbour/bozburun-yacht-club"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Temmuz 2025 sosyal medya paylaşımı mevcut (faal); kapasite/iletişim yayımlanmamış."
+  },
+  {
+   "slug": "octopus-restaurant-sogut",
+   "name": "Octopus Restaurant",
+   "operator": "Octopus Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.6587,
+   "lon": 28.0833,
+   "coordSource": "navily.com/port/sogut-marina (Söğüt iskele bölgesi)",
+   "descriptionTr": "Söğüt Koyu'ndaki köklü restoran; teknelere kendi iskelesinde bağlama imkânı verir. Duş, WC ve Wi-Fi mevcuttur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri",
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "shower",
+    "wc",
+    "wifi"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.navily.com/port/sogut-marina/1643",
+    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/sout/octopus-restaurant/b9114ded-854f-458e-977e-38f1929a4e23"
+   ],
+   "confidence": "medium",
+   "missingNotes": "İletişim ve kapasite yayımlanmamış."
+  },
+  {
+   "slug": "loryma-restaurant-bozukkale",
+   "name": "Loryma Restaurant",
+   "operator": "Loryma Restaurant",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.576377,
+   "lon": 28.011648,
+   "coordSource": "turkeymarinas (36°34'35.0\"N 28°00'41.9\"E)",
+   "descriptionTr": "Bozukkale (Loryma) Koyu'nda 20'den fazla yat kapasiteli iskelesi ve tonozları olan restoran; personel yanaşmada yardım eder. İskele önü derinliği 8-10 m'dir.",
+   "berthCount": 20,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 8,
+   "depthMaxM": 10,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, Türk mutfağı",
+   "minSpendPolicy": "restoran misafirlerine bağlama ücretsiz",
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "security"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+905333434264",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+905372124339"
+    },
+    {
+     "type": "email",
+     "value": "paul@lorymarestaurant.com"
+    },
+    {
+     "type": "website",
+     "value": "http://lorymarestaurant.com"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/12/loryma-restaurant-jetty.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Ana kaynak 2018 tarihli; güncellik yeniden doğrulanmalı (doğrulama listesinde). | 2026-07 doğrulama turu: telefon güncel kaynakta doğrulanamadı (tur: yalnız açık/izinli kaynaklar tarandı)."
+  },
+  {
+   "slug": "rosemary-cokertme",
+   "name": "Rosemary Yacht Harbour & Restaurant",
+   "operator": "Rosemary",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-milas",
+   "lat": 37.00544,
+   "lon": 27.793611,
+   "coordSource": "turkeymarinas (37°00'19.6\"N 27°47'37.0\"E)",
+   "descriptionTr": "Çökertme Koyu'nda restoran iskelesi ve tonozlarıyla hizmet veren işletme; VHF 16'dan 'Rosemary Yacht Harbour' çağrısıyla ulaşılır. İskelede su, elektrik, Wi-Fi ve duş/WC mevcuttur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, Türk mutfağı",
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "water",
+    "electricity",
+    "wifi",
+    "shower",
+    "wc"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902525310158",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+905324325731"
+    },
+    {
+     "type": "email",
+     "value": "mahirvurmaz@superonline.com"
+    },
+    {
+     "type": "website",
+     "value": "http://rosemarycokertme.com"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/12/rosemary-pirate-yacht-jetty.html",
+    "https://www.turgutreisrehberi.com/detay/rosemary-restaurant-otel-cokertme/105212 (2026-07 teyit, GSM)"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Kapasite/derinlik yayımlanmamış; kaynaktaki 'yakıt' bilgisi güncelliği doğrulanamadığı için eklenmedi. | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
+  },
+  {
+   "slug": "denizkizi-kaptan-okluk",
+   "name": "Denizkızı Kaptan Restaurant",
+   "operator": "Denizkızı Kaptan Restaurant",
+   "status": "draft",
+   "typeCode": "restaurant_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.9175,
+   "lon": 28.169722,
+   "coordSource": "turkeymarinas (36°55'03.0\"N 28°10'11.0\"E)",
+   "descriptionTr": "Gökova'nın Okluk (Değirmen Bükü) Koyu'nda yaklaşık 20 tekne kapasiteli iskelesi olan restoran ve market; iskelede elektrik ve su sağlanır.",
+   "berthCount": 20,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "cuisine": "deniz ürünleri, et yemekleri",
+   "minSpendPolicy": null,
+   "reservationRecommended": null,
+   "amenities": [
+    "restaurant",
+    "electricity",
+    "water",
+    "market"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902524655262",
+     "primary": true
+    },
+    {
+     "type": "phone",
+     "value": "+905368622544"
+    },
+    {
+     "type": "email",
+     "value": "info@denizkizikaptan.com"
+    },
+    {
+     "type": "website",
+     "value": "http://denizkizikaptan.com"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/07/denizkizi-kaptan-restaurant-jetty.html",
+    "https://bmag.com.tr/haber/gokova-ayin-koyunda-huzur-ve-denizkizi-kaptan (işletme Okluk'tan Ayın Koyu'na taşındı)"
+   ],
+   "confidence": "low",
+   "missingNotes": "Kaynak 2018 tarihli; son 2 yılda faaliyet teyidi bulunamadı — doğrulanana dek taslak. | 2026-07 doğrulama turu: işletme Okluk'tan Ayın Koyu'na taşındı — Okluk'taki iskele kaydı TASLAĞA alındı."
+  },
+  {
+   "slug": "gocek-yakit-iskelesi-po",
+   "name": "Göcek Yakıt İskelesi (Petrol Ofisi)",
+   "operator": "Petrol Ofisi (bayi)",
+   "status": "published",
+   "typeCode": "fuel_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.751999,
+   "lon": 28.939501,
+   "coordSource": "sea-seek (Göcek belediye rıhtımı KD başı; ±150 m)",
+   "descriptionTr": "Göcek köy rıhtımının kuzeydoğu başında yer alan Petrol Ofisi yakıt iskelesi. Pompa hortumu iskelenin tamamına yetişir; tekneler aborda olarak ikmal yapar.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2.5,
+   "depthMaxM": 4,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "hasDiesel": null,
+   "hasGasoline": null,
+   "hasAdblue": null,
+   "fuelMinDepthM": null,
+   "paymentNote": "Nakit ve kredi kartı",
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Gocek-Belediye-marina-Fethiye-Korfezi-",
+    "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/skopea-liman/po/34c59ef2-2bea-40e2-a802-4b9429967a19"
+   ],
+   "confidence": "high",
+   "missingNotes": "Yakıt türleri ve doğrudan telefon yayımlanmamış; çalışma saati 09:00-18:00 (my-sea)."
+  },
+  {
+   "slug": "gocek-lukoil-yakit-iskelesi",
+   "name": "Göcek Lukoil Yakıt İskelesi",
+   "operator": "Lukoil (bayi)",
+   "status": "published",
+   "typeCode": "fuel_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.748169,
+   "lon": 28.924889,
+   "coordSource": "my-sea + gotosailing (Club Marina referanslı, yaklaşık)",
+   "descriptionTr": "Göcek koyunun batı kıyısında yüzer pontonlu Lukoil yakıt istasyonu. Tekneler pontona aborda olur; derinlik 4 m ve üzeridir, büyük yatlar için mobil tanker çağrılabilir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 4,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "hasDiesel": null,
+   "hasGasoline": null,
+   "hasAdblue": null,
+   "fuelMinDepthM": 4,
+   "paymentNote": "Nakit ve kredi kartı",
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902526451458",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/skopea-liman/lukoil/dc429fb1-2242-46c3-a55b-2c4fe4384199"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Koordinat yaklaşık; sezon saatleri 07:30-19:00 (yaz)."
+  },
+  {
+   "slug": "datca-yakit-iskelesi",
+   "name": "Datça Limanı Yakıt İkmal Noktası",
+   "operator": null,
+   "status": "draft",
+   "typeCode": "fuel_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-datca",
+   "lat": 36.721667,
+   "lon": 27.691667,
+   "coordSource": "cruiserswiki (36°43.300'N 027°41.500'E)",
+   "descriptionTr": "Datça yat limanındaki yakıt ikmal noktası; kaynaklar sabit iskele ile mini-tanker servisi konusunda çelişmektedir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "unknown",
+   "hasDiesel": null,
+   "hasGasoline": null,
+   "hasAdblue": null,
+   "fuelMinDepthM": null,
+   "paymentNote": null,
+   "amenities": [
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.cruiserswiki.org/wiki/Datca",
+    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/datca/fuel-station/a89425b5-1568-4bc0-aaee-614fd2a7d0f3"
+   ],
+   "confidence": "low",
+   "missingNotes": "İşleyiş biçimi (sabit pompa mı tanker mi) doğrulanana dek taslak."
+  },
+  {
+   "slug": "palmiye-yakit-kecibuku",
+   "name": "Palmiye Yakıt İskelesi",
+   "operator": "Palmiye",
+   "status": "draft",
+   "typeCode": "fuel_pier",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.75876,
+   "lon": 28.127146,
+   "coordSource": "sea-seek (Keçi Bükü koy merkezi — yaklaşık)",
+   "descriptionTr": "Keçi Bükü'nde (Orhaniye) kıyıda yakıt tankı ve iskeleye uzanan ikmal hortumu bulunan küçük tesis; yakıt için VHF 73 kanalından çağrı yapılır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "priceTier": "unknown",
+   "hasDiesel": null,
+   "hasGasoline": null,
+   "hasAdblue": null,
+   "fuelMinDepthM": null,
+   "paymentNote": null,
+   "amenities": [
+    "fuel",
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/palmiye-marina/c4d8ecd8-a7c7-4a63-ab94-38846fe0d16a"
+   ],
+   "confidence": "low",
+   "missingNotes": "Koordinat koy merkezli (yaklaşık); tesis konumu netleşene dek taslak."
+  }
+ ],
+ "excluded": [
+  {
+   "name": "My Marina Yacht Club Restaurant (Ekincik)",
+   "reason": "batch1'de my-marina-ekincik olarak zaten kayıtlı — mükerrer. Tip düzeltmesi (private_marina→restaurant_pier) bakım listesine alındı."
+  },
+  {
+   "name": "Üçağız Opet yakıt ikmali",
+   "reason": "Ayrı tesis değil — mevcut Üçağız İskelesi'ne hortumla ikmal. 'fuel' amenity eklemesi bakım listesinde."
+  },
+  {
+   "name": "Kaş Opet-Yenier yakıt iskelesi",
+   "reason": "Zengin veri bulundu ama koordinat kaynaklanamadı + Setur Kaş Marina istasyonuyla karışma riski."
+  },
+  {
+   "name": "Sardunya Restaurant (Selimiye)",
+   "reason": "Koordinat kaynağına erişilemedi."
+  },
+  {
+   "name": "Captain's Table (Söğüt)",
+   "reason": "Koordinat kaynakları erişilemedi."
+  },
+  {
+   "name": "Tersane Adası restoran iskelesi",
+   "reason": "Koordinatlı kaynak bulunamadı."
+  },
+  {
+   "name": "Kuzbükü Yacht Club (Hisarönü)",
+   "reason": "2016 sonrası faaliyet teyidi yok."
+  },
+  {
+   "name": "Captain İbrahim (Çökertme)",
+   "reason": "Yalnız koy düzeyi koordinat bulunabildi."
+  },
+  {
+   "name": "Bozburun yakıt",
+   "reason": "Sabit iskele yok — tanker çağrısıyla servis."
+  }
+ ]
 }

@@ -292,6 +292,62 @@ def emit(records, batch_meta):
     return "\n".join(out) + "\n"
 
 
+
+def emit_corrections(here, records):
+    """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
+
+    Ana bölüm ON CONFLICT DO NOTHING olduğundan, MEVCUT veritabanlarındaki
+    eski/teyitsiz iletişim satırları ve durum değişiklikleri oraya AKMAZ;
+    bu bölüm onları açıkça siler/günceller. Tutarlılık kuralları:
+    - slug kayıtlarda bulunmalı,
+    - silinen değer JSON'daki güncel contacts'ta ARTIK OLMAMALI,
+    - setStatus JSON'daki status ile AYNI olmalı (taze kurulum = düzeltilmiş DB).
+    """
+    files = sorted(here.glob("corrections_*.json"))
+    if not files:
+        return ""
+    by = {r["slug"]: r for r in records}
+    out = ["", "-- " + "=" * 70,
+           "-- DOĞRULAMA DÜZELTMELERİ — mevcut veritabanlarına akar (idempotent).",
+           "-- Kaynak: corrections_*.json (her satırın gerekçesi yanında)."]
+    errors = []
+    for f in files:
+        out.append(f"-- --- {f.name} ---")
+        for c in json.loads(f.read_text(encoding="utf-8")):
+            s = c["slug"]
+            r = by.get(s)
+            if r is None:
+                errors.append(f"düzeltme: bilinmeyen slug {s}")
+                continue
+            for rc in c.get("removeContacts", []):
+                if rc["type"] not in CONTACT_TYPES:
+                    errors.append(f"düzeltme {s}: geçersiz contact tipi {rc['type']}")
+                if any(x.get("type") == rc["type"] and x.get("value") == rc["value"]
+                       for x in r.get("contacts", [])):
+                    errors.append(f"düzeltme {s}: silinecek değer hâlâ JSON contacts içinde: {rc['value']}")
+                out.append(
+                    "DELETE FROM location_contacts\n"
+                    f"WHERE location_id = (SELECT id FROM locations WHERE slug = {q(s)})\n"
+                    f"  AND contact_type = {q(rc['type'])} AND value = {q(rc['value'])}; -- {c.get('reason', '')}"
+                )
+            st = c.get("setStatus")
+            if st:
+                if st not in ("published", "draft"):
+                    errors.append(f"düzeltme {s}: geçersiz status {st}")
+                if r.get("status") != st:
+                    errors.append(f"düzeltme {s}: setStatus={st} ama JSON status={r.get('status')}")
+                out.append(
+                    f"UPDATE locations SET status = {q(st)}\n"
+                    f"WHERE slug = {q(s)} AND status <> {q(st)}; -- {c.get('reason', '')}"
+                )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out.append("")
+    return "\n".join(out)
+
+
 def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
@@ -314,6 +370,7 @@ def main():
             print(f"HATA: {e}", file=sys.stderr)
         sys.exit(1)
     sql = emit(records, data)
+    sql += emit_corrections(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
     published = sum(1 for r in records if r["status"] == "published")
     draft = len(records) - published

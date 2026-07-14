@@ -1,791 +1,791 @@
 {
-  "batch": "9-yunanistan",
-  "collectedAt": "2026-07-12",
-  "method": "Yunan Marinalar Birliği (Greek Marinas Association, greek-marinas.gr) resmî üye rehberi — koordinat, VHF, telefon, kapasite, LOA, su çekimi tek yetkili kaynaktan; Kos resmî sitesiyle çapraz teyit. DMS/DDM koordinatlar ondalığa çevrildi; rehberdeki bariz dizgi hataları DDM olarak yorumlanıp coordSource'ta belgelendi. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
-  "notes": [
-    "İlk çok-ülkeli parti: kayıtlarda countryCode=GR; iller gr-* bölge slug'ları (ilçe kullanılmadı).",
-    "Kapsam: birlik üyesi 20 marina (Yunanistan'ın ana marina omurgası). Belediye iskeleleri/kasaba rıhtımları (town quay) hassas koordinat kaynağı bulunduğunda sonraki partide.",
-    "TR-GR karşı kıyı çiftleri denizci için özellikle değerli: Ayvalık↔Midilli, Kuşadası↔Samos, Bodrum↔Kos, Datça↔Rodos."
-  ],
-  "records": [
+ "batch": "9-yunanistan",
+ "collectedAt": "2026-07-12",
+ "method": "Yunan Marinalar Birliği (Greek Marinas Association, greek-marinas.gr) resmî üye rehberi — koordinat, VHF, telefon, kapasite, LOA, su çekimi tek yetkili kaynaktan; Kos resmî sitesiyle çapraz teyit. DMS/DDM koordinatlar ondalığa çevrildi; rehberdeki bariz dizgi hataları DDM olarak yorumlanıp coordSource'ta belgelendi. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "İlk çok-ülkeli parti: kayıtlarda countryCode=GR; iller gr-* bölge slug'ları (ilçe kullanılmadı).",
+  "Kapsam: birlik üyesi 20 marina (Yunanistan'ın ana marina omurgası). Belediye iskeleleri/kasaba rıhtımları (town quay) hassas koordinat kaynağı bulunduğunda sonraki partide.",
+  "TR-GR karşı kıyı çiftleri denizci için özellikle değerli: Ayvalık↔Midilli, Kuşadası↔Samos, Bodrum↔Kos, Datça↔Rodos."
+ ],
+ "records": [
+  {
+   "slug": "gouvia-marina",
+   "name": "Gouvia Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-korfu",
+   "districtSlug": null,
+   "lat": 39.6517,
+   "lon": 19.8517,
+   "coordSource": "Yunan Marinalar Birliği rehberi (39°39,1'N 19°51,1'E → DDM çevrimi)",
+   "descriptionTr": "Korfu'da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m'ye kadar yat kabul eder.",
+   "berthCount": 1235,
+   "maxLoaM": 80,
+   "maxDraftM": 5.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "69",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
     {
-      "slug": "gouvia-marina",
-      "name": "Gouvia Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-korfu",
-      "districtSlug": null,
-      "lat": 39.6517,
-      "lon": 19.8517,
-      "coordSource": "Yunan Marinalar Birliği rehberi (39°39,1'N 19°51,1'E → DDM çevrimi)",
-      "descriptionTr": "Korfu'da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m'ye kadar yat kabul eder.",
-      "berthCount": 1235,
-      "maxLoaM": 80,
-      "maxDraftM": 5.5,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "69",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302661091900",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "E-posta/web yayınlanmadı; olanak listesi rehberde ayrıntısız."
-    },
-    {
-      "slug": "kleopatra-marina",
-      "name": "Kleopatra Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-preveza",
-      "districtSlug": null,
-      "lat": 38.9517,
-      "lon": 20.7653,
-      "coordSource": "Yunan Marinalar Birliği rehberi (38°57'06\"N 20°45'55\"E)",
-      "descriptionTr": "Aktion-Preveza'da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.",
-      "berthCount": 100,
-      "maxLoaM": 30,
-      "maxDraftM": 8,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "67",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302682023015",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "Rehberdeki 8 m su çekimi değeri yayın kaynağından aynen alındı."
-    },
-    {
-      "slug": "lefkas-marina",
-      "name": "Lefkas Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-lefkada",
-      "districtSlug": null,
-      "lat": 38.83,
-      "lon": 20.7133,
-      "coordSource": "Yunan Marinalar Birliği rehberi (38°49,8'N 20°42,8'E → DDM)",
-      "descriptionTr": "Lefkada'da 620 bağlama ve 280 kara kapasiteli marina.",
-      "berthCount": 620,
-      "maxLoaM": 45,
-      "maxDraftM": 4,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "69",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302645026645",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "mesolongi-marina",
-      "name": "Messolonghi Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-mesolongi",
-      "districtSlug": null,
-      "lat": 38.3613,
-      "lon": 21.4267,
-      "coordSource": "Yunan Marinalar Birliği rehberi (38°21'68N → 21,68' DDM yorumu; 21°25'60E → 25,60')",
-      "descriptionTr": "Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.",
-      "berthCount": 180,
-      "maxLoaM": 50,
-      "maxDraftM": 6,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "69",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302631050190",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Koordinat rehberde karışık biçimde (dakika ondalığı) yayınlandı; DDM olarak yorumlandı."
-    },
-    {
-      "slug": "kalamata-marina",
-      "name": "Kalamata Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-kalamata",
-      "districtSlug": null,
-      "lat": 37.0217,
-      "lon": 22.1217,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°01,3N 22°07,3E → DDM)",
-      "descriptionTr": "Mora'nın güneyinde, Kalamata şehir merkezine bitişik marina.",
-      "berthCount": 250,
-      "maxLoaM": 25,
-      "maxDraftM": 3,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "69",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302721021037",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "zea-marina",
-      "name": "Zea Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.9367,
-      "lon": 23.6483,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°56,2'N 23°38,9'E → DDM)",
-      "descriptionTr": "Pire'nin tarihi marinası; 670 bağlama, kıçtankara 80 m'ye, aborda 150 m'ye kadar.",
-      "berthCount": 670,
-      "maxLoaM": 80,
-      "maxDraftM": 9,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302104559000",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "Aborda maks. 150 m (kıçtankara 80 m maxLoaM alındı)."
-    },
-    {
-      "slug": "athens-marina",
-      "name": "Athens Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.9414,
-      "lon": 23.6655,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°56'29\"N; boylam 23°39'93 → 39,93' DDM yorumu)",
-      "descriptionTr": "Neo Faliro'da mega ve süper yatlara özel marina; 130 m'ye kadar.",
-      "berthCount": 130,
-      "maxLoaM": 130,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302104853200",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Boylam rehberde hatalı biçimde (93 saniye) basılmış; dakika ondalığı olarak yorumlandı."
-    },
-    {
-      "slug": "flisvos-marina",
-      "name": "Flisvos Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.9363,
-      "lon": 23.68,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°56,18N 23°40,8E → DDM)",
-      "descriptionTr": "Paleo Faliro'da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.",
-      "berthCount": 303,
-      "maxLoaM": 90,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302109871000",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "alimos-marina",
-      "name": "Alimos Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.9113,
-      "lon": 23.7005,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°54'68N → 54,68' DDM; 23°42'03E)",
-      "descriptionTr": "Atina'nın ve Yunanistan'ın en büyük marinalarından; 1.080 bağlama, 600 kara.",
-      "berthCount": 1080,
-      "maxLoaM": 40,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": 6.5,
-      "vhfChannel": "71",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302109880000",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Enlem rehberde karışık biçimde; DDM yorumlandı. 6,5 m 'max depth' depthMaxM'e alındı."
-    },
-    {
-      "slug": "agios-kosmas-marina",
-      "name": "Agios Kosmas Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.8806,
-      "lon": 23.7247,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°52'50\"N 23°43'29\"E)",
-      "descriptionTr": "Elliniko'da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m'ye kadar.",
-      "berthCount": 337,
-      "maxLoaM": 80,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302109821787",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "vouliagmeni-marina",
-      "name": "Vouliagmeni Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.7217,
-      "lon": 23.775,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°43,3'N 23°46,5'E → DDM)",
-      "descriptionTr": "Atina Rivierası'nın prestijli koy marinası.",
-      "berthCount": 115,
-      "maxLoaM": 50,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": 8,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302108960012",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "8 m 'max depth' depthMaxM'e alındı."
-    },
-    {
-      "slug": "olympic-marine",
-      "name": "Olympic Marine",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-atina",
-      "districtSlug": null,
-      "lat": 37.6983,
-      "lon": 24.055,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°41,9N 24°03,3E → DDM)",
-      "descriptionTr": "Lavrio/Sounio'da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.",
-      "berthCount": 680,
-      "maxLoaM": 40,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302292063700",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "selanik-aretsou-marina",
-      "name": "Thessaloniki Aretsou Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-selanik",
-      "districtSlug": null,
-      "lat": 40.5806,
-      "lon": 22.9472,
-      "coordSource": "Yunan Marinalar Birliği rehberi (40°34'50\"N 22°56'50\"E)",
-      "descriptionTr": "Selanik Kalamaria'da şehir marinası.",
-      "berthCount": 242,
-      "maxLoaM": 27,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302310444595",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "VHF rehberde yayınlanmadı."
-    },
-    {
-      "slug": "sani-marina",
-      "name": "Sani Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-halkidiki",
-      "districtSlug": null,
-      "lat": 40.0974,
-      "lon": 23.3062,
-      "coordSource": "Yunan Marinalar Birliği rehberi (40°05'846N → 05,846' DDM; 23°18'374E → 18,374')",
-      "descriptionTr": "Halkidiki Kassandra'da Sani Resort bünyesinde butik marina.",
-      "berthCount": 215,
-      "maxLoaM": 27,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302374099400",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Koordinat rehberde binlik-dakika biçiminde; DDM yorumlandı."
-    },
-    {
-      "slug": "porto-carras-marina",
-      "name": "Porto Carras Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-halkidiki",
-      "districtSlug": null,
-      "lat": 40.0689,
-      "lon": 23.7847,
-      "coordSource": "Yunan Marinalar Birliği rehberi (40°04'08\"N 23°47'05\"E)",
-      "descriptionTr": "Sithonia Neos Marmaras'ta resort marinası; 55 m'ye kadar yat kabul eder.",
-      "berthCount": 315,
-      "maxLoaM": 55,
-      "maxDraftM": 5.5,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302375077000",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "midilli-marina",
-      "name": "Mytilene Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-midilli",
-      "districtSlug": null,
-      "lat": 39.0987,
-      "lon": 26.5578,
-      "coordSource": "Yunan Marinalar Birliği rehberi (39°05'919N → 05,919' DDM; 26°33',466E → 33,466')",
-      "descriptionTr": "Midilli (Lesvos) adasında marina; Ayvalık'ın karşı kıyısı.",
-      "berthCount": 222,
-      "maxLoaM": 25,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "71",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302251054000",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Koordinat rehberde binlik-dakika biçiminde; DDM yorumlandı."
-    },
-    {
-      "slug": "samos-marina",
-      "name": "Samos Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-samos",
-      "districtSlug": null,
-      "lat": 37.6956,
-      "lon": 26.9583,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°41'44\"N 26°57'30\"E)",
-      "descriptionTr": "Pythagorio'da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası'nın karşısı.",
-      "berthCount": 260,
-      "maxLoaM": 50,
-      "maxDraftM": 4,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "9",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302273061600",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "leros-marina",
-      "name": "Leros Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-leros",
-      "districtSlug": null,
-      "lat": 37.1293,
-      "lon": 26.8567,
-      "coordSource": "Yunan Marinalar Birliği rehberi (37°07,76N 26°51,40E → DDM)",
-      "descriptionTr": "Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.",
-      "berthCount": 220,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "10",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302247024733",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "Maks. boy rehberde yayınlanmadı."
-    },
-    {
-      "slug": "kos-marina",
-      "name": "Kos Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-kos",
-      "districtSlug": null,
-      "lat": 36.8932,
-      "lon": 27.301,
-      "coordSource": "Yunan Marinalar Birliği rehberi (36°53'35,36\"N 27°18'03,6\"E); kosmarina.gr ile çapraz teyit",
-      "descriptionTr": "Kos (İstanköy) adasında tam donanımlı marina; Bodrum'un karşı kıyısı. 100 tonluk travel-lift.",
-      "berthCount": 250,
-      "maxLoaM": 80,
-      "maxDraftM": 5,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "77",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [
-        "electricity",
-        "security",
-        "wifi",
-        "wc",
-        "shower",
-        "laundry",
-        "restaurant",
-        "travel_lift"
-      ],
-      "services": [
-        "technical_service"
-      ],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302242044150",
-          "primary": true
-        },
-        {
-          "type": "email",
-          "value": "info@kosmarina.gr"
-        },
-        {
-          "type": "website",
-          "value": "https://kosmarina.gr/"
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "Maks. boy: resmî site 80 m, birlik rehberi 45 m — marinanın kendi sitesi esas alındı. Telefon da resmî siteden."
-    },
-    {
-      "slug": "rodos-marina",
-      "name": "Rhodes Marina",
-      "operator": null,
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-rodos",
-      "districtSlug": null,
-      "lat": 36.4363,
-      "lon": 28.2404,
-      "coordSource": "Yunan Marinalar Birliği rehberi (36°26'10,57\"N 28°14'25,42\"E)",
-      "descriptionTr": "Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.",
-      "berthCount": 600,
-      "maxLoaM": 61,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302241039663",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
-        "https://sailingissues.com/marinas-in-greece.pdf"
-      ],
-      "confidence": "high",
-      "missingNotes": "Maks. boy rehberde 200 ft olarak yayınlandı (≈61 m çevrildi); VHF yayınlanmadı."
+     "type": "phone",
+     "value": "+302661091900",
+     "primary": true
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "E-posta/web yayınlanmadı; olanak listesi rehberde ayrıntısız."
+  },
+  {
+   "slug": "kleopatra-marina",
+   "name": "Kleopatra Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-preveza",
+   "districtSlug": null,
+   "lat": 38.9517,
+   "lon": 20.7653,
+   "coordSource": "Yunan Marinalar Birliği rehberi (38°57'06\"N 20°45'55\"E)",
+   "descriptionTr": "Aktion-Preveza'da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.",
+   "berthCount": 100,
+   "maxLoaM": 30,
+   "maxDraftM": 8,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "67",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302682023015",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "Rehberdeki 8 m su çekimi değeri yayın kaynağından aynen alındı."
+  },
+  {
+   "slug": "lefkas-marina",
+   "name": "Lefkas Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-lefkada",
+   "districtSlug": null,
+   "lat": 38.83,
+   "lon": 20.7133,
+   "coordSource": "Yunan Marinalar Birliği rehberi (38°49,8'N 20°42,8'E → DDM)",
+   "descriptionTr": "Lefkada'da 620 bağlama ve 280 kara kapasiteli marina.",
+   "berthCount": 620,
+   "maxLoaM": 45,
+   "maxDraftM": 4,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "69",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302645026645",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "mesolongi-marina",
+   "name": "Messolonghi Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-mesolongi",
+   "districtSlug": null,
+   "lat": 38.3613,
+   "lon": 21.4267,
+   "coordSource": "Yunan Marinalar Birliği rehberi (38°21'68N → 21,68' DDM yorumu; 21°25'60E → 25,60')",
+   "descriptionTr": "Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.",
+   "berthCount": 180,
+   "maxLoaM": 50,
+   "maxDraftM": 6,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "69",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302631050190",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Koordinat rehberde karışık biçimde (dakika ondalığı) yayınlandı; DDM olarak yorumlandı."
+  },
+  {
+   "slug": "kalamata-marina",
+   "name": "Kalamata Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-kalamata",
+   "districtSlug": null,
+   "lat": 37.0217,
+   "lon": 22.1217,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°01,3N 22°07,3E → DDM)",
+   "descriptionTr": "Mora'nın güneyinde, Kalamata şehir merkezine bitişik marina.",
+   "berthCount": 250,
+   "maxLoaM": 25,
+   "maxDraftM": 3,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "69",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302721021037",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "zea-marina",
+   "name": "Zea Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.9367,
+   "lon": 23.6483,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°56,2'N 23°38,9'E → DDM)",
+   "descriptionTr": "Pire'nin tarihi marinası; 670 bağlama, kıçtankara 80 m'ye, aborda 150 m'ye kadar.",
+   "berthCount": 670,
+   "maxLoaM": 80,
+   "maxDraftM": 9,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302104559000",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "Aborda maks. 150 m (kıçtankara 80 m maxLoaM alındı)."
+  },
+  {
+   "slug": "athens-marina",
+   "name": "Athens Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.9414,
+   "lon": 23.6655,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°56'29\"N; boylam 23°39'93 → 39,93' DDM yorumu)",
+   "descriptionTr": "Neo Faliro'da mega ve süper yatlara özel marina; 130 m'ye kadar.",
+   "berthCount": 130,
+   "maxLoaM": 130,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302104853200",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Boylam rehberde hatalı biçimde (93 saniye) basılmış; dakika ondalığı olarak yorumlandı."
+  },
+  {
+   "slug": "flisvos-marina",
+   "name": "Flisvos Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.9363,
+   "lon": 23.68,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°56,18N 23°40,8E → DDM)",
+   "descriptionTr": "Paleo Faliro'da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.",
+   "berthCount": 303,
+   "maxLoaM": 90,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302109871000",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "alimos-marina",
+   "name": "Alimos Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.9113,
+   "lon": 23.7005,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°54'68N → 54,68' DDM; 23°42'03E)",
+   "descriptionTr": "Atina'nın ve Yunanistan'ın en büyük marinalarından; 1.080 bağlama, 600 kara.",
+   "berthCount": 1080,
+   "maxLoaM": 40,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 6.5,
+   "vhfChannel": "71",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302109880000",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Enlem rehberde karışık biçimde; DDM yorumlandı. 6,5 m 'max depth' depthMaxM'e alındı."
+  },
+  {
+   "slug": "agios-kosmas-marina",
+   "name": "Agios Kosmas Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.8806,
+   "lon": 23.7247,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°52'50\"N 23°43'29\"E)",
+   "descriptionTr": "Elliniko'da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m'ye kadar.",
+   "berthCount": 337,
+   "maxLoaM": 80,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302109821787",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "vouliagmeni-marina",
+   "name": "Vouliagmeni Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.7217,
+   "lon": 23.775,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°43,3'N 23°46,5'E → DDM)",
+   "descriptionTr": "Atina Rivierası'nın prestijli koy marinası.",
+   "berthCount": 115,
+   "maxLoaM": 50,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 8,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302108960012",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "8 m 'max depth' depthMaxM'e alındı."
+  },
+  {
+   "slug": "olympic-marine",
+   "name": "Olympic Marine",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-atina",
+   "districtSlug": null,
+   "lat": 37.6983,
+   "lon": 24.055,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°41,9N 24°03,3E → DDM)",
+   "descriptionTr": "Lavrio/Sounio'da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.",
+   "berthCount": 680,
+   "maxLoaM": 40,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302292063700",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "selanik-aretsou-marina",
+   "name": "Thessaloniki Aretsou Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-selanik",
+   "districtSlug": null,
+   "lat": 40.5806,
+   "lon": 22.9472,
+   "coordSource": "Yunan Marinalar Birliği rehberi (40°34'50\"N 22°56'50\"E)",
+   "descriptionTr": "Selanik Kalamaria'da şehir marinası.",
+   "berthCount": 242,
+   "maxLoaM": 27,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302310444595",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "VHF rehberde yayınlanmadı."
+  },
+  {
+   "slug": "sani-marina",
+   "name": "Sani Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-halkidiki",
+   "districtSlug": null,
+   "lat": 40.0974,
+   "lon": 23.3062,
+   "coordSource": "Yunan Marinalar Birliği rehberi (40°05'846N → 05,846' DDM; 23°18'374E → 18,374')",
+   "descriptionTr": "Halkidiki Kassandra'da Sani Resort bünyesinde butik marina.",
+   "berthCount": 215,
+   "maxLoaM": 27,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302374099400",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Koordinat rehberde binlik-dakika biçiminde; DDM yorumlandı."
+  },
+  {
+   "slug": "porto-carras-marina",
+   "name": "Porto Carras Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-halkidiki",
+   "districtSlug": null,
+   "lat": 40.0689,
+   "lon": 23.7847,
+   "coordSource": "Yunan Marinalar Birliği rehberi (40°04'08\"N 23°47'05\"E)",
+   "descriptionTr": "Sithonia Neos Marmaras'ta resort marinası; 55 m'ye kadar yat kabul eder.",
+   "berthCount": 315,
+   "maxLoaM": 55,
+   "maxDraftM": 5.5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302375077000",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "midilli-marina",
+   "name": "Mytilene Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-midilli",
+   "districtSlug": null,
+   "lat": 39.0987,
+   "lon": 26.5578,
+   "coordSource": "Yunan Marinalar Birliği rehberi (39°05'919N → 05,919' DDM; 26°33',466E → 33,466')",
+   "descriptionTr": "Midilli (Lesvos) adasında marina; Ayvalık'ın karşı kıyısı.",
+   "berthCount": 222,
+   "maxLoaM": 25,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "71",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302251054000",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Koordinat rehberde binlik-dakika biçiminde; DDM yorumlandı."
+  },
+  {
+   "slug": "samos-marina",
+   "name": "Samos Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-samos",
+   "districtSlug": null,
+   "lat": 37.6956,
+   "lon": 26.9583,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°41'44\"N 26°57'30\"E)",
+   "descriptionTr": "Pythagorio'da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası'nın karşısı.",
+   "berthCount": 260,
+   "maxLoaM": 50,
+   "maxDraftM": 4,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "9",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302273061600",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "leros-marina",
+   "name": "Leros Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-leros",
+   "districtSlug": null,
+   "lat": 37.1293,
+   "lon": 26.8567,
+   "coordSource": "Yunan Marinalar Birliği rehberi (37°07,76N 26°51,40E → DDM)",
+   "descriptionTr": "Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.",
+   "berthCount": 220,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "10",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302247024733",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "Maks. boy rehberde yayınlanmadı."
+  },
+  {
+   "slug": "kos-marina",
+   "name": "Kos Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-kos",
+   "districtSlug": null,
+   "lat": 36.8932,
+   "lon": 27.301,
+   "coordSource": "Yunan Marinalar Birliği rehberi (36°53'35,36\"N 27°18'03,6\"E); kosmarina.gr ile çapraz teyit",
+   "descriptionTr": "Kos (İstanköy) adasında tam donanımlı marina; Bodrum'un karşı kıyısı. 100 tonluk travel-lift.",
+   "berthCount": 250,
+   "maxLoaM": 80,
+   "maxDraftM": 5,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "77",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "security",
+    "wifi",
+    "wc",
+    "shower",
+    "laundry",
+    "restaurant",
+    "travel_lift"
+   ],
+   "services": [
+    "technical_service"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302242044150",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "info@kosmarina.gr"
+    },
+    {
+     "type": "website",
+     "value": "https://kosmarina.gr/"
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "Maks. boy: resmî site 80 m, birlik rehberi 45 m — marinanın kendi sitesi esas alındı. Telefon da resmî siteden."
+  },
+  {
+   "slug": "rodos-marina",
+   "name": "Rhodes Marina",
+   "operator": null,
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-rodos",
+   "districtSlug": null,
+   "lat": 36.4363,
+   "lon": 28.2404,
+   "coordSource": "Yunan Marinalar Birliği rehberi (36°26'10,57\"N 28°14'25,42\"E)",
+   "descriptionTr": "Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.",
+   "berthCount": 600,
+   "maxLoaM": 61,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302241039663",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://greek-marinas.gr/ (Yunan Marinalar Birliği resmî rehberi)",
+    "https://sailingissues.com/marinas-in-greece.pdf"
+   ],
+   "confidence": "high",
+   "missingNotes": "Maks. boy rehberde 200 ft olarak yayınlandı (≈61 m çevrildi); VHF yayınlanmadı."
+  }
+ ]
 }

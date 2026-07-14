@@ -1,0 +1,261 @@
+{
+  "batch": "31-karadeniz-tur18",
+  "collectedAt": "2026-07-13",
+  "method": "Karadeniz kıyısı (18. tur): turkeymarinas.blogspot.com 2017 Ocak-Nisan sayfaları tüm Karadeniz limanlarını DMS koordinat + kapasite + VHF + iletişimle belgeliyor — bekleyen listedeki Trabzon Yat Limanı dahil. Doğudan batıya 8 kilit durak seçildi (Hopa→Gerze); resmî UAB listesi kapasite çaprazlaması yapıldı. Karadeniz veri setine İLK KEZ giriyor: samsun, ordu, sinop, trabzon, giresun, artvin illeri eklendi. Tahmin/uydurma YOK.",
+  "notes": [
+    "Bekleyen listeden çözülen: Trabzon Yat Limanı (Faroz) — resmî listede 175 deniz/50 kara; blog aynı kapasiteyi ve koordinatı veriyor.",
+    "Karadeniz'de tekneyle doğu-batı geçiş yapanlar için ortalama 60-100 mil aralıklı barınma zinciri kuruldu: Hopa → Trabzon → Akçaabat → Tirebolu → Ünye → Samsun (2 tesis) → Gerze.",
+    "Yakıt: Hopa hariç tüm duraklarda yakıt var (kaynak).",
+    "Bekleyenler: Sinop merkez limanı, Amasra, Zonguldak/Ereğli, Akçakoca (blogda yok; koordinatlı kaynak bulununca eklenecek). Giresun merkez (Boztepe) sonraki tur adayı."
+  ],
+  "records": [
+    {
+      "slug": "hopa-balikci-limani",
+      "name": "Hopa Balıkçı Limanı",
+      "operator": null,
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "artvin",
+      "districtSlug": "artvin-hopa",
+      "lat": 41.416972,
+      "lon": 41.429889,
+      "coordSource": "turkeymarinas (41°25'01.1\"N 41°25'47.6\"E → 41.416972, 41.429889)",
+      "descriptionTr": "Türkiye'nin en doğu limanlarından; Gürcistan sınırındaki Sarp kapısına 20 km. 150 tekne kapasitesi. VHF 16'dan 'Hopa Harbour' çağrılır. Ana mendirek feneri 3 sn'de yeşil, iç mendirek kırmızı çakar (10 mil); Çamburnu feneri 19 mil görünürlüktedir. Kasabada hastane, oteller, tamirhaneler ve balık restoranları vardır.",
+      "berthCount": 150,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+904663514020", "primary": true}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/04/hopa-fishing-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su/elektrik/yakıt ve derinlik kaynakta belirtilmiyor → boş bırakıldı."
+    },
+    {
+      "slug": "trabzon-yat-limani",
+      "name": "Trabzon Yat Limanı",
+      "operator": "Trabzonspor Kulübü (resmî UAB listesi)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "countryCode": "TR",
+      "provinceSlug": "trabzon",
+      "districtSlug": "trabzon-ortahisar",
+      "lat": 41.000861,
+      "lon": 39.785583,
+      "coordSource": "turkeymarinas (41°00'03.1\"N 39°47'08.1\"E → 41.000861, 39.785583)",
+      "descriptionTr": "Tarihi İpek Yolu kenti Trabzon'un yat limanı; 175 tekne (resmî listede ayrıca 50 kara parkı). 750 m ana + 125 m iç mendirek; rıhtımlarda 3-4 m derinlik. VHF 16'dan 'Trabzon Marina' çağrılır. İçme suyu, elektrik, duş, çamaşırhane ve Wi-Fi vardır; çekek yeri ve yelken kulübü bulunur. Rıhtım boyunca restoran ve kafeler sıralıdır.",
+      "berthCount": 175,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 3,
+      "depthMaxM": 4,
+      "vhfChannel": "16",
+      "amenities": ["electricity", "water", "shower", "laundry", "wifi", "restaurant"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+904623250967", "primary": true},
+        {"type": "email", "value": "info@trabzon.bel.tr"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/02/trabzon-marina.html",
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 175 deniz / 50 kara, işletmeci Trabzonspor)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Yakıt kaynakta belirtilmiyor. İşletmeci resmî listede Trabzonspor; blog iletişimi belediye üzerinden veriyor."
+    },
+    {
+      "slug": "akcaabat-balikci-limani",
+      "name": "Akçaabat Balıkçı Limanı",
+      "operator": "Akçaabat Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "trabzon",
+      "districtSlug": "trabzon-akcaabat",
+      "lat": 41.025806,
+      "lon": 39.568056,
+      "coordSource": "turkeymarinas (41°01'32.9\"N 39°34'05.0\"E → 41.025806, 39.568056)",
+      "descriptionTr": "Köftesiyle ünlü Akçaabat'ın kooperatif limanı; 125 tekne. VHF 16'dan 'Akçaabat Harbour' çağrılır. İçme suyu, elektrik, yakıt, ağ tamirhanesi, çekek yeri ve idare binası vardır. Trabzon'a 13 km; kıyıda balık restoranları sıralıdır.",
+      "berthCount": 125,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": ["electricity", "water", "fuel"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+904622271300", "primary": true},
+        {"type": "email", "value": "akcaabat@akcaabat.bel.tr"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/03/akcaabat-fishing-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok."
+    },
+    {
+      "slug": "tirebolu-balikci-limani",
+      "name": "Tirebolu Balıkçı Limanı",
+      "operator": "Tirebolu Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "giresun",
+      "districtSlug": "giresun-tirebolu",
+      "lat": 41.009111,
+      "lon": 38.823333,
+      "coordSource": "turkeymarinas (41°00'32.8\"N 38°49'24.0\"E → 41.009111, 38.823333)",
+      "descriptionTr": "Giresun Tirebolu'da 1.200 m ana mendirekli büyük belediye limanı; 220 tekne. VHF 73'ten 'Tirebolu Harbour' çağrılır. İçme suyu, elektrik, yakıt, ağ tamirhanesi, çekek yeri ve idare binaları vardır. Girişi Kaleburnu feneri işaretler; St. Jean kalesi limana bakar.",
+      "berthCount": 220,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": ["electricity", "water", "fuel"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+904544114016", "primary": true},
+        {"type": "email", "value": "info@tirebolu.bel.tr"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/02/tirebolu-fishing-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok."
+    },
+    {
+      "slug": "unye-balikci-limani",
+      "name": "Ünye Balıkçı Limanı",
+      "operator": "Ünye Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "ordu",
+      "districtSlug": "ordu-unye",
+      "lat": 41.115274,
+      "lon": 37.347438,
+      "coordSource": "turkeymarinas (41°06'55.0\"N 37°20'50.8\"E → 41.115274, 37.347438)",
+      "descriptionTr": "Fındığıyla ünlü Ünye'nin kooperatif limanı; 75 tekne. VHF 73'ten 'Ünye Harbour' çağrılır. İçme suyu, elektrik, yakıt, çekek yeri, sintine alımı ve ağ tamirhanesi vardır. Mendirek fenerleri 6 mil, Ünye feneri 9 mil görünürlüktedir. Kasabada hastane, oteller ve balık restoranları bulunur.",
+      "berthCount": 75,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": ["electricity", "water", "fuel", "pump_out"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+904523231941", "primary": true},
+        {"type": "email", "value": "unye@unye.bel.tr"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/01/unye-fishing-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok."
+    },
+    {
+      "slug": "samsun-yelken-kulubu-marina",
+      "name": "Samsun Yelken Kulübü Marinası",
+      "operator": "Samsun Yelken Kulübü",
+      "status": "published",
+      "typeCode": "boat_club",
+      "countryCode": "TR",
+      "provinceSlug": "samsun",
+      "districtSlug": "samsun-ilkadim",
+      "lat": 41.317667,
+      "lon": 36.338333,
+      "coordSource": "turkeymarinas, marina (41°19'03.6\"N 36°20'18.0\"E → 41.317667, 36.338333)",
+      "descriptionTr": "Samsun Baruthane'de yelken kulübü marinası; 260 tekne. VHF 16'dan 'Samsun Marina' çağrılır. İçme suyu, elektrik, duş, çamaşırhane ve Wi-Fi; rıhtım boyunca restoran-kafeler vardır. Yurda giriş-çıkış limanıdır (işlemler ticari limanda). DİKKAT: yaklaşma, ticari liman gemi trafiğiyle kesişebilir. Şehir merkezine 3-4 km.",
+      "berthCount": 260,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": ["electricity", "water", "shower", "laundry", "wifi", "restaurant"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+903624451515", "primary": true},
+        {"type": "email", "value": "syk@samsunyelken.org.tr"},
+        {"type": "website", "value": "https://samsunyelken.org.tr/"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/01/samsun-yacht-club-marina.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik ve yakıt kaynakta belirtilmiyor."
+    },
+    {
+      "slug": "kurupelit-yat-limani",
+      "name": "Kurupelit Yat Limanı",
+      "operator": "Atakum Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "countryCode": "TR",
+      "provinceSlug": "samsun",
+      "districtSlug": "samsun-atakum",
+      "lat": 41.361972,
+      "lon": 36.236944,
+      "coordSource": "turkeymarinas (41°21'43.1\"N 36°14'13.0\"E → 41.361972, 36.236944)",
+      "descriptionTr": "Samsun Atakum'da, Ondokuz Mayıs Üniversitesi kampüsü kıyısında belediye yat limanı; 900 m ana mendirek, 5 m derinlik. İçme suyu, elektrik ve yakıt; 50 ve 70 tonluk lift, çekek yeri, römorkör-kılavuz botu, dalgıç ve deniz kurtarma desteği vardır. Mevsim balığı sunan temiz restoranlar yakındadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 5,
+      "depthMaxM": 5,
+      "vhfChannel": null,
+      "amenities": ["electricity", "water", "fuel", "wifi"],
+      "services": ["crane", "diver"],
+      "contacts": [
+        {"type": "phone", "value": "+903624444055", "primary": true},
+        {"type": "email", "value": "bilgi@atakum.bel.tr"}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/01/kurupelit-yacht-marina.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Bağlama kapasitesi kaynakta rakamla verilmiyor → null. VHF kanalı belirtilmiyor (VHF telsiz altyapısı var)."
+    },
+    {
+      "slug": "gerze-balikci-limani",
+      "name": "Gerze Balıkçı Limanı",
+      "operator": "Gerze Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "sinop",
+      "districtSlug": "sinop-gerze",
+      "lat": 41.802167,
+      "lon": 35.206972,
+      "coordSource": "turkeymarinas, liman feneri (41°48'07.8\"N 35°12'25.1\"E → 41.802167, 35.206972) — liman fenerin hemen bitişiğindedir",
+      "descriptionTr": "Sinop Gerze'de 500 m ana + 600 m iç mendirekli büyük belediye limanı; 310 tekne. VHF 73'ten 'Gerze Harbour' çağrılır. Su, elektrik, motorin/benzin, çekek yeri ve ağ tamirhanesi vardır. Fener 3 sn'de iki beyaz çakar (6 mil). Sinop'a 49 km; kasabada hastane, oteller ve balık restoranları bulunur.",
+      "berthCount": 310,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": ["electricity", "water", "fuel"],
+      "services": [],
+      "contacts": [
+        {"type": "phone", "value": "+903687181547", "primary": true}
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2017/01/gerze-fishing-harbour.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kaynakta liman için ayrı koordinat yok; fener koordinatı kullanıldı (liman bitişiğinde). Derinlik verilmiyor."
+    }
+  ]
+}

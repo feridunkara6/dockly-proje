@@ -1,292 +1,292 @@
 {
-  "batch": "37-gr-tur24-bekleyenler-iyonya-kiklad",
-  "collectedAt": "2026-07-14",
-  "method": "Yunanistan (24. tur): bekleyen liste (Poros, İkarya, Piso Livadi) + Kiklad/İyonya popüler eksikleri (Milos, Santorini, Fiskardo, Paksos). Kaynak: sea-seek.com işbirlikçi seyir atlası + marinatips.com (Piso Livadi). Fransızca ifadeler aslına sadık çevrildi; tahmin/uydurma YOK.",
-  "notes": [
-    "BEKLEYEN LİSTEDEN ÇÖZÜLDÜ: Poros kasaba rıhtımı (akıntı uyarısıyla), İkarya Agios Kirykos, Piso Livadi (Paros).",
-    "5 yeni bölge: Poros, İkarya, Milos, Santorini, Paksos. Santorini Vlychada'nın '<1,7 m giriş — tehlikeli' uyarısı aynen taşındı (derin çekişli tekneler için hayati).",
-    "Aşama-2 yoğunluk: Gaios yazın çok kalabalık (zincir karışması uyarısı), Fiskardo charter filolarıyla yoğun, Poros güney rıhtımında gece bar müziği.",
-    "Aegiali (Amorgos) yine ALINAMADI: hiçbir açık kaynakta nokta koordinatı yok — bekleyen listede kalıyor. Evdilos (İkarya) sonraki tur adayı."
-  ],
-  "records": [
+ "batch": "37-gr-tur24-bekleyenler-iyonya-kiklad",
+ "collectedAt": "2026-07-14",
+ "method": "Yunanistan (24. tur): bekleyen liste (Poros, İkarya, Piso Livadi) + Kiklad/İyonya popüler eksikleri (Milos, Santorini, Fiskardo, Paksos). Kaynak: sea-seek.com işbirlikçi seyir atlası + marinatips.com (Piso Livadi). Fransızca ifadeler aslına sadık çevrildi; tahmin/uydurma YOK.",
+ "notes": [
+  "BEKLEYEN LİSTEDEN ÇÖZÜLDÜ: Poros kasaba rıhtımı (akıntı uyarısıyla), İkarya Agios Kirykos, Piso Livadi (Paros).",
+  "5 yeni bölge: Poros, İkarya, Milos, Santorini, Paksos. Santorini Vlychada'nın '<1,7 m giriş — tehlikeli' uyarısı aynen taşındı (derin çekişli tekneler için hayati).",
+  "Aşama-2 yoğunluk: Gaios yazın çok kalabalık (zincir karışması uyarısı), Fiskardo charter filolarıyla yoğun, Poros güney rıhtımında gece bar müziği.",
+  "Aegiali (Amorgos) yine ALINAMADI: hiçbir açık kaynakta nokta koordinatı yok — bekleyen listede kalıyor. Evdilos (İkarya) sonraki tur adayı."
+ ],
+ "records": [
+  {
+   "slug": "poros-limani",
+   "name": "Poros Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-poros",
+   "districtSlug": null,
+   "lat": 37.497799,
+   "lon": 23.4562,
+   "coordSource": "sea-seek (37.497799, 23.456200)",
+   "descriptionTr": "BEKLEYEN LİSTEDEN: Saronik'in klasiği Poros kasaba rıhtımı. Dar boğazın içinde rıhtıma aborda ya da güney rıhtıma kıçtan bağlanılır; zemin ÇAMUR. Her yönden iyi korunur; kuvvetli batılı kuzey rıhtımda kısa dalga, kuvvetli güneyli Mora tepelerinden sert sağanak rüzgâr getirir. DİKKAT: boğazda normalde batıdan doğuya ~1 knot AKINTI vardır ve yön değiştirebilir — yavaş manevrada tekneyi iter; feribot/hidrofil neta geçer, güney girişte Mora yakası sığdır. Su ve yakıt alınır; şipçandler vardır. Güney demirlemesinde gece bar müziği duyulur; kuzey daha sakindir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Poros-N-Poros-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Rıhtım derinliği rakamla verilmiyor. Liman VHF'leri kaynakta 16/27/28/88 olarak geçer."
+  },
+  {
+   "slug": "agios-kirykos-limani-ikarya",
+   "name": "Agios Kirykos Limanı (İkarya)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-ikarya",
+   "districtSlug": null,
+   "lat": 37.6138,
+   "lon": 26.296783,
+   "coordSource": "sea-seek (37.613800, 26.296783)",
+   "descriptionTr": "BEKLEYEN LİSTEDEN: İkarya'nın ana limanı. İç dalgakıranın arkasındaki iskelelere bağlanılır; kuzey iskelesinin ucunda ~6 m, iskelelerin başlangıcında SIĞ su vardır. Meltemden yeterli korunur; kuvvetli KUZEYLİDE sert sağanak rüzgâr iner ve rıhtımda kalıcı soluğan rahatsız eder — tekneyi uzun süre gözetimsiz bırakmayın (kaynak uyarısı). Su-elektrik özel işletmeden (fiyatı önceden sorun); yakıt mini tankerle. Evdilos limanı 5,6 mil batıdadır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 6,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Ayios-Kirikos-Ikaria-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "VHF ve ücret kaynakta yok."
+  },
+  {
+   "slug": "piso-livadi-limani-paros",
+   "name": "Piso Livadi Limanı (Paros)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-paros",
+   "districtSlug": null,
+   "lat": 37.0339,
+   "lon": 25.2592,
+   "coordSource": "marinatips.com liman fişi (37.0339, 25.2592)",
+   "descriptionTr": "BEKLEYEN LİSTEDEN: Paros'un doğu kıyısındaki küçük balıkçı limanı; Naxos boğazına bakar. VHF 12/11'den liman idaresine ulaşılır. Kıyıda restoranlar, dükkânlar ve ATM vardır; Naoussa ve Parikia'ya karayolu bağlantılıdır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
     {
-      "slug": "poros-limani",
-      "name": "Poros Limanı",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-poros",
-      "districtSlug": null,
-      "lat": 37.497799,
-      "lon": 23.4562,
-      "coordSource": "sea-seek (37.497799, 23.456200)",
-      "descriptionTr": "BEKLEYEN LİSTEDEN: Saronik'in klasiği Poros kasaba rıhtımı. Dar boğazın içinde rıhtıma aborda ya da güney rıhtıma kıçtan bağlanılır; zemin ÇAMUR. Her yönden iyi korunur; kuvvetli batılı kuzey rıhtımda kısa dalga, kuvvetli güneyli Mora tepelerinden sert sağanak rüzgâr getirir. DİKKAT: boğazda normalde batıdan doğuya ~1 knot AKINTI vardır ve yön değiştirebilir — yavaş manevrada tekneyi iter; feribot/hidrofil neta geçer, güney girişte Mora yakası sığdır. Su ve yakıt alınır; şipçandler vardır. Güney demirlemesinde gece bar müziği duyulur; kuzey daha sakindir.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "16",
-      "amenities": [
-        "water",
-        "fuel"
-      ],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Poros-N-Poros-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Rıhtım derinliği rakamla verilmiyor. Liman VHF'leri kaynakta 16/27/28/88 olarak geçer."
-    },
-    {
-      "slug": "agios-kirykos-limani-ikarya",
-      "name": "Agios Kirykos Limanı (İkarya)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-ikarya",
-      "districtSlug": null,
-      "lat": 37.6138,
-      "lon": 26.296783,
-      "coordSource": "sea-seek (37.613800, 26.296783)",
-      "descriptionTr": "BEKLEYEN LİSTEDEN: İkarya'nın ana limanı. İç dalgakıranın arkasındaki iskelelere bağlanılır; kuzey iskelesinin ucunda ~6 m, iskelelerin başlangıcında SIĞ su vardır. Meltemden yeterli korunur; kuvvetli KUZEYLİDE sert sağanak rüzgâr iner ve rıhtımda kalıcı soluğan rahatsız eder — tekneyi uzun süre gözetimsiz bırakmayın (kaynak uyarısı). Su-elektrik özel işletmeden (fiyatı önceden sorun); yakıt mini tankerle. Evdilos limanı 5,6 mil batıdadır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": 6,
-      "vhfChannel": null,
-      "amenities": [
-        "water",
-        "electricity",
-        "fuel"
-      ],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Ayios-Kirikos-Ikaria-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "VHF ve ücret kaynakta yok."
-    },
-    {
-      "slug": "piso-livadi-limani-paros",
-      "name": "Piso Livadi Limanı (Paros)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-paros",
-      "districtSlug": null,
-      "lat": 37.0339,
-      "lon": 25.2592,
-      "coordSource": "marinatips.com liman fişi (37.0339, 25.2592)",
-      "descriptionTr": "BEKLEYEN LİSTEDEN: Paros'un doğu kıyısındaki küçük balıkçı limanı; Naxos boğazına bakar. VHF 12/11'den liman idaresine ulaşılır. Kıyıda restoranlar, dükkânlar ve ATM vardır; Naoussa ve Parikia'ya karayolu bağlantılıdır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "12",
-      "amenities": [
-        "restaurant"
-      ],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302284021240",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://www.marinatips.com/marina/port-piso-livadi-piso-livadi-south-aegean-paros-greece"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Derinlik ve kapasite kaynakta yok → boş bırakıldı."
-    },
-    {
-      "slug": "adamas-limani-milos",
-      "name": "Adamas Limanı (Milos)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-milos",
-      "districtSlug": null,
-      "lat": 36.723701,
-      "lon": 24.445801,
-      "coordSource": "sea-seek (36.723701, 24.445801)",
-      "descriptionTr": "Milos'un ana limanı; feribot rıhtımının doğusuna ya da küçük doğu rıhtımına bağlanılır — 10 m üzeri tekneler için ~40 yer. Zemin ot-kaya-çamur karışıktır. Meltemden iyi korunur; körfez girişinde meltemde karışık deniz olur. DİKKAT: kuvvetli GÜNEYLİDE demirleme TEHLİKELİDİR; doğu kıyı boyunca kaya ve resifler vardır. VHF 12. Su feribot rıhtımında (İÇME SUYU DEĞİL); yakıt kasaba çıkışında; market, restoran, banka vardır.",
-      "berthCount": 40,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "12",
-      "amenities": [
-        "water",
-        "fuel",
-        "restaurant"
-      ],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302287023360",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Adamas-Milos-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik rakamı kaynakta yok. Zemin karışık (ot/kaya/çamur)."
-    },
-    {
-      "slug": "vlychada-marina-santorini",
-      "name": "Vlychada Marina (Santorini)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-santorini",
-      "districtSlug": null,
-      "lat": 36.336601,
-      "lon": 25.434999,
-      "coordSource": "sea-seek (36.336601, 25.434999)",
-      "descriptionTr": "Santorini'nin güney ucundaki tek gerçek marina; ~200 yer. Fırtınada adada bağlanılabilecek TEK liman budur; doğu rıhtımı GD ve batılıdan iyi korur. ÇOK ÖNEMLİ UYARI: girişte su 1,7 m'DEN AZDIR ve tehlikelidir — iç dalgakıran yakınında batık kaya vardır, girişte DIŞ dalgakırana yakın seyredin; derin çekişli tekneler girmeden liman idaresini arasın. Volkanik yüzen taş kuzeybatı köşede birikebilir — limanda motoru çalıştırırken soğutma emişini tıkayabilir. Su-elektrik rıhtımda; yakıt mini tankerle.",
-      "berthCount": 200,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": 1.7,
-      "vhfChannel": null,
-      "amenities": [
-        "water",
-        "electricity",
-        "fuel",
-        "restaurant"
-      ],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302286025140",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Vlychada-marina-Santorin-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "depthMaxM=1.7 GİRİŞ derinliğidir (kaynak uyarısı); iç derinlik verilmiyor. VHF kaynakta yok."
-    },
-    {
-      "slug": "fiskardo-limani",
-      "name": "Fiskardo Limanı (Kefalonya)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-kefalonya",
-      "districtSlug": null,
-      "lat": 38.4608,
-      "lon": 20.5767,
-      "coordSource": "sea-seek (38.460800, 20.576700)",
-      "descriptionTr": "İyonya'nın en sevilen duraklarından; 1953 depreminden etkilenmeyen Venedik dokusuyla ünlü. Güney/batı rıhtıma baştan ya da kıçtan, batı kıyıdaki pontona bağlanılır; zemin kum-kaya. Liman iyi korunur. Su-elektrik rıhtımda; yakıt mini tankerle; Wi-Fi (kafe) ve bol restoran vardır. Sezonda charter filolarıyla ÇOK yoğunlaşır — erken gelin.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": [
-        "water",
-        "electricity",
-        "fuel",
-        "restaurant",
-        "wifi"
-      ],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+302674051212",
-          "primary": true
-        }
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Fiskardho-Kefalonia-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik kaynakta yok. Telefon, kaynaktaki '(267)40 51212' dizgisinin normalize halidir."
-    },
-    {
-      "slug": "gaios-limani-paksos",
-      "name": "Gaios Limanı (Paksos)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-paksos",
-      "districtSlug": null,
-      "lat": 39.2005,
-      "lon": 20.1854,
-      "coordSource": "sea-seek (39.200500, 20.185400)",
-      "descriptionTr": "Paksos'un başkenti; Agios Nikolaos adacığının arkasındaki kanal-liman. KUZEY girişi derindir (~15 m); GÜNEY girişi ~2 m — SIĞDIR, derin çekişli tekneler kuzeyden girsin. Zemin çamur, tutuş iyidir. Kuzey ve batı rüzgârlarından iyi korunur. Su ve yakıt tankerle; rıhtım boyu restoran-barlar sıralıdır. Yoğunluk (kaynaklı): yazın ÇOK kalabalıktır; feribot/gezi teknesi trafiği yoğundur, demir zincirleri sık karışır — tripline kullanın.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 2,
-      "depthMaxM": 15,
-      "vhfChannel": null,
-      "amenities": [
-        "water",
-        "fuel",
-        "restaurant"
-      ],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Gaios-Paxos-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Rıhtım derinliği ayrıca verilmiyor (giriş derinlikleri kayıtta)."
-    },
-    {
-      "slug": "lakka-koyu-paksos",
-      "name": "Lakka Koyu (Paksos)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "mooring_point",
-      "countryCode": "GR",
-      "provinceSlug": "gr-paksos",
-      "districtSlug": null,
-      "lat": 39.235901,
-      "lon": 20.136101,
-      "coordSource": "sea-seek (39.235901, 20.136101)",
-      "descriptionTr": "Paksos'un kuzey ucundaki sevimli koy; beyaz kumlu sığlıklar üzerinde demirlenir ya da kuzey kesimde karaya halat verilir; rıhtımda az sayıda yer vardır. Kuzey rüzgârlarından iyi korunur. DİKKAT: zemin ÇOK KOMPAKT balçıktır — demir iyice gömülürse kaldırmak zorlaşabilir. Rıhtımda su; köyde duş-WC (Seaside bar), restoranlar, küçük marketler, kasap ve balık tezgâhı vardır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "priceTier": "free",
-      "holdingType": "mud",
-      "isFree": true,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Lakka-Paxos-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik rakamı kaynakta yok."
+     "type": "phone",
+     "value": "+302284021240",
+     "primary": true
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://www.marinatips.com/marina/port-piso-livadi-piso-livadi-south-aegean-paros-greece"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik ve kapasite kaynakta yok → boş bırakıldı."
+  },
+  {
+   "slug": "adamas-limani-milos",
+   "name": "Adamas Limanı (Milos)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-milos",
+   "districtSlug": null,
+   "lat": 36.723701,
+   "lon": 24.445801,
+   "coordSource": "sea-seek (36.723701, 24.445801)",
+   "descriptionTr": "Milos'un ana limanı; feribot rıhtımının doğusuna ya da küçük doğu rıhtımına bağlanılır — 10 m üzeri tekneler için ~40 yer. Zemin ot-kaya-çamur karışıktır. Meltemden iyi korunur; körfez girişinde meltemde karışık deniz olur. DİKKAT: kuvvetli GÜNEYLİDE demirleme TEHLİKELİDİR; doğu kıyı boyunca kaya ve resifler vardır. VHF 12. Su feribot rıhtımında (İÇME SUYU DEĞİL); yakıt kasaba çıkışında; market, restoran, banka vardır.",
+   "berthCount": 40,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [
+    "water",
+    "fuel",
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302287023360",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Adamas-Milos-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik rakamı kaynakta yok. Zemin karışık (ot/kaya/çamur)."
+  },
+  {
+   "slug": "vlychada-marina-santorini",
+   "name": "Vlychada Marina (Santorini)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-santorini",
+   "districtSlug": null,
+   "lat": 36.336601,
+   "lon": 25.434999,
+   "coordSource": "sea-seek (36.336601, 25.434999)",
+   "descriptionTr": "Santorini'nin güney ucundaki tek gerçek marina; ~200 yer. Fırtınada adada bağlanılabilecek TEK liman budur; doğu rıhtımı GD ve batılıdan iyi korur. ÇOK ÖNEMLİ UYARI: girişte su 1,7 m'DEN AZDIR ve tehlikelidir — iç dalgakıran yakınında batık kaya vardır, girişte DIŞ dalgakırana yakın seyredin; derin çekişli tekneler girmeden liman idaresini arasın. Volkanik yüzen taş kuzeybatı köşede birikebilir — limanda motoru çalıştırırken soğutma emişini tıkayabilir. Su-elektrik rıhtımda; yakıt mini tankerle.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": 1.7,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel",
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302286025140",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Vlychada-marina-Santorin-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "depthMaxM=1.7 GİRİŞ derinliğidir (kaynak uyarısı); iç derinlik verilmiyor. VHF kaynakta yok."
+  },
+  {
+   "slug": "fiskardo-limani",
+   "name": "Fiskardo Limanı (Kefalonya)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-kefalonya",
+   "districtSlug": null,
+   "lat": 38.4608,
+   "lon": 20.5767,
+   "coordSource": "sea-seek (38.460800, 20.576700)",
+   "descriptionTr": "İyonya'nın en sevilen duraklarından; 1953 depreminden etkilenmeyen Venedik dokusuyla ünlü. Güney/batı rıhtıma baştan ya da kıçtan, batı kıyıdaki pontona bağlanılır; zemin kum-kaya. Liman iyi korunur. Su-elektrik rıhtımda; yakıt mini tankerle; Wi-Fi (kafe) ve bol restoran vardır. Sezonda charter filolarıyla ÇOK yoğunlaşır — erken gelin.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel",
+    "restaurant",
+    "wifi"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302674051212",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Fiskardho-Kefalonia-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik kaynakta yok. Telefon, kaynaktaki '(267)40 51212' dizgisinin normalize halidir."
+  },
+  {
+   "slug": "gaios-limani-paksos",
+   "name": "Gaios Limanı (Paksos)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-paksos",
+   "districtSlug": null,
+   "lat": 39.2005,
+   "lon": 20.1854,
+   "coordSource": "sea-seek (39.200500, 20.185400)",
+   "descriptionTr": "Paksos'un başkenti; Agios Nikolaos adacığının arkasındaki kanal-liman. KUZEY girişi derindir (~15 m); GÜNEY girişi ~2 m — SIĞDIR, derin çekişli tekneler kuzeyden girsin. Zemin çamur, tutuş iyidir. Kuzey ve batı rüzgârlarından iyi korunur. Su ve yakıt tankerle; rıhtım boyu restoran-barlar sıralıdır. Yoğunluk (kaynaklı): yazın ÇOK kalabalıktır; feribot/gezi teknesi trafiği yoğundur, demir zincirleri sık karışır — tripline kullanın.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2,
+   "depthMaxM": 15,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "fuel",
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Gaios-Paxos-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Rıhtım derinliği ayrıca verilmiyor (giriş derinlikleri kayıtta)."
+  },
+  {
+   "slug": "lakka-koyu-paksos",
+   "name": "Lakka Koyu (Paksos)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "GR",
+   "provinceSlug": "gr-paksos",
+   "districtSlug": null,
+   "lat": 39.235901,
+   "lon": 20.136101,
+   "coordSource": "sea-seek (39.235901, 20.136101)",
+   "descriptionTr": "Paksos'un kuzey ucundaki sevimli koy; beyaz kumlu sığlıklar üzerinde demirlenir ya da kuzey kesimde karaya halat verilir; rıhtımda az sayıda yer vardır. Kuzey rüzgârlarından iyi korunur. DİKKAT: zemin ÇOK KOMPAKT balçıktır — demir iyice gömülürse kaldırmak zorlaşabilir. Rıhtımda su; köyde duş-WC (Seaside bar), restoranlar, küçük marketler, kasap ve balık tezgâhı vardır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": "mud",
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Lakka-Paxos-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik rakamı kaynakta yok."
+  }
+ ]
 }

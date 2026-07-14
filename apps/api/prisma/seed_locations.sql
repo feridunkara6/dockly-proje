@@ -2837,7 +2837,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'http://lorymarestaurant.com', NULL, 
 FROM locations l WHERE l.slug = 'loryma-restaurant-bozukkale'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Rosemary Yacht Harbour & Restaurant · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Rosemary Yacht Harbour & Restaurant · güven: medium · kaynak: turkeymarinas.blogspot.com, www.turgutreisrehberi.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -2880,7 +2880,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'http://rosemarycokertme.com', NULL, 
 FROM locations l WHERE l.slug = 'rosemary-cokertme'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Denizkızı Kaptan Restaurant · güven: low · kaynak: turkeymarinas.blogspot.com ---
+-- --- Denizkızı Kaptan Restaurant · güven: low · kaynak: turkeymarinas.blogspot.com, bmag.com.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -3743,6 +3743,10 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'website', 'https://marmara.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'marmara-adasi-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668855995', 'Marmara Liman Başkanlığı', false
+FROM locations l WHERE l.slug = 'marmara-adasi-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Saraylar Limanı (Marmara Adası) · güven: high · kaynak: turkeymarinas.blogspot.com, www.cruiserswiki.org ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3763,7 +3767,11 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'saraylar-limani' AND a.code IN ('water', 'electricity', 'fuel', 'restaurant', 'market')
 ON CONFLICT DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+902668855489', NULL, false
+SELECT gen_random_uuid(), l.id, 'phone', '+902668877335', 'Saraylar Ek Hizmet Binası', true
+FROM locations l WHERE l.slug = 'saraylar-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668855995', 'Marmara Liman Başkanlığı', false
 FROM locations l WHERE l.slug = 'saraylar-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
@@ -3982,7 +3990,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://www.tdi.gov.tr/gokceada-kuzu
 FROM locations l WHERE l.slug = 'gokceada-kuzu-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Behramkale (Assos) Antik Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Behramkale (Assos) Antik Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com, www.canakkale-ayvacik.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -4044,11 +4052,15 @@ SELECT l.id, sv.id FROM locations l, services sv
 WHERE l.slug = 'burhaniye-oren-yat-limani' AND sv.code IN ('mooring_assist', 'winter_storage')
 ON CONFLICT DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+902664129950', NULL, false
+SELECT gen_random_uuid(), l.id, 'phone', '+905331458129', 'Marina GSM', true
 FROM locations l WHERE l.slug = 'burhaniye-oren-yat-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.burhaniye.bel.tr', NULL, false
+FROM locations l WHERE l.slug = 'burhaniye-oren-yat-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'email', 'marina@burhaniye.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'burhaniye-oren-yat-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
@@ -4251,7 +4263,7 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kalem-adasi-koyu' AND a.code IN ('restaurant')
 ON CONFLICT DO NOTHING;
 
--- --- Çandarlı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Çandarlı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com, www.izmir-dikili.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -7815,7 +7827,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'salih-adasi-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Güllük Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Güllük Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com, tkygm.uab.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8295,7 +8307,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'pissa-koyu-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Kıyıkışlacık (İasos) Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Kıyıkışlacık (İasos) Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8512,7 +8524,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'mercimek-buku-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Yeşilköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Yeşilköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8531,7 +8543,7 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'yesilkoy-marina' AND a.code IN ('electricity', 'water', 'fuel', 'wc', 'shower')
 ON CONFLICT DO NOTHING;
 
--- --- Bostancı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Bostancı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8554,7 +8566,7 @@ SELECT gen_random_uuid(), l.id, 'phone', '+902164589999', NULL, true
 FROM locations l WHERE l.slug = 'bostanci-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Küçükyalı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Küçükyalı Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8577,7 +8589,7 @@ SELECT gen_random_uuid(), l.id, 'phone', '+902164589999', NULL, true
 FROM locations l WHERE l.slug = 'kucukyali-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Heybeliada Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Heybeliada Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8600,7 +8612,7 @@ SELECT gen_random_uuid(), l.id, 'email', 'iletisim@adalar.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'heybeliada-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Selimpaşa Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Selimpaşa Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.silivri.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8627,7 +8639,7 @@ SELECT gen_random_uuid(), l.id, 'email', 'sibim@silivri.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'selimpasa-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Mimarsinan Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Mimarsinan Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.bcekmece.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8654,7 +8666,7 @@ SELECT gen_random_uuid(), l.id, 'email', 'danisma@bcekmece.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'mimarsinan-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- İzmit Belediye Marinası · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- İzmit Belediye Marinası · güven: high · kaynak: turkeymarinas.blogspot.com, www.ozgurkocaeli.com.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8686,11 +8698,11 @@ SELECT gen_random_uuid(), l.id, 'phone', '+902623181001', NULL, true
 FROM locations l WHERE l.slug = 'izmit-belediye-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Darıca Balıkçı Barınağı ve Yat Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Darıca Balıkçı Barınağı ve Yat Limanı · güven: high · kaynak: turkeymarinas.blogspot.com, www.denizbulten.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
-SELECT gen_random_uuid(), 'darica-balikci-barinagi', 2, 'published', 'TR',
+SELECT gen_random_uuid(), 'darica-balikci-barinagi', 2, 'draft', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-darica'),
   'Darıca Balıkçı Barınağı ve Yat Limanı', 'Darıca''da belediye işletmesinde barınak + yat limanı; 300 tekne. İçme suyu, elektrik, yakıt, teknik servis, çekek yeri, idare binası, ağ tamirhanesi ve balık hali vardır. Girişi 18 mil görünürlüklü Yelkenkaya Feneri işaretler. Kıyı balık restoranlarıyla ünlüdür.',
   ST_SetSRID(ST_MakePoint(29.388389, 40.752611), 4326)::geography,
@@ -8714,15 +8726,11 @@ SELECT l.id, sv.id FROM locations l, services sv
 WHERE l.slug = 'darica-balikci-barinagi' AND sv.code IN ('technical_service')
 ON CONFLICT DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+902627452132', NULL, true
-FROM locations l WHERE l.slug = 'darica-balikci-barinagi'
-ON CONFLICT (location_id, contact_type, value) DO NOTHING;
-INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'email', 'beyazmasa@darica.bel.tr', NULL, false
 FROM locations l WHERE l.slug = 'darica-balikci-barinagi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Eskihisar Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Eskihisar Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -8804,7 +8812,7 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'hereke-balikci-barinagi' AND a.code IN ('electricity', 'water', 'fuel')
 ON CONFLICT DO NOTHING;
 
--- --- Karamürsel Ereğli Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Karamürsel Ereğli Balıkçı Barınağı · güven: high · kaynak: turkeymarinas.blogspot.com, www.tarimorman.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9157,7 +9165,7 @@ SELECT l.id, sv.id FROM locations l, services sv
 WHERE l.slug = 'azmak-iskelesi-ciftlik' AND sv.code IN ('mooring_assist')
 ON CONFLICT DO NOTHING;
 
--- --- Karia Bel' Otel İskelesi (Bozburun) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Karia Bel' Otel İskelesi (Bozburun) · güven: medium · kaynak: turkeymarinas.blogspot.com, www.kariabel.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9192,7 +9200,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://kariabel.com/', NULL, false
 FROM locations l WHERE l.slug = 'karia-bel-iskelesi-bozburun'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Nuri's Beach İskelesi (Limanağzı) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Nuri's Beach İskelesi (Limanağzı) · güven: high · kaynak: turkeymarinas.blogspot.com, www.kasgezirehberi.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9226,8 +9234,12 @@ INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_p
 SELECT gen_random_uuid(), l.id, 'website', 'https://nurisbeach.com/', NULL, false
 FROM locations l WHERE l.slug = 'nuris-beach-iskelesi-kas'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905388993272', 'GSM', false
+FROM locations l WHERE l.slug = 'nuris-beach-iskelesi-kas'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Adaköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Adaköy Marina · güven: high · kaynak: turkeymarinas.blogspot.com, www.adakoymarina.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9267,7 +9279,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://adakoymarina.com/', NULL, fa
 FROM locations l WHERE l.slug = 'adakoy-marina-marmaris'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Aydıncık Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Aydıncık Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com, www.mersinaydincik.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9294,7 +9306,7 @@ SELECT gen_random_uuid(), l.id, 'email', 'belediye@mersinaydincik.bel.tr', NULL,
 FROM locations l WHERE l.slug = 'aydincik-balikci-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Anamur İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Anamur İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com, anamurliman.uab.gov.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9309,7 +9321,7 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Anamur İskelesi', 'Türkiye''nin en güney ucu Anamur Burnu''nun doğusundaki kasaba iskelesi. VHF 16''dan ''Anamur İskele'' çağrılır. Kasabada tamirhane, teknik malzeme dükkanları, otel-pansiyon, restoran, eczane ve banka vardır; Anemurion antik kenti ve Mamure Kalesi yakındır. DİKKAT: bölge caretta caretta yuvalama alanıdır — plajlarda gece kısıtlamaları olabilir.' FROM locations WHERE slug = 'anamur-iskelesi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+903248141115', NULL, true
+SELECT gen_random_uuid(), l.id, 'phone', '+903248145092', 'Anamur Liman Başkanlığı', true
 FROM locations l WHERE l.slug = 'anamur-iskelesi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
@@ -9317,7 +9329,7 @@ SELECT gen_random_uuid(), l.id, 'email', 'halklailiskiler@anamur.bel.tr', NULL, 
 FROM locations l WHERE l.slug = 'anamur-iskelesi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Alanya Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Alanya Balıkçı Limanı · güven: high · kaynak: turkeymarinas.blogspot.com, www.alanya.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9401,7 +9413,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'gunluklu-koyu-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Kayabaşı Restaurant (Mazı) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Kayabaşı Restaurant (Mazı) · güven: medium · kaynak: turkeymarinas.blogspot.com, www.kayabasirestaurant.co ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9424,7 +9436,7 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kayabasi-restaurant-mazi' AND a.code IN ('restaurant')
 ON CONFLICT DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+902523392050', NULL, true
+SELECT gen_random_uuid(), l.id, 'phone', '+905555472878', NULL, true
 FROM locations l WHERE l.slug = 'kayabasi-restaurant-mazi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
@@ -9467,19 +9479,19 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://cennetyachtclub.com/', NULL,
 FROM locations l WHERE l.slug = 'cennet-marine-yacht-club'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Kuzbükü Yacht Club · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Kuzbükü Neighbours Restaurant · güven: medium · kaynak: turkeymarinas.blogspot.com, www.oggusto.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'kuzbuku-yacht-club', 5, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
-  'Kuzbükü Yacht Club', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.',
+  'Kuzbükü Neighbours Restaurant', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.',
   ST_SetSRID(ST_MakePoint(28.024444, 36.706111), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Kuzbükü Yacht Club', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.' FROM locations WHERE slug = 'kuzbuku-yacht-club'
+SELECT id, 'tr', 'Kuzbükü Neighbours Restaurant', 'Hisarönü Kuzbükü koyundaki iskeleli restoran-lounge. VHF 77''den çağrılır. Issız Kuzbükü demirlemesinin (ayrı kayıt) kıyı tesisidir; Bozburun''a 2,5 km yol bağlantısı vardır.' FROM locations WHERE slug = 'kuzbuku-yacht-club'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
 SELECT id, NULL, NULL, NULL, NULL
@@ -9490,7 +9502,7 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'kuzbuku-yacht-club' AND a.code IN ('restaurant')
 ON CONFLICT DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+905365017230', NULL, true
+SELECT gen_random_uuid(), l.id, 'phone', '+905325065295', NULL, true
 FROM locations l WHERE l.slug = 'kuzbuku-yacht-club'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
@@ -9616,7 +9628,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'buyukeceli-koyu-gulnar'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Ogun's Place İskelesi (Hayıtbükü) · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Ogun's Place İskelesi (Hayıtbükü) · güven: high · kaynak: turkeymarinas.blogspot.com, www.ogunplace.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9736,7 +9748,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://delikyoldenizrestaurant.com/
 FROM locations l WHERE l.slug = 'deniz-restaurant-delikyol'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Letoonia Marinet · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+-- --- Letoonia Marinet · güven: medium · kaynak: turkeymarinas.blogspot.com, www.letoonia.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9886,7 +9898,7 @@ SELECT id, NULL, NULL, true
 FROM locations WHERE slug = 'batikkaya-buku-demirleme'
 ON CONFLICT (location_id) DO NOTHING;
 
--- --- Kumlubükü Yacht Club · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Kumlubükü Yacht Club · güven: high · kaynak: turkeymarinas.blogspot.com, kumlubukuyachtclub.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9917,7 +9929,7 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://kumlubukuyachtclub.com/', NU
 FROM locations l WHERE l.slug = 'kumlubuku-yacht-club'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Yacht Classic Hotel & Marina · güven: high · kaynak: turkeymarinas.blogspot.com ---
+-- --- Yacht Classic Hotel & Marina · güven: high · kaynak: turkeymarinas.blogspot.com, yachtclassichotel.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
@@ -9954,6 +9966,10 @@ FROM locations l WHERE l.slug = 'yacht-classic-marina-fethiye'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://yachtclassichotel.com/', NULL, false
+FROM locations l WHERE l.slug = 'yacht-classic-marina-fethiye'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905416125067', 'GSM', false
 FROM locations l WHERE l.slug = 'yacht-classic-marina-fethiye'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
@@ -10260,3 +10276,30 @@ SELECT id, 'mud', NULL, true
 FROM locations WHERE slug = 'lakka-koyu-paksos'
 ON CONFLICT (location_id) DO NOTHING;
 
+
+-- ======================================================================
+-- DOĞRULAMA DÜZELTMELERİ — mevcut veritabanlarına akar (idempotent).
+-- Kaynak: corrections_*.json (her satırın gerekçesi yanında).
+-- --- corrections_2026_07_dogrulama.json ---
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'burhaniye-oren-yat-limani')
+  AND contact_type = 'phone' AND value = '+902664129950'; -- eski sabit hat resmî sayfada yok
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'anamur-iskelesi')
+  AND contact_type = 'phone' AND value = '+903248141115'; -- Liman Başkanlığı hattıyla değiştirildi
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'saraylar-limani')
+  AND contact_type = 'phone' AND value = '+902668855489'; -- belediye listesinde Saraylar hattı farklı
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'kayabasi-restaurant-mazi')
+  AND contact_type = 'phone' AND value = '+902523392050'; -- resmî sitede yalnız GSM
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'kuzbuku-yacht-club')
+  AND contact_type = 'phone' AND value = '+905365017230'; -- işletme Neighbours olarak değişti
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'darica-balikci-barinagi')
+  AND contact_type = 'phone' AND value = '+902627452132'; -- tesis yıkılıp yeniden inşa edildi
+UPDATE locations SET status = 'draft'
+WHERE slug = 'darica-balikci-barinagi' AND status <> 'draft'; -- tesis yıkılıp yeniden inşa edildi
+UPDATE locations SET status = 'draft'
+WHERE slug = 'denizkizi-kaptan-okluk' AND status <> 'draft'; -- işletme Ayın Koyu'na taşındı

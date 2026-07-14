@@ -1,311 +1,318 @@
 {
-  "batch": "36-tr-tur23-gokova-fethiye-kulup",
-  "collectedAt": "2026-07-14",
-  "method": "Türkiye (23. tur): 2018/11-12 arşivleri — turkeymarinas.blogspot.com; DMS koordinat + kapasite + iletişim aynı yöntem. Tahmin/uydurma YOK.",
-  "notes": [
-    "Resmî UAB listesindeki İKİ bekleyen çözüldü: Kumlubükü Yacht Club (35 tekne + 18 tonoz) ve Yacht Classic Hotel & Marina (Fethiye, 30 yat).",
-    "Ünlü duraklar eklendi: Kelebekler Vadisi (doğa koruma alanı notuyla), Kara Ada (4 demirleme noktası tek kayıtta), Çökertme koyu + köy iskelesi (zayıf tutuş uyarısıyla), Afkule.",
-    "Güvenlik/dürüstlük: Çökertme'de 'tutuş yer yer zayıf — kıyıya halat verin' ve 'güney fırtınasında batı koyuna geçin' kaynaktan aynen taşındı.",
-    "Kalan bekleyenler: Palamutbükü iskelesi, Mandalya/Ant Marin/Port Atami/Pupa/Global Sailing (koordinatlı kaynak yok), GR: Poros/İkarya/Aegiali."
-  ],
-  "records": [
+ "batch": "36-tr-tur23-gokova-fethiye-kulup",
+ "collectedAt": "2026-07-14",
+ "method": "Türkiye (23. tur): 2018/11-12 arşivleri — turkeymarinas.blogspot.com; DMS koordinat + kapasite + iletişim aynı yöntem. Tahmin/uydurma YOK.",
+ "notes": [
+  "Resmî UAB listesindeki İKİ bekleyen çözüldü: Kumlubükü Yacht Club (35 tekne + 18 tonoz) ve Yacht Classic Hotel & Marina (Fethiye, 30 yat).",
+  "Ünlü duraklar eklendi: Kelebekler Vadisi (doğa koruma alanı notuyla), Kara Ada (4 demirleme noktası tek kayıtta), Çökertme koyu + köy iskelesi (zayıf tutuş uyarısıyla), Afkule.",
+  "Güvenlik/dürüstlük: Çökertme'de 'tutuş yer yer zayıf — kıyıya halat verin' ve 'güney fırtınasında batı koyuna geçin' kaynaktan aynen taşındı.",
+  "Kalan bekleyenler: Palamutbükü iskelesi, Mandalya/Ant Marin/Port Atami/Pupa/Global Sailing (koordinatlı kaynak yok), GR: Poros/İkarya/Aegiali."
+ ],
+ "records": [
+  {
+   "slug": "kumlubuku-yacht-club",
+   "name": "Kumlubükü Yacht Club",
+   "operator": "Kumlubükü Yacht Club",
+   "status": "published",
+   "typeCode": "boat_club",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-marmaris",
+   "lat": 36.745246,
+   "lon": 28.274996,
+   "coordSource": "turkeymarinas (36°44'42.9\"N 28°16'30.0\"E → 36.745246, 28.274996)",
+   "descriptionTr": "Kumlubükü koyundaki yat kulübü — resmî yat limanı listesindeki eksikti. T-iskelede 35 tekne (3,5-4,5 m derinlik) + 15 m derinlikte 18 tonoz. Elektrik, su, profesyonel bağlama yardımı, ÜCRETSİZ Wi-Fi ve duş; güvenlik görevlisi ve tekneye yemek servisi vardır. Restoran (Türk/Çin/Japon), teras bar ve suşi bar; 100 m plaj. Her yıl 1 Nisan - Kasım ortası açıktır.",
+   "berthCount": 35,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3.5,
+   "depthMaxM": 4.5,
+   "vhfChannel": null,
+   "amenities": [
+    "restaurant",
+    "water",
+    "electricity",
+    "wifi",
+    "shower",
+    "security"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
     {
-      "slug": "kumlubuku-yacht-club",
-      "name": "Kumlubükü Yacht Club",
-      "operator": "Kumlubükü Yacht Club",
-      "status": "published",
-      "typeCode": "boat_club",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-marmaris",
-      "lat": 36.745246,
-      "lon": 28.274996,
-      "coordSource": "turkeymarinas (36°44'42.9\"N 28°16'30.0\"E → 36.745246, 28.274996)",
-      "descriptionTr": "Kumlubükü koyundaki yat kulübü — resmî yat limanı listesindeki eksikti. T-iskelede 35 tekne (3,5-4,5 m derinlik) + 15 m derinlikte 18 tonoz. Elektrik, su, profesyonel bağlama yardımı, ÜCRETSİZ Wi-Fi ve duş; güvenlik görevlisi ve tekneye yemek servisi vardır. Restoran (Türk/Çin/Japon), teras bar ve suşi bar; 100 m plaj. Her yıl 1 Nisan - Kasım ortası açıktır.",
-      "berthCount": 35,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 3.5,
-      "depthMaxM": 4.5,
-      "vhfChannel": null,
-      "amenities": [
-        "restaurant",
-        "water",
-        "electricity",
-        "wifi",
-        "shower",
-        "security"
-      ],
-      "services": [
-        "mooring_assist"
-      ],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+902524767242",
-          "primary": true
-        },
-        {
-          "type": "website",
-          "value": "https://kumlubukuyachtclub.com/"
-        }
-      ],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/kumlubuku-yacht-club.html"
-      ],
-      "confidence": "high",
-      "missingNotes": "VHF kaynakta yok. Tonozlar 15 m derinliktedir (ayrı bölge)."
+     "type": "phone",
+     "value": "+902524767242",
+     "primary": true
     },
     {
-      "slug": "yacht-classic-marina-fethiye",
-      "name": "Yacht Classic Hotel & Marina",
-      "operator": "Yacht Classic Hotel",
-      "status": "published",
-      "typeCode": "private_marina",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-fethiye",
-      "lat": 36.622859,
-      "lon": 29.098562,
-      "coordSource": "turkeymarinas (36°37'22.3\"N 29°05'54.8\"E → 36.622859, 29.098562)",
-      "descriptionTr": "Fethiye merkezde, kasabaya 5 dk yürüme mesafesinde otel marinası — resmî listedeki 'Yacht Otel Club & Marina' eksiği. Modern T-iskelede tonoz (lazy line) düzeniyle 30 yat. Yakıt ve kumanya ikmali yapılır; duş, havuz, sauna, hamam, çamaşırhane ve internet vardır; Mori Restaurant ve BluBar tesis içindedir. Mürettebat değişimi için bilinen duraktır; çeyrek asırdır işletmededir.",
-      "berthCount": 30,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": [
-        "restaurant",
-        "water",
-        "electricity",
-        "fuel",
-        "shower",
-        "laundry",
-        "wifi"
-      ],
-      "services": [
-        "mooring_assist"
-      ],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+902526125067",
-          "primary": true
-        },
-        {
-          "type": "email",
-          "value": "info@yachtclassichotel.com"
-        },
-        {
-          "type": "website",
-          "value": "https://yachtclassichotel.com/"
-        }
-      ],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/12/yacht-classic-hotel-marina.html"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik ve VHF kaynakta yok."
-    },
-    {
-      "slug": "kale-pansiyon-iskelesi",
-      "name": "Kale Pansiyon İskelesi (Simena)",
-      "operator": "Kale Pansiyon",
-      "status": "published",
-      "typeCode": "restaurant_pier",
-      "countryCode": "TR",
-      "provinceSlug": "antalya",
-      "districtSlug": "antalya-demre",
-      "lat": 36.196599,
-      "lon": 29.846248,
-      "coordSource": "turkeymarinas (36°11'47.8\"N 29°50'46.5\"E → 36.196599, 29.846248)",
-      "descriptionTr": "Kaleköy'de (antik Simena), kale eteğindeki pansiyon-restoran iskelesi; Kekova manzaralı. Restoran her gün 09:00-23:00 açıktır (Türk/Akdeniz/deniz ürünleri); 9 klimalı oda + 1 müstakil ev. Karadan yol yoktur — yalnız denizden ulaşılır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": [
-        "restaurant"
-      ],
-      "services": [],
-      "contacts": [
-        {
-          "type": "phone",
-          "value": "+902428742111",
-          "primary": true
-        },
-        {
-          "type": "email",
-          "value": "kalepansiyon@superonline.com"
-        },
-        {
-          "type": "website",
-          "value": "https://kalepansiyon.com/"
-        }
-      ],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/kale-pension-and-jetty.html"
-      ],
-      "confidence": "medium",
-      "missingNotes": "İskele kapasitesi, derinlik ve VHF kaynakta yok."
-    },
-    {
-      "slug": "kelebekler-vadisi-demirleme",
-      "name": "Kelebekler Vadisi Koyu",
-      "operator": null,
-      "status": "published",
-      "typeCode": "mooring_point",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-fethiye",
-      "lat": 36.49878,
-      "lon": 29.120706,
-      "coordSource": "turkeymarinas (36°29'55.6\"N 29°07'14.5\"E → 36.498780, 29.120706)",
-      "descriptionTr": "Ölüdeniz'in güneyinde, 350-400 m'lik dik falezlerin arasındaki ünlü kanyon koyu; girişte geniş kumsal. 1995'ten beri DOĞA KORUMA ALANIDIR — kalıcı yapı yasaktır; plajda yazlık restoran-bar ve çadır/bungalov konaklama (~250 kişi) vardır; elektrik jeneratörle sınırlı saatlerdedir. Ölüdeniz Belceğiz'den gündüz saat başı tekne servisi çalışır. Cep telefonu çekimi sınırlıdır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "priceTier": "free",
-      "holdingType": null,
-      "isFree": true,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/kelebekler-vadisi-cove-anchorage.html"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Demirleme derinliği/zemin kaynakta yok → null; falezler doğal koruma sağlar (yön detayı verilmiyor)."
-    },
-    {
-      "slug": "kara-ada-demirleme",
-      "name": "Kara Ada (Bodrum)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "mooring_point",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-bodrum",
-      "lat": 36.965,
-      "lon": 27.462222,
-      "coordSource": "turkeymarinas, Poyraz Limanı (36°57'54.0\"N 27°27'44.0\"E → 36.965000, 27.462222)",
-      "descriptionTr": "Bodrum'un karşısındaki büyük ada. Ana demirleme POYRAZ LİMANI'dır: 7-8 m'ye demirleyip kıyıya halat verin — meltemden korunur, kuvvetli kuzeyli dalgalanma yapar. Diğer noktalar: Adalı köyü önü (5-6 m, KUM zemin), Kaçakçı koyu (dar, sınırlı yer) ve adanın KB'sindeki kaplıca mağarası (7-8 m, jetili, girişi ücretli — mağara içinde sıcak mineralli su). Restoran ve küçük motel vardır; çevrede 8 dalış noktası, yapay resif ve batıklar (17-36 m) bulunur.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 7,
-      "depthMaxM": 8,
-      "vhfChannel": null,
-      "priceTier": "free",
-      "holdingType": null,
-      "isFree": true,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/kara-island-anchorage.html"
-      ],
-      "confidence": "high",
-      "missingNotes": "Poyraz Limanı zemini kaynakta yok → null (Adalı tarafı kumdur)."
-    },
-    {
-      "slug": "cokertme-koyu-demirleme",
-      "name": "Çökertme Koyu",
-      "operator": null,
-      "status": "published",
-      "typeCode": "mooring_point",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-milas",
-      "lat": 36.99613,
-      "lon": 27.79257,
-      "coordSource": "turkeymarinas (36°59'46.1\"N 27°47'33.3\"E → 36.996130, 27.792570)",
-      "descriptionTr": "Gökova'nın klasik durağı Çökertme'nin koyu. Batı kısımda 2-5 m, kuzeyde 5-10 m, girişte 10-20 m. DİKKAT: zemin kum + su bitkisi — TUTUŞ YER YER ZAYIFTIR, kıyıya halat verin. Batı-kuzey-doğu rüzgârlarına korunaklı; GÜNEYLİ dalga sokar — güney fırtınasında batı koyuna geçin. Orta adacığın çevresinde resifler vardır. Koyda 3 restoran pontonu (halat sistemli) bulunur; köy iskelesi ayrı kayıttır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 2,
-      "depthMaxM": 10,
-      "vhfChannel": null,
-      "priceTier": "free",
-      "holdingType": "mixed",
-      "isFree": true,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/cokertme-cove-anchorage.html"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "cokertme-koy-iskelesi",
-      "name": "Çökertme Köy İskelesi",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-milas",
-      "lat": 37.005054,
-      "lon": 27.791449,
-      "coordSource": "turkeymarinas, iskele (37°00'18.2\"N 27°47'29.2\"E → 37.005054, 27.791449)",
-      "descriptionTr": "Çökertme köyünün iskelesi; ~30 tekneye kadar yanaşma. İskele başında yeterli derinlik vardır; su ve elektrik ÜCRETLİ olarak bağlanır. Koyun kuzey ucundadır — güneyli havada koy içi uyarıları geçerlidir (koy kaydına bakın).",
-      "berthCount": 30,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": [
-        "water",
-        "electricity"
-      ],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/11/cokertme-cove-anchorage.html"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Derinlik rakamı ve işletici kaynakta yok."
-    },
-    {
-      "slug": "afkule-koyu-demirleme",
-      "name": "Afkule Koyu",
-      "operator": null,
-      "status": "published",
-      "typeCode": "mooring_point",
-      "countryCode": "TR",
-      "provinceSlug": "mugla",
-      "districtSlug": "mugla-fethiye",
-      "lat": 36.577571,
-      "lon": 29.03089,
-      "coordSource": "turkeymarinas (36°34'39.3\"N 29°01'51.2\"E → 36.577571, 29.030890)",
-      "descriptionTr": "Fethiye ile Ölüdeniz arasında, uçurumdaki Af Kule manastırının (kayaya oyma) altındaki koy. Su ÇOK DERİNDİR; koy açığında dalış için batırılmış eski bir sahil güvenlik botu ve dipte antik amfora parçaları vardır. Yerleşik havada kısa mola/dalış durağıdır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "priceTier": "free",
-      "holdingType": null,
-      "isFree": true,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://turkeymarinas.blogspot.com/2018/12/afkule-koyu-anchorage.html"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Demirleme derinliği/zemin/korunaklılık kaynakta yok — yalnız konum ve dalış özellikleri doğrulandı."
+     "type": "website",
+     "value": "https://kumlubukuyachtclub.com/"
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/kumlubuku-yacht-club.html",
+    "https://kumlubukuyachtclub.com/en/contact-us/ (resmî site — 2026-07 teyit)"
+   ],
+   "confidence": "high",
+   "missingNotes": "VHF kaynakta yok. Tonozlar 15 m derinliktedir (ayrı bölge). | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
+  },
+  {
+   "slug": "yacht-classic-marina-fethiye",
+   "name": "Yacht Classic Hotel & Marina",
+   "operator": "Yacht Classic Hotel",
+   "status": "published",
+   "typeCode": "private_marina",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.622859,
+   "lon": 29.098562,
+   "coordSource": "turkeymarinas (36°37'22.3\"N 29°05'54.8\"E → 36.622859, 29.098562)",
+   "descriptionTr": "Fethiye merkezde, kasabaya 5 dk yürüme mesafesinde otel marinası — resmî listedeki 'Yacht Otel Club & Marina' eksiği. Modern T-iskelede tonoz (lazy line) düzeniyle 30 yat. Yakıt ve kumanya ikmali yapılır; duş, havuz, sauna, hamam, çamaşırhane ve internet vardır; Mori Restaurant ve BluBar tesis içindedir. Mürettebat değişimi için bilinen duraktır; çeyrek asırdır işletmededir.",
+   "berthCount": 30,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "restaurant",
+    "water",
+    "electricity",
+    "fuel",
+    "shower",
+    "laundry",
+    "wifi"
+   ],
+   "services": [
+    "mooring_assist"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902526125067",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "info@yachtclassichotel.com"
+    },
+    {
+     "type": "website",
+     "value": "https://yachtclassichotel.com/"
+    },
+    {
+     "type": "phone",
+     "value": "+905416125067",
+     "label": "GSM"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/12/yacht-classic-hotel-marina.html",
+    "https://yachtclassichotel.com/en/marina/ (resmî marina sayfası — 2026-07 teyit)"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: sabit hat teyit edildi; resmî sayfadaki GSM eklendi."
+  },
+  {
+   "slug": "kale-pansiyon-iskelesi",
+   "name": "Kale Pansiyon İskelesi (Simena)",
+   "operator": "Kale Pansiyon",
+   "status": "published",
+   "typeCode": "restaurant_pier",
+   "countryCode": "TR",
+   "provinceSlug": "antalya",
+   "districtSlug": "antalya-demre",
+   "lat": 36.196599,
+   "lon": 29.846248,
+   "coordSource": "turkeymarinas (36°11'47.8\"N 29°50'46.5\"E → 36.196599, 29.846248)",
+   "descriptionTr": "Kaleköy'de (antik Simena), kale eteğindeki pansiyon-restoran iskelesi; Kekova manzaralı. Restoran her gün 09:00-23:00 açıktır (Türk/Akdeniz/deniz ürünleri); 9 klimalı oda + 1 müstakil ev. Karadan yol yoktur — yalnız denizden ulaşılır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902428742111",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "kalepansiyon@superonline.com"
+    },
+    {
+     "type": "website",
+     "value": "https://kalepansiyon.com/"
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/kale-pension-and-jetty.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "İskele kapasitesi, derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: sabit hat doğrulanamadı; Petit Futé listesinde +905327790476 GSM görünüyor (orta güven, kayda alınmadı)."
+  },
+  {
+   "slug": "kelebekler-vadisi-demirleme",
+   "name": "Kelebekler Vadisi Koyu",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.49878,
+   "lon": 29.120706,
+   "coordSource": "turkeymarinas (36°29'55.6\"N 29°07'14.5\"E → 36.498780, 29.120706)",
+   "descriptionTr": "Ölüdeniz'in güneyinde, 350-400 m'lik dik falezlerin arasındaki ünlü kanyon koyu; girişte geniş kumsal. 1995'ten beri DOĞA KORUMA ALANIDIR — kalıcı yapı yasaktır; plajda yazlık restoran-bar ve çadır/bungalov konaklama (~250 kişi) vardır; elektrik jeneratörle sınırlı saatlerdedir. Ölüdeniz Belceğiz'den gündüz saat başı tekne servisi çalışır. Cep telefonu çekimi sınırlıdır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": null,
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/kelebekler-vadisi-cove-anchorage.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Demirleme derinliği/zemin kaynakta yok → null; falezler doğal koruma sağlar (yön detayı verilmiyor)."
+  },
+  {
+   "slug": "kara-ada-demirleme",
+   "name": "Kara Ada (Bodrum)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-bodrum",
+   "lat": 36.965,
+   "lon": 27.462222,
+   "coordSource": "turkeymarinas, Poyraz Limanı (36°57'54.0\"N 27°27'44.0\"E → 36.965000, 27.462222)",
+   "descriptionTr": "Bodrum'un karşısındaki büyük ada. Ana demirleme POYRAZ LİMANI'dır: 7-8 m'ye demirleyip kıyıya halat verin — meltemden korunur, kuvvetli kuzeyli dalgalanma yapar. Diğer noktalar: Adalı köyü önü (5-6 m, KUM zemin), Kaçakçı koyu (dar, sınırlı yer) ve adanın KB'sindeki kaplıca mağarası (7-8 m, jetili, girişi ücretli — mağara içinde sıcak mineralli su). Restoran ve küçük motel vardır; çevrede 8 dalış noktası, yapay resif ve batıklar (17-36 m) bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 7,
+   "depthMaxM": 8,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": null,
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/kara-island-anchorage.html"
+   ],
+   "confidence": "high",
+   "missingNotes": "Poyraz Limanı zemini kaynakta yok → null (Adalı tarafı kumdur)."
+  },
+  {
+   "slug": "cokertme-koyu-demirleme",
+   "name": "Çökertme Koyu",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-milas",
+   "lat": 36.99613,
+   "lon": 27.79257,
+   "coordSource": "turkeymarinas (36°59'46.1\"N 27°47'33.3\"E → 36.996130, 27.792570)",
+   "descriptionTr": "Gökova'nın klasik durağı Çökertme'nin koyu. Batı kısımda 2-5 m, kuzeyde 5-10 m, girişte 10-20 m. DİKKAT: zemin kum + su bitkisi — TUTUŞ YER YER ZAYIFTIR, kıyıya halat verin. Batı-kuzey-doğu rüzgârlarına korunaklı; GÜNEYLİ dalga sokar — güney fırtınasında batı koyuna geçin. Orta adacığın çevresinde resifler vardır. Koyda 3 restoran pontonu (halat sistemli) bulunur; köy iskelesi ayrı kayıttır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 2,
+   "depthMaxM": 10,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": "mixed",
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/cokertme-cove-anchorage.html"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "cokertme-koy-iskelesi",
+   "name": "Çökertme Köy İskelesi",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-milas",
+   "lat": 37.005054,
+   "lon": 27.791449,
+   "coordSource": "turkeymarinas, iskele (37°00'18.2\"N 27°47'29.2\"E → 37.005054, 27.791449)",
+   "descriptionTr": "Çökertme köyünün iskelesi; ~30 tekneye kadar yanaşma. İskele başında yeterli derinlik vardır; su ve elektrik ÜCRETLİ olarak bağlanır. Koyun kuzey ucundadır — güneyli havada koy içi uyarıları geçerlidir (koy kaydına bakın).",
+   "berthCount": 30,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/11/cokertme-cove-anchorage.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik rakamı ve işletici kaynakta yok."
+  },
+  {
+   "slug": "afkule-koyu-demirleme",
+   "name": "Afkule Koyu",
+   "operator": null,
+   "status": "published",
+   "typeCode": "mooring_point",
+   "countryCode": "TR",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.577571,
+   "lon": 29.03089,
+   "coordSource": "turkeymarinas (36°34'39.3\"N 29°01'51.2\"E → 36.577571, 29.030890)",
+   "descriptionTr": "Fethiye ile Ölüdeniz arasında, uçurumdaki Af Kule manastırının (kayaya oyma) altındaki koy. Su ÇOK DERİNDİR; koy açığında dalış için batırılmış eski bir sahil güvenlik botu ve dipte antik amfora parçaları vardır. Yerleşik havada kısa mola/dalış durağıdır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "free",
+   "holdingType": null,
+   "isFree": true,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2018/12/afkule-koyu-anchorage.html"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Demirleme derinliği/zemin/korunaklılık kaynakta yok — yalnız konum ve dalış özellikleri doğrulandı."
+  }
+ ]
 }

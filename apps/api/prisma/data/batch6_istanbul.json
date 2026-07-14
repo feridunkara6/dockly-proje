@@ -1,83 +1,110 @@
 {
-  "batch": "6-istanbul-genisleme-pilot",
-  "collectedAt": "2026-07-11",
-  "method": "İMEAK Deniz Ticaret Odası resmi marina listesi (VHF + koordinat + telefon) + marinaların resmi web siteleri; çapraz doğrulama. Not: açık kaynak (OpenStreetMap Overpass/Nominatim) coğrafi doğrulama hedeflendi ancak bu ortamda erişime kapalıydı, bu yüzden koordinatlar resmî DTO listesinden (DMS) ve resmî sitelerden alınıp ondalığa çevrildi. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
-  "notes": [
-    "Mevcut 12 İstanbul kaydı TEKRAR EKLENMEDİ (Ataköy, Setur Kalamış & Fenerbahçe, West Istanbul, Viaport/Tuzla, Marintürk İstanbul City Port/Pendik, İSPARK İstinye/Tarabya, adalar barınak/demirlemeleri).",
-    "DTO listesindeki 'İstmarin İstinye/Tarabya Tekne Park' = mevcut 'İSPARK İstinye/Tarabya Tekne Park' ile aynı tesis kabul edilip atlandı (operatör adı farklı, konum aynı).",
-    "Koordinatlar DMS→ondalık çevrildi. Güzelce üç bağımsız kaynakla çapraz doğrulandı; Kıyı koordinatı DTO'dan alındı (kapasite/boy yayınlanmadığı için confidence=medium)."
-  ],
-  "records": [
+ "batch": "6-istanbul-genisleme-pilot",
+ "collectedAt": "2026-07-11",
+ "method": "İMEAK Deniz Ticaret Odası resmi marina listesi (VHF + koordinat + telefon) + marinaların resmi web siteleri; çapraz doğrulama. Not: açık kaynak (OpenStreetMap Overpass/Nominatim) coğrafi doğrulama hedeflendi ancak bu ortamda erişime kapalıydı, bu yüzden koordinatlar resmî DTO listesinden (DMS) ve resmî sitelerden alınıp ondalığa çevrildi. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "Mevcut 12 İstanbul kaydı TEKRAR EKLENMEDİ (Ataköy, Setur Kalamış & Fenerbahçe, West Istanbul, Viaport/Tuzla, Marintürk İstanbul City Port/Pendik, İSPARK İstinye/Tarabya, adalar barınak/demirlemeleri).",
+  "DTO listesindeki 'İstmarin İstinye/Tarabya Tekne Park' = mevcut 'İSPARK İstinye/Tarabya Tekne Park' ile aynı tesis kabul edilip atlandı (operatör adı farklı, konum aynı).",
+  "Koordinatlar DMS→ondalık çevrildi. Güzelce üç bağımsız kaynakla çapraz doğrulandı; Kıyı koordinatı DTO'dan alındı (kapasite/boy yayınlanmadığı için confidence=medium)."
+ ],
+ "records": [
+  {
+   "slug": "guzelce-marina",
+   "name": "Güzelce Marina",
+   "operator": "Güzelce Marina",
+   "status": "published",
+   "typeCode": "private_marina",
+   "provinceSlug": "istanbul",
+   "districtSlug": "istanbul-buyukcekmece",
+   "lat": 40.9998,
+   "lon": 28.5097,
+   "coordSource": "guzelcemarina.com (40.9998, 28.5097) + İMEAK DTO (41°00'00\"N 28°30'35\"E) — çapraz doğrulandı",
+   "descriptionTr": "Büyükçekmece'de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m'ye kadar yat kabul eder.",
+   "berthCount": 250,
+   "maxLoaM": 60,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "72/16",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "water",
+    "crane",
+    "wifi",
+    "wc",
+    "shower"
+   ],
+   "services": [],
+   "contacts": [
     {
-      "slug": "guzelce-marina",
-      "name": "Güzelce Marina",
-      "operator": "Güzelce Marina",
-      "status": "published",
-      "typeCode": "private_marina",
-      "provinceSlug": "istanbul",
-      "districtSlug": "istanbul-buyukcekmece",
-      "lat": 40.9998,
-      "lon": 28.5097,
-      "coordSource": "guzelcemarina.com (40.9998, 28.5097) + İMEAK DTO (41°00'00\"N 28°30'35\"E) — çapraz doğrulandı",
-      "descriptionTr": "Büyükçekmece'de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m'ye kadar yat kabul eder.",
-      "berthCount": 250,
-      "maxLoaM": 60,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "72/16",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": ["electricity", "water", "crane", "wifi", "wc", "shower"],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+902122443333", "primary": true},
-        {"type": "email", "value": "info@guzelcemarina.com"},
-        {"type": "website", "value": "https://guzelcemarina.com/"}
-      ],
-      "sourceUrls": [
-        "https://guzelcemarina.com/",
-        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
-        "https://marinakedisi.com/marinalar/marmara/guzelce-marina/"
-      ],
-      "confidence": "high",
-      "missingNotes": "Azami su çekimi ve derinlik yayınlanmamış (null); yakıt/güvenlik resmî sitede belirtilmediği için eklenmedi."
+     "type": "phone",
+     "value": "+902122443333",
+     "primary": true
     },
     {
-      "slug": "kiyi-istanbul-marina",
-      "name": "Kıyı İstanbul Marina",
-      "operator": "Kıyı İstanbul",
-      "status": "published",
-      "typeCode": "private_marina",
-      "provinceSlug": "istanbul",
-      "districtSlug": "istanbul-buyukcekmece",
-      "lat": 41.0156,
-      "lon": 28.5822,
-      "coordSource": "İMEAK DTO (41°00'56\"N 28°34'56\"E → 41.0156, 28.5822)",
-      "descriptionTr": "Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "73",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+902128820090", "primary": true},
-        {"type": "email", "value": "info@kiyiistanbul.com"},
-        {"type": "website", "value": "https://kiyimarina.com/"}
-      ],
-      "sourceUrls": [
-        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
-        "https://kiyimarina.com/tr/hakkimizda"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Bağlama kapasitesi ve azami boy resmî kaynakta net değil (null); telefon kaynaklar arası farklıydı, DTO listesindeki sabit hat alındı."
+     "type": "email",
+     "value": "info@guzelcemarina.com"
+    },
+    {
+     "type": "website",
+     "value": "https://guzelcemarina.com/"
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://guzelcemarina.com/",
+    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
+    "https://marinakedisi.com/marinalar/marmara/guzelce-marina/"
+   ],
+   "confidence": "high",
+   "missingNotes": "Azami su çekimi ve derinlik yayınlanmamış (null); yakıt/güvenlik resmî sitede belirtilmediği için eklenmedi."
+  },
+  {
+   "slug": "kiyi-istanbul-marina",
+   "name": "Kıyı İstanbul Marina",
+   "operator": "Kıyı İstanbul",
+   "status": "published",
+   "typeCode": "private_marina",
+   "provinceSlug": "istanbul",
+   "districtSlug": "istanbul-buyukcekmece",
+   "lat": 41.0156,
+   "lon": 28.5822,
+   "coordSource": "İMEAK DTO (41°00'56\"N 28°34'56\"E → 41.0156, 28.5822)",
+   "descriptionTr": "Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902128820090",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "info@kiyiistanbul.com"
+    },
+    {
+     "type": "website",
+     "value": "https://kiyimarina.com/"
+    }
+   ],
+   "sourceUrls": [
+    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
+    "https://kiyimarina.com/tr/hakkimizda"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Bağlama kapasitesi ve azami boy resmî kaynakta net değil (null); telefon kaynaklar arası farklıydı, DTO listesindeki sabit hat alındı."
+  }
+ ]
 }

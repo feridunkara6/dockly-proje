@@ -1,0 +1,68 @@
+[
+ {
+  "slug": "burhaniye-oren-yat-limani",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+902664129950"
+   }
+  ],
+  "reason": "eski sabit hat resmî sayfada yok"
+ },
+ {
+  "slug": "anamur-iskelesi",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+903248141115"
+   }
+  ],
+  "reason": "Liman Başkanlığı hattıyla değiştirildi"
+ },
+ {
+  "slug": "saraylar-limani",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+902668855489"
+   }
+  ],
+  "reason": "belediye listesinde Saraylar hattı farklı"
+ },
+ {
+  "slug": "kayabasi-restaurant-mazi",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+902523392050"
+   }
+  ],
+  "reason": "resmî sitede yalnız GSM"
+ },
+ {
+  "slug": "kuzbuku-yacht-club",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+905365017230"
+   }
+  ],
+  "reason": "işletme Neighbours olarak değişti"
+ },
+ {
+  "slug": "darica-balikci-barinagi",
+  "removeContacts": [
+   {
+    "type": "phone",
+    "value": "+902627452132"
+   }
+  ],
+  "setStatus": "draft",
+  "reason": "tesis yıkılıp yeniden inşa edildi"
+ },
+ {
+  "slug": "denizkizi-kaptan-okluk",
+  "setStatus": "draft",
+  "reason": "işletme Ayın Koyu'na taşındı"
+ }
+]

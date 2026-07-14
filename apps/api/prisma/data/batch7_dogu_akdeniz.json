@@ -1,83 +1,115 @@
 {
-  "batch": "7-dogu-akdeniz",
-  "collectedAt": "2026-07-11",
-  "method": "İMEAK Deniz Ticaret Odası resmi marina listesi + marinaların resmi siteleri + denizcilik dizinleri (denizpazari); çapraz doğrulama. Koordinatlar DDM/DMS→ondalık çevrildi. Açık kaynak (OSM Overpass/Nominatim) ve bazı resmî PDF/siteler bu ortamda erişime kapalıydı (robots/proxy); kural gereği etrafından dolaşılmadı. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
-  "notes": [
-    "BULGU: DTO ulusal listesine göre Adana, Hatay ve Osmaniye'de yat MARİNASI yok; Antalya doğusundan Mersin'e kadar tek resmî marina Mersin Marina (mevcut) + Taşucu (mevcut). Bu partide 2 yeni doğrulanmış marina var.",
-    "Mevcut kayıtlar tekrar EKLENMEDİ (Mersin Marina, Taşucu, Alanya Marina zaten var).",
-    "Adana/Hatay kapsaması balıkçı barınağı ve demirleme noktalarıyla ilerleyecek (koordinat teyidi parça parça); bu parti marinalarla sınırlı.",
-    "Gazipaşa coğrafi olarak Antalya'da ama Doğu Akdeniz güzergâhında ve yeni açıldığı için buraya dahil edildi."
-  ],
-  "records": [
+ "batch": "7-dogu-akdeniz",
+ "collectedAt": "2026-07-11",
+ "method": "İMEAK Deniz Ticaret Odası resmi marina listesi + marinaların resmi siteleri + denizcilik dizinleri (denizpazari); çapraz doğrulama. Koordinatlar DDM/DMS→ondalık çevrildi. Açık kaynak (OSM Overpass/Nominatim) ve bazı resmî PDF/siteler bu ortamda erişime kapalıydı (robots/proxy); kural gereği etrafından dolaşılmadı. Tahmin/uydurma YOK; doğrulanamayan alanlar null.",
+ "notes": [
+  "BULGU: DTO ulusal listesine göre Adana, Hatay ve Osmaniye'de yat MARİNASI yok; Antalya doğusundan Mersin'e kadar tek resmî marina Mersin Marina (mevcut) + Taşucu (mevcut). Bu partide 2 yeni doğrulanmış marina var.",
+  "Mevcut kayıtlar tekrar EKLENMEDİ (Mersin Marina, Taşucu, Alanya Marina zaten var).",
+  "Adana/Hatay kapsaması balıkçı barınağı ve demirleme noktalarıyla ilerleyecek (koordinat teyidi parça parça); bu parti marinalarla sınırlı.",
+  "Gazipaşa coğrafi olarak Antalya'da ama Doğu Akdeniz güzergâhında ve yeni açıldığı için buraya dahil edildi."
+ ],
+ "records": [
+  {
+   "slug": "kumkuyu-marina",
+   "name": "Kumkuyu Marina",
+   "operator": "Erdemli Kumkuyu Marina",
+   "status": "published",
+   "typeCode": "private_marina",
+   "provinceSlug": "mersin",
+   "districtSlug": "mersin-erdemli",
+   "lat": 36.5304,
+   "lon": 34.2302,
+   "coordSource": "denizpazari.com (36°31.825'N 34°13.811'E → 36.5304, 34.2302)",
+   "descriptionTr": "Erdemli Kumkuyu'da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "72",
+   "blueFlag": null,
+   "travelLiftTons": 80,
+   "winterStorage": null,
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel",
+    "wifi",
+    "security",
+    "restaurant",
+    "crane",
+    "travel_lift"
+   ],
+   "services": [
+    "technical_service",
+    "crane"
+   ],
+   "contacts": [
     {
-      "slug": "kumkuyu-marina",
-      "name": "Kumkuyu Marina",
-      "operator": "Erdemli Kumkuyu Marina",
-      "status": "published",
-      "typeCode": "private_marina",
-      "provinceSlug": "mersin",
-      "districtSlug": "mersin-erdemli",
-      "lat": 36.5304,
-      "lon": 34.2302,
-      "coordSource": "denizpazari.com (36°31.825'N 34°13.811'E → 36.5304, 34.2302)",
-      "descriptionTr": "Erdemli Kumkuyu'da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.",
-      "berthCount": 200,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "72",
-      "blueFlag": null,
-      "travelLiftTons": 80,
-      "winterStorage": null,
-      "amenities": ["electricity", "water", "fuel", "wifi", "security", "restaurant", "crane", "travel_lift"],
-      "services": ["technical_service", "crane"],
-      "contacts": [
-        {"type": "phone", "value": "+905436219383", "primary": true},
-        {"type": "email", "value": "info@erdemlikumkuyumarina.com"},
-        {"type": "website", "value": "https://www.erdemlikumkuyumarina.com/"}
-      ],
-      "sourceUrls": [
-        "https://www.denizpazari.com/marina-detay.asp?deniz=26",
-        "http://www.erdemlikumkuyumarina.com/"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Azami boy ve su çekimi yayınlanmadı (null); teknik özellikler tek dizin kaynağından, resmî site bu ortamda doğrulanamadı (DNS/robots)."
+     "type": "phone",
+     "value": "+905436219383",
+     "primary": true
     },
     {
-      "slug": "gazipasa-gold-marina",
-      "name": "Gazipaşa Gold Marina",
-      "operator": "Gazipaşa Gold Marina",
-      "status": "published",
-      "typeCode": "private_marina",
-      "provinceSlug": "antalya",
-      "districtSlug": "antalya-gazipasa",
-      "lat": 36.2638,
-      "lon": 32.2800,
-      "coordSource": "İMEAK DTO + gazipasagoldmarina.com (36°15.826'N 032°16.799'E → 36.2638, 32.2800) — çapraz doğrulandı",
-      "descriptionTr": "Gazipaşa'da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "72",
-      "blueFlag": null,
-      "travelLiftTons": null,
-      "winterStorage": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+902425107000", "primary": true},
-        {"type": "email", "value": "info@gazipasagoldmarina.com"},
-        {"type": "website", "value": "https://gazipasagoldmarina.com/"}
-      ],
-      "sourceUrls": [
-        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
-        "https://gazipasagoldmarina.com/"
-      ],
-      "confidence": "high",
-      "missingNotes": "Kapasite/boy henüz yayınlanmadı (tamamlanma aşaması, null). Mavi Bayrak kaydı görüldü ama sayfa okunup teyit edilmediği için blueFlag null bırakıldı."
+     "type": "email",
+     "value": "info@erdemlikumkuyumarina.com"
+    },
+    {
+     "type": "website",
+     "value": "https://www.erdemlikumkuyumarina.com/"
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://www.denizpazari.com/marina-detay.asp?deniz=26",
+    "http://www.erdemlikumkuyumarina.com/"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Azami boy ve su çekimi yayınlanmadı (null); teknik özellikler tek dizin kaynağından, resmî site bu ortamda doğrulanamadı (DNS/robots)."
+  },
+  {
+   "slug": "gazipasa-gold-marina",
+   "name": "Gazipaşa Gold Marina",
+   "operator": "Gazipaşa Gold Marina",
+   "status": "published",
+   "typeCode": "private_marina",
+   "provinceSlug": "antalya",
+   "districtSlug": "antalya-gazipasa",
+   "lat": 36.2638,
+   "lon": 32.28,
+   "coordSource": "İMEAK DTO + gazipasagoldmarina.com (36°15.826'N 032°16.799'E → 36.2638, 32.2800) — çapraz doğrulandı",
+   "descriptionTr": "Gazipaşa'da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "72",
+   "blueFlag": null,
+   "travelLiftTons": null,
+   "winterStorage": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+902425107000",
+     "primary": true
+    },
+    {
+     "type": "email",
+     "value": "info@gazipasagoldmarina.com"
+    },
+    {
+     "type": "website",
+     "value": "https://gazipasagoldmarina.com/"
+    }
+   ],
+   "sourceUrls": [
+    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
+    "https://gazipasagoldmarina.com/"
+   ],
+   "confidence": "high",
+   "missingNotes": "Kapasite/boy henüz yayınlanmadı (tamamlanma aşaması, null). Mavi Bayrak kaydı görüldü ama sayfa okunup teyit edilmediği için blueFlag null bırakıldı."
+  }
+ ]
 }

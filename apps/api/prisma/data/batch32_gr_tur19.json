@@ -1,304 +1,364 @@
 {
-  "batch": "32-gr-tur19-saronik-dogu-ege",
-  "collectedAt": "2026-07-13",
-  "method": "Yunanistan eksikleri (19. tur): Saronik Körfezi (İdra, Egina, Spetses — Atina charter bölgesi, ilk kez) + Doğu Ege bekleyen listesi (Pythagorio, Vathy, Agathonisi, Katapola, Tourlos, Naoussa, Astypalaia). Kaynaklar: sea-seek.com işbirlikçi seyir atlası (koordinat+derinlik+VHF+telefon), cruiserswiki.org (Pythagorio — tek erişilen sayfa; site sonra 403 verdi, zorlanmadı), imaps.gr (Pera Gialos). Tahmin/uydurma YOK; Fransızca kaynak ifadeleri aslına sadık çevrildi.",
-  "notes": [
-    "Saronik Körfezi ilk kez: İdra, Egina, Spetses — Atina'dan çıkan charter filolarının ana rotası. 5 yeni bölge eklendi (agathonisi, astypalaia, egina, hydra, spetses).",
-    "Bekleyen listeden çözülenler: Samos rıhtımları (Pythagorio + Vathy), Agathonisi, Katapola rıhtımı, Tourlos (Mykonos yeni limanı), Naoussa (Paros), Astypalaia.",
-    "Aşama-2 yoğunluk notları (kaynaklı): İdra'da yazın tekneler ÜÇ SIRA aborda; Pythagorio'da sabah 2'ye kadar disko gürültüsü; Spetses iç havzasında sezon tıkanıklığı; Naoussa'da yer çoğunlukla balıkçı teknelerinde.",
-    "Yakıt: Pythagorio, Vathy, Katapola, Tourlos, Naoussa, İdra, Egina, Spetses'te yakıt var (çoğunda mini tankerle — açıklamalarda).",
-    "Bekleyenler: Aegiali (Amorgos), Piso Livadi (Paros), Poros kasaba rıhtımı, İkarya, Xilokeratidi (koordinatlı kaynak yok — my-sea/Navily kullanılMADI, kural gereği)."
-  ],
-  "records": [
+ "batch": "32-gr-tur19-saronik-dogu-ege",
+ "collectedAt": "2026-07-13",
+ "method": "Yunanistan eksikleri (19. tur): Saronik Körfezi (İdra, Egina, Spetses — Atina charter bölgesi, ilk kez) + Doğu Ege bekleyen listesi (Pythagorio, Vathy, Agathonisi, Katapola, Tourlos, Naoussa, Astypalaia). Kaynaklar: sea-seek.com işbirlikçi seyir atlası (koordinat+derinlik+VHF+telefon), cruiserswiki.org (Pythagorio — tek erişilen sayfa; site sonra 403 verdi, zorlanmadı), imaps.gr (Pera Gialos). Tahmin/uydurma YOK; Fransızca kaynak ifadeleri aslına sadık çevrildi.",
+ "notes": [
+  "Saronik Körfezi ilk kez: İdra, Egina, Spetses — Atina'dan çıkan charter filolarının ana rotası. 5 yeni bölge eklendi (agathonisi, astypalaia, egina, hydra, spetses).",
+  "Bekleyen listeden çözülenler: Samos rıhtımları (Pythagorio + Vathy), Agathonisi, Katapola rıhtımı, Tourlos (Mykonos yeni limanı), Naoussa (Paros), Astypalaia.",
+  "Aşama-2 yoğunluk notları (kaynaklı): İdra'da yazın tekneler ÜÇ SIRA aborda; Pythagorio'da sabah 2'ye kadar disko gürültüsü; Spetses iç havzasında sezon tıkanıklığı; Naoussa'da yer çoğunlukla balıkçı teknelerinde.",
+  "Yakıt: Pythagorio, Vathy, Katapola, Tourlos, Naoussa, İdra, Egina, Spetses'te yakıt var (çoğunda mini tankerle — açıklamalarda).",
+  "Bekleyenler: Aegiali (Amorgos), Piso Livadi (Paros), Poros kasaba rıhtımı, İkarya, Xilokeratidi (koordinatlı kaynak yok — my-sea/Navily kullanılMADI, kural gereği)."
+ ],
+ "records": [
+  {
+   "slug": "pythagorio-limani-samos",
+   "name": "Pythagorio Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-samos",
+   "districtSlug": null,
+   "lat": 37.686667,
+   "lon": 26.95,
+   "coordSource": "cruiserswiki (37°41.200'N 026°57.000'E → 37.686667, 26.950000)",
+   "descriptionTr": "Antik Samos'un limanı; Kuşadası-Dilek Yarımadası'nın tam karşısı. Liman içinde derinlik ~5 m; çamur zemin, 25 m zincirle iyi tutar. İç liman her havada güvenlidir; dış rıhtım güneydoğuya açıktır — kuvvetli D/GD rüzgârında iki demir önerilir. Su-elektrik rıhtımda; yakıt mini tankerle ya da 1,5 mil kuzeydeki Samos Marina'dan. Liman ücreti ~10 € /gece (2017). DİKKAT: iç liman girişinin ortasına yakın, şamandırayla işaretli TEHLİKELİ KAYA vardır — kuzey kenardan girin; 2021'den beri iç limanda demirleme yasaktır. Gece rıhtım kafeleri sabaha dek gürültülü olabilir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 4,
+   "depthMaxM": 5,
+   "vhfChannel": "12",
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [
     {
-      "slug": "pythagorio-limani-samos",
-      "name": "Pythagorio Limanı",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-samos",
-      "districtSlug": null,
-      "lat": 37.686667,
-      "lon": 26.95,
-      "coordSource": "cruiserswiki (37°41.200'N 026°57.000'E → 37.686667, 26.950000)",
-      "descriptionTr": "Antik Samos'un limanı; Kuşadası-Dilek Yarımadası'nın tam karşısı. Liman içinde derinlik ~5 m; çamur zemin, 25 m zincirle iyi tutar. İç liman her havada güvenlidir; dış rıhtım güneydoğuya açıktır — kuvvetli D/GD rüzgârında iki demir önerilir. Su-elektrik rıhtımda; yakıt mini tankerle ya da 1,5 mil kuzeydeki Samos Marina'dan. Liman ücreti ~10 € /gece (2017). DİKKAT: iç liman girişinin ortasına yakın, şamandırayla işaretli TEHLİKELİ KAYA vardır — kuzey kenardan girin; 2021'den beri iç limanda demirleme yasaktır. Gece rıhtım kafeleri sabaha dek gürültülü olabilir.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 4,
-      "depthMaxM": 5,
-      "vhfChannel": "12",
-      "amenities": ["electricity", "water", "fuel"],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+302273061225", "primary": true}
-      ],
-      "sourceUrls": [
-        "https://www.cruiserswiki.org/wiki/Pythagorio"
-      ],
-      "confidence": "high",
-      "missingNotes": "Ücret 2017 verisi — güncel tarife değişmiş olabilir. WC/duş yok (kaynak)."
-    },
-    {
-      "slug": "samos-vathy-limani",
-      "name": "Vathy Limanı (Samos)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-samos",
-      "districtSlug": null,
-      "lat": 37.75536,
-      "lon": 26.973063,
-      "coordSource": "sea-seek (37.755360, 26.973063)",
-      "descriptionTr": "Samos'un başkenti Vathy'nin limanı. Rıhtım çevresinde hemen her yerde ~3 m su vardır; feribot rıhtımından uzağa bağlanılır. Ana körfez kuzey-kuzeybatıya tamamen açıktır — meltemde belirgin çapraz dalga girer; güneydoğu köşedeki küçük marina meltemden korunur (hafif soluğanla). Su marinada; yakıt mini tankerle. Kasabada market, banka ve restoranlar rıhtım boyundadır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 3,
-      "depthMaxM": 3,
-      "vhfChannel": null,
-      "amenities": ["water", "fuel"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Vathi-Samos-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "VHF, ücret ve elektrik kaynakta belirtilmiyor."
-    },
-    {
-      "slug": "agathonisi-agios-georgios",
-      "name": "Agios Georgios Rıhtımı (Agathonisi)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-agathonisi",
-      "districtSlug": null,
-      "lat": 37.457523,
-      "lon": 26.966928,
-      "coordSource": "sea-seek (37.457523, 26.966928)",
-      "descriptionTr": "Didim-Datça hattının karşısındaki küçük Agathonisi'nin tek limanı. Feribot rıhtımına 3-4 tek gövdeli tekne sığar (katamaran varsa daha az); koyda demir yeri sınırlıdır — batı ve doğu kollarında 7-12 m'ye demirlenir, tutuş iyidir. Meltemden iyi korunur; güneye açıktır; Temmuz-Eylül arası kuvvetli sağanak rüzgâr (gust) görülür. DİKKAT: yazın yüzme şamandıraları konur ve sıkı denetlenir. Köyde 3 restoran ve bakkallar vardır; SUYU İÇMEYİN (içme suyu değildir).",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 7,
-      "depthMaxM": 12,
-      "vhfChannel": null,
-      "amenities": ["restaurant"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Ormos-Agios-Georgios-Agathonisi-Greece-"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Kaynak 2009 güncellemeli — rıhtım düzeni değişmiş olabilir. Elektrik/ücret verilmiyor."
-    },
-    {
-      "slug": "katapola-limani-amorgos",
-      "name": "Katapola Limanı (Amorgos)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-amorgos",
-      "districtSlug": null,
-      "lat": 36.828701,
-      "lon": 25.8652,
-      "coordSource": "sea-seek (36.828701, 25.865200)",
-      "descriptionTr": "Amorgos'un ana limanı. Kuzeye demir atıp kıçtan rıhtıma bağlanılır. Geniş koy kuzey-kuzeydoğuya açıktır; kuvvetli batı rüzgârında koyda dalga 1,5 m'yi bulabilir. Elektrik rıhtımda; yakıt mini tankerle; tersane, market, banka ve restoranlar vardır. Liman ücreti ~14 €/gece (12 m tekne, 2017), su ~5 €. Koyun karşı (kuzey) yakası Xilokeratidi balıkçı limanıdır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": ["electricity", "water", "fuel"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Katapola-Amorgos-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Rıhtım derinliği kaynakta yok. Ücretler 2017 verisi."
-    },
-    {
-      "slug": "tourlos-marina-mykonos",
-      "name": "Tourlos Marina (Mykonos Yeni Limanı)",
-      "operator": "Mykonos Belediye Liman Fonu",
-      "status": "published",
-      "typeCode": "municipal_marina",
-      "countryCode": "GR",
-      "provinceSlug": "gr-mykonos",
-      "districtSlug": null,
-      "lat": 37.465302,
-      "lon": 25.322599,
-      "coordSource": "sea-seek (37.465302, 25.322599)",
-      "descriptionTr": "Mykonos'un yeni limanındaki yat bölümü; ~40 ponton yeri, maksimum boy 25 m, derinlik 3-5 m. İki giriş vardır (güney kırmızı, kuzey yeşil fener); güney rıhtım daha korunaklıdır. Su-elektrik pontonlarda; yakıt mini tankerle; Wi-Fi, duş-WC ve mekanik tamir bulunur. DİKKAT: meltem K/KB'den doğrudan marinaya eser — Mykonos, Kikladlar'ın en rüzgârlı adalarındandır. Kasabaya 20 dk yürüyüş ya da otobüs.",
-      "berthCount": 40,
-      "maxLoaM": 25,
-      "maxDraftM": null,
-      "depthMinM": 3,
-      "depthMaxM": 5,
-      "vhfChannel": "12",
-      "amenities": ["electricity", "water", "fuel", "wifi", "shower", "wc"],
-      "services": ["technical_service"],
-      "contacts": [
-        {"type": "phone", "value": "+302289022218", "primary": true}
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Tourlos-Marina-Mykonos-Greece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Ücret kaynakta yok."
-    },
-    {
-      "slug": "naoussa-limani-paros",
-      "name": "Naoussa Limanı (Paros)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-paros",
-      "districtSlug": null,
-      "lat": 37.124001,
-      "lon": 25.237101,
-      "coordSource": "sea-seek (37.124001, 25.237101)",
-      "descriptionTr": "Paros'un kuzeyindeki şirin balıkçı kasabası. Rıhtımda 3-5 m, dış kesimde 4-10 m; çamur-kum-yosun zemin iyi tutar; ~70 yer vardır. Meltemden iyi korunur; ama her yönden kuvvetli rüzgâr bağlamayı rahatsız eder. DİKKAT: rıhtımın bazı bölümlerinde su altı kaya çıkıntısı ve doğu-batı uzanan zincir vardır; feribot alanı boş bırakılır; yerin çoğunu yerel balıkçı tekneleri tutar. Yakıt mini tankerle; tamir/tersane, market ve restoranlar vardır. Çevre koylar (Langeri, Ag. Ioannou, Plastira) alternatif demirleme sunar.",
-      "berthCount": 70,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 3,
-      "depthMaxM": 5,
-      "vhfChannel": null,
-      "amenities": ["electricity", "water", "fuel"],
-      "services": ["technical_service"],
-      "contacts": [
-        {"type": "phone", "value": "+302284052646", "primary": true}
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Naoussa-Paros-"
-      ],
-      "confidence": "high",
-      "missingNotes": null
-    },
-    {
-      "slug": "hydra-limani",
-      "name": "İdra (Hydra) Limanı",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-hydra",
-      "districtSlug": null,
-      "lat": 37.350601,
-      "lon": 23.4659,
-      "coordSource": "sea-seek (37.350601, 23.465900)",
-      "descriptionTr": "Saronik'in incisi, arabasız ada İdra'nın taş limanı. VHF 12. Su, elektrik ve yakıt vardır. DİKKAT: zemin ot-kaya-çamur karışımı ve TUTUŞ ZAYIFTIR; kuzeybatı rüzgârı tehlikeli dalgalanma yapar — K/KD rüzgârında kuzey mendireği tercih edilir. Yoğunluk (kaynaklı): yaz aylarında aşırı kalabalıktır, tekneler rıhtıma ÜÇ SIRA aborda bağlanır; dar girişte feribot ve hidrofiller hızlı geçer. Erken saatte gelin.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": "12",
-      "amenities": ["electricity", "water", "fuel"],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+302298052279", "primary": true}
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-d-Hydra-Grece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik ve ücret kaynakta yok. Zemin karışık ('ot-kaya-çamur') olduğundan holdingType girilmedi (liman kaydı)."
-    },
-    {
-      "slug": "aegina-limani",
-      "name": "Egina (Aegina) Limanı",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-egina",
-      "districtSlug": null,
-      "lat": 37.745098,
-      "lon": 23.426901,
-      "coordSource": "sea-seek (37.745098, 23.426901)",
-      "descriptionTr": "Atina'ya en yakın adalardan Egina'nın ana limanı; batı mendireğindeki beyaz şapel uzaktan seçilir. Kanalda 8-9 m; zemin kaya+çamur. Girişte sancak tarafı marinadır; pontonlara dik bağlanılır; rıhtımda şamandıralı bağlama vardır (güney mendireği charter teknelerine ayrılır). VHF 12. Su, elektrik ve mini tankerle yakıt. Her yönden iyi korunur; güneyli rüzgâr rahatsız soluğan sokar; kuvvetli KB rüzgârında DGD kesiminde bağlama tehlikelidir — zinciri tam kaçırın. DİKKAT: feribot/hidrofil trafiği hızlıdır. Kuzeyde N. Metopi yönünde sığlık uzanır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": 8,
-      "depthMaxM": 9,
-      "vhfChannel": "12",
-      "amenities": ["electricity", "water", "fuel"],
-      "services": [],
-      "contacts": [
-        {"type": "phone", "value": "+302297022328", "primary": true}
-      ],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Port-Aegina-N-Aeginia-Grece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Ücret kaynakta yok."
-    },
-    {
-      "slug": "spetses-baltiza-limani",
-      "name": "Spetses Baltiza (Eski Liman)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-spetses",
-      "districtSlug": null,
-      "lat": 37.262199,
-      "lon": 23.164801,
-      "coordSource": "sea-seek (37.262199, 23.164801)",
-      "descriptionTr": "Spetses'in geleneksel kayık tersaneleriyle çevrili eski limanı; doğu girişini Ak Fanari feneri işaretler. İç havza çamur zeminde iyi tutar ve TAM korunak sağlar; kıyıya bağlanılabilir. Dış liman kuvvetli KB rüzgârında rahatsızdır; güneybatı köşesinde büyük sahipsiz zincir vardır — demiri oraya atmayın. Yakıt, su ve elektrik vardır. Sezonda iç havza tıkanır. DİKKAT: Spetses ile Spetsopoula adası arasında çok sayıda resif vardır.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": ["electricity", "water", "fuel"],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.sea-seek.com/en/Vieux-Port-Spetses-crique-de-Baltiza-Grece-"
-      ],
-      "confidence": "high",
-      "missingNotes": "Derinlik, VHF ve ücret kaynakta yok."
-    },
-    {
-      "slug": "astypalaia-pera-gialos",
-      "name": "Pera Gialos Limanı (Astypalaia)",
-      "operator": null,
-      "status": "published",
-      "typeCode": "municipal_pier",
-      "countryCode": "GR",
-      "provinceSlug": "gr-astypalaia",
-      "districtSlug": null,
-      "lat": 36.54716,
-      "lon": 26.355408,
-      "coordSource": "imaps.gr liman fişi (36.547160, 26.355408)",
-      "descriptionTr": "Kelebek biçimli Astypalaia'nın Chora'nın eteğindeki geleneksel limanı. Ana feribot trafiği yeni Agios Andreas limanına taşındı; Pera Gialos'ta son yıllarda yelkenliler için küçük bir marina düzeni kuruldu; Kalymnos'tan yerel feribot yanaşır. Beyaz Chora evleri ve kale limanın hemen üzerindedir.",
-      "berthCount": null,
-      "maxLoaM": null,
-      "maxDraftM": null,
-      "depthMinM": null,
-      "depthMaxM": null,
-      "vhfChannel": null,
-      "amenities": [],
-      "services": [],
-      "contacts": [],
-      "sourceUrls": [
-        "https://www.imaps.gr/en/map/point/194"
-      ],
-      "confidence": "medium",
-      "missingNotes": "Derinlik, hizmet ve ücret verisi kaynakta yok → boş bırakıldı; yalnız konum ve liman rolü doğrulandı."
+     "type": "phone",
+     "value": "+302273061225",
+     "primary": true
     }
-  ]
+   ],
+   "sourceUrls": [
+    "https://www.cruiserswiki.org/wiki/Pythagorio"
+   ],
+   "confidence": "high",
+   "missingNotes": "Ücret 2017 verisi — güncel tarife değişmiş olabilir. WC/duş yok (kaynak)."
+  },
+  {
+   "slug": "samos-vathy-limani",
+   "name": "Vathy Limanı (Samos)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-samos",
+   "districtSlug": null,
+   "lat": 37.75536,
+   "lon": 26.973063,
+   "coordSource": "sea-seek (37.755360, 26.973063)",
+   "descriptionTr": "Samos'un başkenti Vathy'nin limanı. Rıhtım çevresinde hemen her yerde ~3 m su vardır; feribot rıhtımından uzağa bağlanılır. Ana körfez kuzey-kuzeybatıya tamamen açıktır — meltemde belirgin çapraz dalga girer; güneydoğu köşedeki küçük marina meltemden korunur (hafif soluğanla). Su marinada; yakıt mini tankerle. Kasabada market, banka ve restoranlar rıhtım boyundadır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3,
+   "depthMaxM": 3,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Vathi-Samos-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "VHF, ücret ve elektrik kaynakta belirtilmiyor."
+  },
+  {
+   "slug": "agathonisi-agios-georgios",
+   "name": "Agios Georgios Rıhtımı (Agathonisi)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-agathonisi",
+   "districtSlug": null,
+   "lat": 37.457523,
+   "lon": 26.966928,
+   "coordSource": "sea-seek (37.457523, 26.966928)",
+   "descriptionTr": "Didim-Datça hattının karşısındaki küçük Agathonisi'nin tek limanı. Feribot rıhtımına 3-4 tek gövdeli tekne sığar (katamaran varsa daha az); koyda demir yeri sınırlıdır — batı ve doğu kollarında 7-12 m'ye demirlenir, tutuş iyidir. Meltemden iyi korunur; güneye açıktır; Temmuz-Eylül arası kuvvetli sağanak rüzgâr (gust) görülür. DİKKAT: yazın yüzme şamandıraları konur ve sıkı denetlenir. Köyde 3 restoran ve bakkallar vardır; SUYU İÇMEYİN (içme suyu değildir).",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 7,
+   "depthMaxM": 12,
+   "vhfChannel": null,
+   "amenities": [
+    "restaurant"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Ormos-Agios-Georgios-Agathonisi-Greece-"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Kaynak 2009 güncellemeli — rıhtım düzeni değişmiş olabilir. Elektrik/ücret verilmiyor."
+  },
+  {
+   "slug": "katapola-limani-amorgos",
+   "name": "Katapola Limanı (Amorgos)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-amorgos",
+   "districtSlug": null,
+   "lat": 36.828701,
+   "lon": 25.8652,
+   "coordSource": "sea-seek (36.828701, 25.865200)",
+   "descriptionTr": "Amorgos'un ana limanı. Kuzeye demir atıp kıçtan rıhtıma bağlanılır. Geniş koy kuzey-kuzeydoğuya açıktır; kuvvetli batı rüzgârında koyda dalga 1,5 m'yi bulabilir. Elektrik rıhtımda; yakıt mini tankerle; tersane, market, banka ve restoranlar vardır. Liman ücreti ~14 €/gece (12 m tekne, 2017), su ~5 €. Koyun karşı (kuzey) yakası Xilokeratidi balıkçı limanıdır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Katapola-Amorgos-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Rıhtım derinliği kaynakta yok. Ücretler 2017 verisi."
+  },
+  {
+   "slug": "tourlos-marina-mykonos",
+   "name": "Tourlos Marina (Mykonos Yeni Limanı)",
+   "operator": "Mykonos Belediye Liman Fonu",
+   "status": "published",
+   "typeCode": "municipal_marina",
+   "countryCode": "GR",
+   "provinceSlug": "gr-mykonos",
+   "districtSlug": null,
+   "lat": 37.465302,
+   "lon": 25.322599,
+   "coordSource": "sea-seek (37.465302, 25.322599)",
+   "descriptionTr": "Mykonos'un yeni limanındaki yat bölümü; ~40 ponton yeri, maksimum boy 25 m, derinlik 3-5 m. İki giriş vardır (güney kırmızı, kuzey yeşil fener); güney rıhtım daha korunaklıdır. Su-elektrik pontonlarda; yakıt mini tankerle; Wi-Fi, duş-WC ve mekanik tamir bulunur. DİKKAT: meltem K/KB'den doğrudan marinaya eser — Mykonos, Kikladlar'ın en rüzgârlı adalarındandır. Kasabaya 20 dk yürüyüş ya da otobüs.",
+   "berthCount": 40,
+   "maxLoaM": 25,
+   "maxDraftM": null,
+   "depthMinM": 3,
+   "depthMaxM": 5,
+   "vhfChannel": "12",
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel",
+    "wifi",
+    "shower",
+    "wc"
+   ],
+   "services": [
+    "technical_service"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302289022218",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Tourlos-Marina-Mykonos-Greece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Ücret kaynakta yok."
+  },
+  {
+   "slug": "naoussa-limani-paros",
+   "name": "Naoussa Limanı (Paros)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-paros",
+   "districtSlug": null,
+   "lat": 37.124001,
+   "lon": 25.237101,
+   "coordSource": "sea-seek (37.124001, 25.237101)",
+   "descriptionTr": "Paros'un kuzeyindeki şirin balıkçı kasabası. Rıhtımda 3-5 m, dış kesimde 4-10 m; çamur-kum-yosun zemin iyi tutar; ~70 yer vardır. Meltemden iyi korunur; ama her yönden kuvvetli rüzgâr bağlamayı rahatsız eder. DİKKAT: rıhtımın bazı bölümlerinde su altı kaya çıkıntısı ve doğu-batı uzanan zincir vardır; feribot alanı boş bırakılır; yerin çoğunu yerel balıkçı tekneleri tutar. Yakıt mini tankerle; tamir/tersane, market ve restoranlar vardır. Çevre koylar (Langeri, Ag. Ioannou, Plastira) alternatif demirleme sunar.",
+   "berthCount": 70,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3,
+   "depthMaxM": 5,
+   "vhfChannel": null,
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [
+    "technical_service"
+   ],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302284052646",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Naoussa-Paros-"
+   ],
+   "confidence": "high",
+   "missingNotes": null
+  },
+  {
+   "slug": "hydra-limani",
+   "name": "İdra (Hydra) Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-hydra",
+   "districtSlug": null,
+   "lat": 37.350601,
+   "lon": 23.4659,
+   "coordSource": "sea-seek (37.350601, 23.465900)",
+   "descriptionTr": "Saronik'in incisi, arabasız ada İdra'nın taş limanı. VHF 12. Su, elektrik ve yakıt vardır. DİKKAT: zemin ot-kaya-çamur karışımı ve TUTUŞ ZAYIFTIR; kuzeybatı rüzgârı tehlikeli dalgalanma yapar — K/KD rüzgârında kuzey mendireği tercih edilir. Yoğunluk (kaynaklı): yaz aylarında aşırı kalabalıktır, tekneler rıhtıma ÜÇ SIRA aborda bağlanır; dar girişte feribot ve hidrofiller hızlı geçer. Erken saatte gelin.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "12",
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302298052279",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-d-Hydra-Grece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik ve ücret kaynakta yok. Zemin karışık ('ot-kaya-çamur') olduğundan holdingType girilmedi (liman kaydı)."
+  },
+  {
+   "slug": "aegina-limani",
+   "name": "Egina (Aegina) Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-egina",
+   "districtSlug": null,
+   "lat": 37.745098,
+   "lon": 23.426901,
+   "coordSource": "sea-seek (37.745098, 23.426901)",
+   "descriptionTr": "Atina'ya en yakın adalardan Egina'nın ana limanı; batı mendireğindeki beyaz şapel uzaktan seçilir. Kanalda 8-9 m; zemin kaya+çamur. Girişte sancak tarafı marinadır; pontonlara dik bağlanılır; rıhtımda şamandıralı bağlama vardır (güney mendireği charter teknelerine ayrılır). VHF 12. Su, elektrik ve mini tankerle yakıt. Her yönden iyi korunur; güneyli rüzgâr rahatsız soluğan sokar; kuvvetli KB rüzgârında DGD kesiminde bağlama tehlikelidir — zinciri tam kaçırın. DİKKAT: feribot/hidrofil trafiği hızlıdır. Kuzeyde N. Metopi yönünde sığlık uzanır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 8,
+   "depthMaxM": 9,
+   "vhfChannel": "12",
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+302297022328",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Port-Aegina-N-Aeginia-Grece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Ücret kaynakta yok."
+  },
+  {
+   "slug": "spetses-baltiza-limani",
+   "name": "Spetses Baltiza (Eski Liman)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-spetses",
+   "districtSlug": null,
+   "lat": 37.262199,
+   "lon": 23.164801,
+   "coordSource": "sea-seek (37.262199, 23.164801)",
+   "descriptionTr": "Spetses'in geleneksel kayık tersaneleriyle çevrili eski limanı; doğu girişini Ak Fanari feneri işaretler. İç havza çamur zeminde iyi tutar ve TAM korunak sağlar; kıyıya bağlanılabilir. Dış liman kuvvetli KB rüzgârında rahatsızdır; güneybatı köşesinde büyük sahipsiz zincir vardır — demiri oraya atmayın. Yakıt, su ve elektrik vardır. Sezonda iç havza tıkanır. DİKKAT: Spetses ile Spetsopoula adası arasında çok sayıda resif vardır.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "electricity",
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.sea-seek.com/en/Vieux-Port-Spetses-crique-de-Baltiza-Grece-"
+   ],
+   "confidence": "high",
+   "missingNotes": "Derinlik, VHF ve ücret kaynakta yok."
+  },
+  {
+   "slug": "astypalaia-pera-gialos",
+   "name": "Pera Gialos Limanı (Astypalaia)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "GR",
+   "provinceSlug": "gr-astypalaia",
+   "districtSlug": null,
+   "lat": 36.54716,
+   "lon": 26.355408,
+   "coordSource": "imaps.gr liman fişi (36.547160, 26.355408)",
+   "descriptionTr": "Kelebek biçimli Astypalaia'nın Chora'nın eteğindeki geleneksel limanı. Ana feribot trafiği yeni Agios Andreas limanına taşındı; Pera Gialos'ta son yıllarda yelkenliler için küçük bir marina düzeni kuruldu; Kalymnos'tan yerel feribot yanaşır. Beyaz Chora evleri ve kale limanın hemen üzerindedir.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://www.imaps.gr/en/map/point/194"
+   ],
+   "confidence": "medium",
+   "missingNotes": "Derinlik, hizmet ve ücret verisi kaynakta yok → boş bırakıldı; yalnız konum ve liman rolü doğrulandı."
+  }
+ ]
 }
