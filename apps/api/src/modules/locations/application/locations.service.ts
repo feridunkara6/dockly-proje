@@ -33,7 +33,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -107,7 +109,10 @@ export class LocationsService {
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }
@@ -178,6 +183,16 @@ export class LocationsService {
       LocationsService.MAX_REPORT_DISTANCE_M,
     );
     if (!result) throw new AppProblem('not-found');
+    if (result === 'unsupported') {
+      // Marina/liman gibi işletmeli türlerde doluluk bildirimi kapalıdır.
+      throw new AppProblem('validation-error', 'Bu konum türü için doluluk bildirimi kapalıdır.', [
+        {
+          field: 'type',
+          code: 'type_not_supported',
+          message: 'Doluluk yalnız bağlanma yerleri ve restoran iskeleleri için bildirilebilir.',
+        },
+      ]);
+    }
     if (result === 'too-far') {
       // Yanlış bilgi trafiğine karşı: yalnız yakınında olduğun koy bildirilebilir.
       throw new AppProblem('validation-error', 'Bildirim için koyun yakınında olmalısınız.', [

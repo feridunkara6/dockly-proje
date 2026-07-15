@@ -53,6 +53,19 @@ void main() {
     expect(occupancyAgo(t, DateTime(2026, 7, 15, 9, 30), now), '2 sa önce');
   });
 
+  test('TÜR KISITI: yalnız bağlanma yerleri ve restoran iskeleleri', () {
+    expect(occupancySupported('mooring_point'), isTrue);
+    expect(occupancySupported('buoy'), isTrue);
+    expect(occupancySupported('guest_mooring'), isTrue);
+    expect(occupancySupported('restaurant_pier'), isTrue);
+    // Marina ve limanlarda KAPALI (kullanıcı kararı 2026-07).
+    expect(occupancySupported('private_marina'), isFalse);
+    expect(occupancySupported('municipal_marina'), isFalse);
+    expect(occupancySupported('municipal_pier'), isFalse);
+    expect(occupancySupported('fuel_pier'), isFalse);
+    expect(occupancySupported('boat_club'), isFalse);
+  });
+
   test('l10n: doluluk alanları 4 dilde dolu ve ayrık', () {
     for (final AppLocale l in AppLocale.values) {
       final L10n t = l10nOf(l);

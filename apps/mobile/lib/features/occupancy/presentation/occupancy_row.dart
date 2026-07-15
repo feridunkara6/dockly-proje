@@ -16,6 +16,20 @@ import '../application/occupancy_controller.dart';
 /// (GPS payı) ayrıca doğrular. Bildirim için konum paylaşımı ŞARTTIR.
 const double occupancyMaxReportNm = 5.0;
 
+/// Doluluk bildirimi yapılabilen türler (kullanıcı kararı 2026-07): yalnız
+/// BAĞLANMA YERLERİ ve RESTORAN İSKELELERİ. Marina/limanda doluluğu işletme
+/// bilir — kullanıcı bildirimi oralarda kapalıdır (sunucu da aynı kuralı
+/// ayrıca denetler; iki katman).
+const Set<String> occupancySupportedTypes = <String>{
+  'mooring_point',
+  'buoy',
+  'guest_mooring',
+  'restaurant_pier',
+};
+
+bool occupancySupported(String typeCode) =>
+    occupancySupportedTypes.contains(typeCode);
+
 /// Doluluk düzeyi renkleri: durum renkleriyle aynı dil (yeşil/turuncu/kırmızı).
 Color occupancyColor(String level) {
   switch (level) {
@@ -105,9 +119,12 @@ class OccupancyChip extends ConsumerWidget {
   }
 }
 
-/// Detay sayfasındaki "Doluluk bildir" eylem satırı — bildirim YALNIZ buradan
-/// yapılır (alt kart salt gösterim). Sıra: 1) konum paylaşılmış mı,
-/// 2) koy 5 NM içinde mi, 3) üyelik kapısı, 4) düzey seçimi.
+/// Detay sayfasındaki "Doluluk bildir" eylemi — ana eylem bloğunun (Demirleme
+/// Notları / Rezervasyon Talebi) hemen altında TAM GENİŞLİK ikincil düğme:
+/// göz akışında, başparmak erişiminde ve ana eylemi gölgelemeyen profesyonel
+/// bir konum. Bildirim YALNIZ buradan yapılır (alt kart salt gösterim).
+/// Sıra: 1) konum paylaşılmış mı, 2) koy 5 NM içinde mi, 3) üyelik kapısı,
+/// 4) düzey seçimi.
 class OccupancyRow extends ConsumerWidget {
   const OccupancyRow({
     required this.idOrSlug,
@@ -123,14 +140,19 @@ class OccupancyRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
-    return Align(
-      alignment: Alignment.centerRight,
-      child: TextButton.icon(
-        key: const ValueKey<String>('occupancy-report-button'),
-        icon: const DocklyIcon(DocklyIcons.social, size: 18),
-        label: Text(t.occReportCta),
-        style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-        onPressed: () => _startReport(context, ref),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          key: const ValueKey<String>('occupancy-report-button'),
+          icon: const DocklyIcon(DocklyIcons.social, size: 18),
+          label: Text(t.occReportCta),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+          onPressed: () => _startReport(context, ref),
+        ),
       ),
     );
   }

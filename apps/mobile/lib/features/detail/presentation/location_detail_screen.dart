@@ -167,9 +167,6 @@ class _DetailContent extends ConsumerWidget {
           maxDraftM: detail.dimensions.maxDraftM,
         ),
         _SeaRouteRow(destination: detail.position),
-        // KOY DOLULUK (2026-07 ①): bildirme eylemi YALNIZ detay sayfasında.
-        // Konum + yakınlık + üyelik kapıları OccupancyRow içindedir.
-        OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
         const SizedBox(height: 14),
         // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon
@@ -197,6 +194,11 @@ class _DetailContent extends ConsumerWidget {
               ),
             ),
           ),
+        // DOLULUK BİLDİR (kullanıcı kararı 2026-07): yalnız bağlanma yerleri
+        // ve restoran iskelelerinde, ana eylemin hemen altında tam genişlik
+        // ikincil düğme. Marina/limanda bu özellik KAPALI.
+        if (occupancySupported(detail.type))
+          OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
         if (descriptionBelow != null && descriptionBelow.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),

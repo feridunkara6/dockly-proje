@@ -4,6 +4,16 @@ export interface GeoPoint {
   lon: number;
 }
 
+/** Doluluk bildirimi yapılabilen türler (kullanıcı kararı 2026-07):
+ * yalnız BAĞLANMA YERLERİ ve RESTORAN İSKELELERİ — marina/liman gibi işletmeli
+ * yerlerde doluluğu işletme bilir, kullanıcı bildirimi yanlış bilgi üretir. */
+export const OCCUPANCY_SUPPORTED_TYPES: readonly string[] = [
+  'mooring_point',
+  'buoy',
+  'guest_mooring',
+  'restaurant_pier',
+];
+
 /** Koy doluluk düzeyi (2026-07 ayrıştırma paketi ①). */
 export type OccupancyLevel = 'empty' | 'moderate' | 'full';
 
@@ -256,7 +266,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve

@@ -105,16 +105,16 @@ runIf('Misafir kısıtları (e2e — gerçek DB+Redis)', () => {
     // Misafir: üyelik kapısı sunucuda da tutarlı (2026-07 ayrıştırma paketi ①).
     const guest = await login(guestTok('guest-occ'));
     const gRes = await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', `Bearer ${guest.accessToken}`)
-      .send({ level: 'full', position: { lat: 36.749, lon: 28.943 } })
+      .send({ level: 'full', position: { lat: 37.005, lon: 27.386 } })
       .expect(403);
     expect(gRes.body.type).toContain('guest-not-allowed');
 
     // Tokensiz: 401.
     await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
-      .send({ level: 'full', position: { lat: 36.749, lon: 28.943 } })
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
+      .send({ level: 'full', position: { lat: 37.005, lon: 27.386 } })
       .expect(401);
 
     // Kayıtlı kullanıcı: bildirim geçer, özet döner; aynı kullanıcının ikinci
@@ -122,58 +122,65 @@ runIf('Misafir kısıtları (e2e — gerçek DB+Redis)', () => {
     const user = await login(userTok('occ-user-1'));
     const auth = `Bearer ${user.accessToken}`;
     const first = await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', auth)
-      .send({ level: 'full', position: { lat: 36.749, lon: 28.943 } })
+      .send({ level: 'full', position: { lat: 37.005, lon: 27.386 } })
       .expect(200);
     expect(first.body.occupancy.level).toBe('full');
     expect(first.body.occupancy.reportCount).toBe(1);
 
     const second = await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', auth)
-      .send({ level: 'moderate', position: { lat: 36.749, lon: 28.943 } })
+      .send({ level: 'moderate', position: { lat: 37.005, lon: 27.386 } })
       .expect(200);
     expect(second.body.occupancy.level).toBe('moderate');
     expect(second.body.occupancy.reportCount).toBe(1); // üstüne yazdı
 
     // Geçersiz gövde → 400 (zod): bozuk düzey ve KONUMSUZ bildirim.
     await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', auth)
-      .send({ level: 'cok-dolu', position: { lat: 36.749, lon: 28.943 } })
+      .send({ level: 'cok-dolu', position: { lat: 37.005, lon: 27.386 } })
       .expect(400);
     await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', auth)
       .send({ level: 'full' })
       .expect(400);
 
     // KONUM DOĞRULAMASI: koydan uzak (İstanbul) konumla bildirim reddedilir.
     const far = await request(http)
-      .post('/v1/locations/d-marin-gocek/occupancy')
+      .post('/v1/locations/adabogazi-akvaryum-demirleme/occupancy')
       .set('Authorization', auth)
       .send({ level: 'full', position: { lat: 41.0, lon: 29.0 } })
       .expect(400);
     expect(JSON.stringify(far.body)).toContain('too_far');
 
+    // TÜR KISITI (kullanıcı kararı 2026-07): marinada doluluk bildirimi KAPALI
+    // — yakın konumdan bile olsa reddedilir.
+    const marina = await request(http)
+      .post('/v1/locations/d-marin-gocek/occupancy')
+      .set('Authorization', auth)
+      .send({ level: 'full', position: { lat: 36.749, lon: 28.943 } })
+      .expect(400);
+    expect(JSON.stringify(marina.body)).toContain('type_not_supported');
+
     // Bilinmeyen lokasyon → 404.
     await request(http)
       .post('/v1/locations/yok-boyle-koy/occupancy')
       .set('Authorization', auth)
-      .send({ level: 'full', position: { lat: 36.749, lon: 28.943 } })
+      .send({ level: 'full', position: { lat: 37.005, lon: 27.386 } })
       .expect(404);
 
     // Pin sorgusu doluluk özetini taşır (detay/harita yüzeyi).
     const map = await request(http)
-      .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=13')
+      .get('/v1/locations?bbox=27.30,36.95,27.45,37.05&zoom=13')
       .expect(200);
-    interface PinLite {
-      name: string;
-      occupancy: { level: string; reportCount: number } | null;
-    }
-    const marina = (map.body.locations as PinLite[]).find((p) => p.name === 'D-Marin Göcek');
-    expect(marina?.occupancy?.level).toBe('moderate');
+    interface PinLite { name: string; occupancy: { level: string; reportCount: number } | null }
+    const koy = (map.body.locations as PinLite[]).find(
+      (p) => p.name === 'Akvaryum Koyu (Adaboğazı)');
+    expect(koy?.occupancy?.level).toBe('moderate');
   });
 
   it('misafir keşif uçlarını (public locations) normal kullanır', async () => {

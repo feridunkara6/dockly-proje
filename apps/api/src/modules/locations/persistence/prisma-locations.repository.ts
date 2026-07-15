@@ -15,6 +15,7 @@ import {
   TypeDetails,
   OccupancyLevel,
   OccupancySummary,
+  OCCUPANCY_SUPPORTED_TYPES,
 } from '../domain/location.types';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -116,7 +117,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -343,7 +346,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir; hücre + ÜLKE'ye göre
     // GROUP BY → sınır hücrelerinde TR/GR ayrı balon (istemci ülkeye göre renkler).
@@ -416,13 +421,16 @@ export class PrismaLocationsRepository implements LocationsRepository {
     level: OccupancyLevel,
     reporterPos: { lat: number; lon: number },
     maxDistanceM: number,
-  ): Promise<OccupancySummary | 'too-far' | null> {
+  ): Promise<OccupancySummary | 'too-far' | 'unsupported' | null> {
     const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
     const loc = await this.prisma.location.findFirst({
       where: { ...where, status: 'published', deletedAt: null },
-      select: { id: true },
+      select: { id: true, locationType: { select: { code: true } } },
     });
     if (!loc) return null;
+    // TÜR KISITI (kullanıcı kararı 2026-07): yalnız bağlanma yerleri ve
+    // restoran iskeleleri — marina/limanda işletme bilir, bildirim kapalı.
+    if (!OCCUPANCY_SUPPORTED_TYPES.includes(loc.locationType.code)) return 'unsupported';
     // KONUM DOĞRULAMASI (kullanıcı kararı 2026-07): bildiren koyun yakınında
     // olmalı — "en yakın koy ve çevresi" kuralının sunucu katmanı. PostGIS
     // geography mesafesi metre döner; eşik istemci kuralından biraz gevşektir
@@ -553,11 +561,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -604,12 +608,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({
