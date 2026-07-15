@@ -1,6 +1,9 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
+import {
+  DetailData,
+  LocationsRepository,
+} from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -157,9 +160,9 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
   });
 
   it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
-    await expect(
-      service.reportOccupancy('yok-boyle-koy', 'user-1', 'full'),
-    ).rejects.toMatchObject({ code: 'not-found' });
+    await expect(service.reportOccupancy('yok-boyle-koy', 'user-1', 'full')).rejects.toMatchObject({
+      code: 'not-found',
+    });
   });
 
   it('doluluk bildirimi: özet döner', async () => {
@@ -172,7 +175,11 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
         });
       }
     }
-    const res = await new LocationsService(new ReportRepo()).reportOccupancy('d-marin', 'user-1', 'moderate');
+    const res = await new LocationsService(new ReportRepo()).reportOccupancy(
+      'd-marin',
+      'user-1',
+      'moderate',
+    );
     expect(res.occupancy.level).toBe('moderate');
     expect(res.occupancy.reportCount).toBe(2);
   });

@@ -155,7 +155,10 @@ runIf('Misafir kısıtları (e2e — gerçek DB+Redis)', () => {
     const map = await request(http)
       .get('/v1/locations?bbox=28.90,36.70,29.00,36.80&zoom=13')
       .expect(200);
-    interface PinLite { name: string; occupancy: { level: string; reportCount: number } | null }
+    interface PinLite {
+      name: string;
+      occupancy: { level: string; reportCount: number } | null;
+    }
     const marina = (map.body.locations as PinLite[]).find((p) => p.name === 'D-Marin Göcek');
     expect(marina?.occupancy?.level).toBe('moderate');
   });

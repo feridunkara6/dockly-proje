@@ -1,11 +1,28 @@
-import { Body, Controller, Get, Header, Headers, HttpCode, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Headers,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { z } from 'zod';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { Principal } from '../../../core/auth/principal';
 import { LocationsService } from '../application/locations.service';
-import { LocationDetail, LocationSummary, MapResult, OccupancySummary, ReviewItem } from '../domain/location.types';
+import {
+  LocationDetail,
+  LocationSummary,
+  MapResult,
+  OccupancySummary,
+  ReviewItem,
+} from '../domain/location.types';
 import { resolveLocale } from '../../../common/i18n/locale';
 
 /**
@@ -14,9 +31,7 @@ import { resolveLocale } from '../../../common/i18n/locale';
  * + SWR ile CDN'de cache'lenir (docs/23 §17, docs/13 §4).
  */
 /** Doluluk bildirimi gövdesi (2026-07 ①): yalnız üç düzey; fazlası reddedilir. */
-const occupancySchema = z
-  .object({ level: z.enum(['empty', 'moderate', 'full']) })
-  .strict();
+const occupancySchema = z.object({ level: z.enum(['empty', 'moderate', 'full']) }).strict();
 
 @Controller('locations')
 export class LocationsController {
@@ -112,6 +127,8 @@ export class LocationsController {
 /** Tekrarlı `type` param = OR listesi (docs/23 §9.2); tekil değeri diziye sarar. */
 function normalizeTypes(type: string | string[] | undefined): string[] | undefined {
   if (type === undefined) return undefined;
-  const list = (Array.isArray(type) ? type : [type]).map((t) => t.trim()).filter((t) => t.length > 0);
+  const list = (Array.isArray(type) ? type : [type])
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
   return list.length > 0 ? list : undefined;
 }
