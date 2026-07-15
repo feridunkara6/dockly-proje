@@ -37,16 +37,24 @@
       var h = new Date().getHours();
       var gece = (h >= 19 || h < 7);
       if (!gece) s.className = 'gunduz';
-      // Uygulamadaki yerleşimin aynısı: her cihazda TAM EKRAN (cover).
-      // Dikey ekran dikey fotoğrafı, yatay ekran (bilgisayar/yatay tablet)
-      // aynı fotoğrafın yatay kompozisyonunu kullanır — küçük ortalanmış
-      // görsel ve boş kenarlar bitti; her iki görsel de önbelleğe alınır.
+      // 2026-07 (kullanıcı tasarımı): DİKEY ekran dikey marka fotoğrafını,
+      // YATAY ekran (bilgisayar/tablet) gerçek deniz+tekne kompozisyonunu
+      // kaplar. Görsel 2:1 — dar yatay ekranlarda kırpma SOLA yaslanır ki
+      // logo hep görünsün. Flutter inince aynı görselin üzerine çok yavaş
+      // yakınlaşma eklenir; geçiş hissedilmez.
       s.style.backgroundSize = 'cover';
       function uydur() {
         var yatay = window.innerWidth > window.innerHeight;
-        s.style.backgroundImage = 'url(assets/assets/splash/' +
-          (gece ? 'splash_gece' : 'splash_gunduz') +
-          (yatay ? '_yatay' : '') + '.jpg)';
+        if (yatay) {
+          s.style.backgroundImage = 'url(assets/assets/splash/' +
+            (gece ? 'acilis_yatay_gece' : 'acilis_yatay_gunduz') + '.jpg)';
+          s.style.backgroundPosition =
+            (window.innerWidth / window.innerHeight >= 1.6) ? 'center' : '15% center';
+        } else {
+          s.style.backgroundImage = 'url(assets/assets/splash/' +
+            (gece ? 'splash_gece' : 'splash_gunduz') + '.jpg)';
+          s.style.backgroundPosition = 'center';
+        }
       }
       uydur();
       window.addEventListener('resize', uydur);

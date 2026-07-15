@@ -84,9 +84,6 @@ class _SplashGateState extends ConsumerState<SplashGate> {
     // döndürülürse sonraki karede doğru varyanta geçer.
     final Size screen = MediaQuery.sizeOf(context);
     final bool wide = screen.width > screen.height;
-    final _SplashVariant variant = night
-        ? (wide ? _geceYatay : _gece)
-        : (wide ? _gunduzYatay : _gunduz);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -97,7 +94,12 @@ class _SplashGateState extends ConsumerState<SplashGate> {
             child: AnimatedOpacity(
               opacity: _done ? 0 : 1,
               duration: const Duration(milliseconds: 450),
-              child: _SplashScreen(variant: variant),
+              // TELEFON (dikey): marka fotoğrafı. BİLGİSAYAR/TABLET (yatay):
+              // koddan çizilen sahne — her çözünürlükte kusursuz (2026-07
+              // yeniden tasarım; fotoğraf kırpma/büyütme sorunları bitti).
+              child: wide
+                  ? _WideSplash(night: night)
+                  : _SplashScreen(variant: night ? _gece : _gunduz),
             ),
           ),
       ],
@@ -135,7 +137,6 @@ class _SplashVariant {
 }
 
 const Size _dikeyBoyut = Size(853, 1844);
-const Size _yatayBoyut = Size(1920, 1080);
 
 const _SplashVariant _gunduz = _SplashVariant(
   asset: 'assets/splash/splash_gunduz.jpg',
@@ -155,26 +156,7 @@ const _SplashVariant _gece = _SplashVariant(
   end: Offset(0.840, 0.565),
 );
 
-/// Yatay kompozisyonlar: aynı fotoğrafın tekne bandı + görselin KENDİ
-/// logosu (piksel maskesiyle çıkarılıp yatay düzene yerleştirildi — yeni
-/// içerik üretilmedi, kalite kaybı yok; logo blokları ~birebir ölçekte).
-const _SplashVariant _gunduzYatay = _SplashVariant(
-  asset: 'assets/splash/splash_gunduz_yatay.jpg',
-  imageSize: _yatayBoyut,
-  start: Offset(0.475, 0.86),
-  c1: Offset(0.60, 0.92),
-  c2: Offset(0.72, 0.72),
-  end: Offset(0.80, 0.60),
-);
 
-const _SplashVariant _geceYatay = _SplashVariant(
-  asset: 'assets/splash/splash_gece_yatay.jpg',
-  imageSize: _yatayBoyut,
-  start: Offset(0.36, 0.52),
-  c1: Offset(0.50, 0.72),
-  c2: Offset(0.66, 0.78),
-  end: Offset(0.78, 0.66),
-);
 
 /// Fotoğrafın EKRANDAKİ yerleşim dikdörtgeni: her cihazda KAPLA (cover) —
 /// ekran oranı görselinkinden farklıysa taşan kenar kırpılır. Dikeyde dikey
@@ -273,7 +255,10 @@ class _SplashScreenState extends State<_SplashScreen>
                   return CustomPaint(
                     key: const ValueKey<String>('splash-route'),
                     painter: _RoutePainter(
-                      variant: v,
+                      start: v.start,
+                      c1: v.c1,
+                      c2: v.c2,
+                      end: v.end,
                       rect: rect,
                       progress: Curves.easeInOut.transform(_draw.value),
                       phase: _march.value,
@@ -312,15 +297,21 @@ class _SplashScreenState extends State<_SplashScreen>
 /// ne kadarının göründüğünü (0..1), `phase` kesiklerin akış kaymasını belirler.
 class _RoutePainter extends CustomPainter {
   _RoutePainter({
-    required this.variant,
+    required this.start,
+    required this.c1,
+    required this.c2,
+    required this.end,
     required this.rect,
     required this.progress,
     required this.phase,
   });
 
-  final _SplashVariant variant;
+  final Offset start;
+  final Offset c1;
+  final Offset c2;
+  final Offset end;
 
-  /// Fotoğrafın ekrandaki yerleşimi — rota noktaları buna göre eşlenir.
+  /// Fotoğrafın/sahnenin ekrandaki yerleşimi — rota noktaları buna eşlenir.
   final Rect rect;
   final double progress;
   final double phase;
@@ -331,10 +322,10 @@ class _RoutePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (progress <= 0.02) return;
-    final Offset p0 = _mapInRect(variant.start, rect);
-    final Offset p1 = _mapInRect(variant.c1, rect);
-    final Offset p2 = _mapInRect(variant.c2, rect);
-    final Offset p3 = _mapInRect(variant.end, rect);
+    final Offset p0 = _mapInRect(start, rect);
+    final Offset p1 = _mapInRect(c1, rect);
+    final Offset p2 = _mapInRect(c2, rect);
+    final Offset p3 = _mapInRect(end, rect);
     final Path path = Path()
       ..moveTo(p0.dx, p0.dy)
       ..cubicTo(p1.dx, p1.dy, p2.dx, p2.dy, p3.dx, p3.dy);
@@ -368,7 +359,7 @@ class _RoutePainter extends CustomPainter {
   bool shouldRepaint(_RoutePainter old) =>
       old.progress != progress ||
       old.phase != phase ||
-      old.variant != variant ||
+      old.start != start ||
       old.rect != rect;
 }
 
@@ -419,6 +410,89 @@ class _AnchorPin extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// YATAY AÇILIŞ (2026-07, kullanıcı tasarımı): bilgisayar/tablette GERÇEK
+// deniz + tekne görseli kullanılır — gündüz ve gece sürümleri kullanıcının
+// verdiği hazır kompozisyonlardır (logo, slogan, rota ve çapa pini görselin
+// içindedir). Üzerine yalnız çok yavaş bir yakınlaşma (Ken Burns) uygulanır:
+// sahne yaşar ama tasarıma hiçbir öğe eklenmez. Görsel 2:1 orandadır; dar
+// yatay ekranlarda (ör. 4:3 tablet) kırpma SOLA yaslanır ki logo hep görünsün.
+// =============================================================================
+
+class _WideSplash extends StatefulWidget {
+  const _WideSplash({required this.night});
+
+  final bool night;
+
+  @override
+  State<_WideSplash> createState() => _WideSplashState();
+}
+
+class _WideSplashState extends State<_WideSplash>
+    with SingleTickerProviderStateMixin {
+  bool _precached = false;
+
+  /// Çok yavaş yakınlaşma: 1.0 → 1.05, açılış boyunca sürer (tek yön).
+  late final AnimationController _zoom = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 9),
+  )..forward();
+
+  String get _asset => widget.night
+      ? 'assets/splash/acilis_yatay_gece.jpg'
+      : 'assets/splash/acilis_yatay_gunduz.jpg';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_precached) {
+      _precached = true;
+      // PERF: görsel ilk karede hazır olsun (beyaz parlamayı önler).
+      precacheImage(AssetImage(_asset), context);
+    }
+  }
+
+  @override
+  void dispose() {
+    _zoom.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints c) {
+          final double ratio = c.maxWidth / c.maxHeight;
+          // Geniş ekranda (16:9 ve üstü) ortala; darlaştıkça sola yaslan —
+          // görselin sol yarısındaki marka bloğu asla kırpılmasın.
+          final Alignment align =
+              ratio >= 1.6 ? Alignment.center : const Alignment(-0.7, 0);
+          return ClipRect(
+            child: AnimatedBuilder(
+              animation: _zoom,
+              builder: (BuildContext context, Widget? child) {
+                final double scale =
+                    1.0 + 0.05 * Curves.easeOut.transform(_zoom.value);
+                return Transform.scale(scale: scale, child: child);
+              },
+              child: Image.asset(
+                _asset,
+                fit: BoxFit.cover,
+                alignment: align,
+                width: c.maxWidth,
+                height: c.maxHeight,
+                gaplessPlayback: true,
+                filterQuality: FilterQuality.medium,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

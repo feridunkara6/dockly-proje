@@ -36,11 +36,11 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    // Test yüzeyi YATAY (800x600) → masaüstü modu: yatay kompozisyon,
-    // TEK katman tam ekran (bulanık dolgu kalktı — kullanıcı kararı 2026-07).
-    expect(_asset('splash_gunduz_yatay'), findsOneWidget);
-    expect(_asset('splash_gece'), findsNothing);
-    expect(find.byKey(const ValueKey<String>('splash-route')), findsOneWidget);
+    // Test yüzeyi YATAY (800x600) → masaüstü modu: kullanıcının gündüz
+    // tasarımı (gerçek deniz + tekne; rota ve logo görselin içinde).
+    expect(_asset('acilis_yatay_gunduz'), findsOneWidget);
+    expect(_asset('acilis_yatay_gece'), findsNothing);
+    expect(_asset('splash_gunduz'), findsNothing); // dikey fotoğraf yatayda yok
     // PERF sözleşmesi: içerik açılış ekranı görünürken de KURULUDUR (arkada
     // yüklenir) — kararma bitince hazır harita karşılar.
     expect(find.text('HARITA'), findsOneWidget);
@@ -49,20 +49,19 @@ void main() {
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
-    expect(_asset('splash_gunduz'), findsNothing);
-    expect(find.byKey(const ValueKey<String>('splash-route')), findsNothing);
+    expect(_asset('acilis_yatay_gunduz'), findsNothing); // açılış tamamen kalktı
   });
 
   testWidgets('gece (22:00): koyu görsel kullanılır', (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 22)));
     await tester.pump();
 
-    expect(_asset('splash_gece_yatay'), findsOneWidget);
-    expect(_asset('splash_gunduz'), findsNothing);
+    expect(_asset('acilis_yatay_gece'), findsOneWidget);
+    expect(_asset('acilis_yatay_gunduz'), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
-    expect(_asset('splash_gece'), findsNothing);
+    expect(_asset('acilis_yatay_gece'), findsNothing);
     expect(find.text('HARITA'), findsOneWidget);
   });
 
@@ -77,7 +76,9 @@ void main() {
     await tester.pump();
 
     expect(_asset('splash_gunduz'), findsOneWidget); // tek katman
-    expect(_asset('splash_gunduz_yatay'), findsNothing); // dikeyde dikey görsel
+    expect(_asset('acilis_yatay_gunduz'), findsNothing); // dikeyde dikey fotoğraf
+    // Rota animasyonu dikey açılışta yaşamaya devam eder.
+    expect(find.byKey(const ValueKey<String>('splash-route')), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
@@ -87,7 +88,7 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 5)));
     await tester.pump();
-    expect(_asset('splash_gece'), findsWidgets);
+    expect(_asset('acilis_yatay_gece'), findsWidgets); // yatay yüzey → gece tasarımı
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
