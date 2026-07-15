@@ -50,6 +50,31 @@ void main() {
       }
     });
 
+    test('tip ve olanak etiketleri 4 dilde eksiksiz', () {
+      const List<String> types = <String>['private_marina','municipal_marina',
+        'municipal_pier','guest_mooring','restaurant_pier','fuel_pier',
+        'boat_club','mooring_point','buoy'];
+      const List<String> amenities = <String>['fuel','water','electricity',
+        'shower','restaurant','market','wifi','wc','laundry','security',
+        'pump_out','crane','travel_lift','technical_service'];
+      for (final AppLocale l in AppLocale.values) {
+        final L10n t = l10nOf(l);
+        for (final String c in types) {
+          expect(t.typeLabels.containsKey(c), isTrue, reason: '$l $c');
+        }
+        for (final String c in amenities) {
+          expect(t.amenityLabels.containsKey(c), isTrue, reason: '$l $c');
+        }
+      }
+      expect(l10nOf(AppLocale.tr).typeLabel('private_marina'), 'Özel Marina');
+      expect(l10nOf(AppLocale.en).typeLabel('private_marina'), 'Private Marina');
+      expect(l10nOf(AppLocale.ru).amenityLabel('water'), 'Вода');
+      expect(l10nOf(AppLocale.es).amenityLabel('fuel'), 'Combustible');
+      // bilinmeyen kod güvenli düşer
+      expect(l10nOf(AppLocale.en).typeLabel('yeni_tip'), 'Mooring Point');
+      expect(l10nOf(AppLocale.en).amenityLabel('yeni_kod'), 'yeni_kod');
+    });
+
     test('fmt yer tutucuyu doldurur', () {
       expect(L10n.fmt('Boy {0} m', '12'), 'Boy 12 m');
       expect(L10n.fmt('Длина {0} м', '9.5'), 'Длина 9.5 м');

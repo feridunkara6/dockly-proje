@@ -3,8 +3,8 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/amenity_labels.dart';
-import '../../../core/location_type_labels.dart';
+import '../../../core/amenity_labels.dart' show kSearchAmenities;
+import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
@@ -41,6 +41,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n t = ref.watch(l10nProvider);
     final SearchState state = ref.watch(searchControllerProvider);
     final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
     final MyBoat? boat = ref.watch(myBoatProvider);
@@ -74,13 +75,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           textInputAction: TextInputAction.search,
           onChanged: controller.onQueryChanged,
           decoration: InputDecoration(
-            hintText: 'Liman, koy, şehir ara',
+            hintText: t.searchHint,
             border: InputBorder.none,
             suffixIcon: state.query.isEmpty
                 ? const DocklyIcon(DocklyIcons.search)
                 : IconButton(
                     icon: const DocklyIcon(DocklyIcons.clear),
-                    tooltip: 'Temizle',
+                    tooltip: t.clearTooltip,
                     onPressed: () {
                       _ctrl.clear();
                       controller.onQueryChanged('');
@@ -105,6 +106,7 @@ class _FilterRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final SearchState state = ref.watch(searchControllerProvider);
     final LocationSearchController controller = ref.read(searchControllerProvider.notifier);
     final MyBoat? boat = ref.watch(myBoatProvider);
@@ -115,7 +117,7 @@ class _FilterRow extends ConsumerWidget {
 
     final List<Widget> chips = <Widget>[
       FilterChip(
-        label: const Text('Teknem sığar'),
+        label: Text(t.fitChip),
         avatar: const DocklyIcon(DocklyIcons.sailing, size: 16),
         selected: state.boatFitOnly,
         // Tekne yoksa önce tanımlama sayfasını aç; varsa filtreyi aç/kapat.
@@ -130,14 +132,14 @@ class _FilterRow extends ConsumerWidget {
       ),
       // Ücretsiz süzgeci + sıralama (istemci tarafı).
       FilterChip(
-        label: const Text('Ücretsiz'),
+        label: Text(t.freeChip),
         selected: freeOnly,
         onSelected: (bool _) =>
             ref.read(searchFreeOnlyProvider.notifier).state = !freeOnly,
         visualDensity: VisualDensity.compact,
       ),
       FilterChip(
-        label: const Text('Puana göre'),
+        label: Text(t.sortRating),
         selected: sort == SearchSort.rating,
         onSelected: (bool _) => ref.read(searchSortProvider.notifier).state =
             sort == SearchSort.rating ? SearchSort.relevance : SearchSort.rating,
@@ -146,7 +148,7 @@ class _FilterRow extends ConsumerWidget {
       // "Yakınıma göre" yalnız konum biliniyorsa anlamlı (Konumum alındıysa).
       if (origin != null)
         FilterChip(
-          label: const Text('Yakınıma göre'),
+          label: Text(t.sortNearby),
           selected: sort == SearchSort.distance,
           onSelected: (bool _) => ref.read(searchSortProvider.notifier).state =
               sort == SearchSort.distance ? SearchSort.relevance : SearchSort.distance,
@@ -156,7 +158,7 @@ class _FilterRow extends ConsumerWidget {
       // Metin yazmadan da çalışır: çip seçiliyse keşif modu aramayı koşar.
       for (final String a in kSearchAmenities)
         FilterChip(
-          label: Text(amenityLabelTr(a)),
+          label: Text(t.amenityLabel(a)),
           selected: state.amenities.contains(a),
           onSelected: (bool _) => controller.toggleAmenity(a),
           avatar: DocklyIcon(DocklyIcons.forAmenity(a), size: 14),
@@ -164,7 +166,7 @@ class _FilterRow extends ConsumerWidget {
         ),
       for (final String type in types)
         FilterChip(
-          label: Text(locationTypeLabelTr(type)),
+          label: Text(t.typeLabel(type)),
           selected: state.types.contains(type),
           onSelected: (bool _) => controller.toggleType(type),
           avatar: DocklyIcon(DocklyIcons.circle, size: 12, color: DocklyMapColors.forType(type)),
@@ -188,7 +190,7 @@ class _FilterRow extends ConsumerWidget {
   }
 }
 
-class _SearchBody extends StatelessWidget {
+class _SearchBody extends ConsumerWidget {
   const _SearchBody({required this.state, required this.results, required this.onRetry});
 
   final SearchState state;
@@ -196,13 +198,10 @@ class _SearchBody extends StatelessWidget {
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     if (!state.canSearch) {
-      return const _Hint(
-        icon: DocklyIcons.search,
-        message: 'Aramak için en az 2 harf yaz\nya da üstten bir olanak seç '
-            '(örn. Yakıt, Duş).',
-      );
+      return _Hint(icon: DocklyIcons.search, message: t.searchPrompt);
     }
     if (state.isLoading && results.isEmpty) {
       return const Center(child: CircularProgressIndicator());
@@ -211,10 +210,7 @@ class _SearchBody extends StatelessWidget {
       return _ErrorView(message: state.failure!.message, onRetry: onRetry);
     }
     if (state.hasSearched && !state.isLoading && state.failure == null && results.isEmpty) {
-      return const _Hint(
-        icon: DocklyIcons.sailingOutlined,
-        message: 'Sonuç bulunamadı.\nFarklı bir isim ya da filtre dene.',
-      );
+      return _Hint(icon: DocklyIcons.sailingOutlined, message: t.noResults);
     }
     return ListView.separated(
       itemCount: results.length,
@@ -232,7 +228,7 @@ class _ResultTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String subtitle = <String>[
-      locationTypeLabelTr(item.type),
+      ref.watch(l10nProvider).typeLabel(item.type),
       if (_place(item) != null) _place(item)!,
     ].join(' · ');
 
@@ -316,14 +312,14 @@ class _Hint extends StatelessWidget {
   }
 }
 
-class _ErrorView extends StatelessWidget {
+class _ErrorView extends ConsumerWidget {
   const _ErrorView({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -332,7 +328,7 @@ class _ErrorView extends StatelessWidget {
           children: <Widget>[
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            DocklyButton(label: 'Tekrar dene', onPressed: onRetry),
+            DocklyButton(label: ref.watch(l10nProvider).retryLabel, onPressed: onRetry),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/location_controller.dart';
 
 /// "Konumum" düğmesi (harita üstü kontrol). Dokununca tarayıcı/uygulama konum
@@ -12,6 +13,7 @@ class LocateButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final LocationStatus status = ref.watch(locationControllerProvider);
 
     ref.listen<LocationStatus>(locationControllerProvider, (LocationStatus? prev, LocationStatus next) {
@@ -20,17 +22,15 @@ class LocateButton extends ConsumerWidget {
         messenger
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            const SnackBar(
-              content: Text('Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.'),
-            ),
+            SnackBar(content: Text(t.locDenied)),
           );
       } else if (next == LocationStatus.located) {
         messenger
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            const SnackBar(
-              content: Text('Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.'),
-              duration: Duration(seconds: 3),
+            SnackBar(
+              content: Text(t.locLocated),
+              duration: const Duration(seconds: 3),
             ),
           );
       }
@@ -41,7 +41,7 @@ class LocateButton extends ConsumerWidget {
       elevation: 3,
       borderRadius: BorderRadius.circular(24),
       child: IconButton(
-        tooltip: 'Konumum',
+        tooltip: t.locateTooltip,
         icon: loading
             ? const SizedBox(
                 width: 20,

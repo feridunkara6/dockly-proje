@@ -3,7 +3,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
@@ -156,20 +156,21 @@ class MapScreen extends ConsumerWidget {
 }
 
 /// Harita ↔ liste geçiş düğmesi (sağ üst).
-class _ViewToggle extends StatelessWidget {
+class _ViewToggle extends ConsumerWidget {
   const _ViewToggle({required this.isList, required this.onToggle});
 
   final bool isList;
   final VoidCallback onToggle;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     return Material(
       elevation: 3,
       borderRadius: BorderRadius.circular(24),
       child: IconButton(
         icon: DocklyIcon(isList ? DocklyIcons.mapOutlined : DocklyIcons.viewList),
-        tooltip: isList ? 'Harita görünümü' : 'Liste görünümü',
+        tooltip: isList ? t.mapViewTooltip : t.listViewTooltip,
         onPressed: onToggle,
       ),
     );
@@ -185,6 +186,7 @@ class _MapListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final GeoPoint? origin = ref.watch(originProvider);
     final List<LocationPin> items = List<LocationPin>.of(pins);
     if (origin != null) {
@@ -198,13 +200,13 @@ class _MapListView extends ConsumerWidget {
         final LocationPin pin = items[i];
         final double? distNm = origin != null ? haversineNm(origin, pin.position) : null;
         final String subtitle = pin.ratingAvg != null
-            ? '${locationTypeLabelTr(pin.type)} · ★ ${pin.ratingAvg!.toStringAsFixed(1)}'
-            : locationTypeLabelTr(pin.type);
+            ? '${t.typeLabel(pin.type)} · ★ ${pin.ratingAvg!.toStringAsFixed(1)}'
+            : t.typeLabel(pin.type);
         return ListTile(
           leading: DocklyTypeAvatar(type: pin.type),
           title: Text(pin.name, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
-          trailing: distNm != null ? Text('${_fmtNm(distNm)} dnz mili') : null,
+          trailing: distNm != null ? Text('${_fmtNm(distNm)} ${t.nmUnit}') : null,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (BuildContext _) => LocationDetailScreen(idOrSlug: pin.id),
@@ -218,23 +220,23 @@ class _MapListView extends ConsumerWidget {
 
 String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
 
-class _CenterProgress extends StatelessWidget {
+class _CenterProgress extends ConsumerWidget {
   const _CenterProgress();
 
   @override
-  Widget build(BuildContext context) {
-    // İlk yükleme dost mesajı: ücretsiz sunucu uykudan uyanırken kullanıcı
-    // "uygulama bozuk" sanmasın (P0 algı). Veri geldikten sonra görünmez.
-    return const Center(
+  Widget build(BuildContext context, WidgetRef ref) {
+    // İlk yükleme dost mesajı: sunucu ısınırken kullanıcı "uygulama bozuk"
+    // sanmasın (P0 algı). Veri geldikten sonra görünmez.
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          CircularProgressIndicator(),
-          SizedBox(height: 16),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 16),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              'Limanlar yükleniyor…\nİlk açılışta bu 1 dakikayı bulabilir.',
+              ref.watch(l10nProvider).loadingHarbors,
               textAlign: TextAlign.center,
             ),
           ),
@@ -246,11 +248,11 @@ class _CenterProgress extends StatelessWidget {
 
 /// Çevrimdışı bilgi şeridi: bağlantı yokken cihazdaki son görülen limanların
 /// gösterildiğini söyler. Haritayı gezdirmek yeniden denemeyi tetikler.
-class _OfflineBanner extends StatelessWidget {
+class _OfflineBanner extends ConsumerWidget {
   const _OfflineBanner();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     return Material(
       elevation: 2,
@@ -268,7 +270,7 @@ class _OfflineBanner extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             Text(
-              'Çevrimdışı — son görülen limanlar',
+              ref.watch(l10nProvider).offlineBanner,
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
@@ -288,6 +290,7 @@ class _TypeFilterRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final List<String> types = DocklyMapColors.knownTypes.toList();
     final bool fitOn = ref.watch(mapFitFilterProvider);
     final bool hasBoat = ref.watch(myBoatProvider) != null;
@@ -303,7 +306,7 @@ class _TypeFilterRow extends ConsumerWidget {
           if (i == 0) {
             return Center(
               child: FilterChip(
-                label: const Text('Teknem sığar'),
+                label: Text(t.fitChip),
                 avatar: const DocklyIcon(
                   DocklyIcons.checkCircle,
                   size: 14,
@@ -324,7 +327,7 @@ class _TypeFilterRow extends ConsumerWidget {
           final String type = types[i - 1];
           return Center(
             child: FilterChip(
-              label: Text(locationTypeLabelTr(type)),
+              label: Text(t.typeLabel(type)),
               avatar: DocklyIcon(
                 DocklyIcons.circle,
                 size: 12,
@@ -342,16 +345,16 @@ class _TypeFilterRow extends ConsumerWidget {
   }
 }
 
-class _EmptyView extends StatelessWidget {
+class _EmptyView extends ConsumerWidget {
   const _EmptyView();
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         child: Text(
-          'Bu bölgede henüz liman yok. Haritayı kaydırmayı deneyin.',
+          ref.watch(l10nProvider).emptyArea,
           textAlign: TextAlign.center,
         ),
       ),
@@ -359,11 +362,11 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-class _TruncatedHint extends StatelessWidget {
+class _TruncatedHint extends ConsumerWidget {
   const _TruncatedHint();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Positioned(
       bottom: 24,
       left: 24,
@@ -371,10 +374,10 @@ class _TruncatedHint extends StatelessWidget {
       child: Material(
         elevation: 2,
         borderRadius: BorderRadius.circular(8),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Text(
-            'Bu bölgede çok fazla liman var — daha fazlasını görmek için yakınlaştırın.',
+            ref.watch(l10nProvider).tooManyHint,
             textAlign: TextAlign.center,
           ),
         ),
@@ -383,14 +386,14 @@ class _TruncatedHint extends StatelessWidget {
   }
 }
 
-class _ErrorView extends StatelessWidget {
+class _ErrorView extends ConsumerWidget {
   const _ErrorView({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -399,7 +402,7 @@ class _ErrorView extends StatelessWidget {
           children: <Widget>[
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            DocklyButton(label: 'Tekrar dene', onPressed: onRetry),
+            DocklyButton(label: ref.watch(l10nProvider).retryLabel, onPressed: onRetry),
           ],
         ),
       ),
