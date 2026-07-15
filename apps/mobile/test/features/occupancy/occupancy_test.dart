@@ -168,9 +168,9 @@ void main() {
       (WidgetTester tester) async {
     final FakeOccupancyGateway gateway = FakeOccupancyGateway();
     await tester.pumpWidget(_app(
-      Column(children: <Widget>[
-        const OccupancyChip(idOrSlug: 'akvaryum-koyu', initial: null),
-        const OccupancyRow(idOrSlug: 'akvaryum-koyu', position: akvaryum),
+      const Column(children: <Widget>[
+        OccupancyChip(idOrSlug: 'akvaryum-koyu', initial: null),
+        OccupancyRow(idOrSlug: 'akvaryum-koyu', position: akvaryum),
       ]),
       overrides: <Override>[
         signedInAuthOverride(),
