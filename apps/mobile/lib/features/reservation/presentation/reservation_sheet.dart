@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../domain/reservation_option.dart';
@@ -39,6 +40,7 @@ class ReservationSheetBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     final MyBoat? boat = ref.watch(myBoatProvider);
     final List<ReservationOption> options = ref
         .read(reservationStrategyProvider)
@@ -55,14 +57,11 @@ class ReservationSheetBody extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Rezervasyon Talebi', style: theme.textTheme.titleMedium),
+          Text(t.rezTitle, style: theme.textTheme.titleMedium),
           const SizedBox(height: 4),
           Text(locationName, style: theme.textTheme.bodyLarge),
           const SizedBox(height: 4),
-          const Text(
-            'Marinayla doğrudan iletişime geç. WhatsApp ya da e-posta seçersen '
-            'tekne bilgin hazır mesaja eklenir.',
-          ),
+          Text(t.rezIntro),
           const SizedBox(height: 16),
           if (options.isEmpty)
             const _NoContact()
@@ -78,7 +77,8 @@ class ReservationSheetBody extends ConsumerWidget {
                     variant: i == 0
                         ? DocklyButtonVariant.primary
                         : DocklyButtonVariant.secondary,
-                    onPressed: () => _launchReservation(context, options[i].uri),
+                    onPressed: () =>
+                        _launchReservation(context, options[i].uri, t.linkFailed),
                   ),
                 ),
               ),
@@ -96,7 +96,8 @@ DocklyIconData _iconFor(ReservationChannel channel) => switch (channel) {
       ReservationChannel.website => DocklyIcons.language,
     };
 
-Future<void> _launchReservation(BuildContext context, Uri uri) async {
+Future<void> _launchReservation(
+    BuildContext context, Uri uri, String failMessage) async {
   // Context'i await ÖNCESİNDE yakala (use_build_context_synchronously).
   final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
   final NavigatorState navigator = Navigator.of(context);
@@ -109,17 +110,15 @@ Future<void> _launchReservation(BuildContext context, Uri uri) async {
   if (ok) {
     navigator.pop();
   } else {
-    messenger.showSnackBar(
-      const SnackBar(content: Text('Bağlantı açılamadı.')),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(failMessage)));
   }
 }
 
-class _NoContact extends StatelessWidget {
+class _NoContact extends ConsumerWidget {
   const _NoContact();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -129,12 +128,7 @@ class _NoContact extends StatelessWidget {
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
         const SizedBox(width: 10),
-        const Expanded(
-          child: Text(
-            'Bu lokasyon için kayıtlı iletişim bilgisi yok. En kısa sürede '
-            'ekleyeceğiz. Bu arada haritadan komşu noktaları deneyebilirsin.',
-          ),
-        ),
+        Expanded(child: Text(ref.watch(l10nProvider).rezNoContact)),
       ],
     );
   }

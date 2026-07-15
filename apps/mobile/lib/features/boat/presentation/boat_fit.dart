@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/my_boat_controller.dart';
 import '../domain/my_boat.dart';
 import 'boat_sheet.dart';
@@ -16,13 +17,14 @@ class BoatFitRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final MyBoat? boat = ref.watch(myBoatProvider);
     if (boat == null) {
       return Align(
         alignment: Alignment.centerLeft,
         child: ActionChip(
           avatar: const DocklyIcon(DocklyIcons.straighten, size: 18),
-          label: const Text('Teknen sığar mı? · Tekneni tanımla'),
+          label: Text(t.fitCta),
           onPressed: () => showBoatSheet(context),
         ),
       );
@@ -38,7 +40,7 @@ class BoatFitRow extends ConsumerWidget {
         const SizedBox(width: 8),
         TextButton(
           onPressed: () => showBoatSheet(context),
-          child: const Text('Değiştir'),
+          child: Text(t.fitChange),
         ),
       ],
     );
@@ -46,19 +48,20 @@ class BoatFitRow extends ConsumerWidget {
 }
 
 /// Tekne uygunluğu rozeti (renk + ikon + metin).
-class BoatFitBadge extends StatelessWidget {
+class BoatFitBadge extends ConsumerWidget {
   const BoatFitBadge({required this.fit, super.key});
 
   final BoatFit fit;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final (DocklyIconData icon, String label, Color color) = switch (fit) {
-      BoatFit.fits => (DocklyIcons.checkCircle, 'Teknen sığar', DocklyColors.success),
-      BoatFit.tooBig => (DocklyIcons.errorOutline, 'Teknen sığmayabilir', DocklyColors.warning),
+      BoatFit.fits => (DocklyIcons.checkCircle, t.fitYes, DocklyColors.success),
+      BoatFit.tooBig => (DocklyIcons.errorOutline, t.fitMaybeNot, DocklyColors.warning),
       BoatFit.unknown => (
           DocklyIcons.helpOutline,
-          'Uygunluk bilinmiyor',
+          t.fitUnknown,
           Theme.of(context).colorScheme.onSurfaceVariant,
         ),
     };

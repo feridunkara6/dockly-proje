@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../../auth/presentation/account_gate.dart';
 import '../application/favorites_controller.dart';
 import '../domain/favorite_location.dart';
@@ -31,7 +32,9 @@ class FavoriteButton extends ConsumerWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(nowFav ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı'),
+            content: Text(nowFav
+                ? ref.read(l10nProvider).favAdded
+                : ref.read(l10nProvider).favRemoved),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -51,8 +54,7 @@ class FavoriteButton extends ConsumerWidget {
         requireAccount(
           context,
           ref,
-          message: 'Favori limanlarını kaydetmek için hesabınla giriş yap — '
-              'listen her cihazında seninle olur.',
+          message: ref.read(l10nProvider).gateFavMsg,
           onAllowed: toggleAndNotify,
         );
       },

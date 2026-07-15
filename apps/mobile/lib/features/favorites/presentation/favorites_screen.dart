@@ -2,7 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/favorites_controller.dart';
 import '../domain/favorite_location.dart';
@@ -16,7 +16,7 @@ class FavoritesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<FavoriteLocation> favorites = ref.watch(favoritesProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Favoriler')),
+      appBar: AppBar(title: Text(ref.watch(l10nProvider).navFavorites)),
       body: favorites.isEmpty
           ? const _EmptyFavorites()
           : ListView.separated(
@@ -37,7 +37,7 @@ class _FavoriteTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String subtitle = <String>[
-      locationTypeLabelTr(favorite.type),
+      ref.watch(l10nProvider).typeLabel(favorite.type),
       if (favorite.city != null) favorite.city!,
     ].join(' · ');
     return ListTile(
@@ -45,7 +45,7 @@ class _FavoriteTile extends ConsumerWidget {
       title: Text(favorite.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: IconButton(
-        tooltip: 'Favorilerden çıkar',
+        tooltip: ref.watch(l10nProvider).favRemoveTooltip,
         icon: const DocklyIcon(DocklyIcons.favorite, color: DocklyColors.error),
         onPressed: () => ref.read(favoritesProvider.notifier).remove(favorite.id),
       ),
@@ -58,11 +58,11 @@ class _FavoriteTile extends ConsumerWidget {
   }
 }
 
-class _EmptyFavorites extends StatelessWidget {
+class _EmptyFavorites extends ConsumerWidget {
   const _EmptyFavorites();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -72,8 +72,7 @@ class _EmptyFavorites extends StatelessWidget {
             const DocklyIcon(DocklyIcons.favoriteBorder, size: 48, color: DocklyColors.brandPrimary),
             const SizedBox(height: 12),
             Text(
-              'Henüz favori yok.\nBir limanın sayfasında kalp simgesine dokunarak '
-              'favorilerine ekleyebilirsin. Bilgi cihazında kalır.',
+              ref.watch(l10nProvider).favEmpty,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge,
             ),

@@ -5,7 +5,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
@@ -91,7 +91,7 @@ class NearbySheet extends ConsumerWidget {
                             children: <Widget>[
                               Expanded(
                                 child: Text(
-                                  'Yakınımdaki Bağlanma Noktaları',
+                                  ref.watch(l10nProvider).nearbySheetTitle,
                                   style: theme.textTheme.titleMedium
                                       ?.copyWith(fontWeight: FontWeight.w700),
                                 ),
@@ -141,18 +141,18 @@ class NearbySheet extends ConsumerWidget {
 
 /// Mini kart (tasarım .mini-card): 132 px genişlik, 12 px köşe, üstte tip
 /// renkli kapak degradesi (64 px), altta ad + "tip · ★puan · mesafe".
-class _NearbyMiniCard extends StatelessWidget {
+class _NearbyMiniCard extends ConsumerWidget {
   const _NearbyMiniCard({required this.item});
 
   final LocationSummary item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final String rating =
         item.ratingAvg != null ? ' · ★ ${item.ratingAvg!.toStringAsFixed(1)}' : '';
     final String subtitle =
-        '${locationTypeLabelTr(item.type)}$rating · ${_fmtNm(item.distanceNm)} nm';
+        '${ref.watch(l10nProvider).typeLabel(item.type)}$rating · ${_fmtNm(item.distanceNm)} nm';
     return SizedBox(
       width: 132,
       child: Material(

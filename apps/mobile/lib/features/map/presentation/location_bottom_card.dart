@@ -1,15 +1,16 @@
 import 'package:dockly_api/dockly_api.dart' show LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_fit.dart';
 
 /// Harita alt detay kartı (S-06, docs/01-prd §6.3). Pine dokununca alttan belirir:
 /// tip (renk noktası + etiket), ad, puan ve fiyat rozeti. "Detay"/"Yol tarifi"
 /// aksiyonları B.4'te (navigasyon + harici harita) eklenir.
-class LocationBottomCard extends StatelessWidget {
+class LocationBottomCard extends ConsumerWidget {
   const LocationBottomCard({
     required this.pin,
     required this.onClose,
@@ -31,9 +32,14 @@ class LocationBottomCard extends StatelessWidget {
   static const ValueKey<String> cardKey = ValueKey<String>('location-bottom-card');
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
-    final String? priceLabel = priceTierLabelTr(pin.priceTier);
+    final L10n t = ref.watch(l10nProvider);
+    final String? priceLabel = pin.priceTier == 'free'
+        ? t.freeChip
+        : pin.priceTier == 'paid'
+            ? t.pricePaid
+            : null;
     return SafeArea(
       top: false,
       child: Padding(
@@ -61,14 +67,14 @@ class LocationBottomCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        locationTypeLabelTr(pin.type),
+                        t.typeLabel(pin.type),
                         style: theme.textTheme.labelLarge,
                       ),
                     ),
                     IconButton(
                       icon: const DocklyIcon(DocklyIcons.close),
                       onPressed: onClose,
-                      tooltip: 'Kapat',
+                      tooltip: t.closeTooltip,
                     ),
                   ],
                 ),
@@ -83,7 +89,7 @@ class LocationBottomCard extends StatelessWidget {
                   children: <Widget>[
                     const DocklyIcon(DocklyIcons.star, size: 18, color: DocklyColors.warning),
                     const SizedBox(width: 4),
-                    Text(pin.ratingAvg != null ? pin.ratingAvg!.toStringAsFixed(1) : 'Puan yok'),
+                    Text(pin.ratingAvg != null ? pin.ratingAvg!.toStringAsFixed(1) : t.noRatingShort),
                     if (priceLabel != null) ...<Widget>[
                       const SizedBox(width: 12),
                       _PriceBadge(label: priceLabel),
@@ -99,7 +105,7 @@ class LocationBottomCard extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: DocklyButton(
-                      label: 'Detay',
+                      label: t.detailBtn,
                       icon: DocklyIcons.arrowForward,
                       onPressed: onOpenDetail,
                     ),

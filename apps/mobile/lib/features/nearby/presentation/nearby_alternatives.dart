@@ -3,7 +3,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
 
@@ -40,7 +40,7 @@ class NearbyAlternatives extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20),
-            Text('Yakındaki alternatifler', style: theme.textTheme.titleMedium),
+            Text(ref.watch(l10nProvider).nearbyAltTitle, style: theme.textTheme.titleMedium),
             const SizedBox(height: 4),
             for (final LocationSummary item in items) _AltTile(item: item),
           ],
@@ -50,18 +50,18 @@ class NearbyAlternatives extends ConsumerWidget {
   }
 }
 
-class _AltTile extends StatelessWidget {
+class _AltTile extends ConsumerWidget {
   const _AltTile({required this.item});
 
   final LocationSummary item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: DocklyTypeAvatar(type: item.type),
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(locationTypeLabelTr(item.type)),
+      subtitle: Text(ref.watch(l10nProvider).typeLabel(item.type)),
       trailing: Text('${_fmtDistance(item.distanceNm)} dnz mili'),
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(

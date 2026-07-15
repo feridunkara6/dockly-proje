@@ -75,6 +75,21 @@ void main() {
       expect(l10nOf(AppLocale.en).amenityLabel('yeni_kod'), 'yeni_kod');
     });
 
+    test('paket 3a alanları 4 dilde dolu ve ayrık', () {
+      final Set<String> anchors = AppLocale.values.map((AppLocale l) => l10nOf(l).anchorTitle).toSet();
+      expect(anchors.length, 4);
+      for (final AppLocale l in AppLocale.values) {
+        final L10n t = l10nOf(l);
+        for (final String c in <String>['sand','mud','weed','rock','mixed']) {
+          expect(t.holdingLabels.containsKey(c), isTrue, reason: '$l $c');
+        }
+        expect(t.anchorZeminFmt, contains('{0}'));
+        expect(t.seaRouteLineFmt, contains('{1}'));
+      }
+      expect(l10nOf(AppLocale.es).anchorTitle, 'Notas de fondeo');
+      expect(l10nOf(AppLocale.ru).gateTitle, 'Нужен аккаунт');
+    });
+
     test('fmt yer tutucuyu doldurur', () {
       expect(L10n.fmt('Boy {0} m', '12'), 'Boy 12 m');
       expect(L10n.fmt('Длина {0} м', '9.5'), 'Длина 9.5 м');

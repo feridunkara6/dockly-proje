@@ -1,12 +1,21 @@
 import 'package:dockly_mobile/core/l10n/app_locale.dart';
+import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
+import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
+import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
+import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
+import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:dockly_mobile/features/search/application/search_controller.dart';
 import 'package:dockly_mobile/features/search/presentation/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/detail_fakes.dart';
+import '../../support/nearby_fakes.dart';
+import '../../support/reviews_fakes.dart';
 import '../../support/search_fakes.dart';
+import '../../support/weather_fakes.dart';
 
 Widget _app({AppLocale? locale}) {
   return ProviderScope(
@@ -115,5 +124,28 @@ void main() {
 
     expect(find.text('Лодка поместится'), findsOneWidget);
     expect(find.text('Топливо'), findsOneWidget);
+  });
+
+  testWidgets('koy detayı İspanyolca: demirleme notları ve zemin çevrilir',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[
+          appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.es)),
+          locationDetailGatewayProvider
+              .overrideWithValue(FakeLocationDetailGateway(result: sampleAnchorageDetail)),
+          nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+          reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
+          weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+        ],
+        child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('Notas de fondeo'), 200);
+    expect(find.text('Notas de fondeo'), findsOneWidget); // Demirleme Notları
+    expect(find.text('Fondo: Fango'), findsOneWidget); // Zemin: Çamur
+    expect(find.text('Punto de fondeo'), findsOneWidget); // Bağlama Noktası
   });
 }

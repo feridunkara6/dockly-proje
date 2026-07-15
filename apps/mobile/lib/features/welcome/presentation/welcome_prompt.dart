@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
@@ -54,7 +55,7 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
 /// Karşılama içeriği: DENİZCİ DİLİYLE — tekne markası + FEET cinsinden boy
 /// (ürün kararı: "özel hissettirsin"). İç birim metre kalır; feet burada
 /// çevrilir. Ayrı widget — test edilir.
-class WelcomeSheetBody extends StatefulWidget {
+class WelcomeSheetBody extends ConsumerStatefulWidget {
   const WelcomeSheetBody({
     required this.onPickLength,
     required this.onCustom,
@@ -68,10 +69,10 @@ class WelcomeSheetBody extends StatefulWidget {
   final VoidCallback onSkip;
 
   @override
-  State<WelcomeSheetBody> createState() => _WelcomeSheetBodyState();
+  ConsumerState<WelcomeSheetBody> createState() => _WelcomeSheetBodyState();
 }
 
-class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
+class _WelcomeSheetBodyState extends ConsumerState<WelcomeSheetBody> {
   /// Hızlı boy seçenekleri (feet) — 26ft≈7.9m ... 79ft≈24.1m.
   static const List<int> _quickFeet = <int>[26, 33, 39, 46, 59, 79];
 
@@ -88,6 +89,7 @@ class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     // SingleChildScrollView: klavye açıkken / kısa ekranlarda içerik kaydırılır,
     // asla taşmaz (CI dersi: taşma testte hata sayılır).
     return SingleChildScrollView(
@@ -101,21 +103,18 @@ class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
             children: <Widget>[
               const DocklyIcon(DocklyIcons.sailing, color: DocklyColors.brandPrimary),
               const SizedBox(width: 10),
-              Text('Hoş geldin, kaptan', style: theme.textTheme.titleMedium),
+              Text(t.sheetTitle, style: theme.textTheme.titleMedium),
             ],
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Teknenin markası ve boyu (feet)? Söylersen her limanda '
-            '"teknen sığar mı?" işaretini görürsün. Bilgi yalnız cihazında kalır.',
-          ),
+          Text(t.welcomeBody),
           const SizedBox(height: 14),
           TextField(
             controller: _brand,
             textCapitalization: TextCapitalization.words,
-            decoration: const InputDecoration(
-              labelText: 'Teknenin markası (ör. Beneteau)',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: t.welcomeBrandHint,
+              border: const OutlineInputBorder(),
               isDense: true,
             ),
           ),
@@ -136,9 +135,9 @@ class _WelcomeSheetBodyState extends State<WelcomeSheetBody> {
           Row(
             children: <Widget>[
               TextButton(
-                  onPressed: widget.onCustom, child: const Text('Farklı bir boy gir')),
+                  onPressed: widget.onCustom, child: Text(t.welcomeOtherLen)),
               const Spacer(),
-              TextButton(onPressed: widget.onSkip, child: const Text('Şimdilik geç')),
+              TextButton(onPressed: widget.onSkip, child: Text(t.welcomeSkip)),
             ],
           ),
         ],

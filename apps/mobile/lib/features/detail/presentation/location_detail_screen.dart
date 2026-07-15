@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/external_links.dart';
-import '../../../core/location_type_labels.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../auth/presentation/account_gate.dart';
 import '../../boat/presentation/boat_fit.dart';
@@ -40,7 +40,7 @@ class LocationDetailScreen extends ConsumerWidget {
     final LocationDetail? loaded = async.valueOrNull;
     return Scaffold(
       appBar: AppBar(
-        title: Text(loaded?.name ?? 'Liman'),
+        title: Text(loaded?.name ?? ref.watch(l10nProvider).detailFallbackTitle),
         actions: <Widget>[
           if (loaded != null) FavoriteButton(favorite: _favoriteFrom(loaded)),
         ],
@@ -48,7 +48,9 @@ class LocationDetailScreen extends ConsumerWidget {
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (Object err, _) => _DetailError(
-          message: err is AppFailure ? err.message : 'Detay yüklenemedi.',
+          message: err is AppFailure
+              ? err.message
+              : ref.watch(l10nProvider).detailLoadFailed,
           onRetry: () => ref.invalidate(locationDetailProvider(idOrSlug)),
         ),
         data: (LocationDetail d) => _DetailContent(detail: d),
@@ -73,12 +75,13 @@ class _DetailContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     // Denizci bilgileri: boyut + türe özel veriden yalnız DOLU alanlar stat'a
     // çevrilir (uydurma veri yok). Tekne boyu/su çekimi zaten BoatFitRow'da
     // gösterildiği için burada tekrar edilmez.
     final List<MaritimeStat> stats = <MaritimeStat>[
-      ..._dimensionStats(detail.dimensions),
-      ..._typeStats(detail.typeDetails),
+      ..._dimensionStats(t, detail.dimensions),
+      ..._typeStats(t, detail.typeDetails),
     ];
 
     // Demirleme tiplerinde açıklama cümle cümle ayrıştırılır: zemin/DİKKAT
@@ -115,7 +118,7 @@ class _DetailContent extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Text(locationTypeLabelTr(detail.type), style: theme.textTheme.labelLarge),
+            Text(t.typeLabel(detail.type), style: theme.textTheme.labelLarge),
             if (detail.verifiedAt != null) ...<Widget>[
               const SizedBox(width: 8),
               const DocklyIcon(DocklyIcons.verified, size: 16, color: DocklyColors.success),
@@ -139,11 +142,11 @@ class _DetailContent extends ConsumerWidget {
             Text(
               detail.rating.avg != null
                   ? '${detail.rating.avg!.toStringAsFixed(1)} (${detail.rating.count})'
-                  : 'Henüz puan yok',
+                  : t.noRatingYet,
             ),
             const SizedBox(width: 12),
-            if (priceTierLabelTr(detail.priceTier) != null)
-              _Pill(label: priceTierLabelTr(detail.priceTier)!),
+            if (detail.priceTier == 'free' || detail.priceTier == 'paid')
+              _Pill(label: detail.priceTier == 'free' ? t.freeChip : t.pricePaid),
             if (detail.is24h) ...<Widget>[
               const SizedBox(width: 8),
               const _Pill(label: '7/24'),
@@ -168,15 +171,14 @@ class _DetailContent extends ConsumerWidget {
           SizedBox(
             width: double.infinity,
             child: DocklyButton(
-              label: 'Rezervasyon Talebi',
+              label: t.rezTitle,
               icon: DocklyIcons.eventNote,
               // ÜYELİK KAPISI (kullanıcı kararı 2026-07): talep göndermek
               // hesap ister; hesabı olmayana kayıt yolu gösterilir.
               onPressed: () => requireAccount(
                 context,
                 ref,
-                message: 'Rezervasyon talebi göndermek için hesabınla giriş '
-                    'yap — marina talebinin kime ait olduğunu bilsin.',
+                message: t.gateReservationMsg,
                 onAllowed: () => showReservationSheet(
                   context,
                   locationName: detail.name,
@@ -191,11 +193,11 @@ class _DetailContent extends ConsumerWidget {
           Text(descriptionBelow, style: theme.textTheme.bodyLarge),
         ],
 
-        MaritimeInfoPanel(stats: stats),
+        MaritimeInfoPanel(stats: stats, title: t.maritimeTitle),
 
         if (detail.amenities.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          const _SectionTitle('Olanaklar'),
+          _SectionTitle(t.sectionAmenities),
           const SizedBox(height: 8),
           _IconChips(
             items: <(DocklyIconData, String)>[
@@ -207,7 +209,7 @@ class _DetailContent extends ConsumerWidget {
 
         if (detail.services.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          const _SectionTitle('Hizmetler'),
+          _SectionTitle(t.sectionServices),
           const SizedBox(height: 8),
           _IconChips(
             items: <(DocklyIconData, String)>[
@@ -228,7 +230,7 @@ class _DetailContent extends ConsumerWidget {
 
         if (detail.contacts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 20),
-          const _SectionTitle('İletişim'),
+          _SectionTitle(t.sectionContact),
           const SizedBox(height: 6),
           for (final Contact c in detail.contacts) _ContactRow(contact: c),
         ],
@@ -252,91 +254,91 @@ class _DetailContent extends ConsumerWidget {
 
   /// Boyut verisi → stat kartları. Tekne boyu & su çekimi bilerek DIŞARIDA:
   /// onları BoatFitRow zaten üstte gösteriyor (tekrar olmasın).
-  static List<MaritimeStat> _dimensionStats(Dimensions d) {
+  static List<MaritimeStat> _dimensionStats(L10n t, Dimensions d) {
     return <MaritimeStat>[
       if (d.depthMinM != null || d.depthMaxM != null)
         MaritimeStat(
           icon: DocklyIcons.straighten,
           value: _range(d.depthMinM, d.depthMaxM),
-          label: 'Derinlik',
+          label: t.statDepth,
         ),
       if (d.capacity != null)
-        MaritimeStat(icon: DocklyIcons.amMooring, value: '${d.capacity}', label: 'Kapasite'),
+        MaritimeStat(icon: DocklyIcons.amMooring, value: '${d.capacity}', label: t.statCapacity),
     ];
   }
 
   /// Türe özel detay → stat kartları (yalnız dolu alanlar; switch EXPRESSION ile
   /// enum'lar üzerinde tam kapsama).
-  static List<MaritimeStat> _typeStats(TypeDetails? td) {
+  static List<MaritimeStat> _typeStats(L10n t, TypeDetails? td) {
     if (td == null) return const <MaritimeStat>[];
     return switch (td) {
       MarinaTypeDetails m => <MaritimeStat>[
           if (m.berthCount != null)
-            MaritimeStat(icon: DocklyIcons.amMooring, value: '${m.berthCount}', label: 'Bağlama'),
+            MaritimeStat(icon: DocklyIcons.amMooring, value: '${m.berthCount}', label: t.statBerths),
           if (m.vhfChannel != null)
-            MaritimeStat(icon: DocklyIcons.radio, value: m.vhfChannel!, label: 'VHF kanalı'),
+            MaritimeStat(icon: DocklyIcons.radio, value: m.vhfChannel!, label: t.statVhf),
           if (m.hasBlueFlag == true)
-            const MaritimeStat(icon: DocklyIcons.verified, value: 'Var', label: 'Mavi Bayrak'),
+            MaritimeStat(icon: DocklyIcons.verified, value: t.yesLabel, label: t.statBlueFlag),
           if (m.travelLiftCapacityTons != null)
             MaritimeStat(
               icon: DocklyIcons.amCrane,
-              value: '${_num(m.travelLiftCapacityTons!)} ton',
-              label: 'Travel-lift',
+              value: '${_num(m.travelLiftCapacityTons!)} ${t.tonUnit}',
+              label: t.statTravelLift,
             ),
           if (m.winterStorage == true)
-            const MaritimeStat(icon: DocklyIcons.amTool, value: 'Var', label: 'Kışlama'),
+            MaritimeStat(icon: DocklyIcons.amTool, value: t.yesLabel, label: t.statWinter),
         ],
       FuelDockTypeDetails f => <MaritimeStat>[
           if (f.hasDiesel == true)
-            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'Dizel'),
+            MaritimeStat(icon: DocklyIcons.amFuel, value: t.yesLabel, label: t.statDiesel),
           if (f.hasGasoline == true)
-            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'Benzin'),
+            MaritimeStat(icon: DocklyIcons.amFuel, value: t.yesLabel, label: t.statGasoline),
           if (f.hasAdblue == true)
-            const MaritimeStat(icon: DocklyIcons.amFuel, value: 'Var', label: 'AdBlue'),
+            MaritimeStat(icon: DocklyIcons.amFuel, value: t.yesLabel, label: t.statAdblue),
           if (f.minDepthM != null)
             MaritimeStat(
               icon: DocklyIcons.straighten,
               value: '${_num(f.minDepthM!)} m',
-              label: 'Yanaşma derinliği',
+              label: t.statApproachDepth,
             ),
           if (f.paymentNote != null)
-            MaritimeStat(icon: DocklyIcons.infoOutline, value: f.paymentNote!, label: 'Ödeme'),
+            MaritimeStat(icon: DocklyIcons.infoOutline, value: f.paymentNote!, label: t.statPayment),
         ],
       RestaurantDockTypeDetails r => <MaritimeStat>[
           if (r.cuisine != null)
-            MaritimeStat(icon: DocklyIcons.amRestaurant, value: r.cuisine!, label: 'Mutfak'),
+            MaritimeStat(icon: DocklyIcons.amRestaurant, value: r.cuisine!, label: t.statCuisine),
           if (r.berthCountFree != null)
             MaritimeStat(
               icon: DocklyIcons.amMooring,
               value: '${r.berthCountFree}',
-              label: 'Ücretsiz bağlama',
+              label: t.statFreeBerths,
             ),
           if (r.minSpendPolicy != null)
-            MaritimeStat(icon: DocklyIcons.infoOutline, value: r.minSpendPolicy!, label: 'Politika'),
+            MaritimeStat(icon: DocklyIcons.infoOutline, value: r.minSpendPolicy!, label: t.statPolicy),
           if (r.reservationRecommended == true)
-            const MaritimeStat(
+            MaritimeStat(
               icon: DocklyIcons.eventNote,
-              value: 'Önerilir',
-              label: 'Rezervasyon',
+              value: t.recommendedLbl,
+              label: t.statReservationLbl,
             ),
         ],
       AnchorageTypeDetails a => <MaritimeStat>[
           if (a.holdingType != null)
             MaritimeStat(
               icon: DocklyIcons.amMooring,
-              value: holdingTypeLabelTr(a.holdingType!),
-              label: 'Dip tutunma',
+              value: t.holdingLabel(a.holdingType!),
+              label: t.statHolding,
             ),
           if (a.swellExposure != null)
             MaritimeStat(
               icon: DocklyIcons.sailing,
               value: a.swellExposure!,
-              label: 'Dalga maruziyeti',
+              label: t.statSwell,
             ),
           MaritimeStat(
             icon: DocklyIcons.infoOutline,
-            value: a.isFree ? 'Ücretsiz' : 'Ücretli',
-            label: 'Ücret',
+            value: a.isFree ? t.freeChip : t.pricePaid,
+            label: t.statPrice,
           ),
         ],
       UnknownTypeDetails() => const <MaritimeStat>[],
@@ -362,6 +364,7 @@ class _SeaRouteRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final GeoPoint? origin = ref.watch(originProvider);
     if (origin == null) return const SizedBox.shrink();
     final SeaRoutePreview route = computeSeaRoute(origin, destination);
@@ -386,14 +389,15 @@ class _SeaRouteRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Deniz yolu · ${route.compass}', style: theme.textTheme.titleSmall),
+                  Text(L10n.fmt(t.seaRouteFmt, route.compass), style: theme.textTheme.titleSmall),
                   const SizedBox(height: 2),
                   Text(
-                    '${_fmtNm(route.distanceNm)} deniz mili · ~${_fmtEta(route.etaHoursAtCruise)} (8 kn)',
+                    L10n.fmt2(t.seaRouteLineFmt, _fmtNm(route.distanceNm),
+                      _fmtEta(t, route.etaHoursAtCruise)),
                     style: theme.textTheme.bodyMedium,
                   ),
                   Text(
-                    'Haritada baktığın konumdan · kuşuçuşu',
+                    t.seaRouteFrom,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
@@ -409,16 +413,16 @@ class _SeaRouteRow extends ConsumerWidget {
 
 String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
 
-String _fmtEta(double hours) {
+String _fmtEta(L10n t, double hours) {
   if (!hours.isFinite) return '—';
-  if (hours < 1) return '${(hours * 60).round()} dk';
+  if (hours < 1) return '${(hours * 60).round()} ${t.minUnit}';
   int h = hours.floor();
   int m = ((hours - h) * 60).round();
   if (m == 60) {
     h += 1;
     m = 0;
   }
-  return m == 0 ? '$h sa' : '$h sa $m dk';
+  return m == 0 ? '$h ${t.hourUnit}' : '$h ${t.hourUnit} $m ${t.minUnit}';
 }
 
 class _SectionTitle extends StatelessWidget {
@@ -506,8 +510,7 @@ class _ContactRow extends ConsumerWidget {
         requireAccount(
           context,
           ref,
-          message: 'Marinayı uygulamadan tek dokunuşla aramak için hesabınla '
-              'giriş yap.',
+          message: ref.read(l10nProvider).gateCallMsg,
           onAllowed: () => launchContact(context, contact.type, contact.value),
         );
       },
@@ -595,20 +598,22 @@ bool _isAnchoringType(String type) =>
 /// demirleme/DİKKAT cümleleri. UYDURMA VERİ YOK ilkesi: yalnız kayıtlı alanlar
 /// ve açıklamada zaten var olan cümleler; koya özel veri hiç yoksa bunu
 /// dürüstçe söyleyen tek satır kalır.
-class _AnchoringNotes extends StatelessWidget {
+class _AnchoringNotes extends ConsumerWidget {
   const _AnchoringNotes({required this.detail, required this.split});
 
   final LocationDetail detail;
   final AnchorageDescriptionSplit split;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     final AnchorageTypeDetails? a = switch (detail.typeDetails) {
       final AnchorageTypeDetails t => t,
       _ => null,
     };
-    final String? zemin = a?.holdingType == null ? null : _capTr(holdingTypeLabelTr(a!.holdingType!));
+    final String? zemin =
+        a?.holdingType == null ? null : _capTr(t.holdingLabel(a!.holdingType!));
     final String? depth = _depthText(detail.dimensions);
     final bool hasSpecific = zemin != null ||
         depth != null ||
@@ -630,22 +635,20 @@ class _AnchoringNotes extends StatelessWidget {
             children: <Widget>[
               DocklyIcon(DocklyIcons.amMooring, size: 18, color: theme.colorScheme.primary),
               const SizedBox(width: 8),
-              Text('Demirleme Notları',
+              Text(t.anchorTitle,
                   style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            detail.priceTier == 'free'
-                ? 'Rezervasyon yapılmaz — ilk gelen demirler. Ücretsiz demirleme alanıdır.'
-                : 'Rezervasyon yapılmaz — ilk gelen demirler.',
+            detail.priceTier == 'free' ? t.anchorBaselineFree : t.anchorBaseline,
             style: theme.textTheme.bodyMedium,
           ),
           // Koya özel yapısal satırlar (yalnız kayıtlı alanlar).
           if (zemin != null)
-            _NoteRow(icon: DocklyIcons.amMooring, text: 'Zemin: $zemin'),
+            _NoteRow(icon: DocklyIcons.amMooring, text: L10n.fmt(t.anchorZeminFmt, zemin)),
           if (depth != null)
-            _NoteRow(icon: DocklyIcons.straighten, text: 'Derinlik: $depth'),
+            _NoteRow(icon: DocklyIcons.straighten, text: L10n.fmt(t.anchorDepthFmt, depth)),
           // Açıklamadan taşınan demirleme/zemin cümleleri.
           for (final String s in split.anchoring)
             _NoteRow(icon: DocklyIcons.infoOutline, text: s),
@@ -660,8 +663,7 @@ class _AnchoringNotes extends StatelessWidget {
           if (!hasSpecific) ...<Widget>[
             const SizedBox(height: 6),
             Text(
-              'Bu nokta için kayıtlı zemin ve uyarı bilgisi henüz yok — '
-              'derinlik ve dip tutunmasını yerinde kontrol edin.',
+              t.anchorFallback,
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
