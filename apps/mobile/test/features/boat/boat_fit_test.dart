@@ -12,8 +12,11 @@ void main() {
       (BoatFit.unknown, 'Uygunluk bilinmiyor'),
     ];
     for (final (BoatFit fit, String text) in cases) {
+      // Dil paketi: BoatFitBadge artık ConsumerWidget → ProviderScope şart.
       await tester.pumpWidget(
-        MaterialApp(home: Scaffold(body: BoatFitBadge(fit: fit))),
+        ProviderScope(
+          child: MaterialApp(home: Scaffold(body: BoatFitBadge(fit: fit))),
+        ),
       );
       expect(find.text(text), findsOneWidget);
     }

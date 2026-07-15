@@ -153,3 +153,20 @@ String maydayTemplate({String? boatName, String? position}) {
       'TEKNEDE (KİŞİ SAYISI) KİŞİ VAR\n'
       'YARDIM İSTİYORUM. TAMAM.';
 }
+
+/// Uluslararası (İngilizce) MAYDAY şablonu — telsizde uluslararası dil
+/// İngilizce'dir; TR dışındaki uygulama dillerinde bu şablon gösterilir.
+String maydayTemplateEn({String? boatName, String? position}) {
+  final String name = (boatName == null || boatName.trim().isEmpty)
+      ? '(BOAT NAME)'
+      : boatName.trim().toUpperCase();
+  final String pos = position ?? '(READ YOUR POSITION)';
+  return 'MAYDAY, MAYDAY, MAYDAY\n'
+      'THIS IS $name, $name, $name\n'
+      'MAYDAY $name\n'
+      'MY POSITION IS: $pos\n'
+      'NATURE OF DISTRESS: (taking water / fire / medical ...)\n'
+      'PERSONS ON BOARD: (number)\n'
+      'I REQUIRE IMMEDIATE ASSISTANCE\n'
+      'OVER';
+}

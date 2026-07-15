@@ -1,12 +1,15 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/l10n/l10n_strings.dart';
 
 /// Detayda çalışma saatleri + sezon bölümü (docs/23 §11.3). Veri yoksa gizlenir.
 ///
 /// NOT: `day_of_week` 0–6 (docs/22). Standart Postgres/JS düzeni varsayıldı:
-/// 0 = Pazar … 6 = Cumartesi. Veri farklı bir düzen kullanıyorsa `_dayNamesTr`
-/// tek satırda güncellenir.
-class OperatingInfo extends StatelessWidget {
+/// 0 = Pazar … 6 = Cumartesi. Veri farklı bir düzen kullanıyorsa `t.dayNames`
+/// dizini tek satırda güncellenir (l10n_strings.dart, dört dilde).
+class OperatingInfo extends ConsumerWidget {
   const OperatingInfo({
     required this.hours,
     required this.seasons,
@@ -18,26 +21,21 @@ class OperatingInfo extends StatelessWidget {
   final List<Season> seasons;
   final bool is24h;
 
-  static const List<String> _dayNamesTr = <String>[
-    'Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi',
-  ];
-  // Türk haftası: Pazartesi → Pazar sırası.
+  // Hafta görünümü: Pazartesi → Pazar sırası (denizci takvimi).
   static const List<int> _weekOrder = <int>[1, 2, 3, 4, 5, 6, 0];
-  static const List<String> _monthsTr = <String>[
-    '', 'Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara',
-  ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     final List<Widget> children = <Widget>[];
 
     if (is24h) {
       children
-        ..add(_title(theme, 'Çalışma saatleri'))
-        ..add(const _Row(label: 'Her gün', value: '24 saat açık'));
+        ..add(_title(theme, t.opHoursTitle))
+        ..add(_Row(label: t.everyDay, value: t.open24));
     } else if (hours.isNotEmpty) {
-      children.add(_title(theme, 'Çalışma saatleri'));
+      children.add(_title(theme, t.opHoursTitle));
       for (final int dow in _weekOrder) {
         final List<Hour> dayHours = hours.where((Hour h) => h.dayOfWeek == dow).toList();
         if (dayHours.isEmpty) continue;
@@ -45,14 +43,16 @@ class OperatingInfo extends StatelessWidget {
             .where((Hour h) => h.opensAt != null && h.closesAt != null)
             .map((Hour h) => '${h.opensAt}–${h.closesAt}')
             .join(', ');
-        children.add(_Row(label: _dayNamesTr[dow], value: open.isEmpty ? 'Kapalı' : open));
+        children.add(_Row(label: t.dayNames[dow], value: open.isEmpty ? t.closedLabel : open));
       }
     }
 
     if (seasons.isNotEmpty) {
-      children.add(_title(theme, 'Sezon'));
+      children.add(_title(theme, t.seasonTitle));
       for (final Season s in seasons) {
-        children.add(_Row(label: 'Açık', value: '${_fmtMonthDay(s.opensOn)} – ${_fmtMonthDay(s.closesOn)}'));
+        children.add(_Row(
+            label: t.openLabel,
+            value: '${_fmtMonthDay(t, s.opensOn)} – ${_fmtMonthDay(t, s.closesOn)}'));
       }
     }
 
@@ -69,14 +69,14 @@ class OperatingInfo extends StatelessWidget {
         child: Text(text, style: theme.textTheme.titleMedium),
       );
 
-  static String _fmtMonthDay(String? mmdd) {
+  static String _fmtMonthDay(L10n t, String? mmdd) {
     if (mmdd == null) return '?';
     final List<String> parts = mmdd.split('-');
     if (parts.length != 2) return mmdd;
     final int? m = int.tryParse(parts[0]);
     final int? d = int.tryParse(parts[1]);
     if (m == null || d == null || m < 1 || m > 12) return mmdd;
-    return '$d ${_monthsTr[m]}';
+    return '$d ${t.monthAbbr[m]}';
   }
 }
 

@@ -1,10 +1,12 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/detail/presentation/operating_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget _wrap(Widget child) =>
-    MaterialApp(home: Scaffold(body: SingleChildScrollView(child: child)));
+// Dil paketi 3b: OperatingInfo artık ConsumerWidget → ProviderScope şart.
+Widget _wrap(Widget child) => ProviderScope(
+    child: MaterialApp(home: Scaffold(body: SingleChildScrollView(child: child))));
 
 void main() {
   testWidgets('çalışma saatleri: açık gün + kapalı gün', (WidgetTester tester) async {

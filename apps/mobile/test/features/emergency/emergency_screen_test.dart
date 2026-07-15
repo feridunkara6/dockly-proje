@@ -51,6 +51,15 @@ void main() {
       expect(maydayTemplate(), contains('(TEKNE ADI)'));
     });
 
+    test('maydayTemplateEn: uluslararası şablon İngilizce ve aynı yapıda', () {
+      final String t = maydayTemplateEn(boatName: 'Poyraz', position: 'X');
+      expect(t, contains('MAYDAY, MAYDAY, MAYDAY'));
+      expect('POYRAZ'.allMatches(t).length, 4); // THIS IS ×3 + MAYDAY satırı
+      expect(t, contains('MY POSITION IS: X'));
+      expect(t, contains('I REQUIRE IMMEDIATE ASSISTANCE'));
+      expect(maydayTemplateEn(), contains('(BOAT NAME)'));
+    });
+
     test('alfabe 26 harf + 10 rakam eksiksiz', () {
       expect(phoneticAlphabet.length, 26);
       expect(phoneticNumbers.length, 10);

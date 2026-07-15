@@ -94,5 +94,30 @@ void main() {
       expect(L10n.fmt('Boy {0} m', '12'), 'Boy 12 m');
       expect(L10n.fmt('Длина {0} м', '9.5'), 'Длина 9.5 м');
     });
+
+    test('paket 3b alanları 4 dilde dolu: pusula, günler, aylar, acil', () {
+      for (final AppLocale l in AppLocale.values) {
+        final L10n t = l10nOf(l);
+        // 8 pusula yönü TR kodlarıyla eşlenir (K..KB).
+        for (final String c in <String>['K','KD','D','GD','G','GB','B','KB']) {
+          expect(t.compassDirs.containsKey(c), isTrue, reason: '$l $c');
+        }
+        expect(t.dayNames.length, 7, reason: '$l gün adları');
+        expect(t.monthAbbr.length, 13, reason: '$l ay kısaltmaları (0. boş)');
+        expect(t.radioRules.length, 5, reason: '$l telsiz kuralları');
+        expect(t.wxGustFmt, contains('{0}'));
+        expect(t.wxDisclaimerFmt, contains('{0}'));
+        expect(t.wxDisclaimerFmt, contains('{1}'));
+      }
+      // Diller gerçekten ayrık (kopyala-yapıştır kaçağı yok).
+      final Set<String> wx =
+          AppLocale.values.map((AppLocale l) => l10nOf(l).wxTitle).toSet();
+      expect(wx.length, 4);
+      expect(l10nOf(AppLocale.tr).compassDir('KD'), 'KD');
+      expect(l10nOf(AppLocale.en).compassDir('KD'), 'NE');
+      expect(l10nOf(AppLocale.ru).compassDir('G'), 'Ю');
+      // bilinmeyen kod güvenli düşer
+      expect(l10nOf(AppLocale.en).compassDir('X'), 'X');
+    });
   });
 }

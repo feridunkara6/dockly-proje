@@ -3,6 +3,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/reviews_controller.dart';
 
 /// Detay ekranında "Yorumlar" bölümü (S-09). Onaylı yorumları okuma — misafir
@@ -35,7 +36,7 @@ class ReviewsSection extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20),
-            Text('Yorumlar', style: theme.textTheme.titleMedium),
+            Text(ref.watch(l10nProvider).reviewsTitle, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
             for (final Review r in items) _ReviewCard(review: r),
           ],

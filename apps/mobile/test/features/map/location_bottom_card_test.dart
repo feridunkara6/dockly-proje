@@ -3,6 +3,7 @@ import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/map_fakes.dart';
@@ -11,10 +12,14 @@ import '../../support/map_fakes.dart';
 Finder _docklyIcon(DocklyIconData d) =>
     find.byWidgetPredicate((Widget w) => w is DocklyIcon && w.data == d);
 
+/// Dil paketi: LocationBottomCard artık ConsumerWidget → ProviderScope şart.
+Widget _wrap(Widget card) =>
+    ProviderScope(child: MaterialApp(home: Scaffold(body: card)));
+
 void main() {
   testWidgets('kart: tip etiketi + ad + puan + fiyat rozeti gösterir', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () {}))),
+      _wrap(LocationBottomCard(pin: testPin, onClose: () {})),
     );
     expect(find.byKey(LocationBottomCard.cardKey), findsOneWidget);
     expect(find.text('Özel Marina'), findsOneWidget); // private_marina etiketi
@@ -33,7 +38,7 @@ void main() {
       priceTier: 'unknown',
     );
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: LocationBottomCard(pin: noRating, onClose: () {}))),
+      _wrap(LocationBottomCard(pin: noRating, onClose: () {})),
     );
     expect(find.text('Puan yok'), findsOneWidget);
     expect(find.text('Bağlama Noktası'), findsOneWidget);
@@ -45,7 +50,7 @@ void main() {
   testWidgets('kapat düğmesi onClose çağırır', (WidgetTester tester) async {
     bool closed = false;
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () => closed = true))),
+      _wrap(LocationBottomCard(pin: testPin, onClose: () => closed = true)),
     );
     await tester.tap(_docklyIcon(DocklyIcons.close));
     await tester.pump();
@@ -55,15 +60,11 @@ void main() {
   testWidgets('onOpenDetail verilince "Detay" butonu görünür ve çağırır', (WidgetTester tester) async {
     bool opened = false;
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: LocationBottomCard(
-            pin: testPin,
-            onClose: () {},
-            onOpenDetail: () => opened = true,
-          ),
-        ),
-      ),
+      _wrap(LocationBottomCard(
+        pin: testPin,
+        onClose: () {},
+        onOpenDetail: () => opened = true,
+      )),
     );
     expect(find.text('Detay'), findsOneWidget);
     await tester.tap(find.text('Detay'));
@@ -73,7 +74,7 @@ void main() {
 
   testWidgets('onOpenDetail yoksa "Detay" butonu gösterilmez', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: LocationBottomCard(pin: testPin, onClose: () {}))),
+      _wrap(LocationBottomCard(pin: testPin, onClose: () {})),
     );
     expect(find.text('Detay'), findsNothing);
   });
@@ -81,20 +82,12 @@ void main() {
   testWidgets('fit verilince uyum rozeti gösterilir; unknown/verilmezse gösterilmez',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.fits),
-        ),
-      ),
+      _wrap(LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.fits)),
     );
     expect(find.text('Teknen sığar'), findsOneWidget);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.unknown),
-        ),
-      ),
+      _wrap(LocationBottomCard(pin: testPin, onClose: () {}, fit: BoatFit.unknown)),
     );
     expect(find.text('Teknen sığar'), findsNothing);
     expect(find.text('Uygunluk bilinmiyor'), findsNothing);

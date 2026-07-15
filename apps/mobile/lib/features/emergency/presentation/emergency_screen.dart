@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/external_links.dart';
+import '../../../core/l10n/app_locale.dart';
+import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../domain/emergency_content.dart';
@@ -19,6 +21,10 @@ class EmergencyScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
+    // Telsizde uluslararası dil İngilizce'dir: TR dışındaki dillerde MAYDAY
+    // şablonu İngilizce gösterilir (doğru denizcilik pratiği).
+    final bool trLocale = ref.watch(appLocaleProvider) == AppLocale.tr;
     // GPS konumu VARSA o kullanılır (kullanıcı isteği: paylaşılan konuma göre
     // tam koordinat); yoksa harita merkezi en iyi çabadır.
     final GeoPoint? device = ref.watch(devicePositionProvider);
@@ -28,7 +34,7 @@ class EmergencyScreen extends ConsumerWidget {
     final String? posText =
         origin == null ? null : formatDms(origin.lat, origin.lon);
     return Scaffold(
-      appBar: AppBar(title: const Text('Acil Durum')),
+      appBar: AppBar(title: Text(t.emergencyTitle)),
       // Geniş ekranda (web/tablet) içerik ortalanır ve okunur genişlikte kalır;
       // telefonda tam genişlik. Kart içi düzenler LayoutBuilder ile uyarlanır.
       body: Center(
@@ -37,20 +43,27 @@ class EmergencyScreen extends ConsumerWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
             children: <Widget>[
-              _DistressCard(theme: theme),
+              _DistressCard(theme: theme, t: t),
               const SizedBox(height: 12),
               _PositionCard(
                 theme: theme,
+                t: t,
                 posText: posText,
                 origin: origin,
                 isGps: isGps,
               ),
               const SizedBox(height: 12),
-              _MaydayCard(theme: theme, brand: brand, posText: posText),
+              _MaydayCard(
+                theme: theme,
+                t: t,
+                brand: brand,
+                posText: posText,
+                trLocale: trLocale,
+              ),
               const SizedBox(height: 12),
-              _RadioBasicsCard(theme: theme),
+              _RadioBasicsCard(theme: theme, t: t),
               const SizedBox(height: 12),
-              _AlphabetCard(theme: theme),
+              _AlphabetCard(theme: theme, t: t),
             ],
           ),
         ),
@@ -61,9 +74,10 @@ class EmergencyScreen extends ConsumerWidget {
 
 /// Üst kırmızı bölüm: telsiz kanalı + tek dokunuşla arama düğmeleri.
 class _DistressCard extends StatelessWidget {
-  const _DistressCard({required this.theme});
+  const _DistressCard({required this.theme, required this.t});
 
   final ThemeData theme;
+  final L10n t;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +97,7 @@ class _DistressCard extends StatelessWidget {
                   color: theme.colorScheme.onErrorContainer),
               const SizedBox(width: 10),
               Text(
-                'Tehlikede misin?',
+                t.emgDistressTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
                   color: theme.colorScheme.onErrorContainer,
@@ -93,8 +107,7 @@ class _DistressCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Önce telsiz: VHF Kanal 16 (156,8 MHz) — uluslararası tehlike ve '
-            'çağrı kanalı. Telsiz yoksa telefonla ara:',
+            t.emgDistressBody,
             style: TextStyle(color: theme.colorScheme.onErrorContainer),
           ),
           const SizedBox(height: 12),
@@ -116,7 +129,7 @@ class _DistressCard extends StatelessWidget {
                   for (final (String country, EmergencyNumber n) in entries)
                     SizedBox(
                       width: w,
-                      child: _CallTile(theme: theme, country: country, n: n),
+                      child: _CallTile(theme: theme, t: t, country: country, n: n),
                     ),
                 ],
               );
@@ -124,7 +137,7 @@ class _DistressCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '112 her iki ülkede de geçerlidir. Numaraya dokununca arama açılır.',
+            t.emg112Note,
             style: theme.textTheme.labelSmall?.copyWith(
                 color: theme.colorScheme.onErrorContainer.withValues(alpha: 0.8)),
           ),
@@ -136,11 +149,25 @@ class _DistressCard extends StatelessWidget {
 
 /// Tek dokunuşla arayan kompakt numara kutusu: ülke — NUMARA — kurum adı.
 class _CallTile extends StatelessWidget {
-  const _CallTile({required this.theme, required this.country, required this.n});
+  const _CallTile({
+    required this.theme,
+    required this.t,
+    required this.country,
+    required this.n,
+  });
 
   final ThemeData theme;
+  final L10n t;
   final String country;
   final EmergencyNumber n;
+
+  /// Kurum etiketi numaraya göre yerelleşir (158 → Sahil Güvenlik, 108 →
+  /// Hellenic CG, 112 → acil çağrı) — içerik listesi TR kalır, görünüm çevrilir.
+  String get _label => switch (n.number) {
+        '158' => t.emgCoastGuard,
+        '108' => t.emgHellenicCG,
+        _ => t.emgCall,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +190,7 @@ class _CallTile extends StatelessWidget {
                   const SizedBox(width: 5),
                   Expanded(
                     child: Text(
-                      country == 'TR' ? 'TÜRKİYE' : 'YUNANİSTAN',
+                      country == 'TR' ? t.emgCountryTr : t.emgCountryGr,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -187,7 +214,7 @@ class _CallTile extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                n.label,
+                _label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelSmall?.copyWith(
@@ -207,12 +234,14 @@ class _CallTile extends StatelessWidget {
 class _PositionCard extends StatelessWidget {
   const _PositionCard({
     required this.theme,
+    required this.t,
     required this.posText,
     required this.origin,
     required this.isGps,
   });
 
   final ThemeData theme;
+  final L10n t;
   final String? posText;
   final GeoPoint? origin;
 
@@ -224,22 +253,20 @@ class _PositionCard extends StatelessWidget {
     return _SectionCard(
       theme: theme,
       icon: DocklyIcons.place,
-      title: 'Konumun',
+      title: t.emgPositionTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (posText == null || origin == null)
-            const Text(
-              'Konum henüz alınamadı — haritadaki "Konumum" düğmesiyle konum '
-              'paylaşırsan burada tam GPS koordinatın görünür.',
-            )
+            Text(t.emgNoPosition)
           else ...<Widget>[
             Text(posText!,
                 style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800, fontFamily: 'monospace')),
             const SizedBox(height: 2),
             Text(
-              'Ondalık: ${origin!.lat.toStringAsFixed(5)}, ${origin!.lon.toStringAsFixed(5)}',
+              L10n.fmt(t.emgDecimalFmt,
+                  '${origin!.lat.toStringAsFixed(5)}, ${origin!.lon.toStringAsFixed(5)}'),
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
@@ -247,21 +274,16 @@ class _PositionCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: OutlinedButton.icon(
-                onPressed: () => _copy(context,
+                onPressed: () => _copy(context, t,
                     '$posText (${origin!.lat.toStringAsFixed(5)}, ${origin!.lon.toStringAsFixed(5)})'),
                 icon: const DocklyIcon(DocklyIcons.navigation, size: 16),
-                label: const Text('Koordinatı kopyala'),
+                label: Text(t.emgCopyCoord),
               ),
             ),
           ],
           const SizedBox(height: 8),
           Text(
-            isGps
-                ? 'Kaynak: cihazının paylaştığı GPS konumu — acil bildirimde bu '
-                    'koordinatı okuyabilirsin.'
-                : 'Not: Bu koordinat GPS değil, haritada baktığın alanın '
-                    'merkezidir. Haritadaki "Konumum" düğmesiyle gerçek konumunu '
-                    'paylaşabilirsin.',
+            isGps ? t.emgGpsNote : t.emgMapCenterNote,
             style: theme.textTheme.labelSmall
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
@@ -273,27 +295,33 @@ class _PositionCard extends StatelessWidget {
 
 /// MAYDAY / PAN PAN / SECURITE kartı — kopyalanabilir şablonla.
 class _MaydayCard extends StatelessWidget {
-  const _MaydayCard({required this.theme, required this.brand, required this.posText});
+  const _MaydayCard({
+    required this.theme,
+    required this.t,
+    required this.brand,
+    required this.posText,
+    required this.trLocale,
+  });
 
   final ThemeData theme;
+  final L10n t;
   final String? brand;
   final String? posText;
+  final bool trLocale;
 
   @override
   Widget build(BuildContext context) {
-    final String template = maydayTemplate(boatName: brand, position: posText);
+    final String template = trLocale
+        ? maydayTemplate(boatName: brand, position: posText)
+        : maydayTemplateEn(boatName: brand, position: posText);
     return _SectionCard(
       theme: theme,
       icon: DocklyIcons.radio,
-      title: 'MAYDAY çağrısı (can tehlikesi)',
+      title: t.emgMaydayTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            '1) Telsizi VHF Kanal 16\'ya al.\n'
-            '2) Mandala bas, yavaş ve net konuş.\n'
-            '3) Aşağıdaki sırayla oku; yanıt gelmezse 1 dakika sonra tekrarla.',
-          ),
+          Text(t.emgMaydaySteps),
           const SizedBox(height: 10),
           Container(
             width: double.infinity,
@@ -312,16 +340,14 @@ class _MaydayCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: OutlinedButton.icon(
-              onPressed: () => _copy(context, template),
+              onPressed: () => _copy(context, t, template),
               icon: const DocklyIcon(DocklyIcons.radio, size: 16),
-              label: const Text('Şablonu kopyala'),
+              label: Text(t.emgCopyTemplate),
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            'MAYDAY yalnız CAN TEHLİKESİNDE kullanılır. Acil ama can tehlikesi '
-            'yoksa: "PAN PAN, PAN PAN, PAN PAN". Seyir güvenliği duyurusu için: '
-            '"SECURITE, SECURITE, SECURITE" (sekürite okunur).',
+            t.emgPanPanNote,
             style: theme.textTheme.bodySmall
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
@@ -333,23 +359,18 @@ class _MaydayCard extends StatelessWidget {
 
 /// Temel telsiz kuralları — amatör denizciye beş madde.
 class _RadioBasicsCard extends StatelessWidget {
-  const _RadioBasicsCard({required this.theme});
+  const _RadioBasicsCard({required this.theme, required this.t});
 
   final ThemeData theme;
+  final L10n t;
 
   @override
   Widget build(BuildContext context) {
-    const List<String> rules = <String>[
-      'Kanal 16 her zaman dinlemede kalsın; çağrıdan sonra çalışma kanalına geçilir.',
-      'Konuşmadan önce kanalı DİNLE — başkasının acil çağrısını ezme.',
-      'Söz bitince "TAMAM" (over) de; görüşme tamamen bitince "KAPATIYORUM" (out).',
-      'DSC\'li telsizde kırmızı DISTRESS tuşu (Kanal 70) konum ve kimliğini otomatik yollar — kapağını kaldırıp 5 saniye basılı tut.',
-      'Telsiz yoksa: yukarıdaki numaraları GSM ile ara; telefonda da aynı şablonu kullan.',
-    ];
+    final List<String> rules = t.radioRules;
     return _SectionCard(
       theme: theme,
       icon: DocklyIcons.infoOutline,
-      title: 'Temel telsiz kuralları',
+      title: t.emgRadioTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -372,23 +393,21 @@ class _RadioBasicsCard extends StatelessWidget {
 
 /// Denizci (NATO fonetik) alfabesi — harfler + rakamlar.
 class _AlphabetCard extends StatelessWidget {
-  const _AlphabetCard({required this.theme});
+  const _AlphabetCard({required this.theme, required this.t});
 
   final ThemeData theme;
+  final L10n t;
 
   @override
   Widget build(BuildContext context) {
     return _SectionCard(
       theme: theme,
       icon: DocklyIcons.chat,
-      title: 'Denizci Alfabesi',
+      title: t.emgAlphabetTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            'Telsizde tekne adı ve çağrı işareti bu kelimelerle kodlanır — '
-            '"POYRAZ" = Papa, Oscar, Yankee, Romeo, Alfa, Zulu.',
-          ),
+          Text(t.emgAlphabetBody),
           const SizedBox(height: 10),
           Wrap(
             spacing: 6,
@@ -399,7 +418,7 @@ class _AlphabetCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text('Rakamlar',
+          Text(t.emgNumbersTitle,
               style: theme.textTheme.labelMedium
                   ?.copyWith(fontWeight: FontWeight.w700)),
           const SizedBox(height: 6),
@@ -494,8 +513,8 @@ class _SectionCard extends StatelessWidget {
 }
 
 /// Metni panoya kopyalar ve kısa onay gösterir.
-Future<void> _copy(BuildContext context, String text) async {
+Future<void> _copy(BuildContext context, L10n t, String text) async {
   final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
   await Clipboard.setData(ClipboardData(text: text));
-  messenger.showSnackBar(const SnackBar(content: Text('Kopyalandı.')));
+  messenger.showSnackBar(SnackBar(content: Text(t.copiedLabel)));
 }

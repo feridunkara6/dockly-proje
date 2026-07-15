@@ -5,6 +5,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/weather_controller.dart';
 
 /// Detay sayfası "Rüzgâr & Hava" kartı. HASSAS VERİ İLKELERİ:
@@ -20,6 +21,7 @@ class WeatherCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final key = weatherKeyFor(position.lat, position.lon);
     final AsyncValue<WeatherForecast> async = ref.watch(weatherForecastProvider(key));
     return async.when(
@@ -54,7 +56,7 @@ class WeatherCard extends ConsumerWidget {
               children: <Widget>[
                 DocklyIcon(DocklyIcons.explore, size: 18, color: theme.colorScheme.primary),
                 const SizedBox(width: 8),
-                Text('Rüzgâr & Hava',
+                Text(t.wxTitle,
                     style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
               ],
             ),
@@ -72,14 +74,15 @@ class WeatherCard extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(compassTr(now.windDirDeg), style: theme.textTheme.titleMedium),
+                Text(t.compassDir(compassTr(now.windDirDeg)),
+                    style: theme.textTheme.titleMedium),
                 const Spacer(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     if (now.gustKn != null)
                       Text(
-                        'Hamle ${_fmtKn(now.gustKn!)} kn',
+                        L10n.fmt(t.wxGustFmt, _fmtKn(now.gustKn!)),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: _windColor(now.gustKn!, theme),
                           fontWeight: FontWeight.w600,
@@ -122,8 +125,7 @@ class WeatherCard extends ConsumerWidget {
             const SizedBox(height: 8),
             // Dürüstlük satırı: tahmin uyarısı + veri saati + ZORUNLU atıf.
             Text(
-              'Tahmindir — seyir kararlarında resmî meteoroloji esastır. '
-              'Veri: ${f.attribution} · ${_hourLabel(f.fetchedAt)}',
+              L10n.fmt2(t.wxDisclaimerFmt, f.attribution, _hourLabel(f.fetchedAt)),
               style: theme.textTheme.labelSmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),

@@ -1,6 +1,7 @@
 import 'package:dockly_mobile/core/l10n/app_locale.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
+import 'package:dockly_mobile/features/emergency/presentation/emergency_screen.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
@@ -147,5 +148,25 @@ void main() {
     expect(find.text('Notas de fondeo'), findsOneWidget); // Demirleme Notları
     expect(find.text('Fondo: Fango'), findsOneWidget); // Zemin: Çamur
     expect(find.text('Punto de fondeo'), findsOneWidget); // Bağlama Noktası
+  });
+
+  testWidgets('acil durum İngilizce: başlıklar çevrilir, MAYDAY şablonu İngilizce',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[
+          appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.en)),
+        ],
+        child: const MaterialApp(home: EmergencyScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Are you in distress?'), findsOneWidget);
+    // MAYDAY kartı listenin aşağısında — önce görünür alana kaydır (CI dersi).
+    await tester.scrollUntilVisible(
+        find.text('MAYDAY call (life-threatening)'), 200);
+    expect(find.textContaining('I REQUIRE IMMEDIATE ASSISTANCE'), findsOneWidget);
+    expect(find.textContaining('YARDIM İSTİYORUM'), findsNothing); // TR şablon yok
   });
 }
