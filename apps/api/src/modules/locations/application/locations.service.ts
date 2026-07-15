@@ -5,9 +5,13 @@ import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../dom
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
 import { normalizeSearch, sanitizeAmenities } from '../domain/search';
 import { parseReviewsLimit } from '../domain/reviews';
-import { LocationDetail, LocationSummary, MapResult, ReviewItem
+import {
+  LocationDetail,
+  LocationSummary,
+  MapResult,
   OccupancyLevel,
   OccupancySummary,
+  ReviewItem,
 } from '../domain/location.types';
 import { pickLabel } from '../../../common/i18n/locale';
 import { AppProblem } from '../../../common/problem/problem';

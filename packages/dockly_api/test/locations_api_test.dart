@@ -217,15 +217,7 @@ void main() {
     expect(failure, isA<ValidationFailure>());
     expect((failure as ValidationFailure).errors.single.code, 'bbox-too-large');
   });
-}
 
-Future<AppFailure> _capture(Future<void> Function() action) async {
-  try {
-    await action();
-  } on AppFailure catch (failure) {
-    return failure;
-  }
-  throw StateError('beklenen AppFailure fırlatılmadı');
 
   test('reportOccupancy: Bearer başlığı + gövde + özet parse', () async {
     adapter.enqueueJson(200, <String, dynamic>{
@@ -285,4 +277,13 @@ Future<AppFailure> _capture(Future<void> Function() action) async {
     expect(result.locations.first.occupancy?.reportCount, 4);
     expect(result.locations.last.occupancy, isNull);
   });
+}
+
+Future<AppFailure> _capture(Future<void> Function() action) async {
+  try {
+    await action();
+  } on AppFailure catch (failure) {
+    return failure;
+  }
+  throw StateError('beklenen AppFailure fırlatılmadı');
 }
