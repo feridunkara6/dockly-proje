@@ -17,6 +17,7 @@ import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
+import '../../occupancy/presentation/occupancy_row.dart';
 import '../application/location_detail_controller.dart';
 import '../domain/anchorage_notes.dart';
 import 'cover_photo.dart';
@@ -160,6 +161,10 @@ class _DetailContent extends ConsumerWidget {
           maxDraftM: detail.dimensions.maxDraftM,
         ),
         _SeaRouteRow(destination: detail.position),
+        // KOY DOLULUK (2026-07 ayrıştırma paketi ①): son 6 saatin bildirimi
+        // + "Doluluk bildir" eylemi. Bildirim üyelik kapılıdır; veri yoksa
+        // yalnız eylem görünür (tahmin gösterilmez).
+        OccupancyRow(idOrSlug: detail.id, initial: detail.occupancy),
 
         const SizedBox(height: 14),
         // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon

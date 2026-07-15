@@ -173,6 +173,19 @@ class L10n {
     required this.emgAlphabetBody,
     required this.emgNumbersTitle,
     required this.copiedLabel,
+    required this.occLevelEmpty,
+    required this.occLevelModerate,
+    required this.occLevelFull,
+    required this.occChipFmt,
+    required this.occCountFmt,
+    required this.occReportCta,
+    required this.occSheetTitle,
+    required this.occSheetNote,
+    required this.occReported,
+    required this.gateOccupancyMsg,
+    required this.agoJustNow,
+    required this.agoMinFmt,
+    required this.agoHourFmt,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -240,6 +253,33 @@ class L10n {
   final String emgRadioTitle;
   final List<String> radioRules;
   final String emgAlphabetTitle, emgAlphabetBody, emgNumbersTitle, copiedLabel;
+
+  // --- Koy doluluk bildirimi (2026-07 ayrıştırma paketi ①) ---
+  final String occLevelEmpty;
+  final String occLevelModerate;
+  final String occLevelFull;
+  final String occChipFmt;
+  final String occCountFmt;
+  final String occReportCta;
+  final String occSheetTitle;
+  final String occSheetNote;
+  final String occReported;
+  final String gateOccupancyMsg;
+  final String agoJustNow;
+  final String agoMinFmt;
+  final String agoHourFmt;
+
+  /// Doluluk düzey kodu → seçili dildeki etiket.
+  String occupancyLabel(String code) {
+    switch (code) {
+      case 'empty':
+        return occLevelEmpty;
+      case 'moderate':
+        return occLevelModerate;
+      default:
+        return occLevelFull;
+    }
+  }
 
   String compassDir(String trCode) => compassDirs[trCode] ?? trCode;
 
@@ -461,6 +501,19 @@ const L10n _tr = L10n(
   emgAlphabetBody: 'Telsizde tekne adı ve çağrı işareti bu kelimelerle kodlanır — "POYRAZ" = Papa, Oscar, Yankee, Romeo, Alfa, Zulu.',
   emgNumbersTitle: 'Rakamlar',
   copiedLabel: 'Kopyalandı.',
+  occLevelEmpty: 'Boş',
+  occLevelModerate: 'Orta',
+  occLevelFull: 'Dolu',
+  occChipFmt: 'Doluluk: {0} · {1}',
+  occCountFmt: '{0} bildirim',
+  occReportCta: 'Doluluk bildir',
+  occSheetTitle: 'Koy şu an ne durumda?',
+  occSheetNote: 'Bildirimin 6 saat boyunca diğer denizcilere gösterilir; yeni bildirimin eskisinin yerine geçer.',
+  occReported: 'Bildirimin alındı — teşekkürler kaptan.',
+  gateOccupancyMsg: 'Doluluk bildirmek için ücretsiz bir hesap gerekir.',
+  agoJustNow: 'az önce',
+  agoMinFmt: '{0} dk önce',
+  agoHourFmt: '{0} sa önce',
 );
 
 const L10n _en = L10n(
@@ -668,6 +721,19 @@ const L10n _en = L10n(
   emgAlphabetBody: 'Boat names and call signs are spelled with these words on the radio — "POYRAZ" = Papa, Oscar, Yankee, Romeo, Alfa, Zulu.',
   emgNumbersTitle: 'Numbers',
   copiedLabel: 'Copied.',
+  occLevelEmpty: 'Quiet',
+  occLevelModerate: 'Moderate',
+  occLevelFull: 'Full',
+  occChipFmt: 'Occupancy: {0} · {1}',
+  occCountFmt: '{0} report(s)',
+  occReportCta: 'Report occupancy',
+  occSheetTitle: 'How busy is this bay right now?',
+  occSheetNote: 'Your report is shown to other sailors for 6 hours; a new report replaces your previous one.',
+  occReported: 'Report received — thanks, captain.',
+  gateOccupancyMsg: 'A free account is required to report occupancy.',
+  agoJustNow: 'just now',
+  agoMinFmt: '{0} min ago',
+  agoHourFmt: '{0} h ago',
 );
 
 const L10n _es = L10n(
@@ -875,6 +941,19 @@ const L10n _es = L10n(
   emgAlphabetBody: 'Los nombres y distintivos se deletrean con estas palabras — "POYRAZ" = Papa, Oscar, Yankee, Romeo, Alfa, Zulu.',
   emgNumbersTitle: 'Números',
   copiedLabel: 'Copiado.',
+  occLevelEmpty: 'Tranquila',
+  occLevelModerate: 'Media',
+  occLevelFull: 'Llena',
+  occChipFmt: 'Ocupación: {0} · {1}',
+  occCountFmt: '{0} aviso(s)',
+  occReportCta: 'Informar ocupación',
+  occSheetTitle: '¿Cómo está la cala ahora mismo?',
+  occSheetNote: 'Tu aviso se muestra a otros navegantes durante 6 horas; un aviso nuevo sustituye al anterior.',
+  occReported: 'Aviso recibido — ¡gracias, capitán!',
+  gateOccupancyMsg: 'Se necesita una cuenta gratuita para informar la ocupación.',
+  agoJustNow: 'ahora mismo',
+  agoMinFmt: 'hace {0} min',
+  agoHourFmt: 'hace {0} h',
 );
 
 const L10n _ru = L10n(
@@ -1082,6 +1161,19 @@ const L10n _ru = L10n(
   emgAlphabetBody: 'Название судна и позывной передаются этими словами — «POYRAZ» = Papa, Oscar, Yankee, Romeo, Alfa, Zulu.',
   emgNumbersTitle: 'Цифры',
   copiedLabel: 'Скопировано.',
+  occLevelEmpty: 'Свободно',
+  occLevelModerate: 'Средне',
+  occLevelFull: 'Занято',
+  occChipFmt: 'Занятость: {0} · {1}',
+  occCountFmt: 'сообщений: {0}',
+  occReportCta: 'Сообщить о занятости',
+  occSheetTitle: 'Насколько занята бухта сейчас?',
+  occSheetNote: 'Ваше сообщение видно другим морякам 6 часов; новое сообщение заменяет предыдущее.',
+  occReported: 'Сообщение получено — спасибо, капитан!',
+  gateOccupancyMsg: 'Чтобы сообщить о занятости, нужен бесплатный аккаунт.',
+  agoJustNow: 'только что',
+  agoMinFmt: '{0} мин назад',
+  agoHourFmt: '{0} ч назад',
 );
 
 /// Saf eşleme — birim testli.

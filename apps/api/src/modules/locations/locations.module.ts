@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
+import { AuthModule } from '../auth/auth.module';
 import { LocationsController } from './presentation/locations.controller';
 import { LocationsService } from './application/locations.service';
 import { LOCATIONS_REPOSITORY } from './domain/locations.repository';
 import { PrismaLocationsRepository } from './persistence/prisma-locations.repository';
 
 @Module({
+  // AuthModule: doluluk bildirimi ucu JwtAuthGuard/AccountGuard kullanır (2026-07 ①).
+  imports: [AuthModule],
   controllers: [LocationsController],
   providers: [
     LocationsService,

@@ -226,4 +226,63 @@ Future<AppFailure> _capture(Future<void> Function() action) async {
     return failure;
   }
   throw StateError('beklenen AppFailure fırlatılmadı');
+
+  test('reportOccupancy: Bearer başlığı + gövde + özet parse', () async {
+    adapter.enqueueJson(200, <String, dynamic>{
+      'occupancy': <String, dynamic>{
+        'level': 'moderate',
+        'reportedAt': '2026-07-15T12:00:00.000Z',
+        'reportCount': 2,
+      },
+    });
+
+    final summary = await api.reportOccupancy(
+      idOrSlug: 'akvaryum-koyu',
+      level: 'moderate',
+      accessToken: 'tok-123',
+    );
+    expect(summary.level, 'moderate');
+    expect(summary.reportCount, 2);
+    expect(summary.reportedAt.toUtc().hour, 12);
+
+    final req = adapter.received.last;
+    expect(req.method, 'POST');
+    expect(req.uri.path, '/v1/locations/akvaryum-koyu/occupancy');
+    expect(req.headers['Authorization'], 'Bearer tok-123');
+  });
+
+  test('pin doluluk özeti: alan varsa parse, yoksa null (geriye uyumlu)', () async {
+    adapter.enqueueJson(200, <String, dynamic>{
+      'clusters': <dynamic>[],
+      'locations': <dynamic>[
+        <String, dynamic>{
+          'id': 'loc-1',
+          'name': 'Akvaryum Koyu',
+          'type': 'mooring_point',
+          'position': <String, dynamic>{'lat': 37.0, 'lon': 27.38},
+          'ratingAvg': null,
+          'priceTier': 'free',
+          'occupancy': <String, dynamic>{
+            'level': 'full',
+            'reportedAt': '2026-07-15T09:00:00.000Z',
+            'reportCount': 4,
+          },
+        },
+        <String, dynamic>{
+          'id': 'loc-2',
+          'name': 'Eski Sunucu Pini',
+          'type': 'mooring_point',
+          'position': <String, dynamic>{'lat': 36.9, 'lon': 27.4},
+          'ratingAvg': null,
+          'priceTier': 'free',
+        },
+      ],
+      'truncated': false,
+    });
+
+    final result = await api.mapByBbox(bbox: bbox, zoom: 13);
+    expect(result.locations.first.occupancy?.level, 'full');
+    expect(result.locations.first.occupancy?.reportCount, 4);
+    expect(result.locations.last.occupancy, isNull);
+  });
 }

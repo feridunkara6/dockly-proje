@@ -1,4 +1,5 @@
 import 'geo.dart';
+import 'occupancy.dart';
 
 /// Harita iğnesi — minimum bayt seti (docs/23 §11.1).
 class LocationPin {
@@ -11,6 +12,7 @@ class LocationPin {
     required this.priceTier,
     this.maxBoatLengthM,
     this.maxDraftM,
+    this.occupancy,
   });
 
   final String id;
@@ -27,6 +29,9 @@ class LocationPin {
   final double? maxBoatLengthM;
   final double? maxDraftM;
 
+  /// Son 6 saatte doluluk bildirimi varsa özet; yoksa null (geriye uyumlu).
+  final OccupancySummary? occupancy;
+
   factory LocationPin.fromJson(Map<String, dynamic> json) => LocationPin(
         id: json['id'] as String,
         name: json['name'] as String,
@@ -36,6 +41,7 @@ class LocationPin {
         priceTier: json['priceTier'] as String,
         maxBoatLengthM: (json['maxBoatLengthM'] as num?)?.toDouble(),
         maxDraftM: (json['maxDraftM'] as num?)?.toDouble(),
+        occupancy: OccupancySummary.fromJsonNullable(json['occupancy']),
       );
 }
 

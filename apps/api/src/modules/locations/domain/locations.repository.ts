@@ -6,6 +6,8 @@ import {
   Dimensions,
   HourDto,
   LocationPin,
+  OccupancyLevel,
+  OccupancySummary,
   LocationSummary,
   NearbyParams,
   RatingDimensionAvg,
@@ -29,6 +31,8 @@ export interface DetailData {
   baseName: string;
   baseDescription: string | null;
   i18n: { locale: string; name: string | null; description: string | null }[];
+  /** Son 6 saat penceresi doluluk özeti (yoksa null/undefined). */
+  occupancy?: OccupancySummary | null;
   lat: number;
   lon: number;
   countryCode: string;
@@ -60,6 +64,17 @@ export interface LocationsRepository {
    * (rating_count DESC) — tavan aşılırsa en önemli pin'ler korunur.
    */
   findPinsInBbox(bbox: Bbox, types: string[] | undefined, limit: number): Promise<LocationPin[]>;
+
+  /**
+   * Doluluk bildirimi: kullanıcı başına lokasyon başına tek satır — yeni
+   * bildirim üstüne yazar. Dönen değer güncel 6 saatlik özettir.
+   * Lokasyon yoksa/yayında değilse null döner (servis not-found üretir).
+   */
+  reportOccupancy(
+    idOrSlug: string,
+    userId: string,
+    level: OccupancyLevel,
+  ): Promise<OccupancySummary | null>;
 
   /**
    * Bir merkeze `radiusMeters` içindeki yayınlanmış lokasyonları mesafeye göre

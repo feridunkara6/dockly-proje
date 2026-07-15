@@ -4,6 +4,7 @@ import 'dto/geo.dart';
 import 'dto/location_detail.dart';
 import 'dto/location_summary.dart';
 import 'dto/map_result.dart';
+import 'dto/occupancy.dart';
 import 'dto/review.dart';
 import 'problem_mapper.dart';
 
@@ -114,6 +115,27 @@ class LocationsApi {
         '/v1/locations/${Uri.encodeComponent(idOrSlug)}',
       );
       return LocationDetail.fromJson(res.data!);
+    });
+  }
+
+  /// Koy doluluk bildirimi (2026-07 ayrıştırma paketi ①). HESAP ister —
+  /// access token Authorization başlığıyla gider; misafir sunucudan
+  /// guest-not-allowed alır. Dönen özet ekranı hemen tazeler.
+  Future<OccupancySummary> reportOccupancy({
+    required String idOrSlug,
+    required String level,
+    required String accessToken,
+  }) async {
+    return _call(() async {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/v1/locations/$idOrSlug/occupancy',
+        data: <String, dynamic>{'level': level},
+        options: Options(
+          headers: <String, dynamic>{'Authorization': 'Bearer $accessToken'},
+        ),
+      );
+      return OccupancySummary.fromJson(
+          res.data!['occupancy'] as Map<String, dynamic>);
     });
   }
 

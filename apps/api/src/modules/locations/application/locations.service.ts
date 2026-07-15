@@ -5,7 +5,10 @@ import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../dom
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
 import { normalizeSearch, sanitizeAmenities } from '../domain/search';
 import { parseReviewsLimit } from '../domain/reviews';
-import { LocationDetail, LocationSummary, MapResult, ReviewItem } from '../domain/location.types';
+import { LocationDetail, LocationSummary, MapResult, ReviewItem
+  OccupancyLevel,
+  OccupancySummary,
+} from '../domain/location.types';
 import { pickLabel } from '../../../common/i18n/locale';
 import { AppProblem } from '../../../common/problem/problem';
 
@@ -26,7 +29,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -100,7 +105,10 @@ export class LocationsService {
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }
@@ -143,8 +151,24 @@ export class LocationsService {
       seasons: d.seasons,
       typeDetails: d.typeDetails,
       media: { cover: d.cover, count: d.photoCount },
+      occupancy: d.occupancy ?? null,
       userContext: null,
       counts: { reviews: d.reviewCount, photos: d.photoCount },
     };
+  }
+
+  /**
+   * Doluluk bildirimi (2026-07 ayrıştırma paketi ①): HESAP ister (guard
+   * denetler); kullanıcı başına lokasyon başına tek satır — yeni bildirim
+   * üstüne yazar. Dönen değer güncel özettir (istemci ekranı hemen tazeler).
+   */
+  async reportOccupancy(
+    idOrSlug: string,
+    userId: string,
+    level: OccupancyLevel,
+  ): Promise<{ occupancy: OccupancySummary }> {
+    const summary = await this.repo.reportOccupancy(idOrSlug, userId, level);
+    if (!summary) throw new AppProblem('not-found');
+    return { occupancy: summary };
   }
 }

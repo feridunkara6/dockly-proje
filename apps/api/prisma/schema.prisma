@@ -474,6 +474,7 @@ model User {
   locationsDeleted             Location[]               @relation("LocationDeletedByUser")
 
   reviews                       Review[]                @relation("ReviewAuthor")
+  occupancyReports LocationOccupancyReport[]
   reviewsDeleted                Review[]                @relation("ReviewDeletedByUser")
   reviewReactions                ReviewReaction[]
 
@@ -717,6 +718,7 @@ model Location {
   operatingHours          OperatingHour[]
   openingSeasons          OpeningSeason[]
   i18n                    LocationI18n[]
+  occupancyReports LocationOccupancyReport[]
   amenities               LocationAmenity[]
   services                LocationService[]
   media                   LocationMedia[]
@@ -840,6 +842,35 @@ model OpeningSeason {
   location Location @relation(fields: [locationId], references: [id])
 
   @@map("opening_seasons")
+}
+
+// ---------------------------------------------------------------------
+// KOY DOLULUK BİLDİRİMİ (2026-07 ayrıştırma paketi ①)
+// Kullanıcı başına lokasyon başına TEK satır (PK) — yeni bildirim üstüne
+// yazar. Okuma tarafı yalnız son 6 saatlik pencereye bakar; pencere dışı
+// satırlar kendiliğinden "yok" sayılır (silme işi gerektirmez).
+// ---------------------------------------------------------------------
+
+enum OccupancyLevel {
+  empty
+  moderate
+  full
+
+  @@map("occupancy_level")
+}
+
+model LocationOccupancyReport {
+  locationId String          @map("location_id") @db.Uuid
+  userId     String          @map("user_id") @db.Uuid
+  level      OccupancyLevel
+  reportedAt DateTime        @default(now()) @map("reported_at") @db.Timestamptz(6)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([locationId, userId])
+  @@index([locationId, reportedAt(sort: Desc)], map: "ix_occupancy_location_time")
+  @@map("location_occupancy_reports")
 }
 
 model LocationI18n {

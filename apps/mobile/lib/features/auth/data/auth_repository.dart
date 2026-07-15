@@ -19,12 +19,16 @@ abstract interface class AuthRepository {
   /// Açılışta saklanan refresh token'dan oturumu geri yükler; yoksa/geçersizse null.
   Future<SessionUser?> restore();
 
+  /// Yetkili uçlar için geçerli access token (2026-07 doluluk paketi).
+  /// Süresi dolmuşsa/yoksa refresh ile tazelemeyi dener; oturum yoksa null.
+  Future<String?> validAccessToken();
+
   /// Çıkış: sunucuda aile iptali (best-effort) + yerel temizlik.
   Future<void> logout();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
-  const AuthRepositoryImpl({
+  AuthRepositoryImpl({
     required AuthApi api,
     required AuthGateway gateway,
     required TokenStore store,
@@ -35,6 +39,29 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthApi _api;
   final AuthGateway _gateway;
   final TokenStore _store;
+
+  /// Bellekteki access token + bitiş anı (yalnız refresh token kalıcıdır;
+  /// access token GÜVENLİK gereği diske yazılmaz — docs/26 §8).
+  String? _accessToken;
+  DateTime? _accessExpiresAt;
+
+  void _rememberAccess(SessionBundle bundle) {
+    _accessToken = bundle.accessToken;
+    // 60 sn emniyet payı: süre sonuna yaklaşan token kullanılmaz.
+    _accessExpiresAt =
+        DateTime.now().add(Duration(seconds: bundle.expiresIn - 60));
+  }
+
+  @override
+  Future<String?> validAccessToken() async {
+    final DateTime? exp = _accessExpiresAt;
+    if (_accessToken != null && exp != null && DateTime.now().isBefore(exp)) {
+      return _accessToken;
+    }
+    // Süresi dolmuş → refresh dene (restore aynı zamanda tokenı da hatırlar).
+    final SessionUser? user = await restore();
+    return user == null ? null : _accessToken;
+  }
 
   @override
   Future<SessionUser> signIn(AuthProviderKind kind) async {
@@ -58,6 +85,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<SessionUser> _openSession(String idToken) async {
     final bundle = await _api.createSession(idToken);
     await _store.saveRefreshToken(bundle.refreshToken);
+    _rememberAccess(bundle);
     return bundle.user;
   }
 
@@ -68,6 +96,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final bundle = await _api.refresh(refreshToken);
       await _store.saveRefreshToken(bundle.refreshToken);
+      _rememberAccess(bundle);
       return bundle.user;
     } on AppFailure {
       // Geçersiz/expired refresh → yerel temizlik, sessiz düşüş (docs/26 §8).
@@ -87,6 +116,8 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     }
     await _store.clear();
+    _accessToken = null;
+    _accessExpiresAt = null;
     // Sağlayıcı (Firebase) oturumunu da kapat — en-iyi-çaba, hata fırlatmaz.
     await _gateway.signOutProvider();
   }

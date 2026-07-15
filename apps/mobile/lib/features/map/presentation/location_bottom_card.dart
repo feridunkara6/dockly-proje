@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../occupancy/presentation/occupancy_row.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_fit.dart';
 
@@ -93,6 +94,29 @@ class LocationBottomCard extends ConsumerWidget {
                     if (priceLabel != null) ...<Widget>[
                       const SizedBox(width: 12),
                       _PriceBadge(label: priceLabel),
+                    ],
+                    // KOY DOLULUK (2026-07 ①): son 6 saatte bildirim varsa
+                    // renkli nokta + etiket; yoksa hiçbir şey (tahmin yok).
+                    if (pin.occupancy != null) ...<Widget>[
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: occupancyColor(pin.occupancy!.level),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          t.occupancyLabel(pin.occupancy!.level),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ],
                   ],
                 ),

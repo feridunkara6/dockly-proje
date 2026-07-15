@@ -13,6 +13,8 @@ import {
   ReviewItem,
   SearchParams,
   TypeDetails,
+  OccupancyLevel,
+  OccupancySummary,
 } from '../domain/location.types';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -31,6 +33,16 @@ function fmtMonthDay(month: number | null, day: number | null): string | null {
   return month != null && day != null ? `${pad2(month)}-${pad2(day)}` : null;
 }
 
+/** PinRow'daki ham doluluk sütunlarını özete çevirir (pencerede yoksa null). */
+function pinOccupancy(r: PinRow): OccupancySummary | null {
+  if (!r.occLevel || !r.occReportedAt) return null;
+  return {
+    level: r.occLevel as OccupancyLevel,
+    reportedAt: new Date(r.occReportedAt).toISOString(),
+    reportCount: Number(r.occCount ?? 1),
+  };
+}
+
 function dec(v: unknown): number | null {
   return v === null || v === undefined ? null : Number(v);
 }
@@ -46,6 +58,9 @@ interface PinRow {
   priceTier: string;
   maxBoatLengthM: Prisma.Decimal | number | null;
   maxDraftM: Prisma.Decimal | number | null;
+  occLevel?: string | null;
+  occReportedAt?: Date | null;
+  occCount?: number | null;
 }
 
 interface NearbyRow extends PinRow {
@@ -101,7 +116,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -115,9 +132,25 @@ export class PrismaLocationsRepository implements LocationsRepository {
         l.rating_avg                   AS "ratingAvg",
         l.price_tier::text             AS "priceTier",
         l.max_boat_length_m            AS "maxBoatLengthM",
-        l.max_draft_m                  AS "maxDraftM"
+        l.max_draft_m                  AS "maxDraftM",
+        occ.level::text                AS "occLevel",
+        occ.reported_at                AS "occReportedAt",
+        occ.cnt                        AS "occCount"
       FROM locations l
       JOIN location_types lt ON lt.id = l.location_type_id
+      -- Doluluk özeti (2026-07 ①): son 6 saatin EN YENİ bildirimi + sayısı.
+      -- LATERAL, ix_occupancy_location_time index'iyle pin başına ucuzdur.
+      LEFT JOIN LATERAL (
+        SELECT r.level, r.reported_at,
+               (SELECT count(*)::int FROM location_occupancy_reports c
+                 WHERE c.location_id = l.id
+                   AND c.reported_at >= now() - interval '6 hours') AS cnt
+        FROM location_occupancy_reports r
+        WHERE r.location_id = l.id
+          AND r.reported_at >= now() - interval '6 hours'
+        ORDER BY r.reported_at DESC
+        LIMIT 1
+      ) occ ON true
       WHERE l.status = 'published'
         AND l.deleted_at IS NULL
         AND l.position && ST_MakeEnvelope(${bbox.minLon}, ${bbox.minLat}, ${bbox.maxLon}, ${bbox.maxLat}, 4326)::geography
@@ -135,6 +168,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       priceTier: r.priceTier,
       maxBoatLengthM: dec(r.maxBoatLengthM),
       maxDraftM: dec(r.maxDraftM),
+      occupancy: pinOccupancy(r),
     }));
   }
 
@@ -311,7 +345,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir; hücre + ÜLKE'ye göre
     // GROUP BY → sınır hücrelerinde TR/GR ayrı balon (istemci ülkeye göre renkler).
@@ -353,6 +389,50 @@ export class PrismaLocationsRepository implements LocationsRepository {
       ] as [number, number, number, number],
       countryCode: r.countryCode,
     }));
+  }
+
+  /** Son 6 saat penceresinin doluluk özeti (yoksa null). */
+  private async occupancySummary(locationId: string): Promise<OccupancySummary | null> {
+    const rows = await this.prisma.$queryRaw<
+      { level: string; reportedAt: Date; cnt: number }[]
+    >(Prisma.sql`
+      SELECT r.level::text AS level, r.reported_at AS "reportedAt",
+             (SELECT count(*)::int FROM location_occupancy_reports c
+               WHERE c.location_id = ${locationId}::uuid
+                 AND c.reported_at >= now() - interval '6 hours') AS cnt
+      FROM location_occupancy_reports r
+      WHERE r.location_id = ${locationId}::uuid
+        AND r.reported_at >= now() - interval '6 hours'
+      ORDER BY r.reported_at DESC
+      LIMIT 1
+    `);
+    if (rows.length === 0) return null;
+    return {
+      level: rows[0].level as OccupancyLevel,
+      reportedAt: rows[0].reportedAt.toISOString(),
+      reportCount: Number(rows[0].cnt),
+    };
+  }
+
+  async reportOccupancy(
+    idOrSlug: string,
+    userId: string,
+    level: OccupancyLevel,
+  ): Promise<OccupancySummary | null> {
+    const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
+    const loc = await this.prisma.location.findFirst({
+      where: { ...where, status: 'published', deletedAt: null },
+      select: { id: true },
+    });
+    if (!loc) return null;
+    // Kullanıcı başına tek satır: yeni bildirim üstüne yazar (fikir değişikliği
+    // ve spam aynı mekanizmayla çözülür — kullanıcı sayıyı şişiremez).
+    await this.prisma.locationOccupancyReport.upsert({
+      where: { locationId_userId: { locationId: loc.id, userId } },
+      create: { locationId: loc.id, userId, level },
+      update: { level, reportedAt: new Date() },
+    });
+    return this.occupancySummary(loc.id);
   }
 
   async findDetail(idOrSlug: string): Promise<DetailData | null> {
@@ -458,15 +538,12 @@ export class PrismaLocationsRepository implements LocationsRepository {
       baseName: loc.name,
       baseDescription: loc.description,
       i18n: loc.i18n.map((t) => ({ locale: t.locale, name: t.name, description: t.description })),
+      occupancy: await this.occupancySummary(loc.id),
       lat,
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -513,12 +590,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({

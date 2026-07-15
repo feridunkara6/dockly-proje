@@ -1,9 +1,6 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import {
-  DetailData,
-  LocationsRepository,
-} from '../src/modules/locations/domain/locations.repository';
+import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -79,6 +76,9 @@ class FakeRepo implements LocationsRepository {
   findPinsInBbox(): Promise<never[]> {
     return Promise.resolve([]);
   }
+  reportOccupancy(): Promise<null> {
+    return Promise.resolve(null);
+  }
   findNearby(): Promise<never[]> {
     return Promise.resolve([]);
   }
@@ -133,6 +133,48 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     const d = await new LocationsService(new EsRepo()).detail('with-es', 'es');
     expect(d.description).toBe('Descripción ES');
     expect(d.name).toBe('D-Marin'); // es name null, en satırı yok → baseName
+  });
+
+  it('doluluk: repo özet vermezse null, verirse aynen geçer', async () => {
+    const d = await service.detail('d-marin', 'tr');
+    expect(d.occupancy).toBeNull();
+
+    const withOcc: DetailData = {
+      ...SAMPLE,
+      occupancy: { level: 'full', reportedAt: '2026-07-15T10:00:00.000Z', reportCount: 3 },
+    };
+    class OccRepo extends FakeRepo {
+      findDetail(): Promise<DetailData> {
+        return Promise.resolve(withOcc);
+      }
+    }
+    const d2 = await new LocationsService(new OccRepo()).detail('d-marin', 'tr');
+    expect(d2.occupancy).toEqual({
+      level: 'full',
+      reportedAt: '2026-07-15T10:00:00.000Z',
+      reportCount: 3,
+    });
+  });
+
+  it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
+    await expect(
+      service.reportOccupancy('yok-boyle-koy', 'user-1', 'full'),
+    ).rejects.toMatchObject({ code: 'not-found' });
+  });
+
+  it('doluluk bildirimi: özet döner', async () => {
+    class ReportRepo extends FakeRepo {
+      reportOccupancy(): Promise<{ level: 'moderate'; reportedAt: string; reportCount: number }> {
+        return Promise.resolve({
+          level: 'moderate' as const,
+          reportedAt: '2026-07-15T11:00:00.000Z',
+          reportCount: 2,
+        });
+      }
+    }
+    const res = await new LocationsService(new ReportRepo()).reportOccupancy('d-marin', 'user-1', 'moderate');
+    expect(res.occupancy.level).toBe('moderate');
+    expect(res.occupancy.reportCount).toBe(2);
   });
 
   it("ru çevirisi henüz yoksa açıklama EN'e düşer (fallback zinciri)", async () => {

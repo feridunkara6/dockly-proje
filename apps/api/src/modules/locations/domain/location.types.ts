@@ -4,6 +4,21 @@ export interface GeoPoint {
   lon: number;
 }
 
+/** Koy doluluk düzeyi (2026-07 ayrıştırma paketi ①). */
+export type OccupancyLevel = 'empty' | 'moderate' | 'full';
+
+/**
+ * Doluluk özeti: son 6 saat penceresindeki bildirimlerden türetilir.
+ * `level` EN SON bildirimdir (stale koruması: en yeni kazanır),
+ * `reportCount` penceredeki bildirim sayısı, `reportedAt` en son bildirim anı.
+ * Pencerede bildirim yoksa alan hiç dönmez (null) — tahmin gösterilmez.
+ */
+export interface OccupancySummary {
+  level: OccupancyLevel;
+  reportedAt: string;
+  reportCount: number;
+}
+
 /** Harita pin'i — minimum bayt seti (docs/23 §11.1). */
 export interface LocationPin {
   id: string;
@@ -16,6 +31,8 @@ export interface LocationPin {
   /** Kabul limitleri (null = bilinmiyor) — istemci tekne-uyum rozetini haritada çizer. */
   maxBoatLengthM: number | null;
   maxDraftM: number | null;
+  /** Son 6 saatte bildirim varsa doluluk özeti; yoksa null. */
+  occupancy: OccupancySummary | null;
 }
 
 /** Sınırlayıcı kutu (`minLon,minLat,maxLon,maxLat`, docs/23 §9.5). */
@@ -239,7 +256,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve
@@ -267,6 +287,8 @@ export interface LocationDetail {
   seasons: SeasonDto[];
   typeDetails: TypeDetails | null;
   media: MediaBlock;
+  /** Son 6 saatte bildirim varsa doluluk özeti; yoksa null. */
+  occupancy: OccupancySummary | null;
   userContext: null;
   counts: { reviews: number; photos: number };
 }

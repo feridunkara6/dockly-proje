@@ -1,5 +1,6 @@
 import 'geo.dart';
 import 'location_summary.dart' show CoverMedia;
+import 'occupancy.dart';
 
 /// Liman detayı — S-09 tam veri seti (docs/23 §11.3).
 class LocationDetail {
@@ -25,6 +26,7 @@ class LocationDetail {
     required this.typeDetails,
     required this.media,
     required this.counts,
+    this.occupancy,
   });
 
   final String id;
@@ -48,6 +50,9 @@ class LocationDetail {
   final TypeDetails? typeDetails;
   final MediaInfo media;
   final Counts counts;
+
+  /// Son 6 saatte doluluk bildirimi varsa özet; yoksa null (geriye uyumlu).
+  final OccupancySummary? occupancy;
 
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     List<T> list<T>(String key, T Function(Map<String, dynamic>) fromJson) =>
@@ -80,6 +85,7 @@ class LocationDetail {
           : TypeDetails.fromJson(json['typeDetails'] as Map<String, dynamic>),
       media: MediaInfo.fromJson(json['media'] as Map<String, dynamic>),
       counts: Counts.fromJson(json['counts'] as Map<String, dynamic>),
+      occupancy: OccupancySummary.fromJsonNullable(json['occupancy']),
     );
   }
 }
