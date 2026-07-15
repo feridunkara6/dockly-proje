@@ -37,16 +37,19 @@
       var h = new Date().getHours();
       var gece = (h >= 19 || h < 7);
       if (!gece) s.className = 'gunduz';
-      // Uygulamadaki yerleşimin aynısı: dikey ekranda kapla (cover),
-      // yatay/geniş ekranda tam boy ortada (auto 100%).
+      // Uygulamadaki yerleşimin aynısı: her cihazda TAM EKRAN (cover).
+      // Dikey ekran dikey fotoğrafı, yatay ekran (bilgisayar/yatay tablet)
+      // aynı fotoğrafın yatay kompozisyonunu kullanır — küçük ortalanmış
+      // görsel ve boş kenarlar bitti; her iki görsel de önbelleğe alınır.
+      s.style.backgroundSize = 'cover';
       function uydur() {
-        s.style.backgroundSize =
-          (window.innerWidth > window.innerHeight) ? 'auto 100%' : 'cover';
+        var yatay = window.innerWidth > window.innerHeight;
+        s.style.backgroundImage = 'url(assets/assets/splash/' +
+          (gece ? 'splash_gece' : 'splash_gunduz') +
+          (yatay ? '_yatay' : '') + '.jpg)';
       }
       uydur();
       window.addEventListener('resize', uydur);
-      s.style.backgroundImage = 'url(assets/assets/splash/' +
-        (gece ? 'splash_gece.jpg' : 'splash_gunduz.jpg') + ')';
       // Flutter ilk karesini çizince katmanı yumuşakça kaldır.
       window.addEventListener('flutter-first-frame', function () {
         s.style.opacity = '0';

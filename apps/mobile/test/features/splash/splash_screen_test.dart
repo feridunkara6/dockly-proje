@@ -36,9 +36,9 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    // Test yüzeyi YATAY (800x600) → masaüstü modu: bulanık zemin + net
-    // tam-boy fotoğraf = aynı görseli taşıyan İKİ katman.
-    expect(_asset('splash_gunduz'), findsNWidgets(2));
+    // Test yüzeyi YATAY (800x600) → masaüstü modu: yatay kompozisyon,
+    // TEK katman tam ekran (bulanık dolgu kalktı — kullanıcı kararı 2026-07).
+    expect(_asset('splash_gunduz_yatay'), findsOneWidget);
     expect(_asset('splash_gece'), findsNothing);
     expect(find.byKey(const ValueKey<String>('splash-route')), findsOneWidget);
     // PERF sözleşmesi: içerik açılış ekranı görünürken de KURULUDUR (arkada
@@ -57,7 +57,7 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 22)));
     await tester.pump();
 
-    expect(_asset('splash_gece'), findsNWidgets(2));
+    expect(_asset('splash_gece_yatay'), findsOneWidget);
     expect(_asset('splash_gunduz'), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 250));
@@ -76,7 +76,8 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    expect(_asset('splash_gunduz'), findsOneWidget); // bulanık zemin YOK
+    expect(_asset('splash_gunduz'), findsOneWidget); // tek katman
+    expect(_asset('splash_gunduz_yatay'), findsNothing); // dikeyde dikey görsel
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);

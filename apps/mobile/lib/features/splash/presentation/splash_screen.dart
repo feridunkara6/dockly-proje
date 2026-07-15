@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Açılış (splash) kapısı: uygulama her açılışta önce markalı açılış ekranını
-/// gösterir, ardından yumuşak geçişle asıl içeriğe döner. GÜNDÜZ/GECE duyarlı:
+/// TAM EKRAN gösterir (telefonda dikey, bilgisayar/tablette yatay kompozisyon),
+/// ardından yumuşak geçişle asıl içeriğe döner. GÜNDÜZ/GECE duyarlı:
 /// 07:00-19:00 arası aydınlık deniz fotoğrafı, hava karardıktan sonra koyu
 /// gece fotoğrafı kullanılır (ürün kararı — profesyonel marka açılışı).
 /// Açılış ekranı hâlâ görünürken alttaki uygulamanın "beklemesi" gereken
@@ -78,6 +79,14 @@ class _SplashGateState extends ConsumerState<SplashGate> {
   @override
   Widget build(BuildContext context) {
     final DateTime t = (widget.now ?? DateTime.now)();
+    final bool night = splashIsNight(t);
+    // Yatay ekran (bilgisayar/yatay tablet) → yatay kompozisyon; ekran
+    // döndürülürse sonraki karede doğru varyanta geçer.
+    final Size screen = MediaQuery.sizeOf(context);
+    final bool wide = screen.width > screen.height;
+    final _SplashVariant variant = night
+        ? (wide ? _geceYatay : _gece)
+        : (wide ? _gunduzYatay : _gunduz);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -88,7 +97,7 @@ class _SplashGateState extends ConsumerState<SplashGate> {
             child: AnimatedOpacity(
               opacity: _done ? 0 : 1,
               duration: const Duration(milliseconds: 450),
-              child: _SplashScreen(variant: splashIsNight(t) ? _gece : _gunduz),
+              child: _SplashScreen(variant: variant),
             ),
           ),
       ],
@@ -96,16 +105,18 @@ class _SplashGateState extends ConsumerState<SplashGate> {
   }
 }
 
-/// Fotoğrafın piksel boyutu — kapak (cover) kırpma matematiğinin referansı.
-/// İki görsel de aynı boyuttadır.
-const Size _splashImageSize = Size(853, 1844);
-
 /// Bir açılış görseli + üstüne çizilecek rotanın görsel-uzayı koordinatları
 /// (0..1 normalize). Rota, TEKNEDEN çıkıp kıvrılarak ÇAPA işaretine gider;
 /// noktalar her görselin kendi tekne/su kompozisyonuna göre ayarlanmıştır.
+///
+/// CİHAZA UYUM (kullanıcı kararı 2026-07): dikey ekranlar (telefon) dikey
+/// fotoğrafı, YATAY ekranlar (bilgisayar/yatay tablet) aynı fotoğrafın
+/// öğeleriyle kurulmuş GERÇEK YATAY kompozisyonu kullanır — görsel her
+/// cihazda tam ekrandır; küçük ortalanmış fotoğraf ve bulanık dolgu bitti.
 class _SplashVariant {
   const _SplashVariant({
     required this.asset,
+    required this.imageSize,
     required this.start,
     required this.c1,
     required this.c2,
@@ -113,14 +124,22 @@ class _SplashVariant {
   });
 
   final String asset;
+
+  /// Fotoğrafın piksel boyutu — kapak (cover) kırpma matematiğinin referansı.
+  final Size imageSize;
+
   final Offset start; // tekne (çizginin çıkış noktası)
   final Offset c1; // bezier kontrol 1
   final Offset c2; // bezier kontrol 2
   final Offset end; // çapa pini
 }
 
+const Size _dikeyBoyut = Size(853, 1844);
+const Size _yatayBoyut = Size(1920, 1080);
+
 const _SplashVariant _gunduz = _SplashVariant(
   asset: 'assets/splash/splash_gunduz.jpg',
+  imageSize: _dikeyBoyut,
   start: Offset(0.475, 0.735),
   c1: Offset(0.61, 0.78),
   c2: Offset(0.72, 0.59),
@@ -129,24 +148,43 @@ const _SplashVariant _gunduz = _SplashVariant(
 
 const _SplashVariant _gece = _SplashVariant(
   asset: 'assets/splash/splash_gece.jpg',
+  imageSize: _dikeyBoyut,
   start: Offset(0.335, 0.585),
   c1: Offset(0.44, 0.46),
   c2: Offset(0.67, 0.72),
   end: Offset(0.840, 0.565),
 );
 
-/// Fotoğrafın EKRANDAKİ yerleşim dikdörtgeni (cihaza uyum):
-/// - DİKEY ekran (telefon): cover — fotoğraf ekranı doldurur, taşan kırpılır.
-/// - YATAY ekran (bilgisayar/yatay tablet): contain — fotoğraf TAM BOY ortada
-///   görünür (yarım görünme ve dev büyütmeden doğan kalite kaybı biter);
-///   kenarlar aynı fotoğrafın bulanık dolgusuyla kaplanır.
-Rect _splashImageRect(Size screen) {
-  final bool wide = screen.width > screen.height;
-  final double sx = screen.width / _splashImageSize.width;
-  final double sy = screen.height / _splashImageSize.height;
-  final double scale = wide ? math.min(sx, sy) : math.max(sx, sy);
-  final double dw = _splashImageSize.width * scale;
-  final double dh = _splashImageSize.height * scale;
+/// Yatay kompozisyonlar: aynı fotoğrafın tekne bandı + görselin KENDİ
+/// logosu (piksel maskesiyle çıkarılıp yatay düzene yerleştirildi — yeni
+/// içerik üretilmedi, kalite kaybı yok; logo blokları ~birebir ölçekte).
+const _SplashVariant _gunduzYatay = _SplashVariant(
+  asset: 'assets/splash/splash_gunduz_yatay.jpg',
+  imageSize: _yatayBoyut,
+  start: Offset(0.475, 0.86),
+  c1: Offset(0.60, 0.92),
+  c2: Offset(0.72, 0.72),
+  end: Offset(0.80, 0.60),
+);
+
+const _SplashVariant _geceYatay = _SplashVariant(
+  asset: 'assets/splash/splash_gece_yatay.jpg',
+  imageSize: _yatayBoyut,
+  start: Offset(0.36, 0.52),
+  c1: Offset(0.50, 0.72),
+  c2: Offset(0.66, 0.78),
+  end: Offset(0.78, 0.66),
+);
+
+/// Fotoğrafın EKRANDAKİ yerleşim dikdörtgeni: her cihazda KAPLA (cover) —
+/// ekran oranı görselinkinden farklıysa taşan kenar kırpılır. Dikeyde dikey
+/// fotoğraf, yatayda yatay kompozisyon kullanıldığından kırpma hep küçüktür.
+Rect _splashImageRect(Size screen, Size image) {
+  final double sx = screen.width / image.width;
+  final double sy = screen.height / image.height;
+  final double scale = math.max(sx, sy);
+  final double dw = image.width * scale;
+  final double dh = image.height * scale;
   return Rect.fromLTWH(
     (screen.width - dw) / 2,
     (screen.height - dh) / 2,
@@ -212,47 +250,23 @@ class _SplashScreenState extends State<_SplashScreen>
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints c) {
           final Size screen = Size(c.maxWidth, c.maxHeight);
-          final Rect rect = _splashImageRect(screen);
-          final bool wide = screen.width > screen.height;
+          final Rect rect = _splashImageRect(screen, v.imageSize);
           final Offset pin = _mapInRect(v.end, rect);
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              if (wide) ...<Widget>[
-                // BİLGİSAYAR/YATAY: zemin, aynı fotoğrafın bulanık dolgusu —
-                // bilinçli bulanık olduğundan büyütme kalitesi göze batmaz.
-                RepaintBoundary(
-                  child: ImageFiltered(
-                    imageFilter: ui.ImageFilter.blur(sigmaX: 28, sigmaY: 28),
-                    child: Image.asset(
-                      v.asset,
-                      fit: BoxFit.cover,
-                      gaplessPlayback: true,
-                      filterQuality: FilterQuality.low,
-                    ),
-                  ),
-                ),
-                // Hafif karartma: ortadaki net fotoğraf öne çıksın.
-                const ColoredBox(color: Color(0x2E06141F)),
-                // Fotoğrafın TAMAMI, ekran yüksekliğinde ve NET (küçültme —
-                // büyütme değil → kalite korunur).
-                Positioned.fromRect(
-                  rect: rect,
-                  child: Image.asset(
-                    v.asset,
-                    fit: BoxFit.fill,
-                    gaplessPlayback: true,
-                    filterQuality: FilterQuality.medium,
-                  ),
-                ),
-              ] else
-                // TELEFON (dikey): fotoğraf ekranı kaplar (cover).
-                Image.asset(
+              // TEK katman: cihaza uygun kompozisyon ekranı KAPLAR (cover).
+              // rect, rota ressamıyla aynı matematiği paylaşır — çizgi her
+              // ekranda fotoğrafın doğru noktalarına oturur.
+              Positioned.fromRect(
+                rect: rect,
+                child: Image.asset(
                   v.asset,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   gaplessPlayback: true,
                   filterQuality: FilterQuality.medium,
                 ),
+              ),
               AnimatedBuilder(
                 animation: Listenable.merge(<Listenable>[_draw, _march]),
                 builder: (BuildContext context, Widget? _) {
