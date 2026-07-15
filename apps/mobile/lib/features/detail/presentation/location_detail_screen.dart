@@ -124,6 +124,12 @@ class _DetailContent extends ConsumerWidget {
               const SizedBox(width: 8),
               const DocklyIcon(DocklyIcons.verified, size: 16, color: DocklyColors.success),
             ],
+            // DOLULUK ÇİPİ (kullanıcı kararı 2026-07): bağlama noktası
+            // işaretinin hemen yanında; veri yoksa görünmez.
+            const SizedBox(width: 10),
+            Flexible(
+              child: OccupancyChip(idOrSlug: detail.id, initial: detail.occupancy),
+            ),
           ],
         ),
         const SizedBox(height: 6),
@@ -161,10 +167,9 @@ class _DetailContent extends ConsumerWidget {
           maxDraftM: detail.dimensions.maxDraftM,
         ),
         _SeaRouteRow(destination: detail.position),
-        // KOY DOLULUK (2026-07 ayrıştırma paketi ①): son 6 saatin bildirimi
-        // + "Doluluk bildir" eylemi. Bildirim üyelik kapılıdır; veri yoksa
-        // yalnız eylem görünür (tahmin gösterilmez).
-        OccupancyRow(idOrSlug: detail.id, initial: detail.occupancy),
+        // KOY DOLULUK (2026-07 ①): bildirme eylemi YALNIZ detay sayfasında.
+        // Konum + yakınlık + üyelik kapıları OccupancyRow içindedir.
+        OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
         const SizedBox(height: 14),
         // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon

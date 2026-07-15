@@ -186,6 +186,8 @@ class L10n {
     required this.agoJustNow,
     required this.agoMinFmt,
     required this.agoHourFmt,
+    required this.occNeedLocation,
+    required this.occTooFar,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -268,6 +270,8 @@ class L10n {
   final String agoJustNow;
   final String agoMinFmt;
   final String agoHourFmt;
+  final String occNeedLocation;
+  final String occTooFar;
 
   /// Doluluk düzey kodu → seçili dildeki etiket.
   String occupancyLabel(String code) {
@@ -514,6 +518,8 @@ const L10n _tr = L10n(
   agoJustNow: 'az önce',
   agoMinFmt: '{0} dk önce',
   agoHourFmt: '{0} sa önce',
+  occNeedLocation: 'Doluluk bildirmek için önce konumunu paylaşmalısın — haritadaki "Konumum" düğmesine dokun.',
+  occTooFar: 'Yanlış bilgiyi önlemek için yalnız yakınında olduğun koylar için bildirim yapabilirsin.',
 );
 
 const L10n _en = L10n(
@@ -734,6 +740,8 @@ const L10n _en = L10n(
   agoJustNow: 'just now',
   agoMinFmt: '{0} min ago',
   agoHourFmt: '{0} h ago',
+  occNeedLocation: 'Share your location first to report occupancy — tap the "My location" button on the map.',
+  occTooFar: 'To prevent false reports, you can only report for bays near your current position.',
 );
 
 const L10n _es = L10n(
@@ -954,6 +962,8 @@ const L10n _es = L10n(
   agoJustNow: 'ahora mismo',
   agoMinFmt: 'hace {0} min',
   agoHourFmt: 'hace {0} h',
+  occNeedLocation: 'Comparte tu ubicación para informar la ocupación — toca el botón "Mi ubicación" en el mapa.',
+  occTooFar: 'Para evitar avisos falsos, solo puedes informar sobre calas cercanas a tu posición actual.',
 );
 
 const L10n _ru = L10n(
@@ -1174,6 +1184,8 @@ const L10n _ru = L10n(
   agoJustNow: 'только что',
   agoMinFmt: '{0} мин назад',
   agoHourFmt: '{0} ч назад',
+  occNeedLocation: 'Чтобы сообщить о занятости, сначала поделитесь местоположением — нажмите кнопку «Моё местоположение» на карте.',
+  occTooFar: 'Во избежание ложных сообщений можно сообщать только о бухтах рядом с вашим местоположением.',
 );
 
 /// Saf eşleme — birim testli.

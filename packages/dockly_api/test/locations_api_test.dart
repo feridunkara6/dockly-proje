@@ -231,6 +231,7 @@ void main() {
     final summary = await api.reportOccupancy(
       idOrSlug: 'akvaryum-koyu',
       level: 'moderate',
+      position: const GeoPoint(lat: 37.02, lon: 27.39),
       accessToken: 'tok-123',
     );
     expect(summary.level, 'moderate');
@@ -241,6 +242,10 @@ void main() {
     expect(req.method, 'POST');
     expect(req.uri.path, '/v1/locations/akvaryum-koyu/occupancy');
     expect(req.headers['Authorization'], 'Bearer tok-123');
+    // KONUM DOĞRULAMASI: bildirenin konumu gövdeyle sunucuya gider.
+    final Map<String, dynamic> body = req.data as Map<String, dynamic>;
+    expect((body['position'] as Map<String, dynamic>)['lat'], 37.02);
+    expect((body['position'] as Map<String, dynamic>)['lon'], 27.39);
   });
 
   test('pin doluluk özeti: alan varsa parse, yoksa null (geriye uyumlu)', () async {

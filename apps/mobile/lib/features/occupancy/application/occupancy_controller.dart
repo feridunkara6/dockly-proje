@@ -17,7 +17,7 @@ import '../../auth/application/auth_controller.dart';
 
 /// Bildirim ağ geçidi — testte sahte ile override edilir.
 abstract interface class OccupancyGateway {
-  Future<OccupancySummary> report(String idOrSlug, String level);
+  Future<OccupancySummary> report(String idOrSlug, String level, GeoPoint position);
 }
 
 class ApiOccupancyGateway implements OccupancyGateway {
@@ -27,14 +27,16 @@ class ApiOccupancyGateway implements OccupancyGateway {
   final Future<String?> Function() _tokenProvider;
 
   @override
-  Future<OccupancySummary> report(String idOrSlug, String level) async {
+  Future<OccupancySummary> report(
+      String idOrSlug, String level, GeoPoint position) async {
     final String? token = await _tokenProvider();
     if (token == null) {
       // Arayüz kapısı normalde buraya düşürmez; oturum süresi ağ yokken
       // dolmuşsa güvenli tarafta kal: standart oturum hatası fırlat.
       throw const AuthFailure('Oturum yenilenemedi — lütfen tekrar giriş yapın.');
     }
-    return _api.reportOccupancy(idOrSlug: idOrSlug, level: level, accessToken: token);
+    return _api.reportOccupancy(
+        idOrSlug: idOrSlug, level: level, position: position, accessToken: token);
   }
 }
 
@@ -55,9 +57,10 @@ class OccupancyOverrides extends Notifier<Map<String, OccupancySummary>> {
   @override
   Map<String, OccupancySummary> build() => <String, OccupancySummary>{};
 
-  Future<OccupancySummary> report(String idOrSlug, String level) async {
+  Future<OccupancySummary> report(
+      String idOrSlug, String level, GeoPoint position) async {
     final OccupancySummary summary =
-        await ref.read(occupancyGatewayProvider).report(idOrSlug, level);
+        await ref.read(occupancyGatewayProvider).report(idOrSlug, level, position);
     state = <String, OccupancySummary>{...state, idOrSlug: summary};
     return summary;
   }

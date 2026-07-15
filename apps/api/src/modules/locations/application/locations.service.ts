@@ -33,7 +33,9 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -107,7 +109,10 @@ export class LocationsService {
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+  ): Promise<{ data: ReviewItem[] }> {
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }
@@ -161,13 +166,29 @@ export class LocationsService {
    * denetler); kullanıcı başına lokasyon başına tek satır — yeni bildirim
    * üstüne yazar. Dönen değer güncel özettir (istemci ekranı hemen tazeler).
    */
+  /** İstemci kuralı 5 NM; sunucu 6 NM (11.112 m) — GPS sapması payı. */
+  static readonly MAX_REPORT_DISTANCE_M = 11_112;
+
   async reportOccupancy(
     idOrSlug: string,
     userId: string,
     level: OccupancyLevel,
+    reporterPos: { lat: number; lon: number },
   ): Promise<{ occupancy: OccupancySummary }> {
-    const summary = await this.repo.reportOccupancy(idOrSlug, userId, level);
-    if (!summary) throw new AppProblem('not-found');
-    return { occupancy: summary };
+    const result = await this.repo.reportOccupancy(
+      idOrSlug,
+      userId,
+      level,
+      reporterPos,
+      LocationsService.MAX_REPORT_DISTANCE_M,
+    );
+    if (!result) throw new AppProblem('not-found');
+    if (result === 'too-far') {
+      // Yanlış bilgi trafiğine karşı: yalnız yakınında olduğun koy bildirilebilir.
+      throw new AppProblem('validation-error', 'Bildirim için koyun yakınında olmalısınız.', [
+        { field: 'position', code: 'too_far', message: 'Konum, bildirilen koydan çok uzak.' },
+      ]);
+    }
+    return { occupancy: result };
   }
 }

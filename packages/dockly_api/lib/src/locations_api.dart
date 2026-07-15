@@ -124,12 +124,17 @@ class LocationsApi {
   Future<OccupancySummary> reportOccupancy({
     required String idOrSlug,
     required String level,
+    required GeoPoint position,
     required String accessToken,
   }) async {
     return _call(() async {
       final res = await _dio.post<Map<String, dynamic>>(
         '/v1/locations/$idOrSlug/occupancy',
-        data: <String, dynamic>{'level': level},
+        data: <String, dynamic>{
+          'level': level,
+          // KONUM DOĞRULAMASI: sunucu, bildirenin koya yakınlığını denetler.
+          'position': <String, dynamic>{'lat': position.lat, 'lon': position.lon},
+        },
         options: Options(
           headers: <String, dynamic>{'Authorization': 'Bearer $accessToken'},
         ),

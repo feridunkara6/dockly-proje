@@ -92,4 +92,24 @@ void main() {
     expect(find.text('Teknen sığar'), findsNothing);
     expect(find.text('Uygunluk bilinmiyor'), findsNothing);
   });
+
+  testWidgets('doluluk rozeti: pin özet taşıyorsa tip etiketinin yanında görünür',
+      (WidgetTester tester) async {
+    final LocationPin occPin = LocationPin(
+      id: 'akvaryum',
+      name: 'Akvaryum Koyu (Adaboğazı)',
+      type: 'mooring_point',
+      position: const GeoPoint(lat: 37.0, lon: 27.38),
+      ratingAvg: null,
+      priceTier: 'free',
+      occupancy: OccupancySummary(
+        level: 'full',
+        reportedAt: DateTime(2026, 7, 15, 10),
+        reportCount: 2,
+      ),
+    );
+    await tester.pumpWidget(_wrap(LocationBottomCard(pin: occPin, onClose: () {})));
+    expect(find.text('Dolu'), findsOneWidget); // kompakt rozet (salt gösterim)
+    expect(find.text('Doluluk bildir'), findsNothing); // bildirme YALNIZ detayda
+  });
 }

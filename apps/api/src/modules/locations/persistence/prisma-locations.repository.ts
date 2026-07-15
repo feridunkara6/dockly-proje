@@ -116,7 +116,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<LocationPin[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // `&&` = geography GIST index'i (ix_locations_position) kullanan bbox örtüşmesi;
     // nokta geometrileri için örtüşme = "kutu içinde" (tam sonuç). ADR-005 ham SQL.
@@ -343,7 +345,9 @@ export class PrismaLocationsRepository implements LocationsRepository {
     limit: number,
   ): Promise<Cluster[]> {
     const typeFilter =
-      types && types.length > 0 ? Prisma.sql`AND lt.code = ANY(${types}::text[])` : Prisma.empty;
+      types && types.length > 0
+        ? Prisma.sql`AND lt.code = ANY(${types}::text[])`
+        : Prisma.empty;
 
     // ST_SnapToGrid ile noktalar hücre düğümüne kilitlenir; hücre + ÜLKE'ye göre
     // GROUP BY → sınır hücrelerinde TR/GR ayrı balon (istemci ülkeye göre renkler).
@@ -414,13 +418,27 @@ export class PrismaLocationsRepository implements LocationsRepository {
     idOrSlug: string,
     userId: string,
     level: OccupancyLevel,
-  ): Promise<OccupancySummary | null> {
+    reporterPos: { lat: number; lon: number },
+    maxDistanceM: number,
+  ): Promise<OccupancySummary | 'too-far' | null> {
     const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
     const loc = await this.prisma.location.findFirst({
       where: { ...where, status: 'published', deletedAt: null },
       select: { id: true },
     });
     if (!loc) return null;
+    // KONUM DOĞRULAMASI (kullanıcı kararı 2026-07): bildiren koyun yakınında
+    // olmalı — "en yakın koy ve çevresi" kuralının sunucu katmanı. PostGIS
+    // geography mesafesi metre döner; eşik istemci kuralından biraz gevşektir
+    // (GPS sapması payı), böylece dürüst kullanıcı sınırda reddedilmez.
+    const distRows = await this.prisma.$queryRaw<{ dist: number }[]>(Prisma.sql`
+      SELECT ST_Distance(
+        l.position,
+        ST_SetSRID(ST_MakePoint(${reporterPos.lon}, ${reporterPos.lat}), 4326)::geography
+      ) AS dist
+      FROM locations l WHERE l.id = ${loc.id}::uuid
+    `);
+    if (distRows.length === 0 || Number(distRows[0].dist) > maxDistanceM) return 'too-far';
     // Kullanıcı başına tek satır: yeni bildirim üstüne yazar (fikir değişikliği
     // ve spam aynı mekanizmayla çözülür — kullanıcı sayıyı şişiremez).
     await this.prisma.locationOccupancyReport.upsert({
@@ -539,11 +557,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       lon,
       countryCode: loc.countryCode,
       adminArea: loc.adminArea
-        ? {
-            id: loc.adminArea.id,
-            name: loc.adminArea.name,
-            province: loc.adminArea.parent?.name ?? null,
-          }
+        ? { id: loc.adminArea.id, name: loc.adminArea.name, province: loc.adminArea.parent?.name ?? null }
         : null,
       waterBody: loc.waterBody
         ? { id: loc.waterBody.id, name: loc.waterBody.name, type: loc.waterBody.type }
@@ -590,12 +604,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
         })),
       contacts: [...loc.contacts]
         .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
-        .map((c) => ({
-          type: c.contactType,
-          value: c.value,
-          isPrimary: c.isPrimary,
-          label: c.label,
-        })),
+        .map((c) => ({ type: c.contactType, value: c.value, isPrimary: c.isPrimary, label: c.label })),
       hours: [...loc.operatingHours]
         .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
         .map((h) => ({

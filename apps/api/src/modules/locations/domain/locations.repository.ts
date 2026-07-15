@@ -70,11 +70,14 @@ export interface LocationsRepository {
    * bildirim üstüne yazar. Dönen değer güncel 6 saatlik özettir.
    * Lokasyon yoksa/yayında değilse null döner (servis not-found üretir).
    */
+  /** `reporterPos` koya [maxDistanceM]'den uzaksa 'too-far' döner (bildirim yazılmaz). */
   reportOccupancy(
     idOrSlug: string,
     userId: string,
     level: OccupancyLevel,
-  ): Promise<OccupancySummary | null>;
+    reporterPos: { lat: number; lon: number },
+    maxDistanceM: number,
+  ): Promise<OccupancySummary | 'too-far' | null>;
 
   /**
    * Bir merkeze `radiusMeters` içindeki yayınlanmış lokasyonları mesafeye göre

@@ -5,8 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/origin_provider.dart';
 import '../../auth/presentation/account_gate.dart';
+import '../../route/domain/sea_route.dart';
 import '../application/occupancy_controller.dart';
+
+/// KONUM KURALI (kullanıcı kararı 2026-07): doluluk yalnız BULUNDUĞUN yerin
+/// en yakın koyu ve çevresindeki koylar için bildirilebilir — yanlış bilgi
+/// trafiğine karşı. İstemci eşiği 5 NM; sunucu aynı kuralı 6 NM ile
+/// (GPS payı) ayrıca doğrular. Bildirim için konum paylaşımı ŞARTTIR.
+const double occupancyMaxReportNm = 5.0;
 
 /// Doluluk düzeyi renkleri: durum renkleriyle aynı dil (yeşil/turuncu/kırmızı).
 Color occupancyColor(String level) {
@@ -29,88 +37,43 @@ String occupancyAgo(L10n t, DateTime reportedAt, DateTime now) {
   return L10n.fmt(t.agoHourFmt, d.inHours.toString());
 }
 
-/// Detay ekranındaki doluluk satırı: son bildirim (varsa) + bildirme eylemi.
-/// [initial] detay yanıtından gelir; kullanıcı bildirince yerel geçersiz kılma
-/// haritası (occupancyOverridesProvider) daha taze özeti sağlar — HTTP
-/// önbelleği yüzünden bekletmeden ekran anında güncellenir.
-class OccupancyRow extends ConsumerWidget {
-  const OccupancyRow({
+/// Doluluk çipi — BAĞLAMA NOKTASI İŞARETİNİN yanında durur (kullanıcı kararı
+/// 2026-07): detay sayfasında tip satırında, haritanın alt kartında tip
+/// etiketinin yanında. Özet yoksa hiçbir şey çizmez (tahmin yok).
+/// [compact] alt kart içindir: yalnız renkli nokta + düzey etiketi.
+/// Bildirim sonrası yerel geçersiz kılma (occupancyOverridesProvider) HTTP
+/// önbelleğini beklemeden çipi tazeler.
+class OccupancyChip extends ConsumerWidget {
+  const OccupancyChip({
     required this.idOrSlug,
     required this.initial,
+    this.compact = false,
     this.now,
     super.key,
   });
 
   final String idOrSlug;
   final OccupancySummary? initial;
+  final bool compact;
 
   /// Saat kaynağı — testte sabitlenir; null → [DateTime.now].
   final DateTime Function()? now;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final L10n t = ref.watch(l10nProvider);
     final OccupancySummary? summary =
         ref.watch(occupancyOverridesProvider)[idOrSlug] ?? initial;
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Row(
-        children: <Widget>[
-          if (summary != null)
-            Expanded(child: _OccupancyChip(summary: summary, now: now))
-          else
-            const Spacer(),
-          TextButton.icon(
-            key: const ValueKey<String>('occupancy-report-button'),
-            icon: const DocklyIcon(DocklyIcons.social, size: 18),
-            label: Text(t.occReportCta),
-            style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-            onPressed: () => requireAccount(
-              context,
-              ref,
-              message: t.gateOccupancyMsg,
-              onAllowed: () => _showReportSheet(context, ref),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _showReportSheet(BuildContext context, WidgetRef ref) async {
-    final String? level = await showModalBottomSheet<String>(
-      context: context,
-      useSafeArea: true,
-      builder: (_) => const OccupancySheetBody(),
-    );
-    if (level == null || !context.mounted) return;
-    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    final L10n t = ref.read(l10nProvider);
-    try {
-      await ref.read(occupancyOverridesProvider.notifier).report(idOrSlug, level);
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(t.occReported)));
-    } on AppFailure catch (f) {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(f.message)));
-    }
-  }
-}
-
-class _OccupancyChip extends ConsumerWidget {
-  const _OccupancyChip({required this.summary, this.now});
-
-  final OccupancySummary summary;
-  final DateTime Function()? now;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+    if (summary == null) return const SizedBox.shrink();
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final Color color = occupancyColor(summary.level);
-    final String ago = occupancyAgo(t, summary.reportedAt, (now ?? DateTime.now)());
+    final String label = compact
+        ? t.occupancyLabel(summary.level)
+        : L10n.fmt2(
+            t.occChipFmt,
+            t.occupancyLabel(summary.level),
+            occupancyAgo(t, summary.reportedAt, (now ?? DateTime.now)()),
+          );
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -119,16 +82,17 @@ class _OccupancyChip extends ConsumerWidget {
           height: 10,
           decoration: BoxDecoration(shape: BoxShape.circle, color: color),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         Flexible(
           child: Text(
-            L10n.fmt2(t.occChipFmt, t.occupancyLabel(summary.level), ago),
+            label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: (compact ? theme.textTheme.bodySmall : theme.textTheme.bodyMedium)
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
-        if (summary.reportCount > 1) ...<Widget>[
+        if (!compact && summary.reportCount > 1) ...<Widget>[
           const SizedBox(width: 6),
           Text(
             '(${L10n.fmt(t.occCountFmt, summary.reportCount.toString())})',
@@ -138,6 +102,89 @@ class _OccupancyChip extends ConsumerWidget {
         ],
       ],
     );
+  }
+}
+
+/// Detay sayfasındaki "Doluluk bildir" eylem satırı — bildirim YALNIZ buradan
+/// yapılır (alt kart salt gösterim). Sıra: 1) konum paylaşılmış mı,
+/// 2) koy 5 NM içinde mi, 3) üyelik kapısı, 4) düzey seçimi.
+class OccupancyRow extends ConsumerWidget {
+  const OccupancyRow({
+    required this.idOrSlug,
+    required this.position,
+    super.key,
+  });
+
+  final String idOrSlug;
+
+  /// Koyun konumu — bildirenin GPS'ine uzaklığı istemcide de denetlenir.
+  final GeoPoint position;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton.icon(
+        key: const ValueKey<String>('occupancy-report-button'),
+        icon: const DocklyIcon(DocklyIcons.social, size: 18),
+        label: Text(t.occReportCta),
+        style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+        onPressed: () => _startReport(context, ref),
+      ),
+    );
+  }
+
+  void _startReport(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.read(l10nProvider);
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    // 1) Konum şart: GPS paylaşılmamışsa yönlendir (harita merkezi SAYILMAZ —
+    //    yanlış bilgi trafiğine karşı gerçek konum gerekir).
+    final GeoPoint? gps = ref.read(devicePositionProvider);
+    if (gps == null) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(t.occNeedLocation)));
+      return;
+    }
+    // 2) Yakınlık: yalnız en yakın koy ve çevresi (5 NM).
+    if (haversineNm(gps, position) > occupancyMaxReportNm) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(t.occTooFar)));
+      return;
+    }
+    // 3) Üyelik kapısı → 4) düzey seçimi.
+    requireAccount(
+      context,
+      ref,
+      message: t.gateOccupancyMsg,
+      onAllowed: () => _showReportSheet(context, ref, gps),
+    );
+  }
+
+  Future<void> _showReportSheet(
+      BuildContext context, WidgetRef ref, GeoPoint gps) async {
+    final String? level = await showModalBottomSheet<String>(
+      context: context,
+      useSafeArea: true,
+      builder: (_) => const OccupancySheetBody(),
+    );
+    if (level == null || !context.mounted) return;
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final L10n t = ref.read(l10nProvider);
+    try {
+      await ref
+          .read(occupancyOverridesProvider.notifier)
+          .report(idOrSlug, level, gps);
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(t.occReported)));
+    } on AppFailure catch (f) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(f.message)));
+    }
   }
 }
 
