@@ -177,9 +177,13 @@ runIf('Misafir kısıtları (e2e — gerçek DB+Redis)', () => {
     const map = await request(http)
       .get('/v1/locations?bbox=27.30,36.95,27.45,37.05&zoom=13')
       .expect(200);
-    interface PinLite { name: string; occupancy: { level: string; reportCount: number } | null }
+    interface PinLite {
+      name: string;
+      occupancy: { level: string; reportCount: number } | null;
+    }
     const koy = (map.body.locations as PinLite[]).find(
-      (p) => p.name === 'Akvaryum Koyu (Adaboğazı)');
+      (p) => p.name === 'Akvaryum Koyu (Adaboğazı)',
+    );
     expect(koy?.occupancy?.level).toBe('moderate');
   });
 
