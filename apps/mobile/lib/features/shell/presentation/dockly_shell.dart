@@ -2,6 +2,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
@@ -63,6 +64,7 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
 
   @override
   Widget build(BuildContext context) {
+    final L10n t = ref.watch(l10nProvider); // dil değişince menü yenilenir
     final bool dark = Theme.of(context).brightness == Brightness.dark;
     // Tasarım sistemi §5 (glass tab bar) + mockup: açık cam zemin (0.72 beyaz),
     // ince üst çizgi, PILL GÖSTERGESİZ sekmeler — seçili sekme marka mavisi
@@ -124,31 +126,31 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
               _built[i] = true; // ilk ziyarette kur, sonra canlı tut
               _index = i;
             }),
-            destinations: const <NavigationDestination>[
+            destinations: <NavigationDestination>[
               NavigationDestination(
-                icon: DocklyIcon(DocklyIcons.exploreOutlined),
-                selectedIcon: DocklyIcon(DocklyIcons.explore),
-                label: 'Keşfet',
+                icon: const DocklyIcon(DocklyIcons.exploreOutlined),
+                selectedIcon: const DocklyIcon(DocklyIcons.explore),
+                label: t.navExplore,
               ),
               NavigationDestination(
-                icon: DocklyIcon(DocklyIcons.search),
-                selectedIcon: DocklyIcon(DocklyIcons.search),
-                label: 'Arama',
+                icon: const DocklyIcon(DocklyIcons.search),
+                selectedIcon: const DocklyIcon(DocklyIcons.search),
+                label: t.navSearch,
               ),
               NavigationDestination(
-                icon: DocklyIcon(DocklyIcons.favoriteBorder),
-                selectedIcon: DocklyIcon(DocklyIcons.favorite),
-                label: 'Favoriler',
+                icon: const DocklyIcon(DocklyIcons.favoriteBorder),
+                selectedIcon: const DocklyIcon(DocklyIcons.favorite),
+                label: t.navFavorites,
               ),
               NavigationDestination(
-                icon: DocklyIcon(DocklyIcons.eventNoteOutlined),
-                selectedIcon: DocklyIcon(DocklyIcons.eventNote),
-                label: 'Taleplerim',
+                icon: const DocklyIcon(DocklyIcons.eventNoteOutlined),
+                selectedIcon: const DocklyIcon(DocklyIcons.eventNote),
+                label: t.navRequests,
               ),
               NavigationDestination(
-                icon: DocklyIcon(DocklyIcons.personOutline),
-                selectedIcon: DocklyIcon(DocklyIcons.person),
-                label: 'Profil',
+                icon: const DocklyIcon(DocklyIcons.personOutline),
+                selectedIcon: const DocklyIcon(DocklyIcons.person),
+                label: t.navProfile,
               ),
             ],
           ),

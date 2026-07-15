@@ -5,10 +5,12 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/flavor.dart';
 import 'core/firebase_options.dart';
+import 'core/l10n/app_locale.dart';
 import 'core/providers.dart';
 import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
@@ -33,8 +35,14 @@ Future<void> bootstrap(AppConfig config) async {
   // bakarken ısınma başlasın → veri daha erken gelir.
   unawaited(DocklyClient(baseUrl: config.apiBaseUrl).warmUp());
 
+  // DİL (kullanıcı kararı 2026-07): önce kayıtlı seçim, yoksa CİHAZ DİLİ
+  // (tr/en/es/ru; diğerleri İngilizce'ye düşer). Profil'deki menüden
+  // değiştirilebilir; seçim cihazda saklanır.
+  final AppLocale initialLocale = await readInitialLocale();
+
   final List<Override> overrides = <Override>[
     appConfigProvider.overrideWithValue(config),
+    appLocaleProvider.overrideWith(() => AppLocaleController(initialLocale)),
     ...mapplat.mapPlatformOverrides(),
   ];
 
@@ -80,11 +88,23 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocale loc = ref.watch(appLocaleProvider);
     return MaterialApp(
       title: 'Moorira',
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
+      // Dil: Material bileşenleri (tarih seçici, geri düğmesi ipuçları vb.)
+      // seçili dile uyar; uygulama metinleri l10nProvider'dan gelir.
+      locale: Locale(loc.name),
+      supportedLocales: const <Locale>[
+        Locale('tr'), Locale('en'), Locale('es'), Locale('ru'),
+      ],
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       // Açılış ekranı (marka) → 5 sekmeli kabuk; giriş/hesap Profil sekmesinde
       // (AccountSection). Giriş zorunlu değil — misafir modu ilkedir.
       home: const SplashGate(child: DocklyShell()),

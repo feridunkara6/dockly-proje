@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Dil desteği (TR/EN/ES/RU): Material bileşen çevirileri.
+  flutter_localizations:
+    sdk: flutter
   # Firebase kimlik köprüsü (docs/23 §3): giriş Firebase'de, oturum bizim
   # sunucuda. Sürümler Flutter 3.27 (Dart 3.6) ile uyumlu ailede sabitlenir.
   firebase_core: ^3.10.0

@@ -3,6 +3,7 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/auth_controller.dart';
 import '../domain/auth_gateway.dart';
 import '../domain/auth_state.dart';
@@ -16,20 +17,23 @@ class AccountSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AuthState state = ref.watch(authControllerProvider);
+    final L10n t = ref.watch(l10nProvider);
     if (state is Authenticated && !state.isGuest) {
       return _SignedInCard(
+        t: t,
         email: ref.watch(authGatewayProvider).currentEmail,
         onSignOut: () => ref.read(authControllerProvider.notifier).logout(),
       );
     }
-    return _SignInCard(onSignIn: () => showSignInSheet(context));
+    return _SignInCard(t: t, onSignIn: () => showSignInSheet(context));
   }
 }
 
 /// Oturum kapalı: fayda anlatan giriş kartı.
 class _SignInCard extends StatelessWidget {
-  const _SignInCard({required this.onSignIn});
+  const _SignInCard({required this.t, required this.onSignIn});
 
+  final L10n t;
   final VoidCallback onSignIn;
 
   @override
@@ -51,24 +55,19 @@ class _SignInCard extends StatelessWidget {
               DocklyIcon(DocklyIcons.personOutline, color: theme.colorScheme.primary),
               const SizedBox(width: 10),
               Expanded(
-                child: Text('Hesabınla her cihazda',
+                child: Text(t.accTitle,
                     style: theme.textTheme.titleSmall
                         ?.copyWith(fontWeight: FontWeight.w700)),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            'Giriş yaparsan favori limanların ve tekne bilgin hesabında saklanır; '
-            'telefon değişse de kaybolmaz. Keşif için giriş gerekmez — misafir '
-            'modda her şey açık.',
-            style: theme.textTheme.bodyMedium,
-          ),
+          Text(t.accBody, style: theme.textTheme.bodyMedium),
           const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: DocklyButton(
-              label: 'Giriş yap veya kayıt ol',
+              label: t.accCta,
               icon: DocklyIcons.personOutline,
               onPressed: onSignIn,
             ),
@@ -81,8 +80,9 @@ class _SignInCard extends StatelessWidget {
 
 /// Oturum açık: e-posta + çıkış.
 class _SignedInCard extends StatelessWidget {
-  const _SignedInCard({required this.email, required this.onSignOut});
+  const _SignedInCard({required this.t, required this.email, required this.onSignOut});
 
+  final L10n t;
   final String? email;
   final VoidCallback onSignOut;
 
@@ -105,7 +105,7 @@ class _SignedInCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Hesabın açık',
+                Text(t.accOpen,
                     style: theme.textTheme.titleSmall
                         ?.copyWith(fontWeight: FontWeight.w700)),
                 if (email != null) ...<Widget>[
@@ -119,7 +119,7 @@ class _SignedInCard extends StatelessWidget {
               ],
             ),
           ),
-          TextButton(onPressed: onSignOut, child: const Text('Çıkış yap')),
+          TextButton(onPressed: onSignOut, child: Text(t.signOut)),
         ],
       ),
     );
@@ -163,12 +163,13 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
 
   /// Basit istemci doğrulaması — asıl doğrulama Firebase'de.
   String? _validate() {
+    final L10n t = ref.read(l10nProvider);
     final String email = _email.text.trim();
     if (email.isEmpty || !email.contains('@') || !email.contains('.')) {
-      return 'Geçerli bir e-posta adresi yaz.';
+      return t.valEmail;
     }
     if (_password.text.length < 6) {
-      return 'Şifre en az 6 karakter olmalı.';
+      return t.valPassword;
     }
     return null;
   }
@@ -219,18 +220,19 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text('Hoş geldin, kaptan',
+          Text(t.sheetTitle,
               style: theme.textTheme.titleLarge
                   ?.copyWith(fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
           Text(
-            'Favorilerin ve teknen hesabında saklansın.',
+            t.sheetSub,
             style: theme.textTheme.bodyMedium
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
@@ -240,9 +242,9 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
             enabled: !_busy,
             keyboardType: TextInputType.emailAddress,
             autofillHints: const <String>[AutofillHints.email],
-            decoration: const InputDecoration(
-              labelText: 'E-posta',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: t.emailLabel,
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
@@ -251,9 +253,9 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
             enabled: !_busy,
             obscureText: true,
             autofillHints: const <String>[AutofillHints.password],
-            decoration: const InputDecoration(
-              labelText: 'Şifre (en az 6 karakter)',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: t.passwordLabel,
+              border: const OutlineInputBorder(),
             ),
           ),
           if (_error != null) ...<Widget>[
@@ -267,12 +269,12 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
           ],
           const SizedBox(height: 16),
           DocklyButton(
-            label: _busy ? 'Bekleyin…' : 'Giriş yap',
+            label: _busy ? t.busyLabel : t.signInBtn,
             onPressed: _busy ? null : () => _submitEmail(register: false),
           ),
           const SizedBox(height: 8),
           DocklyButton(
-            label: 'Kayıt ol',
+            label: t.registerBtn,
             variant: DocklyButtonVariant.secondary,
             onPressed: _busy ? null : () => _submitEmail(register: true),
           ),
@@ -282,7 +284,7 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
               const Expanded(child: Divider()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text('veya',
+                child: Text(t.orLabel,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
               ),
@@ -291,7 +293,7 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
           ),
           const SizedBox(height: 16),
           DocklyButton(
-            label: 'Google ile devam et',
+            label: t.googleBtn,
             variant: DocklyButtonVariant.secondary,
             onPressed: _busy ? null : _submitGoogle,
           ),
