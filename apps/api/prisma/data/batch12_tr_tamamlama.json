@@ -332,7 +332,7 @@
    "slug": "oren-gokova-yakit",
    "name": "Ören Marina Yakıt İskelesi (OPET)",
    "operator": null,
-   "status": "published",
+   "status": "draft",
    "typeCode": "fuel_pier",
    "countryCode": "TR",
    "provinceSlug": "mugla",
@@ -358,7 +358,7 @@
     "https://www.petrolofisi.com.tr/denizcilik/marina-istasyonlari (PO resmî marina istasyonları sayfası — ağ teyidi)"
    ],
    "confidence": "high",
-   "missingNotes": "Telefon/VHF kaynakta yok → null. İstasyon, adı geçen marinanın içindedir; çalışma saatlerini marinadan teyit edin."
+   "missingNotes": "Telefon/VHF kaynakta yok → null. İstasyon, adı geçen marinanın içindedir; çalışma saatlerini marinadan teyit edin. 2026-07 kontrolü: Setur tesisi 'Ören Rib & Refit Park'a (çekek/bakım) dönüştü ve resmî sayfada yakıt istasyonu geçmiyor; istasyonun hâlâ çalıştığı doğrulanamadığından kayıt taslağa çekildi."
   },
   {
    "slug": "atakoy-marina-yakit",
@@ -490,7 +490,7 @@
   },
   {
    "slug": "milta-bodrum-yakit",
-   "name": "Milta Bodrum Marina Yakıt İskelesi (Aytemiz)",
+   "name": "Milta Bodrum Marina Yakıt İskelesi (Petrol Ofisi)",
    "operator": null,
    "status": "published",
    "typeCode": "fuel_pier",
@@ -500,7 +500,7 @@
    "lat": 37.033333,
    "lon": 27.430556,
    "coordSource": "marinakedisi.com (37°02'00\"N 27°25'50\"E → 37.033333, 27.430556)",
-   "descriptionTr": "Milta Bodrum Marina içinde Aytemiz yakıt iskelesi.",
+   "descriptionTr": "Milta Bodrum Marina içinde Petrol Ofisi yakıt istasyonu. Petrol Ofisi, Muğla'daki yedinci, Türkiye genelindeki on altıncı marina istasyonunu Ağustos 2025'te burada hizmete açtı (önceki işletici Aytemiz idi).",
    "berthCount": null,
    "maxLoaM": null,
    "maxDraftM": null,
@@ -515,10 +515,11 @@
    "contacts": [],
    "sourceUrls": [
     "https://marinakedisi.com/marinalardaki-yakit-istasyonlari/ (yakıt istasyonu rehberi — konum/işletici)",
-    "https://www.petrolofisi.com.tr/denizcilik/marina-istasyonlari (PO resmî marina istasyonları sayfası — ağ teyidi)"
+    "https://www.petrolofisi.com.tr/denizcilik/marina-istasyonlari (PO resmî marina istasyonları sayfası — ağ teyidi)",
+    "https://www.aa.com.tr/tr/enerjiterminali/sirket-haberleri/petrol-ofisi-16nci-marina-istasyonu-milta-bodrum-marinayi-hizmete-acti/51362"
    ],
    "confidence": "high",
-   "missingNotes": "Telefon/VHF kaynakta yok → null. İstasyon, adı geçen marinanın içindedir; çalışma saatlerini marinadan teyit edin."
+   "missingNotes": "Telefon/VHF kaynakta yok → null. İstasyon, adı geçen marinanın içindedir; çalışma saatlerini marinadan teyit edin. Marka güncellemesi 2026-07 eksik doldurma turunda yapıldı (AA haberi, Ağustos 2025)."
   },
   {
    "slug": "gokkaya-koyu-kekova",

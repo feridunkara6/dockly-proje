@@ -500,7 +500,7 @@
   },
   {
    "slug": "gokova-oren-marina",
-   "name": "Setur Gökova Ören Marina",
+   "name": "Setur Ören Rib & Refit Park",
    "operator": "Setur Marinas",
    "status": "published",
    "typeCode": "private_marina",
@@ -510,7 +510,7 @@
    "lat": 37.031417,
    "lon": 27.981972,
    "coordSource": "marinakedisi.com marina fişi (37°01'53.1\"N 27°58'55.1\"E → 37.031417, 27.981972)",
-   "descriptionTr": "Gökova Körfezi'nin kuzey kıyısında, Ören'de büyük marina: denizde 410, karada 150 tekne. VHF 73'ten (Setur çağrı düzeni 16/73) ulaşılır. Gökova'nın kuzey yakasında bu ölçekte tek tam donanımlı liman olması nedeniyle körfez rotalarının önemli durağıdır. Keramos antik kenti hemen ardındadır.",
+   "descriptionTr": "Gökova Körfezi'nin kuzey kıyısındaki eski Setur Gökova Ören Marina, 'Ören Rib & Refit Park' adıyla çekek ve bakım-onarım tesisine dönüştürülmüştür. 150 tekne kapasiteli kara parkı, 50 m'ye kadar tekneler için 240 ton amfibik lift, 70 ton travel lift ve üç kapalı hangar bulunur. Ziyaretçi teknelere denizde bağlama hizmeti sunmaz; çekek, kışlama ve refit için hizmet verir.",
    "berthCount": 410,
    "maxLoaM": null,
    "maxDraftM": null,
@@ -519,10 +519,14 @@
    "vhfChannel": "73",
    "amenities": [
     "electricity",
-    "water"
+    "water",
+    "travel_lift",
+    "crane",
+    "technical_service"
    ],
    "services": [
-    "winter_storage"
+    "winter_storage",
+    "technical_service"
    ],
    "contacts": [
     {
@@ -541,10 +545,11 @@
    ],
    "sourceUrls": [
     "https://marinakedisi.com/marinalar/ege/setur-gokova-oren-marina/ (koordinat, kapasite, VHF, iletişim)",
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 420 deniz / 130 kara)"
+    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 420 deniz / 130 kara)",
+    "https://www.seturmarinas.com/en/marinas/oren-rib-refit-park"
    ],
    "confidence": "high",
-   "missingNotes": "Kapasite kaynaklar arasında küçük farkla veriliyor (410/150 marina fişi; 420/130 resmî liste) — marina fişi esas alındı. Maks. boy ve derinlik verilmiyor."
+   "missingNotes": "Kapasite kaynaklar arasında küçük farkla veriliyor (410/150 marina fişi; 420/130 resmî liste) — marina fişi esas alındı. Maks. boy ve derinlik verilmiyor. 2026-07 kontrolü: tesis tipi değişti (marina → çekek/refit); tip kodu şema gereği korunuyor, açıklama günceldir."
   },
   {
    "slug": "setur-altinyunus-marina",
