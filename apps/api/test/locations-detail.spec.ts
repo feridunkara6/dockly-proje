@@ -1,9 +1,6 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import {
-  DetailData,
-  LocationsRepository,
-} from '../src/modules/locations/domain/locations.repository';
+import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -112,6 +109,33 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     const d = await service.detail('d-marin', 'en');
     expect(d.name).toBe('D-Marin Gocek');
     expect(d.amenities[0].label).toBe('Electricity');
+  });
+
+  it('es locale: ES açıklama seçilir; adı olmayan i18n satırı adı DEĞİŞTİRMEZ', async () => {
+    // Veri çevirisi kuralı (kullanıcı kararı 2026-07): koy adları çevrilmez —
+    // seed'in yazdığı es/ru satırlarında name NULL kalır, ad zincirden gelir.
+    const withEs: DetailData = {
+      ...SAMPLE,
+      slug: 'with-es',
+      i18n: [
+        { locale: 'tr', name: 'D-Marin Göcek', description: 'TR açıklama' },
+        { locale: 'es', name: null, description: 'Descripción ES' },
+      ],
+    };
+    class EsRepo extends FakeRepo {
+      findDetail(): Promise<DetailData> {
+        return Promise.resolve(withEs);
+      }
+    }
+    const d = await new LocationsService(new EsRepo()).detail('with-es', 'es');
+    expect(d.description).toBe('Descripción ES');
+    expect(d.name).toBe('D-Marin'); // es name null, en satırı yok → baseName
+  });
+
+  it("ru çevirisi henüz yoksa açıklama EN'e düşer (fallback zinciri)", async () => {
+    const d = await service.detail('d-marin', 'ru');
+    expect(d.description).toBe('EN desc');
+    expect(d.name).toBe('D-Marin Gocek'); // en satırındaki ad
   });
 
   it('typeDetails (marina) + rating.dimensions geçirilir', async () => {

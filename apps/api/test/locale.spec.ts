@@ -12,6 +12,13 @@ describe('resolveLocale (docs/23 §7)', () => {
     expect(resolveLocale('fr')).toBe('tr');
   });
 
+  it('İspanyolca ve Rusça desteklenir (2026-07 dil paketi)', () => {
+    expect(resolveLocale('es-ES,es;q=0.9')).toBe('es');
+    expect(resolveLocale('es-419')).toBe('es'); // Latin Amerika İspanyolcası
+    expect(resolveLocale('ru-RU,ru;q=0.9')).toBe('ru');
+    expect(resolveLocale('ru')).toBe('ru');
+  });
+
   it('boş/eksik header → varsayılan tr', () => {
     expect(resolveLocale(undefined)).toBe('tr');
     expect(resolveLocale('')).toBe('tr');

@@ -10278,6 +10278,956 @@ ON CONFLICT (location_id) DO NOTHING;
 
 
 -- ======================================================================
+-- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).
+-- Kaynak: i18n_*.json; yeniden koşmak çeviriyi tazeler (DO UPDATE).
+-- --- i18n_tur1.json (i18n-tur1) ---
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Kadıköy, İstanbul, the marina has a capacity of 1.278 berths afloat and 220 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-kalamis-fenerbahce-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Kadıköy (İstanbul), tiene una capacidad de 1.278 amarres a flote y 220 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-kalamis-fenerbahce-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Kadıköy (İstanbul) и рассчитана на 1.278 мест на воде и 220 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-kalamis-fenerbahce-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located on the central waterfront of Yalova, the marina has a capacity of 225 berths afloat and 70 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-yalova-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el paseo marítimo central de Yalova, tiene una capacidad de 225 amarres a flote y 70 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-yalova-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена на центральной набережной Yalova и рассчитана на 225 мест на воде и 70 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-yalova-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the town centre of Ayvalık, the marina has a capacity of 200 berths afloat and 30 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-ayvalik-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de Ayvalık, tiene una capacidad de 200 amarres a flote y 30 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-ayvalik-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Ayvalık и рассчитана на 200 мест на воде и 30 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-ayvalik-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located at the Altınyunus locality of Çeşme, the marina has a capacity of 186 berths afloat and 60 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el paraje de Altınyunus, en Çeşme, tiene una capacidad de 186 amarres a flote y 60 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в местности Altınyunus в Çeşme и рассчитана на 186 мест на воде и 60 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the town centre of Kuşadası, the marina has a capacity of 557 berths afloat and 100 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-kusadasi-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de Kuşadası, tiene una capacidad de 557 amarres a flote y 100 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-kusadasi-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Kuşadası и рассчитана на 557 мест на воде и 100 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-kusadasi-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the town centre of Marmaris, the marina offers wet berthing for 701 boats. It is operated as part of Setur Marinas.' FROM locations WHERE slug = 'netsel-marmaris-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de Marmaris, dispone de amarres a flote para 701 embarcaciones. Se explota dentro del grupo Setur Marinas.' FROM locations WHERE slug = 'netsel-marmaris-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Marmaris и располагает причальными местами на воде для 701 судна. Эксплуатируется в составе Setur Marinas.' FROM locations WHERE slug = 'netsel-marmaris-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the town centre of Finike, the marina has a capacity of 284 berths afloat and 100 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-finike-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de Finike, tiene una capacidad de 284 amarres a flote y 100 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-finike-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Finike и рассчитана на 284 места на воде и 100 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-finike-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located at the Büyük Liman locality in Konyaaltı, Antalya, the marina has a capacity of 198 berths afloat and 150 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-antalya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el paraje de Büyük Liman, en Konyaaltı (Antalya), tiene una capacidad de 198 amarres a flote y 150 plazas en tierra. Está gestionado por Setur Marinas.' FROM locations WHERE slug = 'setur-antalya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в местности Büyük Liman в районе Konyaaltı (Antalya) и рассчитана на 198 мест на воде и 150 мест на берегу. Управляется компанией Setur Marinas.' FROM locations WHERE slug = 'setur-antalya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located on Bucak Denizi in Kaş, the marina has a capacity of 447 berths afloat and 120 places ashore. It is operated within Setur Marinas under the name Makmarin Kaş Marina.' FROM locations WHERE slug = 'setur-kas-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Bucak Denizi, en Kaş, tiene una capacidad de 447 amarres a flote y 120 plazas en tierra. Se explota dentro de Setur Marinas bajo el nombre de Makmarin Kaş Marina.' FROM locations WHERE slug = 'setur-kas-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в заливе Bucak Denizi в Kaş и рассчитана на 447 мест на воде и 120 мест на берегу. Эксплуатируется в составе Setur Marinas под названием Makmarin Kaş Marina.' FROM locations WHERE slug = 'setur-kas-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Yenişehir, Mersin, the marina is operated by Mersin Yat Limanı İşletmeleri A.Ş.' FROM locations WHERE slug = 'mersin-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Yenişehir (Mersin), está gestionado por Mersin Yat Limanı İşletmeleri A.Ş.' FROM locations WHERE slug = 'mersin-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в районе Yenişehir (Mersin) и управляется компанией Mersin Yat Limanı İşletmeleri A.Ş.' FROM locations WHERE slug = 'mersin-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the Göcek neighbourhood of Fethiye, the marina has a capacity of 380 wet berths and dry storage for 150 boats. It is operated by D-Marin.' FROM locations WHERE slug = 'd-marin-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el barrio de Göcek, en Fethiye, tiene una capacidad de 380 amarres a flote y 150 plazas de marina seca. Está gestionado por D-Marin.' FROM locations WHERE slug = 'd-marin-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в районе Göcek города Fethiye и рассчитана на 380 причальных мест на воде и 150 мест для хранения судов на берегу. Управляется компанией D-Marin.' FROM locations WHERE slug = 'd-marin-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Turgutreis, Bodrum, the marina has a capacity of 532 wet berths and a boatyard (hardstanding) for 150 boats. It is operated by D-Marin.' FROM locations WHERE slug = 'd-marin-turgutreis'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Turgutreis (Bodrum), tiene una capacidad de 532 amarres a flote y una zona de varadero (en tierra) para 150 embarcaciones. Está gestionado por D-Marin.' FROM locations WHERE slug = 'd-marin-turgutreis'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Turgutreis (Bodrum) и рассчитана на 532 причальных места на воде и 150 мест на берегу (судоверфь для подъёма судов). Управляется компанией D-Marin.' FROM locations WHERE slug = 'd-marin-turgutreis'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Didim, the marina has a capacity of 591 wet berths, 90 of which are for superyachts. It is operated by D-Marin.' FROM locations WHERE slug = 'd-marin-didim'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Didim, tiene una capacidad de 591 amarres a flote, de los cuales 90 son para superyates. Está gestionado por D-Marin.' FROM locations WHERE slug = 'd-marin-didim'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Didim и рассчитана на 591 причальное место на воде, из которых 90 предназначены для суперъяхт. Управляется компанией D-Marin.' FROM locations WHERE slug = 'd-marin-didim'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Yalıkavak, Bodrum, the marina has a capacity of 620 yachts; the facility, which previously operated under the name Palmarina, has been renamed Yalıkavak Marina.' FROM locations WHERE slug = 'yalikavak-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Yalıkavak (Bodrum), tiene capacidad para 620 yates; la instalación, que antes operaba bajo el nombre de Palmarina, ha pasado a llamarse Yalıkavak Marina.' FROM locations WHERE slug = 'yalikavak-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Yalıkavak (Bodrum) и рассчитана на 620 яхт; комплекс, ранее работавший под названием Palmarina, получил название Yalıkavak Marina.' FROM locations WHERE slug = 'yalikavak-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the city centre of Bodrum, the marina is operated within Doğan Holding. It holds the Blue Flag and the 5 Gold Anchors awards.' FROM locations WHERE slug = 'milta-bodrum-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de la ciudad de Bodrum, se explota dentro del grupo Doğan Holding. Posee la Bandera Azul y el galardón de las 5 Anclas de Oro.' FROM locations WHERE slug = 'milta-bodrum-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Bodrum и эксплуатируется в составе Doğan Holding. Отмечена наградами «Голубой флаг» и «5 золотых якорей».' FROM locations WHERE slug = 'milta-bodrum-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located at the Karagözler locality of Fethiye, the marina offers 350 berths for boats of up to 50 metres. It holds the Blue Flag and the 5 Gold Anchors awards.' FROM locations WHERE slug = 'ece-saray-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el paraje de Karagözler, en Fethiye, ofrece 350 amarres para embarcaciones de hasta 50 metros. Posee la Bandera Azul y las 5 Anclas de Oro.' FROM locations WHERE slug = 'ece-saray-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в местности Karagözler города Fethiye и предлагает 350 причальных мест для судов длиной до 50 метров. Отмечена наградами «Голубой флаг» и «5 золотых якорей».' FROM locations WHERE slug = 'ece-saray-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Göcek, the marina (formerly known as Marintürk Göcek Village Port) is operated by Setur Marinas. It has a capacity of 220 boats afloat and 200 ashore, and a boatyard with a haul-out area.' FROM locations WHERE slug = 'gocek-village-port-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Göcek (antes conocido como Marintürk Göcek Village Port), está gestionado por Setur Marinas. Tiene capacidad para 220 embarcaciones a flote y 200 en tierra, y dispone de una zona de varadero.' FROM locations WHERE slug = 'gocek-village-port-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Göcek (прежнее название — Marintürk Göcek Village Port) и управляется компанией Setur Marinas. Рассчитана на 220 судов на воде и 200 на берегу, имеется площадка для подъёма судов.' FROM locations WHERE slug = 'gocek-village-port-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Founded in 1990, Club Marina is a naturally sheltered marina located in Büngüş Koyu in Göcek and is able to serve mega yachts.' FROM locations WHERE slug = 'club-marina-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Fundado en 1990, Club Marina es un puerto deportivo naturalmente abrigado, situado en Büngüş Koyu, en Göcek, capaz de dar servicio a megayates.' FROM locations WHERE slug = 'club-marina-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Основанная в 1990 году Club Marina — естественно защищённая марина в бухте Büngüş Koyu в Göcek, способная принимать мегаяхты.' FROM locations WHERE slug = 'club-marina-gocek'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Founded in 1989, Skopea Marina is located on the central waterfront of Göcek and can serve boats of up to 110 metres.' FROM locations WHERE slug = 'skopea-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Fundado en 1989, Skopea Marina está situado en el paseo marítimo central de Göcek y puede dar servicio a embarcaciones de hasta 110 metros.' FROM locations WHERE slug = 'skopea-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Основанная в 1989 году Skopea Marina расположена на центральной набережной Göcek и может принимать суда длиной до 110 метров.' FROM locations WHERE slug = 'skopea-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located at the Orhaniye locality of Marmaris, the marina is operated by Martı Hotels & Marinas. It has a fuel station and technical service facilities.' FROM locations WHERE slug = 'marti-marina-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el paraje de Orhaniye, en Marmaris, está gestionado por Martı Hotels & Marinas. Dispone de estación de combustible y servicios técnicos.' FROM locations WHERE slug = 'marti-marina-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в местности Orhaniye близ Marmaris и управляется компанией Martı Hotels & Marinas. Имеются топливная станция и услуги технического сервиса.' FROM locations WHERE slug = 'marti-marina-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A small facility in Ekincik Koyu, in the Köyceğiz district, offering a restaurant and a yacht berthing jetty. It operates seasonally, from April to October.' FROM locations WHERE slug = 'my-marina-ekincik'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es una pequeña instalación en Ekincik Koyu, en el municipio de Köyceğiz, que ofrece restaurante y un pantalán de amarre para yates. Funciona de forma estacional, de abril a octubre.' FROM locations WHERE slug = 'my-marina-ekincik'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Небольшой комплекс в бухте Ekincik Koyu в районе Köyceğiz, предлагающий ресторан и причал для швартовки яхт. Работает сезонно, с апреля по октябрь.' FROM locations WHERE slug = 'my-marina-ekincik'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A large marina located at the Yalancı Boğaz locality of Adaköy, Marmaris; it is also known as Marmaris Yacht Marina. It has a capacity of 750 boats afloat and a large boatyard area.' FROM locations WHERE slug = 'yacht-marin-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un gran puerto deportivo situado en el paraje de Yalancı Boğaz, en Adaköy (Marmaris); también se conoce como Marmaris Yacht Marina. Tiene capacidad para 750 embarcaciones a flote y una gran zona de varadero.' FROM locations WHERE slug = 'yacht-marin-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Крупная марина в местности Yalancı Boğaz на Adaköy (Marmaris); также известна как Marmaris Yacht Marina. Рассчитана на 750 судов на воде и располагает большой площадкой для хранения судов на берегу.' FROM locations WHERE slug = 'yacht-marin-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Founded in 1982 about 3 km east of the centre of Marmaris, the marina offers 44 wet berths and a hardstanding area for 150 boats ashore.' FROM locations WHERE slug = 'albatros-marina-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Fundado en 1982, a unos 3 km al este del centro de Marmaris, el puerto deportivo ofrece 44 amarres a flote y una explanada de varada para 150 embarcaciones en tierra.' FROM locations WHERE slug = 'albatros-marina-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Основанная в 1982 году марина примерно в 3 км к востоку от центра Marmaris предлагает 44 причальных места на воде и площадку на берегу для 150 судов.' FROM locations WHERE slug = 'albatros-marina-marmaris'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A small marina located at the Gökliman locality of the village of Kıyıkışlacık, Milas, near the ancient city of Iasos.' FROM locations WHERE slug = 'port-iasos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un pequeño puerto deportivo situado en el paraje de Gökliman, en el pueblo de Kıyıkışlacık (Milas), cerca de la antigua ciudad de Iasos.' FROM locations WHERE slug = 'port-iasos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Небольшая марина в местности Gökliman у деревни Kıyıkışlacık (Milas), рядом с древним городом Iasos.' FROM locations WHERE slug = 'port-iasos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Bakırköy, İstanbul, the marina offers berthing for 1000 boats afloat. It has a fuel station and technical maintenance and repair services.' FROM locations WHERE slug = 'atakoy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Bakırköy (İstanbul), ofrece amarre a flote para 1000 embarcaciones. Dispone de estación de combustible y servicios técnicos de mantenimiento y reparación.' FROM locations WHERE slug = 'atakoy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в районе Bakırköy (İstanbul) и предлагает стоянку на воде для 1000 судов. Имеются топливная станция и услуги технического обслуживания и ремонта.' FROM locations WHERE slug = 'atakoy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A marina opened in 2015 within the Viaport shopping and entertainment complex in Tuzla, İstanbul.' FROM locations WHERE slug = 'viaport-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un puerto deportivo inaugurado en 2015 dentro del complejo comercial y de ocio Viaport, en Tuzla (İstanbul).' FROM locations WHERE slug = 'viaport-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина, открытая в 2015 году на территории торгово-развлекательного комплекса Viaport в районе Tuzla (İstanbul).' FROM locations WHERE slug = 'viaport-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A marina in Beylikdüzü, İstanbul, with a capacity of 600 boats afloat and 300 boats ashore. With travel lifts of 75 and 700 tons it provides maintenance, repair and refit services; it is a port of entry with a customs gate.' FROM locations WHERE slug = 'west-istanbul-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un puerto deportivo en Beylikdüzü (İstanbul), con capacidad para 600 embarcaciones a flote y 300 en tierra. Con travelifts de 75 y 700 toneladas ofrece servicios de mantenimiento, reparación y refit; es un puerto de entrada con puesto de aduanas.' FROM locations WHERE slug = 'west-istanbul-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина в районе Beylikdüzü (İstanbul) рассчитана на 600 судов на воде и 300 судов на берегу. Травел-лифты грузоподъёмностью 75 и 700 тонн позволяют выполнять техническое обслуживание, ремонт и рефит; это порт въезда с таможенным пунктом.' FROM locations WHERE slug = 'west-istanbul-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in Pendik, İstanbul, the marina has a capacity of 785 berths on floating pontoons. It offers haul-out and launching for boats of up to 200 tons, as well as maintenance and repair services.' FROM locations WHERE slug = 'marinturk-istanbul-city-port'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en Pendik (İstanbul), tiene una capacidad de 785 amarres en pantalanes flotantes. Ofrece varada y botadura de embarcaciones de hasta 200 toneladas, así como servicios de mantenimiento y reparación.' FROM locations WHERE slug = 'marinturk-istanbul-city-port'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в районе Pendik (İstanbul) и рассчитана на 785 причальных мест на плавучих понтонах. Возможны подъём и спуск судов массой до 200 тонн, а также услуги технического обслуживания и ремонта.' FROM locations WHERE slug = 'marinturk-istanbul-city-port'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A yacht harbour in Sığacık, in the Seferihisar district of İzmir, in service since 2010. It has a capacity of about 480 boats afloat and 80 ashore.' FROM locations WHERE slug = 'teos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un puerto deportivo en Sığacık, en el municipio de Seferihisar (İzmir), en servicio desde 2010. Tiene capacidad para unas 480 embarcaciones a flote y 80 en tierra.' FROM locations WHERE slug = 'teos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Яхтенная гавань в Sığacık, в районе Seferihisar (İzmir), работает с 2010 года. Рассчитана примерно на 480 судов на воде и 80 на берегу.' FROM locations WHERE slug = 'teos-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A waterfront development in Alaçatı, in the Çeşme district of İzmir, combining a yacht harbour with residential and hotel areas.' FROM locations WHERE slug = 'port-alacati-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un complejo marítimo en Alaçatı, en el municipio de Çeşme (İzmir), que combina un puerto deportivo con zonas residenciales y hoteleras.' FROM locations WHERE slug = 'port-alacati-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Прибрежный комплекс в Alaçatı, в районе Çeşme (İzmir), объединяющий яхтенную гавань с жилой и гостиничной зонами.' FROM locations WHERE slug = 'port-alacati-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A marina located in Üçkuyular, İzmir; according to published reports, it has been transferred to the İzmir Metropolitan Municipality and renovated under the name İzmir Marina.' FROM locations WHERE slug = 'levent-marina-izmir'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Puerto deportivo situado en Üçkuyular (İzmir); según publicaciones, ha sido transferido al Ayuntamiento Metropolitano de İzmir y renovado bajo el nombre de İzmir Marina.' FROM locations WHERE slug = 'levent-marina-izmir'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в Üçkuyular (İzmir); по имеющимся публикациям, она передана муниципалитету большого İzmir и обновлена под названием İzmir Marina.' FROM locations WHERE slug = 'levent-marina-izmir'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A yacht harbour in the town centre of Çeşme, operated as a partnership between IC Holding and Camper & Nicholsons, serving boats of up to 60 metres. It is a port of entry where customs and passport formalities can be completed.' FROM locations WHERE slug = 'ic-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es un puerto deportivo en el centro de Çeşme, gestionado en asociación por IC Holding y Camper & Nicholsons, que da servicio a embarcaciones de hasta 60 metros. Es un puerto de entrada donde pueden realizarse los trámites de aduana y pasaporte.' FROM locations WHERE slug = 'ic-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Яхтенная гавань в центре города Çeşme, управляемая партнёрством IC Holding и Camper & Nicholsons и принимающая суда длиной до 60 метров. Это порт въезда, где можно пройти таможенные и паспортные формальности.' FROM locations WHERE slug = 'ic-cesme-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located in the town centre of Kemer, the marina (formerly known as Kemer Türkiz Marina) has a capacity of 230 boats afloat and 140 ashore. Since 2016 it has been operated by Mavi Yeşil International Tourism Ltd.' FROM locations WHERE slug = 'g-marina-kemer'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo, situado en el centro de Kemer (antes conocido como Kemer Türkiz Marina), tiene capacidad para 230 embarcaciones a flote y 140 en tierra. Desde 2016 está gestionado por Mavi Yeşil International Tourism Ltd.' FROM locations WHERE slug = 'g-marina-kemer'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина расположена в центре города Kemer (прежнее название — Kemer Türkiz Marina) и рассчитана на 230 судов на воде и 140 на берегу. С 2016 года управляется компанией Mavi Yeşil International Tourism Ltd.' FROM locations WHERE slug = 'g-marina-kemer'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Opened on 10 February 2011, Alanya Marina has a capacity of 287 boats afloat and 150 ashore. It has a 100-ton travel lift.' FROM locations WHERE slug = 'alanya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Inaugurado el 10 de febrero de 2011, Alanya Marina tiene capacidad para 287 embarcaciones a flote y 150 en tierra. Dispone de un travelift de 100 toneladas.' FROM locations WHERE slug = 'alanya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Открытая 10 февраля 2011 года Alanya Marina рассчитана на 287 судов на воде и 150 на берегу. Имеется травел-лифт грузоподъёмностью 100 тонн.' FROM locations WHERE slug = 'alanya-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The former Levent Marina has been taken over by İZDENİZ A.Ş., a subsidiary of the İzmir Metropolitan Municipality, and is operated under the name İzmir Marina. The facility in Balçova offers 24/7 electricity and water, security, diver and boat washing services.' FROM locations WHERE slug = 'izmir-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El antiguo Levent Marina ha sido asumido por İZDENİZ A.Ş., filial del Ayuntamiento Metropolitano de İzmir, y se explota bajo el nombre de İzmir Marina. La instalación de Balçova ofrece electricidad y agua 24/7, seguridad, servicio de buzo y lavado de embarcaciones.' FROM locations WHERE slug = 'izmir-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бывшая Levent Marina перешла к компании İZDENİZ A.Ş., дочернему предприятию муниципалитета большого İzmir, и эксплуатируется под названием İzmir Marina. Комплекс в Balçova предлагает электричество и воду 24/7, охрану, услуги водолаза и мойку судов.' FROM locations WHERE slug = 'izmir-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the Büyükdeniz Quay, operated by the Foça Municipality since 1994, private and commercial yachts berth under contract, while visiting boats are offered daily stays with electricity and water connections.' FROM locations WHERE slug = 'foca-buyukdeniz-rihtimi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el muelle Büyükdeniz, gestionado por el Ayuntamiento de Foça desde 1994, los yates privados y comerciales amarran mediante contrato, y a las embarcaciones visitantes se les ofrece estancia diaria con conexión de electricidad y agua.' FROM locations WHERE slug = 'foca-buyukdeniz-rihtimi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'На причале Büyükdeniz, находящемся в ведении муниципалитета Foça с 1994 года, частные и коммерческие яхты швартуются по договору, а гостевым судам предоставляется посуточная стоянка с подключением электричества и воды.' FROM locations WHERE slug = 'foca-buyukdeniz-rihtimi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The Bozburun yacht berthing facility, listed in the Marmaris Municipality''s fee tariff, offers seasonal and daily mooring. The facility, with a capacity of 80 boats, provides electricity and water through a prepaid card system, and a service boat is available.' FROM locations WHERE slug = 'bozburun-yat-yanasma-yeri'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El punto de atraque de yates de Bozburun, incluido en la tarifa del Ayuntamiento de Marmaris, ofrece servicio de amarre estacional y diario. La instalación, con capacidad para 80 embarcaciones, suministra electricidad y agua mediante un sistema de tarjeta prepago y cuenta con lancha de servicio.' FROM locations WHERE slug = 'bozburun-yat-yanasma-yeri'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Причал для яхт в Bozburun, включённый в тарифную сетку муниципалитета Marmaris, предлагает сезонную и посуточную стоянку. Комплекс вмещает 80 судов; электричество и вода подаются по предоплаченной карточной системе, имеется сервисный катер.' FROM locations WHERE slug = 'bozburun-yat-yanasma-yeri'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'In Marmaris Harbour, operated by MUTTAŞ, a subsidiary of the Muğla Metropolitan Municipality, berthing for 200 boats is provided along a quay of approximately 1.700 metres. Yachts are offered water, electricity, waste collection, security and mooring-line services; the port is in mixed use with cruise traffic.' FROM locations WHERE slug = 'marmaris-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el puerto de Marmaris, gestionado por MUTTAŞ, filial del Ayuntamiento Metropolitano de Muğla, se ofrece atraque a 200 embarcaciones en un muelle de aproximadamente 1.700 metros. A los yates se les proporciona agua, electricidad, recogida de residuos, seguridad y servicio de amarradores; el puerto es de uso mixto con tráfico de cruceros.' FROM locations WHERE slug = 'marmaris-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'В порту Marmaris, которым управляет MUTTAŞ, дочернее предприятие муниципалитета Большой Muğla, у причала длиной около 1.700 метров могут швартоваться 200 судов. Яхтам предоставляются вода, электричество, приём отходов, охрана и швартовные услуги; порт используется совместно с круизным трафиком.' FROM locations WHERE slug = 'marmaris-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the pier in Marmaris İçmeler, operated by MUTTAŞ, berthing is provided for approximately 40 boats along a 220-metre quay and a 142-metre pier. A waste-water collection service is available.' FROM locations WHERE slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el embarcadero de İçmeler, en Marmaris, gestionado por MUTTAŞ, se ofrece atraque a unas 40 embarcaciones en un muelle de 220 metros y un pantalán de 142 metros. Dispone de servicio de recogida de aguas residuales.' FROM locations WHERE slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'На пирсе в İçmeler (Marmaris), находящемся под управлением MUTTAŞ, у причала длиной 220 метров и пирса длиной 142 метра могут швартоваться около 40 судов. Имеется приём сточных вод.' FROM locations WHERE slug = 'icmeler-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the 183-metre pier on Cumhuriyet Square in Marmaris Turunç, MUTTAŞ provides berthing for approximately 30 boats. Water, waste collection, security and mooring-line services are offered.' FROM locations WHERE slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el pantalán de 183 metros de la plaza Cumhuriyet, en Turunç (Marmaris), MUTTAŞ ofrece atraque a unas 30 embarcaciones. Se prestan servicios de agua, recogida de residuos, seguridad y amarradores.' FROM locations WHERE slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'У пирса длиной 183 метра на площади Cumhuriyet в Turunç (Marmaris) компания MUTTAŞ обеспечивает стоянку примерно для 30 судов. Предоставляются вода, приём отходов, охрана и помощь со швартовкой.' FROM locations WHERE slug = 'turunc-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The harbour on Barış Square in Bodrum is operated by MUTTAŞ; berthing is provided for approximately 230 boats along a 960-metre quay and a 140-metre floating pontoon. It is an international ferry gateway to Kos.' FROM locations WHERE slug = 'bodrum-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto de la plaza Barış, en Bodrum, está gestionado por MUTTAŞ; ofrece atraque a unas 230 embarcaciones en un muelle de 960 metros y un pantalán flotante de 140 metros. Es puerta internacional de ferris hacia Kos.' FROM locations WHERE slug = 'bodrum-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Порт на площади Barış в Bodrum находится под управлением MUTTAŞ: у причала длиной 960 метров и плавучего пирса длиной 140 метров могут швартоваться около 230 судов. Отсюда выполняются международные паромные рейсы на Kos.' FROM locations WHERE slug = 'bodrum-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the facility in Bodrum Gümbet operated by MUTTAŞ, consisting of three piers with a total length of 595 metres, mooring is provided for approximately 200 boats. Water, security and mooring-line services are offered.' FROM locations WHERE slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En la instalación de Gümbet (Bodrum), gestionada por MUTTAŞ y formada por tres pantalanes con una longitud total de 595 metros, se ofrece amarre a unas 200 embarcaciones. Dispone de agua, seguridad y servicio de amarradores.' FROM locations WHERE slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Комплекс в Gümbet (Bodrum) под управлением MUTTAŞ состоит из трёх пирсов общей длиной 595 метров и вмещает около 200 судов. Предоставляются вода, охрана и помощь со швартовкой.' FROM locations WHERE slug = 'gumbet-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the harbour in Fethiye Karagözler operated by MUTTAŞ, berthing is provided for approximately 50 boats; water, waste collection, security and mooring-line services are offered. It is an international ferry gateway to Rodos.' FROM locations WHERE slug = 'fethiye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el puerto de Karagözler, en Fethiye, gestionado por MUTTAŞ, se ofrece atraque a unas 50 embarcaciones; se prestan servicios de agua, recogida de residuos, seguridad y amarradores. Es puerta internacional de ferris hacia Rodos.' FROM locations WHERE slug = 'fethiye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'В гавани Karagözler в Fethiye, находящейся под управлением MUTTAŞ, могут швартоваться около 50 судов; предоставляются вода, приём отходов, охрана и швартовные услуги. Отсюда выполняются международные паромные рейсы на Rodos.' FROM locations WHERE slug = 'fethiye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The municipal pier in the village centre of Göcek was built in 1989 and is today operated by the Fethiye Municipality. Mooring fees are set per metre in the municipal revenue tariff.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El embarcadero municipal del centro del pueblo de Göcek se construyó en 1989 y hoy lo gestiona el Ayuntamiento de Fethiye. Las tarifas de amarre se fijan por metro en la ordenanza de ingresos municipal.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Муниципальный пирс в центре посёлка Göcek построен в 1989 году и сегодня находится в ведении муниципалитета Fethiye. Плата за стоянку устанавливается за метр согласно муниципальному тарифу.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A harbour with a capacity of 120 yachts on the waterfront promenade in the centre of Çanakkale, operated by the municipality. Thanks to its status as a temporary border gate, transit log formalities can be completed here.' FROM locations WHERE slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Puerto con capacidad para 120 yates situado en el paseo marítimo del centro de Çanakkale y gestionado por el ayuntamiento. Gracias a su estatus de puesto fronterizo temporal, permite realizar los trámites del transit log.' FROM locations WHERE slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Гавань на набережной в центре Çanakkale вместимостью 120 яхт, находящаяся в ведении муниципалитета. Благодаря статусу временного пограничного пункта здесь можно оформить транзит-лог.' FROM locations WHERE slug = 'canakkale-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'In Gelibolu, the inner part of the natural harbour, closed to northerly winds, is suitable for mooring yachts; the shelter has a fuel pump.' FROM locations WHERE slug = 'gelibolu-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En Gelibolu, la parte interior del puerto natural, protegida de los vientos del norte, es adecuada para el amarre de yates; el refugio dispone de surtidor de combustible.' FROM locations WHERE slug = 'gelibolu-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'В Gelibolu внутренняя часть естественной гавани, закрытая от северных ветров, подходит для стоянки яхт; в укрытии имеется топливная колонка.' FROM locations WHERE slug = 'gelibolu-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The pier and harbour in the centre of Erdek are used for mooring local boats as well as sailing boats and yachts; the Balıkesir Metropolitan Municipality has announced that it plans to convert the pier into a marina.' FROM locations WHERE slug = 'erdek-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El embarcadero y el puerto del centro de Erdek se utilizan para el amarre de embarcaciones locales, veleros y yates; el Ayuntamiento Metropolitano de Balıkesir ha anunciado que planea convertir el embarcadero en un puerto deportivo.' FROM locations WHERE slug = 'erdek-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Пирс и гавань в центре Erdek используются для стоянки местных судов, парусных лодок и яхт; муниципалитет Большой Balıkesir объявил о планах преобразовать пирс в марину.' FROM locations WHERE slug = 'erdek-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The harbour in Mudanya Güzelyalı has been operated since 2020 by BURULAŞ, a subsidiary of the Bursa Metropolitan Municipality. The facility, with capacity for 58 yachts and 60 fishing boats, is monitored 24/7 by security and a camera system.' FROM locations WHERE slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto de Güzelyalı, en Mudanya, está gestionado desde 2020 por BURULAŞ, filial del Ayuntamiento Metropolitano de Bursa. La instalación, con capacidad para 58 yates y 60 barcos pesqueros, está vigilada 24/7 mediante personal de seguridad y un sistema de cámaras.' FROM locations WHERE slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Гавань в Güzelyalı (Mudanya) с 2020 года находится под управлением BURULAŞ, дочерней компании муниципалитета Большой Bursa. Комплекс вмещает 58 яхт и 60 рыбацких лодок и находится под охраной и видеонаблюдением 24/7.' FROM locations WHERE slug = 'guzelyali-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A boat park with floating pontoons and a capacity of 180 boats in İstinye Bay, operated by İSPARK, a subsidiary of İBB. Water, electricity, WC and security services are provided; subscriptions range from daily to annual.' FROM locations WHERE slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Aparcamiento náutico con pantalanes flotantes y capacidad para 180 embarcaciones en la cala de İstinye, gestionado por İSPARK, filial del İBB. Ofrece agua, electricidad, WC y seguridad; se aplican abonos desde diarios hasta anuales.' FROM locations WHERE slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Стоянка для катеров с плавучими пирсами на 180 судов в бухте İstinye, управляемая компанией İSPARK, дочерним предприятием İBB. Предоставляются вода, электричество, туалет и охрана; абонементы — от суточных до годовых.' FROM locations WHERE slug = 'ispark-istinye-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A boat park with floating pontoons in Tarabya Bay, operated by İSPARK, a subsidiary of İBB; the operator reports a capacity of 265 boats. Water, electricity, WC and security services are provided.' FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Aparcamiento náutico con pantalanes flotantes en la cala de Tarabya, gestionado por İSPARK, filial del İBB; el operador declara una capacidad de 265 embarcaciones. Ofrece agua, electricidad, WC y seguridad.' FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Стоянка для катеров с плавучими пирсами в бухте Tarabya, управляемая компанией İSPARK, дочерним предприятием İBB; по данным оператора, вместимость составляет 265 судов. Предоставляются вода, электричество, туалет и охрана.' FROM locations WHERE slug = 'ispark-tarabya-tekne-park'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A harbour with a capacity of 65 yachts located in Antalya''s historic Kaleiçi old port, operated by a company of the metropolitan municipality. Mooring and security services are provided 24 hours a day, and daily excursion boats also make heavy use of the harbour.' FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Puerto con capacidad para 65 yates situado en el antiguo puerto del histórico barrio de Kaleiçi, en Antalya, gestionado por una empresa del ayuntamiento metropolitano. Ofrece servicio de amarradores y seguridad las 24 horas, y las embarcaciones de excursión diaria también hacen un uso intensivo del puerto.' FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Гавань на 65 яхт в старом порту исторического квартала Kaleiçi в Antalya, управляемая компанией муниципалитета. Швартовные услуги и охрана предоставляются 24 часа в сутки; гавань также активно используется прогулочными судами однодневных экскурсий.' FROM locations WHERE slug = 'antalya-kaleici-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The old harbour beside the town centre of Kaş has a capacity of approximately 100 boats; it is used by local excursion and diving boats as well as visiting yachts. Berthing is on laid mooring chains, and paid showers, WC and a laundry are available nearby.' FROM locations WHERE slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto viejo junto al centro de Kaş tiene capacidad para unas 100 embarcaciones; lo utilizan barcos locales de excursión y buceo, así como yates de paso. El amarre se realiza con cadenas de muertos fondeadas, y en los alrededores hay duchas y WC de pago y lavandería.' FROM locations WHERE slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Старая гавань рядом с центром Kaş вмещает около 100 судов; ею пользуются местные экскурсионные и дайверские катера, а также заходящие яхты. Швартовка выполняется на проложенных цепях мёртвых якорей; поблизости есть платные душ и туалет, а также прачечная.' FROM locations WHERE slug = 'kas-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The harbour and fishing shelter in Kalkan, with a capacity of approximately 50 boats, serves local boats and visiting yachts. In 2023, works to renew the ground surface, the haul-out area and the mooring rings were completed.' FROM locations WHERE slug = 'kalkan-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto y refugio pesquero de Kalkan, con capacidad para unas 50 embarcaciones, atiende a barcos locales y yates de paso. En 2023 se completaron las obras de renovación del pavimento, de la zona de varada y de las anillas de amarre.' FROM locations WHERE slug = 'kalkan-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Гавань и рыбацкое укрытие в Kalkan вместимостью около 50 судов обслуживает местные лодки и заходящие яхты. В 2023 году завершены работы по обновлению покрытия, места подъёма судов и швартовных колец.' FROM locations WHERE slug = 'kalkan-belediye-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The village pier of Üçağız in the Kekova area was operated for years by the Demre Municipality; in June 2024 it was leased for 10 years to a private group through a ministry tender. The Demre Municipality has launched legal proceedings to have the tender annulled.' FROM locations WHERE slug = 'ucagiz-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El embarcadero del pueblo de Üçağız, en la zona de Kekova, fue gestionado durante años por el Ayuntamiento de Demre; en junio de 2024 se arrendó por 10 años a un grupo privado mediante una licitación ministerial. El Ayuntamiento de Demre ha iniciado un proceso judicial para anular la licitación.' FROM locations WHERE slug = 'ucagiz-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Деревенский пирс Üçağız в районе Kekova долгие годы находился в ведении муниципалитета Demre; в июне 2024 года по итогам министерского тендера он был сдан в аренду частной группе на 10 лет. Муниципалитет Demre начал судебный процесс с целью отмены тендера.' FROM locations WHERE slug = 'ucagiz-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The Demre Marina, built by the Ministry of Transport and Infrastructure at the Çayağzı location, opened on 26 July 2025. The facility, with 64.000 m² of land area and 120.000 m² of sheltered water area, is planned to operate 12 months a year.' FROM locations WHERE slug = 'demre-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El puerto deportivo de Demre, construido por el Ministerio de Transportes e Infraestructuras en el paraje de Çayağzı, se inauguró el 26 de julio de 2025. La instalación, con 64.000 m² de superficie terrestre y 120.000 m² de espejo de agua abrigado, está prevista para operar los 12 meses del año.' FROM locations WHERE slug = 'demre-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Марина Demre, построенная Министерством транспорта и инфраструктуры в местности Çayağzı, открылась 26 июля 2025 года. Комплекс располагает 64.000 м² береговой территории и 120.000 м² защищённой акватории; планируется, что он будет работать 12 месяцев в году.' FROM locations WHERE slug = 'demre-yat-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The town harbour of Taşucu, where visiting boats and fishing boats moor. A project for a marina and shelter with capacity for 100 yachts + 76 fishing boats is under way on the existing site.' FROM locations WHERE slug = 'tasucu-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Puerto del pueblo de Taşucu, donde amarran embarcaciones de paso y barcos pesqueros. En el emplazamiento actual se está desarrollando un proyecto de puerto deportivo y refugio con capacidad para 100 yates + 76 barcos pesqueros.' FROM locations WHERE slug = 'tasucu-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Городская гавань Taşucu, где швартуются заходящие суда и рыбацкие лодки. На существующей территории реализуется проект марины и укрытия вместимостью 100 яхт + 76 рыбацких лодок.' FROM locations WHERE slug = 'tasucu-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A classic cove restaurant in the sheltered Kapı Bay at the entrance to the Gulf of Skopea, offering mooring on laid lines for approximately 20 boats at its jetty. The staff assist with mooring.' FROM locations WHERE slug = 'kapi-creek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante clásico de cala en la abrigada bahía de Kapı, a la entrada del golfo de Skopea, que ofrece en su pantalán amarre a muertos para unas 20 embarcaciones. El personal ayuda en el amarre.' FROM locations WHERE slug = 'kapi-creek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Классический ресторан в защищённой бухте Kapı у входа в залив Skopea; у его пирса предусмотрена стоянка на мёртвых якорях примерно для 20 судов. Персонал помогает при швартовке.' FROM locations WHERE slug = 'kapi-creek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The Göbün Bay restaurant, in business since 1979; its two jetties can accommodate up to 40 boats. Solar-generated electricity, water, showers/WC and Wi-Fi are provided.' FROM locations WHERE slug = 'gobun-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante de la bahía de Göbün, en funcionamiento desde 1979; sus dos pantalanes tienen capacidad para hasta 40 embarcaciones. Ofrece electricidad de origen solar, agua, duchas/WC y Wi-Fi.' FROM locations WHERE slug = 'gobun-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан в бухте Göbün, работающий с 1979 года; два его пирса вмещают до 40 судов. Предоставляются электричество от солнечных панелей, вода, душ/туалет и Wi-Fi.' FROM locations WHERE slug = 'gobun-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A restaurant with its own jetty in Wall Bay / Hamam (Kleopatra) Bay, operating on the site of the former Wall Bay Restaurant. Water, showers and WC are available on the jetty.' FROM locations WHERE slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante con pantalán propio en Wall Bay / bahía de Hamam (Kleopatra); opera en el emplazamiento del antiguo Wall Bay Restaurant. En el pantalán hay agua, duchas y WC.' FROM locations WHERE slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан с собственным пирсом в бухте Wall Bay / Hamam (Kleopatra); работает на месте прежнего Wall Bay Restaurant. На пирсе есть вода, душ и туалет.' FROM locations WHERE slug = 'adaia-gocek-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The restaurant jetty in Küçük Sarsala Bay has a capacity of approximately 35 boats; water, showers and WC are available.' FROM locations WHERE slug = 'sarsala-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El pantalán del restaurante de la cala de Küçük Sarsala tiene capacidad para unas 35 embarcaciones; dispone de agua, duchas y WC.' FROM locations WHERE slug = 'sarsala-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Пирс ресторана в бухте Küçük Sarsala вмещает около 35 судов; имеются вода, душ и туалет.' FROM locations WHERE slug = 'sarsala-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A cove restaurant with a jetty in Boynuzbükü Bay in the north of the Gulf of Skopea; the jetty has room for approximately 18 boats and water supply is possible.' FROM locations WHERE slug = 'boynuzbuku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante de cala con pantalán en la bahía de Boynuzbükü, al norte del golfo de Skopea; el pantalán tiene sitio para unas 18 embarcaciones y es posible tomar agua.' FROM locations WHERE slug = 'boynuzbuku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан с пирсом в бухте Boynuzbükü в северной части залива Skopea; у пирса есть место примерно для 18 судов, возможна заправка водой.' FROM locations WHERE slug = 'boynuzbuku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A modern Mediterranean restaurant with its own jetty in Bedri Rahmi (Taşyaka / Tomb Bay) Bay.' FROM locations WHERE slug = 'miori-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante mediterráneo moderno con pantalán propio en la bahía de Bedri Rahmi (Taşyaka / Tomb Bay).' FROM locations WHERE slug = 'miori-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Современный средиземноморский ресторан с собственным пирсом в бухте Bedri Rahmi (Taşyaka / Tomb Bay).' FROM locations WHERE slug = 'miori-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A family restaurant with its own jetty in Keçibükü, Orhaniye; electricity, water, showers, WC and Wi-Fi are available on the jetty.' FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante familiar con pantalán propio en Keçibükü, Orhaniye; en el pantalán hay electricidad, agua, duchas, WC y Wi-Fi.' FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Семейный ресторан с собственным пирсом в Keçibükü (Orhaniye); на пирсе есть электричество, вода, душ, туалет и Wi-Fi.' FROM locations WHERE slug = 'ersoy-restaurant-orhaniye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A restaurant with its own jetty on the Selimiye shore; boats whose guests dine there are offered berthing, water, electricity and Wi-Fi.' FROM locations WHERE slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante con pantalán propio en la costa de Selimiye; a las embarcaciones que cenan allí se les ofrece amarre, agua, electricidad y Wi-Fi.' FROM locations WHERE slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан с собственным пирсом на берегу Selimiye; судам, гости которых ужинают в ресторане, предоставляются стоянка, вода, электричество и Wi-Fi.' FROM locations WHERE slug = 'aurora-restaurant-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A boutique hotel and restaurant with a jetty in Selimiye; it offers visiting boats berthing at its own jetty.' FROM locations WHERE slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Hotel boutique y restaurante con pantalán en Selimiye; ofrece a las embarcaciones visitantes amarre en su propio pantalán.' FROM locations WHERE slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бутик-отель и ресторан с пирсом в Selimiye; гостевые суда могут швартоваться у его собственного пирса.' FROM locations WHERE slug = 'poseidon-selimiye'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The only restaurant in Dirsek Bükü, which has no road connection; boats moor stern-to at its stone jetty. It is open from April to October and is known for its evening meze buffet.' FROM locations WHERE slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'El único restaurante de Dirsek Bükü, que carece de conexión por carretera; se amarra de popa a su pantalán de piedra. Abre de abril a octubre y es conocido por su bufé de mezes por la noche.' FROM locations WHERE slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Единственный ресторан в Dirsek Bükü, куда нет автомобильной дороги; швартовка кормой к его каменному пирсу. Открыт с апреля по октябрь и известен вечерним буфетом с мезе.' FROM locations WHERE slug = 'dirsek-buku-restaurant'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A yacht club and boutique hotel with a jetty and restaurant on the shore of Bozburun Bay; it offers visiting boats quayside berthing.' FROM locations WHERE slug = 'bozburun-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Club náutico y hotel boutique con pantalán y restaurante a orillas de la bahía de Bozburun; ofrece amarre de muelle a las embarcaciones visitantes.' FROM locations WHERE slug = 'bozburun-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Яхт-клуб и бутик-отель с пирсом и рестораном на берегу бухты Bozburun; гостевым судам предлагается стоянка у причала.' FROM locations WHERE slug = 'bozburun-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A long-established restaurant in Söğüt Bay; boats may moor at its own jetty. Showers, WC and Wi-Fi are available.' FROM locations WHERE slug = 'octopus-restaurant-sogut'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante de larga tradición en la cala de Söğüt; permite a las embarcaciones amarrar en su propio pantalán. Dispone de duchas, WC y Wi-Fi.' FROM locations WHERE slug = 'octopus-restaurant-sogut'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан с давней историей в бухте Söğüt; суда могут швартоваться у его собственного пирса. Есть душ, туалет и Wi-Fi.' FROM locations WHERE slug = 'octopus-restaurant-sogut'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A restaurant in Bozukkale (Loryma) Bay with a jetty for more than 20 yachts and laid moorings; the staff help with coming alongside. The depth off the jetty is 8-10 m.' FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante en la bahía de Bozukkale (Loryma) con un pantalán con capacidad para más de 20 yates y muertos de amarre; el personal ayuda en el atraque. La profundidad frente al pantalán es de 8-10 m.' FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан в бухте Bozukkale (Loryma) с пирсом более чем на 20 яхт и мёртвыми якорями; персонал помогает при швартовке. Глубина у пирса — 8-10 м.' FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An establishment in Çökertme Bay serving boats with a restaurant jetty and laid moorings; it can be reached on VHF 16 with the call ''Rosemary Yacht Harbour''. Water, electricity, Wi-Fi and showers/WC are available on the jetty.' FROM locations WHERE slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Establecimiento de la cala de Çökertme que atiende a las embarcaciones con pantalán de restaurante y muertos de amarre; se le puede llamar por el canal VHF 16 con el indicativo ''Rosemary Yacht Harbour''. En el pantalán hay agua, electricidad, Wi-Fi y duchas/WC.' FROM locations WHERE slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Заведение в бухте Çökertme, обслуживающее суда у ресторанного пирса и на мёртвых якорях; связь по VHF 16, позывной ''Rosemary Yacht Harbour''. На пирсе есть вода, электричество, Wi-Fi и душ/туалет.' FROM locations WHERE slug = 'rosemary-cokertme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Restaurant and market in Okluk (Değirmen Bükü) Bay in Gökova, with a jetty for approximately 20 boats; electricity and water are available on the jetty.' FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Restaurante y tienda en la cala de Okluk (Değirmen Bükü), en Gökova, con un pantalán con capacidad para aproximadamente 20 embarcaciones; en el pantalán hay electricidad y agua.' FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Ресторан и магазин в бухте Okluk (Değirmen Bükü) в заливе Gökova с причалом примерно на 20 судов; на причале есть электричество и вода.' FROM locations WHERE slug = 'denizkizi-kaptan-okluk'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Petrol Ofisi fuel jetty located at the north-eastern end of the Göcek village quay. The pump hose reaches the entire jetty; boats come alongside to refuel.' FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Pantalán de combustible de Petrol Ofisi situado en el extremo nororiental del muelle del pueblo de Göcek. La manguera del surtidor alcanza todo el pantalán; las embarcaciones repostan abarloadas.' FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Топливный причал Petrol Ofisi на северо-восточном конце деревенской набережной Göcek. Шланг колонки достаёт до любой точки причала; суда заправляются, швартуясь лагом.' FROM locations WHERE slug = 'gocek-yakit-iskelesi-po'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Lukoil fuel station with a floating pontoon on the western shore of Göcek bay. Boats come alongside the pontoon; the depth is 4 m and more, and a mobile tanker can be called for large yachts.' FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Estación de combustible Lukoil con pontón flotante en la orilla occidental de la bahía de Göcek. Las embarcaciones se abarloan al pontón; la profundidad es de 4 m o más, y para los yates grandes puede solicitarse una cisterna móvil.' FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Топливная станция Lukoil с плавучим понтоном на западном берегу бухты Göcek. Суда швартуются лагом к понтону; глубина 4 м и более, для больших яхт можно вызвать передвижной заправщик.' FROM locations WHERE slug = 'gocek-lukoil-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Fuel supply point in the Datça marina; sources conflict as to whether it is a fixed jetty or a mini-tanker service.' FROM locations WHERE slug = 'datca-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Punto de repostaje de combustible en el puerto deportivo de Datça; las fuentes se contradicen entre un pantalán fijo y un servicio de minicisterna.' FROM locations WHERE slug = 'datca-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Пункт заправки топливом в яхтенной марине Datça; источники расходятся в том, стационарный ли это причал или обслуживание мини-заправщиком.' FROM locations WHERE slug = 'datca-yakit-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Small facility in Keçi Bükü (Orhaniye) with a fuel tank ashore and a supply hose reaching the jetty; call on VHF channel 73 for fuel.' FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Pequeña instalación en Keçi Bükü (Orhaniye) con un depósito de combustible en tierra y una manguera de suministro que llega al pantalán; para repostar se llama por el canal 73 de VHF.' FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Небольшой пункт в Keçi Bükü (Orhaniye) с топливным резервуаром на берегу и заправочным шлангом, дотягивающимся до причала; заявка на топливо подаётся по 73-му каналу УКВ.' FROM locations WHERE slug = 'palmiye-yakit-kecibuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Değirmen Bükü, the largest bay of the Gulf of Gökova, is about 3 km long and holds numerous safe anchorages around its shores; its western arm is known as İngiliz Limanı. Anchor in 6-7 m; the bottom is mud, the holding is good and the bay is well sheltered.' FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Değirmen Bükü, la cala más grande del golfo de Gökova, tiene unos 3 km de longitud y alberga numerosos fondeaderos seguros a su alrededor; su brazo occidental se conoce como İngiliz Limanı. Se fondea en 6-7 m; el fondo es de fango, el agarre es bueno y la cala está bien abrigada.' FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Değirmen Bükü — самая большая бухта залива Gökova, длиной около 3 км, с множеством безопасных якорных стоянок по берегам; её западный рукав известен как İngiliz Limanı. Якорь отдают на глубине 6-7 м; дно илистое, держит хорошо, бухта хорошо защищена.' FROM locations WHERE slug = 'degirmen-buku-ingiliz-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Okluk Bay, in the south-east of Değirmen Bükü, is an anchorage sheltered from all directions and is known for the mermaid statue on the rocks. The depth decreases from 12 m in the inner part to 7-8 m towards the shore; the bottom is mud and the holding is excellent.' FROM locations WHERE slug = 'okluk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'La cala de Okluk, al sureste de Değirmen Bükü, es un fondeadero abrigado de todas las direcciones y conocido por la estatua de la sirena sobre las rocas. La profundidad baja de 12 m en la parte interior a 7-8 m hacia la costa; el fondo es de fango y el agarre es excelente.' FROM locations WHERE slug = 'okluk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта Okluk на юго-востоке Değirmen Bükü — якорная стоянка, защищённая со всех направлений и известная статуей русалки на скалах. Глубина уменьшается с 12 м во внутренней части до 7-8 м к берегу; дно илистое, держит отлично.' FROM locations WHERE slug = 'okluk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A narrow and deep bay on the southern shore of the Gulf of Gökova, west of Değirmen Bükü. The bottom is a mix of sand, rock and mud; anchoring is permitted and there is a small jetty in the bay.' FROM locations WHERE slug = 'longoz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala estrecha y profunda en la costa sur del golfo de Gökova, al oeste de Değirmen Bükü. El fondo es una mezcla de arena, roca y fango; se permite fondear y hay un pequeño pantalán en la cala.' FROM locations WHERE slug = 'longoz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Узкая и глубокая бухта на южном берегу залива Gökova, к западу от Değirmen Bükü. Дно — смесь песка, камня и ила; якорная стоянка разрешена, в бухте есть небольшой причал.' FROM locations WHERE slug = 'longoz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Around Sedir Adası, home to the ancient city of Kedrai and to Kleopatra Plajı, anchor in 8-12 m in the eastern bay and 6-9 m in the southern bay. The main anchorage is open to northerly winds; the southern bay is better sheltered from northerlies. CROWDING (sourced): Kleopatra Plajı becomes extremely crowded in high season, especially after 13:00 — arrive as early in the morning as possible; the beach closes at 19:00. The jetty is taken up by day-trip boats and is very crowded in summer. Going ashore on the island is ticketed/paid; landing on the island at night is forbidden (staying overnight at anchor is allowed).' FROM locations WHERE slug = 'sedir-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Alrededor de Sedir Adası, que alberga la antigua ciudad de Kedrai y Kleopatra Plajı, se fondea en 8-12 m en la cala oriental y en 6-9 m en la cala sur. El fondeadero principal está expuesto a los vientos del norte; la cala sur está más abrigada de ellos. AFLUENCIA (según fuentes): Kleopatra Plajı se masifica en temporada alta, especialmente después de las 13:00 — llegue por la mañana lo más temprano posible; la playa cierra a las 19:00. El pantalán lo ocupan los barcos de excursión diaria y en verano está muy concurrido. El desembarco en la isla es con entrada/de pago; está prohibido desembarcar en la isla de noche (pernoctar fondeado está permitido).' FROM locations WHERE slug = 'sedir-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Вокруг острова Sedir Adası, где находятся античный город Kedrai и пляж Kleopatra Plajı, встают на якорь на глубине 8-12 м в восточной бухте и 6-9 м в южной. Основная якорная стоянка открыта северным ветрам; южная бухта лучше защищена от них. ЗАГРУЖЕННОСТЬ (по источникам): в высокий сезон Kleopatra Plajı переполнен, особенно после 13:00 — приходите как можно раньше утром; пляж закрывается в 19:00. Причал занят экскурсионными судами и летом очень многолюден. Выход на остров платный, по билетам; ночью высаживаться на остров запрещено (ночёвка на якоре разрешена).' FROM locations WHERE slug = 'sedir-adasi-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An anchorage bay on the northern shore of the Gulf of Gökova, surrounded by pine forests. The bottom is sand; anchoring is permitted, and there is a beach and small businesses ashore.' FROM locations WHERE slug = 'akbuk-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero en la costa norte del golfo de Gökova, rodeada de pinares. El fondo es de arena; se permite fondear, y en la costa hay una playa y pequeños negocios.' FROM locations WHERE slug = 'akbuk-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Якорная бухта на северном берегу залива Gökova, окружённая сосновыми лесами. Дно песчаное; якорная стоянка разрешена, на берегу есть пляж и небольшие заведения.' FROM locations WHERE slug = 'akbuk-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An anchorage bay on the southern shore of the Gulf of Gökova, west of Löngöz. The bottom is sand; anchoring is permitted and a jetty is available in the bay.' FROM locations WHERE slug = 'tuzla-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero en la costa sur del golfo de Gökova, al oeste de Löngöz. El fondo es de arena; se permite fondear y en la cala se dispone de un pantalán.' FROM locations WHERE slug = 'tuzla-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Якорная бухта на южном берегу залива Gökova, к западу от Löngöz. Дно песчаное; якорная стоянка разрешена, в бухте можно встать у причала.' FROM locations WHERE slug = 'tuzla-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A deep, narrow, fjord-like bay at the inner end of the Gulf of Hisarönü, at the narrowest point of the Datça Peninsula. The bottom is mud; you can anchor and take stern lines ashore.' FROM locations WHERE slug = 'bencik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala profunda y estrecha con aspecto de fiordo, en el fondo del golfo de Hisarönü, en el punto más estrecho de la península de Datça. El fondo es de fango; se puede fondear y dar cabos a tierra por popa.' FROM locations WHERE slug = 'bencik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Глубокая и узкая бухта, похожая на фьорд, в глубине залива Hisarönü, в самом узком месте полуострова Datça. Дно илистое; можно встать на якорь с заводкой кормовых швартовов на берег.' FROM locations WHERE slug = 'bencik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A wide anchorage in front of Selimiye village on the Bozburun Peninsula. The bottom is sand and weed; anchoring and mooring with stern lines ashore are permitted.' FROM locations WHERE slug = 'selimiye-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Un amplio fondeadero frente al pueblo de Selimiye, en la península de Bozburun. El fondo es de arena y algas; se permite fondear y amarrarse con cabos a tierra por popa.' FROM locations WHERE slug = 'selimiye-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Обширная якорная стоянка перед деревней Selimiye на полуострове Bozburun. Дно — песок и водоросли; разрешено вставать на якорь и швартоваться кормой к берегу.' FROM locations WHERE slug = 'selimiye-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Keçi Bükü, located at the mouth of the Gulf of Hisarönü, is known for the islet with castle ruins in its middle and for the Kızkumu sandbar. The bay is well sheltered from all winds; it is recommended to enter through the eastern passage of the entrance.' FROM locations WHERE slug = 'keci-buku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Keçi Bükü, situada en la boca del golfo de Hisarönü, es conocida por el islote con ruinas de un castillo en su centro y por el banco de arena de Kızkumu. La cala está bien abrigada de todos los vientos; se recomienda navegar por el paso oriental de la bocana.' FROM locations WHERE slug = 'keci-buku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Keçi Bükü у входа в залив Hisarönü известна островком с руинами крепости посередине и песчаной косой Kızkumu. Бухта хорошо защищена от всех ветров; заходить рекомендуется восточным проходом входа.' FROM locations WHERE slug = 'keci-buku-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An L-shaped, secluded bay with no road connection on the south-western shore of the Gulf of Hisarönü, offering the best protection among the bays of the area. The bottom is sand and the holding is good.' FROM locations WHERE slug = 'dirsek-buku-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala solitaria en forma de L, sin conexión por carretera, en la costa suroccidental del golfo de Hisarönü, que ofrece la mejor protección de entre las calas de la zona. El fondo es de arena y el agarre es bueno.' FROM locations WHERE slug = 'dirsek-buku-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Уединённая бухта в форме буквы L без автомобильного сообщения на юго-западном берегу залива Hisarönü; она обеспечивает лучшую защиту среди бухт этого района. Дно песчаное, держит хорошо.' FROM locations WHERE slug = 'dirsek-buku-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'This fjord-like natural harbour on the southern coast of the Bozburun Peninsula, entered through a narrow entrance about 135 m wide, provides shelter in all weather. Anchor with stern lines ashore in 10 m in the northern part and 5-8 m in the southern part; the bottom holds well.' FROM locations WHERE slug = 'serce-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Este puerto natural con aspecto de fiordo, en la costa sur de la península de Bozburun, al que se entra por una bocana estrecha de unos 135 m de ancho, ofrece abrigo con cualquier tiempo. Se fondea con cabos a tierra por popa en 10 m en la parte norte y en 5-8 m en la parte sur; el fondo agarra bien.' FROM locations WHERE slug = 'serce-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Эта похожая на фьорд естественная гавань на южном берегу полуострова Bozburun, с узким входом шириной около 135 м, даёт укрытие в любую погоду. Якорь с кормовыми швартовами на берег отдают на глубине 10 м в северной части и 5-8 м в южной; дно держит хорошо.' FROM locations WHERE slug = 'serce-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A small bay between Marmaris and Bozburun where Byzantine-era church ruins can be seen from its shore. Anchor in 5-7 m off the beach; the bay is well sheltered from the meltemi.' FROM locations WHERE slug = 'gerbekse-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una pequeña cala entre Marmaris y Bozburun desde cuya orilla se ven ruinas de iglesias de época bizantina. Se fondea en 5-7 m frente a la playa; la cala está bien abrigada del meltemi.' FROM locations WHERE slug = 'gerbekse-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Небольшая бухта между Marmaris и Bozburun, с берега которой видны руины церквей византийской эпохи. Якорь отдают на глубине 5-7 м напротив пляжа; бухта хорошо защищена от мельтеми.' FROM locations WHERE slug = 'gerbekse-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An anchorage in front of Söğüt village in the south of the Bozburun Peninsula. The bottom is a mix of sand, weed and mud; anchoring is permitted.' FROM locations WHERE slug = 'sogut-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Un fondeadero frente al pueblo de Söğüt, en el sur de la península de Bozburun. El fondo es una mezcla de arena, algas y fango; se permite fondear.' FROM locations WHERE slug = 'sogut-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Якорная стоянка перед деревней Söğüt на юге полуострова Bozburun. Дно — смесь песка, водорослей и ила; якорная стоянка разрешена.' FROM locations WHERE slug = 'sogut-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A wide sandy bay near Marmaris, at the foot of the ancient city of Amos. There is a depth of 3,5-4,5 m in front of the yacht club jetty, and 18 mooring buoys are available in 15 m of water.' FROM locations WHERE slug = 'kumlubuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una amplia cala arenosa cerca de Marmaris, a los pies de la antigua ciudad de Amos. Frente al pantalán del club náutico hay una profundidad de 3,5-4,5 m, y existen 18 boyas de amarre en 15 m de profundidad.' FROM locations WHERE slug = 'kumlubuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Широкая песчаная бухта недалеко от Marmaris, у подножия античного города Amos. Перед причалом яхт-клуба глубина 3,5-4,5 м; на глубине 15 м установлено 18 швартовных буёв.' FROM locations WHERE slug = 'kumlubuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located about 14 nautical miles south-west of Marmaris, the bay is protected from the meltemi by Çiftlik Adası lying off it. Anchor in 7-10 m in the north-west and 5-9 m on the island side; beware of the shallow reefs lying off the shore.' FROM locations WHERE slug = 'ciftlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Situada a unas 14 millas náuticas al suroeste de Marmaris, la cala queda protegida del meltemi por la isla Çiftlik Adası que tiene delante. Se fondea en 7-10 m en el noroeste y en 5-9 m del lado de la isla; hay que prestar atención a los arrecifes poco profundos frente a la costa.' FROM locations WHERE slug = 'ciftlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта примерно в 14 морских милях к юго-западу от Marmaris защищена от мельтеми лежащим перед ней островом Çiftlik Adası. Якорь отдают на глубине 7-10 м в северо-западной части и 5-9 м со стороны острова; следует остерегаться мелководных рифов, лежащих недалеко от берега.' FROM locations WHERE slug = 'ciftlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A bay on the southern coast of the Datça Peninsula, indenting towards the north-west and surrounded by pine forests. Anchor in 6-10 m in front of the campsite; it offers protection from all directions except south-easterly winds.' FROM locations WHERE slug = 'kuruca-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala en la costa sur de la península de Datça, que se adentra hacia el noroeste y está rodeada de pinares. Se fondea en 6-10 m frente al camping; ofrece protección de todas las direcciones salvo de los vientos del sureste.' FROM locations WHERE slug = 'kuruca-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта на южном берегу полуострова Datça, вдающаяся в берег к северо-западу и окружённая сосновыми лесами. Якорь отдают на глубине 6-10 м напротив кемпинга; бухта защищает от всех направлений, кроме юго-восточных ветров.' FROM locations WHERE slug = 'kuruca-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'At the western tip of the Datça Peninsula, boats anchor in the historic harbour in front of the ruins of the ancient city of Knidos. The bottom is a mix of sand, rock and weed; anchoring is permitted.' FROM locations WHERE slug = 'knidos-antik-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En el extremo occidental de la península de Datça se fondea en el puerto histórico frente a las ruinas de la antigua ciudad de Knidos. El fondo es una mezcla de arena, roca y algas; se permite fondear.' FROM locations WHERE slug = 'knidos-antik-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'На западной оконечности полуострова Datça встают на якорь в исторической гавани перед руинами античного города Knidos. Дно — смесь песка, камня и водорослей; якорная стоянка разрешена.' FROM locations WHERE slug = 'knidos-antik-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A secluded anchorage bay at the north-western tip of the Datça Peninsula. The bottom is sand and weed; anchoring is permitted and there are no services ashore.' FROM locations WHERE slug = 'mersincik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero solitaria en el extremo noroccidental de la península de Datça. El fondo es de arena y algas; se permite fondear y no hay servicios en tierra.' FROM locations WHERE slug = 'mersincik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Уединённая якорная бухта на северо-западной оконечности полуострова Datça. Дно — песок и водоросли; якорная стоянка разрешена, услуг на берегу нет.' FROM locations WHERE slug = 'mersincik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A natural anchorage bay on the western shore of the Gulf of Göcek, between Sarsala and Taşyaka. The bottom is a mix of sand, mud, rock and weed; anchoring and taking stern lines ashore are practised.' FROM locations WHERE slug = 'siralibuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero natural en la costa occidental del golfo de Göcek, entre Sarsala y Taşyaka. El fondo es una mezcla de arena, fango, roca y algas; se practica el fondeo y el amarre con cabos a tierra por popa.' FROM locations WHERE slug = 'siralibuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Естественная якорная бухта на западном берегу залива Göcek, между Sarsala и Taşyaka. Дно — смесь песка, ила, камня и водорослей; здесь встают на якорь и заводят кормовые швартовы на берег.' FROM locations WHERE slug = 'siralibuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A quiet anchorage bay on the western shore of the Gulf of Göcek, south of Boynuzbükü. The bottom is sand; boats anchor and moor with stern lines ashore, and there are no facilities in the bay.' FROM locations WHERE slug = 'kille-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero tranquila en la costa occidental del golfo de Göcek, al sur de Boynuzbükü. El fondo es de arena; se fondea y se amarra con cabos a tierra por popa, y no hay instalaciones en la cala.' FROM locations WHERE slug = 'kille-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Тихая якорная бухта на западном берегу залива Göcek, к югу от Boynuzbükü. Дно песчаное; суда встают на якорь и швартуются кормой к берегу, никакой инфраструктуры в бухте нет.' FROM locations WHERE slug = 'kille-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A group of low islands lying off Göcek; boats anchor in the shallow sandy area between the islands or moor with stern lines ashore. The bottom is sand and rock; a small number of visitor buoys have been reported in the area.' FROM locations WHERE slug = 'yassica-adalari'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Un grupo de islas bajas frente a Göcek; las embarcaciones fondean en la zona arenosa poco profunda entre las islas o se amarran con cabos a tierra por popa. El fondo es de arena y roca; se ha informado de un reducido número de boyas para visitantes en la zona.' FROM locations WHERE slug = 'yassica-adalari'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Группа низких островов перед Göcek; суда встают на якорь на мелководном песчаном участке между островами или швартуются кормой к берегу. Дно — песок и камень; сообщается о небольшом числе гостевых буёв в этом районе.' FROM locations WHERE slug = 'yassica-adalari'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'In the bay of Tersane Adası there is a historic anchorage, with the ruins of a Byzantine-Ottoman era shipyard at its entrance. Anchor in about 14 m and moor with stern lines ashore; the holding is good, and the two small inlets at the head of the bay are shallow.' FROM locations WHERE slug = 'tersane-adasi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'En la cala de Tersane Adası hay un fondeadero histórico, con ruinas de unos astilleros de época bizantino-otomana en su entrada. Se fondea en unos 14 m amarrándose con cabos a tierra por popa; el agarre es bueno, y las dos pequeñas bocanas del fondo de la cala son poco profundas.' FROM locations WHERE slug = 'tersane-adasi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'В бухте острова Tersane Adası находится историческая якорная стоянка, у входа в которую сохранились руины верфи византийско-османской эпохи. Якорь отдают на глубине около 14 м со швартовкой кормой к берегу; держит хорошо, а два маленьких заливчика в глубине бухты мелководны.' FROM locations WHERE slug = 'tersane-adasi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Also known as Manastır Koyu, the bay is an anchorage famous for the ruins of the ''Kleopatra Hamamı'' on its shore. Anchor on a sandy bottom in 10-12 m in the southern/western part; the bay is open to the north, and the reef extending from the south-eastern islet is a hazard.' FROM locations WHERE slug = 'hamam-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Conocida también como Manastır Koyu, la cala es un fondeadero famoso por las ruinas del ''Kleopatra Hamamı'' en su orilla. Se fondea sobre fondo de arena en 10-12 m en la parte sur/oeste; la cala está abierta al norte y el arrecife que se extiende desde el islote del sureste supone un peligro.' FROM locations WHERE slug = 'hamam-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта, известная также как Manastır Koyu, — якорная стоянка, знаменитая руинами «Kleopatra Hamamı» на берегу. Якорь отдают на песчаное дно на глубине 10-12 м в южной/западной части; бухта открыта к северу, а риф, тянущийся от юго-восточного островка, представляет опасность.' FROM locations WHERE slug = 'hamam-koyu-demirleme'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A bay on the eastern shore of the Gulf of Fethiye, within a forested nature park. The bottom is mud and anchoring is permitted; there is a beach and a seasonal snack kiosk ashore.' FROM locations WHERE slug = 'katranci-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala en la costa oriental del golfo de Fethiye, dentro de un parque natural boscoso. El fondo es de fango y se permite fondear; en la costa hay una playa y un quiosco de temporada.' FROM locations WHERE slug = 'katranci-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта на восточном берегу залива Fethiye, на территории лесистого природного парка. Дно илистое, якорная стоянка разрешена; на берегу пляж и сезонный киоск.' FROM locations WHERE slug = 'katranci-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'An anchorage bay on the eastern shore of the Gulf of Fethiye, near Katrancı, surrounded by pine forests. The bottom is mud and anchoring is permitted; there is a beach ashore.' FROM locations WHERE slug = 'kucuk-kargi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala fondeadero en la costa oriental del golfo de Fethiye, cerca de Katrancı, rodeada de pinares. El fondo es de fango y se permite fondear; en la costa hay una playa.' FROM locations WHERE slug = 'kucuk-kargi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Якорная бухта на восточном берегу залива Fethiye, недалеко от Katrancı, окружённая сосновыми лесами. Дно илистое, якорная стоянка разрешена; на берегу есть пляж.' FROM locations WHERE slug = 'kucuk-kargi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'A bay on the northern shore of the gulf, about 2 miles west of the Fethiye harbour entrance, known for its restaurant. It is usually calm in the summer months and suitable for anchoring; outside the bay the bottom drops steeply to 45-50 m.' FROM locations WHERE slug = 'turunc-pinari-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una cala en la costa norte del golfo, a unas 2 millas al oeste de la entrada del puerto de Fethiye, conocida por su restaurante. En los meses de verano suele estar tranquila y es apta para fondear; fuera de la cala el fondo cae bruscamente hasta 45-50 m.' FROM locations WHERE slug = 'turunc-pinari-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта на северном берегу залива, примерно в 2 милях к западу от входа в гавань Fethiye, известная своим рестораном. В летние месяцы здесь обычно спокойно, бухта подходит для якорной стоянки; за пределами бухты дно круто обрывается до 45-50 м.' FROM locations WHERE slug = 'turunc-pinari-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Göbün (Kapı Creek) bay, in the south-east of the Kapıdağ Peninsula, is included in the paid mooring system of the Göcek Special Environmental Protection Area. Under the 2025 regime, instead of free anchoring, the bays use the shore ring/stern mooring/buoy systems operated by the Türkiye Çevre Ajansı; the bottom of the bay is sand.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'La cala de Göbün (Kapı Creek), al sureste de la península de Kapıdağ, está incluida en el sistema de amarre de pago de la Zona de Protección Ambiental Especial de Göcek. Con el régimen de 2025, en lugar del fondeo libre, en las calas se utilizan los sistemas de argollas de tierra/muertos/boyas gestionados por la Türkiye Çevre Ajansı; el fondo de la cala es de arena.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта Göbün (Kapı Creek) на юго-востоке полуострова Kapıdağ входит в платную систему швартовки особой природоохранной зоны Göcek. По режиму 2025 года вместо свободной якорной стоянки в бухтах используются системы береговых рымов/рейдовых бочек/буёв, обслуживаемые агентством Türkiye Çevre Ajansı; дно бухты песчаное.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'The large Sarsala bay on the western shore of the Gulf of Göcek is among the bays where a buoy/stern mooring system has been installed under the 2025 Göcek mooring regime, and the system is operated for a fee by the Türkiye Çevre Ajansı. The bay is open to the north-east.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'La gran cala de Sarsala, en la costa occidental del golfo de Göcek, figura entre las calas donde se ha instalado un sistema de boyas/muertos con el régimen de amarre de Göcek de 2025, y el sistema lo gestiona de pago la Türkiye Çevre Ajansı. La cala está abierta al nordeste.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Большая бухта Sarsala на западном берегу залива Göcek входит в число бухт, где по режиму швартовки Göcek 2025 года установлена система буёв/рейдовых бочек; система платно эксплуатируется агентством Türkiye Çevre Ajansı. Бухта открыта к северо-востоку.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Boynuzbükü, a wooded and deep bay in the north-west of the Gulf of Göcek, is included in the paid buoy/stern mooring system under the 2025 Göcek mooring regime; the system is operated by the Türkiye Çevre Ajansı. The bottom of the bay is mud.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Boynuzbükü, una cala arbolada y profunda en el noroeste del golfo de Göcek, está incluida en el sistema de pago de boyas/muertos del régimen de amarre de Göcek de 2025; el sistema lo gestiona la Türkiye Çevre Ajansı. El fondo de la cala es de fango.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Boynuzbükü — лесистая и глубокая бухта на северо-западе залива Göcek — включена в платную систему буёв/рейдовых бочек по режиму швартовки Göcek 2025 года; система эксплуатируется агентством Türkiye Çevre Ajansı. Дно бухты илистое.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Also known as Taşyaka, the bay is famous for its Lycian rock tombs and for the fish figure by Bedri Rahmi Eyüboğlu; under the 2025 Göcek mooring regime it is among the bays where the paid buoy/stern mooring system of the Türkiye Çevre Ajansı has been installed. It offers a wide and sheltered mooring area north-west of the Taşkaya islet.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Conocida también como Taşyaka, la cala es famosa por sus tumbas rupestres licias y por la figura del pez de Bedri Rahmi Eyüboğlu; en el régimen de amarre de Göcek de 2025 figura entre las calas donde se ha instalado el sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı. Ofrece una zona de amarre amplia y abrigada al noroeste del islote de Taşkaya.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта, известная также как Taşyaka, славится ликийскими скальными гробницами и фигурой рыбы работы Bedri Rahmi Eyüboğlu; по режиму швартовки Göcek 2025 года она входит в число бухт, где установлена платная система буёв/рейдовых бочек агентства Türkiye Çevre Ajansı. К северо-западу от островка Taşkaya она предлагает обширную и защищённую зону швартовки.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+
+-- ======================================================================
 -- DOĞRULAMA DÜZELTMELERİ — mevcut veritabanlarına akar (idempotent).
 -- Kaynak: corrections_*.json (her satırın gerekçesi yanında).
 -- --- corrections_2026_07_dogrulama.json ---

@@ -1,5 +1,7 @@
-/** Desteklenen içerik dilleri (docs/00 §1: v1 TR, EN gün-1 hazır). */
-export const SUPPORTED_LOCALES = ['tr', 'en'] as const;
+/** Desteklenen içerik dilleri (docs/00 §1: v1 TR, EN gün-1 hazır).
+ *  2026-07 dil desteği: uygulama arayüzüyle birlikte ES ve RU içerik de
+ *  sunulur; çeviriler location_i18n'e seed ile akar (i18n_*.json). */
+export const SUPPORTED_LOCALES = ['tr', 'en', 'es', 'ru'] as const;
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'tr';
 

@@ -293,6 +293,62 @@ def emit(records, batch_meta):
 
 
 
+def emit_i18n(here, records):
+    """Veri çevirileri (i18n_*.json) → location_i18n satırları (idempotent).
+
+    Kullanıcı kararı (2026-07): koy/liman ADLARI ÇEVRİLMEZ — yalnız açıklama.
+    Bu yüzden name hep NULL yazılır ve DO UPDATE yalnız description'ı tazeler;
+    böylece i18n satırı ad zincirini (istenen → en → taban ad) bozamaz.
+    Dosya biçimi: {"round": "...", "translations": {"<slug>": {"en": "...",
+    "es": "...", "ru": "..."}}}. Tutarlılık kuralları:
+    - slug kayıtlarda bulunmalı (çeviri sahipsiz kalamaz),
+    - locale yalnız en/es/ru (tr ana bölümden gelir),
+    - metin boş olamaz; rakamlar TR kaynakla AYNI kalmalı (derinlik, VHF,
+      telefon vb. çeviride değişemez — 0 uydurma veri ilkesinin uzantısı).
+    """
+    files = sorted(here.glob("i18n_*.json"))
+    if not files:
+        return ""
+    by = {r["slug"]: r for r in records}
+    out = ["", "-- " + "=" * 70,
+           "-- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).",
+           "-- Kaynak: i18n_*.json; yeniden koşmak çeviriyi tazeler (DO UPDATE)."]
+    errors = []
+    digits = lambda t: sorted(re.findall(r"\d+(?:[.,]\d+)?", t or ""))
+    for f in files:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        out.append(f"-- --- {f.name} ({data.get('round', '?')}) ---")
+        for slug, tr_map in data["translations"].items():
+            r = by.get(slug)
+            if r is None:
+                errors.append(f"i18n {f.name}: bilinmeyen slug {slug}")
+                continue
+            src_digits = digits(r.get("descriptionTr"))
+            for locale in sorted(tr_map):
+                text = tr_map[locale]
+                if locale not in ("en", "es", "ru"):
+                    errors.append(f"i18n {slug}: geçersiz locale {locale}")
+                    continue
+                if not isinstance(text, str) or not text.strip():
+                    errors.append(f"i18n {slug}/{locale}: boş çeviri")
+                    continue
+                if digits(text) != src_digits:
+                    errors.append(
+                        f"i18n {slug}/{locale}: rakamlar TR kaynakla uyuşmuyor "
+                        f"(TR={src_digits} ≠ {digits(text)})")
+                out.append(
+                    "INSERT INTO location_i18n (location_id, locale, name, description)\n"
+                    f"SELECT id, {q(locale)}, NULL, {q(text)} FROM locations WHERE slug = {q(slug)}\n"
+                    "ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;"
+                )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out.append("")
+    return "\n".join(out)
+
+
 def emit_corrections(here, records):
     """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
 
@@ -370,6 +426,7 @@ def main():
             print(f"HATA: {e}", file=sys.stderr)
         sys.exit(1)
     sql = emit(records, data)
+    sql += emit_i18n(here, records)
     sql += emit_corrections(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
     published = sum(1 for r in records if r["status"] == "published")
