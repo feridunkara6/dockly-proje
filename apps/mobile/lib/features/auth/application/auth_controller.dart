@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
@@ -10,10 +11,11 @@ import '../domain/token_store.dart';
 final Provider<AuthGateway> authGatewayProvider =
     Provider<AuthGateway>((ref) => const StubAuthGateway());
 
-/// Token deposu — kalıcı (web: localStorage). Depoya erişilemezse sessizce
-/// oturumsuz davranır (PrefsTokenStore hataları yutar; testler etkilenmez).
+/// Token deposu — web: localStorage (rotasyon + aile iptaliyle dengelenmiş
+/// bilinçli karar); MOBİL: Keychain/Keystore (SecureTokenStore, mağaza fazı).
+/// Depoya erişilemezse her iki depo da hatayı yutar: oturumsuz devam edilir.
 final Provider<TokenStore> tokenStoreProvider =
-    Provider<TokenStore>((ref) => PrefsTokenStore());
+    Provider<TokenStore>((ref) => kIsWeb ? PrefsTokenStore() : SecureTokenStore());
 
 final Provider<AuthRepository> authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(

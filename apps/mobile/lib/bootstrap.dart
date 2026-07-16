@@ -46,13 +46,15 @@ Future<void> bootstrap(AppConfig config) async {
     ...mapplat.mapPlatformOverrides(),
   ];
 
-  // Firebase kimlik köprüsü (giriş/kayıt paketi 1): şimdilik yalnız web —
-  // iOS/Android kayıtları mağaza fazında eklenecek. Başlatma BAŞARISIZ olursa
-  // uygulama stub gateway ile misafir modda sorunsuz çalışmaya devam eder;
-  // giriş düğmesi nazik bir mesaj gösterir (çökme yok).
-  if (kIsWeb) {
+  // Firebase kimlik köprüsü: web her zaman; iOS, Firebase konsol kaydı yapılıp
+  // mooriraFirebaseOptionsIos dolunca devreye girer (mağaza fazı). Başlatma
+  // BAŞARISIZ olursa ya da seçenekler henüz yoksa uygulama stub gateway ile
+  // misafir modda sorunsuz çalışır; giriş düğmesi nazik bir mesaj gösterir.
+  final FirebaseOptions? firebaseOptions =
+      kIsWeb ? mooriraFirebaseOptionsWeb : mooriraFirebaseOptionsIos;
+  if (firebaseOptions != null) {
     try {
-      await Firebase.initializeApp(options: mooriraFirebaseOptionsWeb);
+      await Firebase.initializeApp(options: firebaseOptions);
       overrides.add(
         authGatewayProvider.overrideWithValue(FirebaseAuthGateway()),
       );

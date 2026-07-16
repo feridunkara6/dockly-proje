@@ -5,7 +5,8 @@ import '../../../core/origin_provider.dart';
 import '../../map/application/map_controller.dart';
 import '../../map/domain/map_viewport.dart';
 import '../data/location_service_stub.dart'
-    if (dart.library.html) '../data/location_service_web.dart';
+    if (dart.library.html) '../data/location_service_web.dart'
+    if (dart.library.io) '../data/location_service_mobile.dart';
 import '../domain/location_service.dart';
 
 /// Konum servisi sağlayıcısı. Derleme hedefine göre (web/mobil) doğru uygulama

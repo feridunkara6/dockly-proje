@@ -1,0 +1,93 @@
+# iOS PROJE İSKELESİ — TEK SEFERLİK (App Store fazı, adım 1)
+#
+# Ne yapar: apps/mobile/ios klasörünü macOS koşucusunda üretir (flutter create),
+# Moorira'ya göre yapılandırır (bundle id com.moorira.app, görünen ad "Moorira",
+# konum izin metni, iOS 14 tabanı, şifreleme muafiyeti) ve main'e bot commit'i
+# olarak ekler — CI'daki lockfile/prettier bot deseniyle aynı.
+#
+# Nasıl çalıştırılır: GitHub → Actions sekmesi → "iOS iskelesi (tek seferlik)"
+# → "Run workflow". ios/ zaten varsa hiçbir şeye dokunmadan biter.
+name: iOS iskelesi (tek seferlik)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  iskele:
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Zaten var mı? (idempotent koruma)
+        run: |
+          if [ -d ios ]; then
+            echo "::notice::apps/mobile/ios zaten var — hiçbir şey yapılmadı."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          fi
+
+      - uses: subosito/flutter-action@v2
+        if: env.SKIP != 'true'
+        with:
+          channel: stable
+          flutter-version: 3.27.4
+
+      - name: iOS platform klasörünü üret
+        if: env.SKIP != 'true'
+        run: |
+          flutter create --platforms=ios --org com.moorira --project-name dockly_mobile .
+          # flutter create'in eklediği şablon testi bizim uygulamayı tanımaz —
+          # kalırsa CI mobil işini kırar. Sil (bizim gerçek testlerimiz test/ altında).
+          rm -f test/widget_test.dart
+
+      - name: Moorira yapılandırması (bundle id, ad, izinler, iOS 14)
+        if: env.SKIP != 'true'
+        run: |
+          PLIST=ios/Runner/Info.plist
+          PB=ios/Runner.xcodeproj/project.pbxproj
+          PLB=/usr/libexec/PlistBuddy
+
+          # Bundle ID: com.moorira.app (test hedefi: com.moorira.app.RunnerTests)
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com\.moorira\.docklyMobile\.RunnerTests;/PRODUCT_BUNDLE_IDENTIFIER = com.moorira.app.RunnerTests;/g' "$PB"
+          sed -i '' 's/PRODUCT_BUNDLE_IDENTIFIER = com\.moorira\.docklyMobile;/PRODUCT_BUNDLE_IDENTIFIER = com.moorira.app;/g' "$PB"
+
+          # Taban sürüm iOS 14 (firebase_auth 5 + mapbox 2 + geolocator için güvenli)
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 14.0;/g' "$PB"
+          sed -i '' "s/^# platform :ios, '12.0'/platform :ios, '14.0'/" ios/Podfile
+
+          # Görünen ad: Moorira
+          $PLB -c "Set :CFBundleDisplayName Moorira" "$PLIST" \
+            || $PLB -c "Add :CFBundleDisplayName string Moorira" "$PLIST"
+
+          # Konum izni amaç metni (App Store zorunluluğu; yalnız kullanım anında istenir)
+          $PLB -c "Add :NSLocationWhenInUseUsageDescription string Konumun, sana en yakin koylari gostermek ve doluluk bildirimini bulundugun koyla sinirlamak icin kullanilir." "$PLIST" \
+            || $PLB -c "Set :NSLocationWhenInUseUsageDescription Konumun, sana en yakin koylari gostermek ve doluluk bildirimini bulundugun koyla sinirlamak icin kullanilir." "$PLIST"
+
+          # Telefon/e-posta bağlantıları (koy iletişim kartları url_launcher ile açar)
+          $PLB -c "Add :LSApplicationQueriesSchemes array" "$PLIST" || true
+          $PLB -c "Add :LSApplicationQueriesSchemes:0 string tel" "$PLIST" || true
+          $PLB -c "Add :LSApplicationQueriesSchemes:1 string mailto" "$PLIST" || true
+
+          # Şifreleme beyanı: yalnız standart HTTPS → muaf (her TestFlight
+          # yüklemesinde "encryption" sorusunu bir daha sormaz)
+          $PLB -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST" \
+            || $PLB -c "Set :ITSAppUsesNonExemptEncryption false" "$PLIST"
+
+          echo "--- Info.plist özeti ---"
+          $PLB -c "Print" "$PLIST" | head -40
+
+      - name: Bot commit (main)
+        if: env.SKIP != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A .
+          git commit -m "feat(ios): iOS proje iskeleti — Moorira yapılandırmasıyla (mağaza fazı 1)"
+          git push origin HEAD:main \
+            || { git fetch origin main && git rebase origin/main && git push origin HEAD:main; } \
+            || echo "::error::Push başarısız — Actions sekmesinden yeniden çalıştır."

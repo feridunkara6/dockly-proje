@@ -24,16 +24,27 @@ class FirebaseAuthGateway implements AuthGateway {
     switch (kind) {
       case AuthProviderKind.google:
         return _guard(() async {
-          if (!kIsWeb) {
-            // Mobil (iOS/Android) google_sign_in eklentisiyle mağaza fazında.
-            throw const UnexpectedFailure(
-                'Google ile giriş şimdilik yalnız web sürümünde.');
-          }
-          final UserCredential cred =
-              await _auth.signInWithPopup(GoogleAuthProvider());
+          // Web: popup akışı. MOBİL (mağaza fazı): sistem sayfalı sağlayıcı
+          // akışı — firebase_auth signInWithProvider ek eklenti istemez.
+          final UserCredential cred = kIsWeb
+              ? await _auth.signInWithPopup(GoogleAuthProvider())
+              : await _auth.signInWithProvider(GoogleAuthProvider());
           return _idTokenOf(cred);
         });
       case AuthProviderKind.apple:
+        return _guard(() async {
+          if (kIsWeb) {
+            // Web'de Apple girişi ayrıca Apple Developer "Services ID"
+            // yapılandırması ister — mağaza fazından sonra açılacak.
+            throw const UnexpectedFailure(
+                'Apple ile giriş şimdilik iOS uygulamasında.');
+          }
+          // iOS: yerli Sign in with Apple sayfası. App Store kuralı 4.8:
+          // üçüncü taraf girişi (Google) sunan uygulamada bu seçenek ZORUNLU.
+          final UserCredential cred =
+              await _auth.signInWithProvider(AppleAuthProvider());
+          return _idTokenOf(cred);
+        });
       case AuthProviderKind.phone:
         throw const UnexpectedFailure('Bu giriş yöntemi çok yakında.');
       case AuthProviderKind.guest:

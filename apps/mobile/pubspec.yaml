@@ -23,6 +23,12 @@ dependencies:
   latlong2: ^0.9.1
   url_launcher: ^6.3.1
   shared_preferences: ^2.3.2
+  # GPS — MOBİL (mağaza fazı): iOS/Android'de gerçek konum; web tarayıcı API'sini
+  # kullanmayı sürdürür (koşullu import, location_service_*.dart).
+  geolocator: ^13.0.2
+  # Refresh token mobilde Keychain/Keystore'da (mağaza fazı, denetim bulgusu);
+  # web'de shared_preferences sürer (rotasyon + aile iptaliyle dengeli karar).
+  flutter_secure_storage: ^9.2.2
   dockly_api:
     path: ../../packages/dockly_api
   dockly_core:
