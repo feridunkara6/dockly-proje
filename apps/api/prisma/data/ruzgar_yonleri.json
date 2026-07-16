@@ -1,5 +1,5 @@
 {
- "kaynak": "Koy açıklamalarındaki (descriptionTr) doğrulanmış korunma/maruz kalma ifadelerinden çıkarıldı; 2026-07 elle gözden geçirildi (49 kayıt). Yeni kayıt eklerken açıklamada yön ifadesi varsa buraya da işlenir.",
+ "kaynak": "Koy açıklamalarındaki (descriptionTr) doğrulanmış korunma/maruz kalma ifadelerinden çıkarıldı; 2026-07 elle gözden geçirildi (49 kayıt). Yeni kayıt eklerken açıklamada yön ifadesi varsa buraya da işlenir. 2026-07 rüzgâr verisi turu: 65 nokta daha, kayıtlı kaynaklardan birebir alıntıyla (turkeymarinas, sailingissues, resmî/yerel sayfalar); tamamı elle doğrulandı.",
  "not": "Yön kodları TR pusula: K,KD,D,GD,G,GB,B,KB. Yalnız AÇIK (maruz) yönler tutulur; açıklamada yön bilgisi olmayan koylar bilinçli olarak YOKTUR (tahmin yazılmaz).",
  "yonler": {
   "yesilkoy-firnaz-koyu": [
@@ -160,6 +160,241 @@
   ],
   "didim-akbuk-marina": [
    "G"
+  ],
+  "symi-gialos-rihtimi": [
+   "KD"
+  ],
+  "symi-panormitis-iskelesi": [
+   "K"
+  ],
+  "simi-nanou-koyu": [
+   "D",
+   "G",
+   "GD",
+   "KD"
+  ],
+  "simi-marathounta-koyu": [
+   "G",
+   "K",
+   "KB",
+   "KD"
+  ],
+  "simi-emporios-koyu": [
+   "D",
+   "K",
+   "KD"
+  ],
+  "simi-agios-vasileios-koyu": [
+   "B",
+   "G",
+   "GB"
+  ],
+  "lindos-koyu": [
+   "D",
+   "G",
+   "GD",
+   "KD"
+  ],
+  "halki-emporios-rihtimi": [
+   "D",
+   "GD",
+   "K"
+  ],
+  "kalekoy-simena-restoran-pontonlari": [
+   "B"
+  ],
+  "icmeler-rihtimi": [
+   "B"
+  ],
+  "icmeler-koyu-demirleme": [
+   "B"
+  ],
+  "sig-liman-selimiye": [
+   "K"
+  ],
+  "vlychadia-samandira-sahasi": [
+   "G"
+  ],
+  "telendos-demirleme": [
+   "KB"
+  ],
+  "patmos-skala-rihtimi": [
+   "GD"
+  ],
+  "patmos-kampos-koyu": [
+   "D",
+   "GD"
+  ],
+  "nisyros-mandraki-limani": [
+   "D",
+   "GD",
+   "K",
+   "KB",
+   "KD"
+  ],
+  "pali-limani-nisyros": [
+   "K",
+   "KB"
+  ],
+  "lipsi-limani": [
+   "K"
+  ],
+  "mesta-limani-sakiz": [
+   "K",
+   "KB"
+  ],
+  "sigri-limani": [
+   "K"
+  ],
+  "kalantos-koyu-naxos": [
+   "G"
+  ],
+  "cabana-plaji-paros": [
+   "G"
+  ],
+  "galissas-koyu-syros": [
+   "B",
+   "K",
+   "KB",
+   "KD"
+  ],
+  "agios-nikolaos-limani-zakinthos": [
+   "GD",
+   "KD"
+  ],
+  "gumusluk-iskeleleri": [
+   "K"
+  ],
+  "yalikavak-balikci-limani": [
+   "B"
+  ],
+  "papaz-bogazi-demirleme": [
+   "G"
+  ],
+  "yarimada-koyu-demirleme": [
+   "G"
+  ],
+  "nergis-koyu-demirleme": [
+   "K"
+  ],
+  "guvercinlik-balikci-barinagi": [
+   "B"
+  ],
+  "kocabahce-iskelesi": [
+   "K"
+  ],
+  "bozburun-yat-yanasma-yeri": [
+   "G"
+  ],
+  "icmeler-iskelesi": [
+   "B"
+  ],
+  "turunc-iskelesi": [
+   "B",
+   "D"
+  ],
+  "fethiye-limani": [
+   "K"
+  ],
+  "gocek-belediye-iskelesi": [
+   "G"
+  ],
+  "erdek-yat-limani": [
+   "G"
+  ],
+  "kas-belediye-limani": [
+   "G"
+  ],
+  "kalkan-belediye-limani": [
+   "G"
+  ],
+  "hydra-limani": [
+   "K",
+   "KB"
+  ],
+  "spetses-baltiza-limani": [
+   "KB"
+  ],
+  "azmak-iskelesi-ciftlik": [
+   "G"
+  ],
+  "kizilada-fener-restorani": [
+   "K",
+   "KB",
+   "KD"
+  ],
+  "cokertme-koy-iskelesi": [
+   "G"
+  ],
+  "poros-limani": [
+   "B"
+  ],
+  "agios-kirykos-limani-ikarya": [
+   "K"
+  ],
+  "adamas-limani-milos": [
+   "G"
+  ],
+  "bozukkale-loryma-demirleme": [
+   "K"
+  ],
+  "sarsala-restaurant": [
+   "KD"
+  ],
+  "dirsek-buku-restaurant": [
+   "K"
+  ],
+  "dirsek-buku-koyu": [
+   "K"
+  ],
+  "bozburun-yacht-club": [
+   "B",
+   "G",
+   "GB",
+   "GD",
+   "K",
+   "KB",
+   "KD"
+  ],
+  "rosemary-cokertme": [
+   "G"
+  ],
+  "ciftlik-koyu": [
+   "G"
+  ],
+  "knidos-antik-limani": [
+   "B"
+  ],
+  "mersincik-koyu": [
+   "KD"
+  ],
+  "tersane-adasi-koyu": [
+   "K",
+   "KB"
+  ],
+  "katranci-koyu": [
+   "GB",
+   "KB"
+  ],
+  "kucuk-kargi-koyu": [
+   "KB"
+  ],
+  "turunc-pinari-koyu": [
+   "KB"
+  ],
+  "boynuzbuku-samandira-sahasi": [
+   "G",
+   "GB"
+  ],
+  "candarli-limani": [
+   "G"
+  ],
+  "egri-liman-demirleme": [
+   "G",
+   "K"
+  ],
+  "sarpdere-limani-demirleme": [
+   "K"
   ]
  }
 }
