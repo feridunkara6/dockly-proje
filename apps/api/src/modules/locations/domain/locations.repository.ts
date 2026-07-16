@@ -33,6 +33,8 @@ export interface DetailData {
   i18n: { locale: string; name: string | null; description: string | null }[];
   /** Son 6 saat penceresi doluluk özeti (yoksa null/undefined). */
   occupancy?: OccupancySummary | null;
+  /** Rüzgâra açık yönler (TR pusula, virgüllü) — uyarı rozeti verisi. */
+  windExposedDirs?: string | null;
   lat: number;
   lon: number;
   countryCode: string;

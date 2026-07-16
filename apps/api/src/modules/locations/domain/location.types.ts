@@ -266,7 +266,10 @@ export interface AnchorageTypeDetails {
 }
 
 export type TypeDetails =
-  MarinaTypeDetails | FuelDockTypeDetails | RestaurantDockTypeDetails | AnchorageTypeDetails;
+  | MarinaTypeDetails
+  | FuelDockTypeDetails
+  | RestaurantDockTypeDetails
+  | AnchorageTypeDetails;
 
 /**
  * Liman detayı (docs/23 §11.3). `typeDetails` (alt-tip birleşimi) ve
@@ -296,6 +299,8 @@ export interface LocationDetail {
   media: MediaBlock;
   /** Son 6 saatte bildirim varsa doluluk özeti; yoksa null. */
   occupancy: OccupancySummary | null;
+  /** Rüzgâra AÇIK yönler (TR pusula kodları, virgüllü: 'G,GD'); yoksa null. */
+  windExposedDirs: string | null;
   userContext: null;
   counts: { reviews: number; photos: number };
 }

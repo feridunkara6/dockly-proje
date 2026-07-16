@@ -1,0 +1,165 @@
+{
+ "kaynak": "Koy açıklamalarındaki (descriptionTr) doğrulanmış korunma/maruz kalma ifadelerinden çıkarıldı; 2026-07 elle gözden geçirildi (49 kayıt). Yeni kayıt eklerken açıklamada yön ifadesi varsa buraya da işlenir.",
+ "not": "Yön kodları TR pusula: K,KD,D,GD,G,GB,B,KB. Yalnız AÇIK (maruz) yönler tutulur; açıklamada yön bilgisi olmayan koylar bilinçli olarak YOKTUR (tahmin yazılmaz).",
+ "yonler": {
+  "yesilkoy-firnaz-koyu": [
+   "G",
+   "GD"
+  ],
+  "soguksu-koyu-fethiye": [
+   "G"
+  ],
+  "engeceli-manal-limani": [
+   "G"
+  ],
+  "kleftolimano-koyu-thymaina": [
+   "KB"
+  ],
+  "gumusluk-koyu-demirleme": [
+   "K"
+  ],
+  "catal-adasi-demirleme": [
+   "KB"
+  ],
+  "kizilkuyruk-koyu-demirleme": [
+   "D",
+   "GD"
+  ],
+  "tas-ada-koyu-demirleme": [
+   "G"
+  ],
+  "kapikaya-koyu-demirleme": [
+   "K"
+  ],
+  "duverlik-merdivenli-demirleme": [
+   "G"
+  ],
+  "ilicabuku-demirleme": [
+   "K"
+  ],
+  "ulelibuk-varvil-demirleme": [
+   "B",
+   "KB"
+  ],
+  "kocabahce-koyu-demirleme": [
+   "K"
+  ],
+  "ayaca-koyu-demirleme": [
+   "G"
+  ],
+  "pythagorio-limani-samos": [
+   "GD"
+  ],
+  "samos-vathy-limani": [
+   "K",
+   "KB"
+  ],
+  "agathonisi-agios-georgios": [
+   "G"
+  ],
+  "katapola-limani-amorgos": [
+   "K",
+   "KD"
+  ],
+  "aegina-limani": [
+   "G"
+  ],
+  "batikkaya-buku-demirleme": [
+   "D"
+  ],
+  "cokertme-koyu-demirleme": [
+   "G"
+  ],
+  "kissebuku-alakisla-demirleme": [
+   "G",
+   "GD"
+  ],
+  "bitez-koyu-demirleme": [
+   "G"
+  ],
+  "gundogan-balikci-barinagi": [
+   "K"
+  ],
+  "akyarlar-balikci-barinagi": [
+   "G"
+  ],
+  "palamutbuku-balikci-barinagi": [
+   "G"
+  ],
+  "datca-yat-limani": [
+   "G"
+  ],
+  "domuz-cukuru-parmak-buku-demirleme": [
+   "G"
+  ],
+  "bayindir-limanagzi-kas-demirleme": [
+   "K"
+  ],
+  "ceneviz-limani-demirleme": [
+   "K"
+  ],
+  "sazak-koyu-demirleme": [
+   "K"
+  ],
+  "altinoluk-balikci-barinagi": [
+   "KD"
+  ],
+  "sedir-adasi-demirleme": [
+   "K"
+  ],
+  "kuruca-buku": [
+   "GD"
+  ],
+  "hamam-koyu-demirleme": [
+   "K"
+  ],
+  "sarsala-samandira-sahasi": [
+   "KD"
+  ],
+  "buyukada-kuzey-demirleme": [
+   "K",
+   "KD"
+  ],
+  "avsa-turkeli-demirleme": [
+   "B"
+  ],
+  "karabiga-limani": [
+   "D",
+   "KD"
+  ],
+  "bozcaada-limani": [
+   "D",
+   "GD"
+  ],
+  "camlik-koyu-demirleme-ayvalik": [
+   "G"
+  ],
+  "kalem-adasi-koyu": [
+   "B"
+  ],
+  "oasis-marina-yeni-foca": [
+   "B"
+  ],
+  "yeni-foca-halk-plaji-demirleme": [
+   "B",
+   "GB"
+  ],
+  "dalyankoy-koyu-demirleme": [
+   "K",
+   "KB"
+  ],
+  "teos-limani-demirleme": [
+   "G"
+  ],
+  "ahmetbeyli-claros-demirleme": [
+   "G"
+  ],
+  "kusadasi-sahil-demirleme": [
+   "B",
+   "GB"
+  ],
+  "didim-akbuk-marina": [
+   "G"
+  ]
+ }
+}

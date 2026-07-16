@@ -23,6 +23,7 @@ import '../domain/anchorage_notes.dart';
 import 'cover_photo.dart';
 import 'maritime_info_panel.dart';
 import '../../weather/presentation/weather_card.dart';
+import '../../weather/presentation/wind_warning_badge.dart';
 import 'operating_info.dart';
 
 /// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
@@ -159,6 +160,13 @@ class _DetailContent extends ConsumerWidget {
               const _Pill(label: '7/24'),
             ],
           ],
+        ),
+
+        // RÜZGÂR UYARI ROZETİ (2026-07 ②): koyun açık yönünden bugün eşik
+        // üstü rüzgâr bekleniyorsa görünür; veri/tahmin yoksa hiç çizilmez.
+        WindWarningBadge(
+          exposedDirs: detail.windExposedDirs,
+          position: detail.position,
         ),
 
         const SizedBox(height: 12),

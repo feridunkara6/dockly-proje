@@ -350,6 +350,43 @@ def emit_i18n(here, records):
     return "\n".join(out)
 
 
+def emit_wind(here, records):
+    """Rüzgâra açık yönler (ruzgar_yonleri.json) → locations.wind_exposed_dirs.
+
+    Açıklamalardaki doğrulanmış ifadelerden türetilmiş, elle gözden geçirilmiş
+    veridir. UPDATE kullanılır ki mevcut canlı satırlara da AKSIN (idempotent).
+    locations tablosunda tutulur — her türe (koy, liman, marina) uygulanır,
+    yan etkisizdir.
+    """
+    f = here / "ruzgar_yonleri.json"
+    if not f.exists():
+        return ""
+    data = json.loads(f.read_text(encoding="utf-8"))["yonler"]
+    by = {r["slug"] for r in records}
+    out = ["", "-- " + "=" * 70,
+           "-- RÜZGÂRA AÇIK YÖNLER — uyarı rozeti verisi (açıklamalardan, elle onaylı)."]
+    errors = []
+    GECERLI = {"K", "KD", "D", "GD", "G", "GB", "B", "KB"}
+    for slug, dirs in sorted(data.items()):
+        if slug not in by:
+            errors.append(f"rüzgâr: bilinmeyen slug {slug}")
+            continue
+        bad = [x for x in dirs if x not in GECERLI]
+        if bad:
+            errors.append(f"rüzgâr {slug}: geçersiz yön {bad}")
+            continue
+        csv = ",".join(dirs)
+        out.append(
+            f"UPDATE locations SET wind_exposed_dirs = {q(csv)} WHERE slug = {q(slug)};"
+        )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out.append("")
+    return "\n".join(out)
+
+
 def emit_corrections(here, records):
     """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
 
@@ -427,6 +464,7 @@ def main():
             print(f"HATA: {e}", file=sys.stderr)
         sys.exit(1)
     sql = emit(records, data)
+    sql += emit_wind(here, records)
     sql += emit_i18n(here, records)
     sql += emit_corrections(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")

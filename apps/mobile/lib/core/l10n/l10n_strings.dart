@@ -188,6 +188,8 @@ class L10n {
     required this.agoHourFmt,
     required this.occNeedLocation,
     required this.occTooFar,
+    required this.windExposedLabels,
+    required this.wwBadgeFmt,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -272,6 +274,13 @@ class L10n {
   final String agoHourFmt;
   final String occNeedLocation;
   final String occTooFar;
+
+  // --- Rüzgâr uyarı rozeti (2026-07 ayrıştırma paketi ②) ---
+  /// TR pusula kodu → "şu yöne açık" etiketi (TR'de denizci rüzgâr adlarıyla).
+  final Map<String, String> windExposedLabels;
+  final String wwBadgeFmt;
+
+  String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
   /// Doluluk düzey kodu → seçili dildeki etiket.
   String occupancyLabel(String code) {
@@ -520,6 +529,12 @@ const L10n _tr = L10n(
   agoHourFmt: '{0} sa önce',
   occNeedLocation: 'Doluluk bildirmek için önce konumunu paylaşmalısın — haritadaki "Konumum" düğmesine dokun.',
   occTooFar: 'Yanlış bilgiyi önlemek için yalnız yakınında olduğun koylar için bildirim yapabilirsin.',
+  windExposedLabels: <String, String>{
+    'K': 'Kuzeye açık', 'KD': 'Poyraza açık', 'D': 'Doğuya açık',
+    'GD': 'Keşişlemeye açık', 'G': 'Güneye açık', 'GB': 'Lodosa açık',
+    'B': 'Batıya açık', 'KB': 'Karayele açık',
+  },
+  wwBadgeFmt: '{0} — bugün {1} kn bekleniyor',
 );
 
 const L10n _en = L10n(
@@ -742,6 +757,12 @@ const L10n _en = L10n(
   agoHourFmt: '{0} h ago',
   occNeedLocation: 'Share your location first to report occupancy — tap the "My location" button on the map.',
   occTooFar: 'To prevent false reports, you can only report for bays near your current position.',
+  windExposedLabels: <String, String>{
+    'K': 'Exposed to N', 'KD': 'Exposed to NE', 'D': 'Exposed to E',
+    'GD': 'Exposed to SE', 'G': 'Exposed to S', 'GB': 'Exposed to SW',
+    'B': 'Exposed to W', 'KB': 'Exposed to NW',
+  },
+  wwBadgeFmt: '{0} — {1} kn expected today',
 );
 
 const L10n _es = L10n(
@@ -964,6 +985,12 @@ const L10n _es = L10n(
   agoHourFmt: 'hace {0} h',
   occNeedLocation: 'Comparte tu ubicación para informar la ocupación — toca el botón "Mi ubicación" en el mapa.',
   occTooFar: 'Para evitar avisos falsos, solo puedes informar sobre calas cercanas a tu posición actual.',
+  windExposedLabels: <String, String>{
+    'K': 'Expuesta al N', 'KD': 'Expuesta al NE', 'D': 'Expuesta al E',
+    'GD': 'Expuesta al SE', 'G': 'Expuesta al S', 'GB': 'Expuesta al SO',
+    'B': 'Expuesta al O', 'KB': 'Expuesta al NO',
+  },
+  wwBadgeFmt: '{0} — hoy se esperan {1} kn',
 );
 
 const L10n _ru = L10n(
@@ -1186,6 +1213,12 @@ const L10n _ru = L10n(
   agoHourFmt: '{0} ч назад',
   occNeedLocation: 'Чтобы сообщить о занятости, сначала поделитесь местоположением — нажмите кнопку «Моё местоположение» на карте.',
   occTooFar: 'Во избежание ложных сообщений можно сообщать только о бухтах рядом с вашим местоположением.',
+  windExposedLabels: <String, String>{
+    'K': 'Открыта северу', 'KD': 'Открыта северо-востоку', 'D': 'Открыта востоку',
+    'GD': 'Открыта юго-востоку', 'G': 'Открыта югу', 'GB': 'Открыта юго-западу',
+    'B': 'Открыта западу', 'KB': 'Открыта северо-западу',
+  },
+  wwBadgeFmt: '{0} — сегодня ожидается {1} уз',
 );
 
 /// Saf eşleme — birim testli.

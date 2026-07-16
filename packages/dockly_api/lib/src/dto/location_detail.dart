@@ -27,6 +27,7 @@ class LocationDetail {
     required this.media,
     required this.counts,
     this.occupancy,
+    this.windExposedDirs,
   });
 
   final String id;
@@ -53,6 +54,10 @@ class LocationDetail {
 
   /// Son 6 saatte doluluk bildirimi varsa özet; yoksa null (geriye uyumlu).
   final OccupancySummary? occupancy;
+
+  /// Rüzgâra AÇIK yönler (TR pusula kodları, virgüllü: 'G,GD'); yoksa null.
+  /// Uyarı rozeti bu alanla canlı tahmini birleştirir (geriye uyumlu).
+  final String? windExposedDirs;
 
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     List<T> list<T>(String key, T Function(Map<String, dynamic>) fromJson) =>
@@ -86,6 +91,7 @@ class LocationDetail {
       media: MediaInfo.fromJson(json['media'] as Map<String, dynamic>),
       counts: Counts.fromJson(json['counts'] as Map<String, dynamic>),
       occupancy: OccupancySummary.fromJsonNullable(json['occupancy']),
+      windExposedDirs: json['windExposedDirs'] as String?,
     );
   }
 }

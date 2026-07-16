@@ -684,6 +684,9 @@ model Location {
   depthMaxM         Decimal?        @map("depth_max_m") @db.Decimal(4, 2)
   capacity          Int?
   priceTier         PriceTier       @default(unknown) @map("price_tier")
+  /// Rüzgâra AÇIK yönler — TR pusula kodlarıyla virgüllü liste (ör. 'G,GD').
+  /// Uyarı rozeti verisi (2026-07); kaynak: açıklamalardaki onaylı ifadeler.
+  windExposedDirs   String?         @map("wind_exposed_dirs")
   is24h             Boolean         @default(false) @map("is_24h")
   coverMediaId      String?         @map("cover_media_id") @db.Uuid
   ratingAvg         Decimal?        @map("rating_avg") @db.Decimal(3, 2)

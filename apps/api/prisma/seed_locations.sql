@@ -10912,6 +10912,58 @@ ON CONFLICT DO NOTHING;
 
 
 -- ======================================================================
+-- RÜZGÂRA AÇIK YÖNLER — uyarı rozeti verisi (açıklamalardan, elle onaylı).
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'aegina-limani';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'agathonisi-agios-georgios';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'ahmetbeyli-claros-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'akyarlar-balikci-barinagi';
+UPDATE locations SET wind_exposed_dirs = 'KD' WHERE slug = 'altinoluk-balikci-barinagi';
+UPDATE locations SET wind_exposed_dirs = 'B' WHERE slug = 'avsa-turkeli-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'ayaca-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'D' WHERE slug = 'batikkaya-buku-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'bayindir-limanagzi-kas-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'bitez-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'D,GD' WHERE slug = 'bozcaada-limani';
+UPDATE locations SET wind_exposed_dirs = 'K,KD' WHERE slug = 'buyukada-kuzey-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'camlik-koyu-demirleme-ayvalik';
+UPDATE locations SET wind_exposed_dirs = 'KB' WHERE slug = 'catal-adasi-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'ceneviz-limani-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'cokertme-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K,KB' WHERE slug = 'dalyankoy-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'datca-yat-limani';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'didim-akbuk-marina';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'domuz-cukuru-parmak-buku-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'duverlik-merdivenli-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'engeceli-manal-limani';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'gumusluk-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'gundogan-balikci-barinagi';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'hamam-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'ilicabuku-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'B' WHERE slug = 'kalem-adasi-koyu';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'kapikaya-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'D,KD' WHERE slug = 'karabiga-limani';
+UPDATE locations SET wind_exposed_dirs = 'K,KD' WHERE slug = 'katapola-limani-amorgos';
+UPDATE locations SET wind_exposed_dirs = 'G,GD' WHERE slug = 'kissebuku-alakisla-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'D,GD' WHERE slug = 'kizilkuyruk-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'KB' WHERE slug = 'kleftolimano-koyu-thymaina';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'kocabahce-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'GD' WHERE slug = 'kuruca-buku';
+UPDATE locations SET wind_exposed_dirs = 'B,GB' WHERE slug = 'kusadasi-sahil-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'B' WHERE slug = 'oasis-marina-yeni-foca';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'palamutbuku-balikci-barinagi';
+UPDATE locations SET wind_exposed_dirs = 'GD' WHERE slug = 'pythagorio-limani-samos';
+UPDATE locations SET wind_exposed_dirs = 'K,KB' WHERE slug = 'samos-vathy-limani';
+UPDATE locations SET wind_exposed_dirs = 'KD' WHERE slug = 'sarsala-samandira-sahasi';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'sazak-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'K' WHERE slug = 'sedir-adasi-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'soguksu-koyu-fethiye';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'tas-ada-koyu-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G' WHERE slug = 'teos-limani-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'B,KB' WHERE slug = 'ulelibuk-varvil-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'B,GB' WHERE slug = 'yeni-foca-halk-plaji-demirleme';
+UPDATE locations SET wind_exposed_dirs = 'G,GD' WHERE slug = 'yesilkoy-firnaz-koyu';
+
+-- ======================================================================
 -- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).
 -- Kaynak: i18n_*.json; yeniden koşmak çeviriyi tazeler (DO UPDATE).
 -- --- i18n_tur1.json (i18n-tur1) ---

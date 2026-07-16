@@ -1,9 +1,6 @@
 import { LocationsService } from '../src/modules/locations/application/locations.service';
 import { AppProblem } from '../src/common/problem/problem';
-import {
-  DetailData,
-  LocationsRepository,
-} from '../src/modules/locations/domain/locations.repository';
+import { DetailData, LocationsRepository } from '../src/modules/locations/domain/locations.repository';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -159,6 +156,20 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     });
   });
 
+  it('rüzgâra açık yönler: yoksa null, varsa aynen geçer', async () => {
+    const d = await service.detail('d-marin', 'tr');
+    expect(d.windExposedDirs).toBeNull();
+
+    const withWind: DetailData = { ...SAMPLE, windExposedDirs: 'G,GD' };
+    class WindRepo extends FakeRepo {
+      findDetail(): Promise<DetailData> {
+        return Promise.resolve(withWind);
+      }
+    }
+    const d2 = await new LocationsService(new WindRepo()).detail('d-marin', 'tr');
+    expect(d2.windExposedDirs).toBe('G,GD');
+  });
+
   it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
     await expect(
       service.reportOccupancy('yok-boyle-koy', 'user-1', 'full', { lat: 36.75, lon: 28.95 }),
@@ -172,10 +183,8 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
       }
     }
     await expect(
-      new LocationsService(new FarRepo()).reportOccupancy('d-marin', 'user-1', 'full', {
-        lat: 41.0,
-        lon: 29.0,
-      }),
+      new LocationsService(new FarRepo()).reportOccupancy(
+        'd-marin', 'user-1', 'full', { lat: 41.0, lon: 29.0 }),
     ).rejects.toMatchObject({ code: 'validation-error' });
   });
 
@@ -186,10 +195,8 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
       }
     }
     await expect(
-      new LocationsService(new UnsupportedRepo()).reportOccupancy('d-marin', 'user-1', 'full', {
-        lat: 36.75,
-        lon: 28.95,
-      }),
+      new LocationsService(new UnsupportedRepo()).reportOccupancy(
+        'd-marin', 'user-1', 'full', { lat: 36.75, lon: 28.95 }),
     ).rejects.toMatchObject({ code: 'validation-error' });
   });
 
@@ -204,11 +211,7 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
       }
     }
     const res = await new LocationsService(new ReportRepo()).reportOccupancy(
-      'd-marin',
-      'user-1',
-      'moderate',
-      { lat: 36.75, lon: 28.95 },
-    );
+      'd-marin', 'user-1', 'moderate', { lat: 36.75, lon: 28.95 });
     expect(res.occupancy.level).toBe('moderate');
     expect(res.occupancy.reportCount).toBe(2);
   });
