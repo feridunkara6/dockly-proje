@@ -1,0 +1,66 @@
+# =============================================================================
+# MOORIRA — Codemagic derleme yapılandırması (App Store fazı, B planı)
+# =============================================================================
+# Neden Codemagic: Xcode Cloud kurulumu yerel Xcode gerektiriyor (kullanıcının
+# Mac'i desteklemiyor). Codemagic imza/sertifika yönetimini App Store Connect
+# API anahtarıyla SUNUCU tarafında kendisi yapar — yerel Mac'e hiç iş düşmez.
+#
+# Derleme ELLE başlatılır (Codemagic panelinden "Start new build") — main'e
+# her push'ta otomatik derleme BİLİNÇLİ kapalı: CI botunun stil commit'leri
+# ücretsiz dakika kotasını boşa yakmasın.
+#
+# Kurulum önkoşulları (Codemagic panelinde, rehber sohbette):
+#   • Developer Portal entegrasyonu adı: moorira-asc-key  (App Store Connect
+#     API anahtarı — Issuer ID + Key ID + .p8)
+#   • "mapbox" ortam değişkeni grubu: MAPBOX_DOWNLOADS_TOKEN (secure) ve
+#     MAPBOX_ACCESS_TOKEN
+# =============================================================================
+workflows:
+  ios-testflight:
+    name: iOS TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    working_directory: apps/mobile
+    integrations:
+      app_store_connect: moorira-asc-key
+    environment:
+      flutter: 3.27.4
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.moorira.app
+      groups:
+        - mapbox
+    scripts:
+      - name: Mapbox indirme kimliği (pod kaynağı)
+        script: |
+          cat > ~/.netrc <<NETRC
+          machine api.mapbox.com
+          login mapbox
+          password $MAPBOX_DOWNLOADS_TOKEN
+          NETRC
+          chmod 600 ~/.netrc
+      - name: İmza profillerini Xcode projesine bağla
+        script: xcode-project use-profiles
+      - name: Bağımlılıklar
+        script: flutter pub get
+      - name: CocoaPods
+        script: find . -name "Podfile" -execdir pod install \;
+      - name: iOS derleme (imzalı IPA)
+        script: |
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$BUILD_NUMBER \
+            --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
+            --dart-define=MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - Moorira Test
