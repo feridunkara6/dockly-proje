@@ -16,9 +16,18 @@ const FirebaseOptions mooriraFirebaseOptionsWeb = FirebaseOptions(
   measurementId: 'G-KMZXH18WNW',
 );
 
-/// iOS uygulaması yapılandırması (mağaza fazı). Değerler, Firebase konsolunda
-/// iOS uygulaması (bundle: com.moorira.app) kaydedilince buraya yazılacak —
-/// rehberdeki "Firebase'e iOS ekle" adımı. NULL iken bootstrap Firebase'i
-/// mobilde HİÇ başlatmaz: uygulama misafir modda tam çalışır, giriş düğmeleri
-/// nazik mesaj gösterir (çökme yok). Bu değerler de gizli değildir.
-FirebaseOptions? get mooriraFirebaseOptionsIos => null;
+/// iOS uygulaması yapılandırması (Firebase konsol kaydı 2026-07-16,
+/// GoogleService-Info.plist'ten). Bu değerler de gizli değildir — web ile aynı
+/// kural: proje adres etiketleridir, erişim güvenliği Authentication
+/// kurallarıyla sağlanır. Tip nullable kalır: bootstrap sözleşmesi
+/// (null → Firebase başlatılmaz) değişmez.
+FirebaseOptions? get mooriraFirebaseOptionsIos => const FirebaseOptions(
+      apiKey: 'AIzaSyCNYBliV534O2y15hxYUNYOjYzuH6WtoiY',
+      appId: '1:1072474722600:ios:eaa0c6981dd6279986c01d',
+      messagingSenderId: '1072474722600',
+      projectId: 'moorira',
+      storageBucket: 'moorira.firebasestorage.app',
+      iosBundleId: 'com.moorira.app',
+      iosClientId:
+          '1072474722600-kbbiqlhgd991mm46umsnk1h4vu8a5uo9.apps.googleusercontent.com',
+    );
